@@ -1,0 +1,8 @@
+pyyaml>=6.0
+elasticsearch>=8.0.0
+sigma==0.0.1
+click>=8.0.0
+python-dotenv>=0.19.0
+requests>=2.25.0
+# Sigma CLI 관련 (선택적)
+# sigma-cli>=1.0.0  # pip install sigma-cli로 별도 설치 권장 

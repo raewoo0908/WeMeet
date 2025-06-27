@@ -1,0 +1,22 @@
+title: Network Connection to Suspicious IP
+id: 87654321-4321-4321-4321-210987654321
+description: Detects network connections to known malicious IP addresses
+author: Security Team
+date: 2024/01/01
+logsource:
+  category: network_connection
+  product: windows
+detection:
+  selection:
+    DestinationIp|re:
+      - '192\.168\.1\.100'
+      - '10\.0\.0\.50'
+    DestinationPort|contains:
+      - '4444'
+      - '8080'
+      - '443'
+  condition: selection
+level: high
+tags:
+  - attack.command_and_control
+  - attack.t1071 

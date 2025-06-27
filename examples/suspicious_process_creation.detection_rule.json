@@ -1,0 +1,49 @@
+{
+  "rule_id": "12345678-1234-1234-1234-123456789012",
+  "risk_score": 47,
+  "description": "Detects suspicious process creation patterns including PowerShell and CMD execution",
+  "name": "Suspicious Process Creation",
+  "severity": "medium",
+  "type": "query",
+  "language": "kuery",
+  "query": "(process.command_line:(*powershell.exe* OR *cmd.exe* OR *wscript.exe* OR *cscript.exe*)) AND (process.executable:(*\\\\powershell.exe OR *\\\\cmd.exe OR *\\\\wscript.exe OR *\\\\cscript.exe))",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.execution",
+    "attack.t1059"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": "Security Team",
+  "false_positives": [],
+  "license": "DRL",
+  "rule_name_override": "",
+  "timestamp_override": "",
+  "throttle": "",
+  "output_index": "",
+  "meta": {
+    "from": "1m",
+    "kibana_siem_app_url": ""
+  }
+}
