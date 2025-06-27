@@ -12,6 +12,9 @@ pip install sigma-cli
 
 # 또는 pipx로 설치 (권장)
 pipx install sigma-cli
+
+# mac 환경에서
+python3 -m pip install sigma-cli
 ```
 
 ### 2. 필요한 플러그인 설치
@@ -68,6 +71,7 @@ python src/main.py convert-to-detection-rule \
   --pipeline ecs_windows
 ```
 
+# Below from here is now Progressing...
 ### 5. Detection Rule 생성
 
 ```bash
