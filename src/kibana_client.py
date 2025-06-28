@@ -64,7 +64,7 @@ class KibanaDetectionClient:
             rule_data: Detection Rule 데이터
             
         Returns:
-            생성된 규칙의 ID 또는 None
+            생성된 규칙의 rule_id 또는 None
         """
         try:
             url = f"{self.kibana_url}/api/detection_engine/rules"
@@ -73,7 +73,8 @@ class KibanaDetectionClient:
             
             if response.status_code == 200:
                 result = response.json()
-                rule_id = result.get('id')
+                # 생성된 규칙의 rule_id 반환
+                rule_id = result.get('rule_id')
                 self.logger.info(f"Detection Rule 생성 완료: {rule_id}")
                 return rule_id
             else:
@@ -132,34 +133,56 @@ class KibanaDetectionClient:
             
             if response.status_code == 200:
                 result = response.json()
-                if result.get('data'):
-                    return result['data'][0]
-                return None
+                return result  # 바로 규칙 객체 반환
             else:
-                self.logger.error(f"Detection Rule 조회 실패: {response.status_code}")
+                self.logger.error(f"Detection Rule 조회 실패: {response.status_code} - {response.text}")
                 return None
                 
         except Exception as e:
             self.logger.error(f"Detection Rule 조회 중 오류 발생: {e}")
             return None
     
-    def list_detection_rules(self) -> List[Dict[str, Any]]:
+    def list_detection_rules(self, page: int = 1, per_page: int = 100, 
+                           sort_field: str = 'created_at', sort_order: str = 'desc',
+                           filter_query: Optional[str] = None) -> List[Dict[str, Any]]:
         """
         모든 Detection Rule을 조회합니다.
         
+        Args:
+            page: 페이지 번호 (기본값: 1)
+            per_page: 페이지당 규칙 수 (기본값: 100)
+            sort_field: 정렬 필드 (기본값: 'created_at')
+            sort_order: 정렬 순서 ('asc' 또는 'desc', 기본값: 'desc')
+            filter_query: 필터 쿼리 (선택사항, 예: 'alert.attributes.name:windows')
+            
         Returns:
             규칙 목록
         """
         try:
-            url = f"{self.kibana_url}/api/detection_engine/rules"
+            url = f"{self.kibana_url}/api/detection_engine/rules/_find"
             
-            response = self.session.get(url)
+            # 기본 파라미터 설정
+            params = {
+                'page': page,
+                'per_page': per_page,
+                'sort_field': sort_field,
+                'sort_order': sort_order
+            }
+            
+            # 필터 쿼리가 있으면 추가
+            if filter_query:
+                params['filter'] = filter_query
+            
+            response = self.session.get(url, params=params)
             
             if response.status_code == 200:
                 result = response.json()
-                return result.get('data', [])
+                self.logger.info(f"목록 조회 응답: {result}")
+                rules = result.get('data', [])
+                self.logger.info(f"조회된 규칙 수: {len(rules)}")
+                return rules
             else:
-                self.logger.error(f"Detection Rule 목록 조회 실패: {response.status_code}")
+                self.logger.error(f"Detection Rule 목록 조회 실패: {response.status_code} - {response.text}")
                 return []
                 
         except Exception as e:
@@ -178,7 +201,7 @@ class KibanaDetectionClient:
         """
         try:
             url = f"{self.kibana_url}/api/detection_engine/rules"
-            params = {'rule_ids': json.dumps([rule_id])}
+            params = {'rule_id': rule_id}
             
             response = self.session.delete(url, params=params)
             
@@ -204,16 +227,11 @@ class KibanaDetectionClient:
             활성화 성공 여부
         """
         try:
-            url = f"{self.kibana_url}/api/detection_engine/rules/_bulk_update"
+            url = f"{self.kibana_url}/api/detection_engine/rules"
             
             data = {
-                "ids": [rule_id],
-                "actions": [
-                    {
-                        "action": "set_enabled",
-                        "enabled": True
-                    }
-                ]
+                "rule_id": rule_id,
+                "enabled": True
             }
             
             response = self.session.patch(url, json=data)
@@ -240,16 +258,11 @@ class KibanaDetectionClient:
             비활성화 성공 여부
         """
         try:
-            url = f"{self.kibana_url}/api/detection_engine/rules/_bulk_update"
+            url = f"{self.kibana_url}/api/detection_engine/rules"
             
             data = {
-                "ids": [rule_id],
-                "actions": [
-                    {
-                        "action": "set_enabled",
-                        "enabled": False
-                    }
-                ]
+                "rule_id": rule_id,
+                "enabled": False
             }
             
             response = self.session.patch(url, json=data)
