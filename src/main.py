@@ -72,36 +72,32 @@ def check_sigma_cli(sigma_cli_path):
         
         if manager.check_installation():
             version = manager.get_version()
-            click.echo(f"✅ Sigma CLI 설치됨: {version}")
+            click.echo(f"✅ Sigma CLI 확인됨: {version}")
             
             # 사용 가능한 대상 조회
             try:
                 targets = manager.list_available_targets()
-                click.echo(f"📋 사용 가능한 변환 대상: {len(targets)}개")
-                for target in targets[:5]:  # 처음 5개만 표시
-                    click.echo(f"   - {target}")
-                if len(targets) > 5:
-                    click.echo(f"   ... 및 {len(targets) - 5}개 더")
+                click.echo("📋 사용 가능한 변환 대상: ")
+                for target in targets:
+                    click.echo(target)
             except Exception as e:
                 click.echo(f"⚠️ 대상 조회 실패: {e}")
             
             # 사용 가능한 파이프라인 조회
             try:
                 pipelines = manager.list_available_pipelines()
-                click.echo(f"🔧 사용 가능한 파이프라인: {len(pipelines)}개")
-                for pipeline in pipelines[:5]:  # 처음 5개만 표시
-                    click.echo(f"   - {pipeline}")
-                if len(pipelines) > 5:
-                    click.echo(f"   ... 및 {len(pipelines) - 5}개 더")
+                click.echo("🔧 사용 가능한 파이프라인: ")
+                for pipeline in pipelines:
+                    click.echo(pipeline)
             except Exception as e:
                 click.echo(f"⚠️ 파이프라인 조회 실패: {e}")
             
             # 설치된 플러그인 조회
             try:
                 plugins = manager.list_installed_plugins()
-                click.echo(f"📦 설치된 플러그인: {len(plugins)}개")
+                click.echo("📦 설치된 플러그인: ")
                 for plugin in plugins:
-                    click.echo(f"   - {plugin}")
+                    click.echo(plugin)
             except Exception as e:
                 click.echo(f"⚠️ 플러그인 조회 실패: {e}")
                 
@@ -145,7 +141,7 @@ def setup_sigma_cli(sigma_cli_path, required_plugins):
 @click.option('--pipeline', default='ecs_windows', help='Sigma CLI 파이프라인 (기본값: ecs_windows)')
 @click.option('--sigma-cli-path', default=get_default_sigma_cli_path, help='Sigma CLI 명령어 경로')
 def convert_to_lucene(input, pipeline, sigma_cli_path):
-    """Sigma rule을 Lucene 쿼리로 변환합니다."""
+    """Sigma rule을 단순히 Lucene 쿼리로 변환합니다."""
     try:
         converter = get_sigma_converter(sigma_cli_path)
         lucene_query = converter.convert_to_lucene(input, pipeline)
@@ -411,8 +407,8 @@ def list_sigma_cli_info(sigma_cli_path):
 def validate_rule(input, sigma_cli_path):
     """Sigma rule의 유효성을 검사합니다."""
     try:
-        manager = get_sigma_manager(sigma_cli_path)
-        is_valid = manager.validate_sigma_rule(input)
+        converter = get_sigma_converter(sigma_cli_path)
+        is_valid = converter.validate_sigma_rule(input)
         if is_valid:
             click.echo(f"✅ {input} 규칙이 유효합니다.")
         else:

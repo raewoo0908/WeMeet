@@ -30,6 +30,34 @@ class SigmaCLIConverter:
         """Sigma rule 파일을 로드합니다."""
         with open(file_path, 'r', encoding='utf-8') as f:
             return yaml.safe_load(f)
+        
+    def validate_sigma_rule(self, sigma_rule_path: str) -> bool:
+        """
+        Sigma rule 유효성 검사
+        
+        Args:
+            sigma_rule_path: Sigma rule 파일 경로
+            
+        Returns:
+            유효성 검사 결과
+        """
+        try:
+            cmd = [
+                self.sigma_cli_path, "check",
+                sigma_rule_path
+            ]
+            
+            result = subprocess.run(
+                cmd,
+                capture_output=True,
+                text=True,
+                check=True
+            )
+            
+            return True
+            
+        except subprocess.CalledProcessError:
+            return False
     
     def convert_to_lucene(self, sigma_rule_path: str, pipeline: str = "ecs_windows") -> str:
         """
@@ -276,6 +304,10 @@ class SigmaCLIConverter:
         if output_file is None:
             input_path = Path(input_file)
             output_file = str(input_path.with_suffix('.detection_rule.json'))
+        
+        # 출력 디렉토리가 없으면 생성
+        output_path = Path(output_file)
+        output_path.parent.mkdir(parents=True, exist_ok=True)
         
         # JSON 파일로 저장
         with open(output_file, 'w', encoding='utf-8') as f:

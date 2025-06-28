@@ -159,34 +159,6 @@ class SigmaCLIManager:
             print(f"❌ 플러그인 '{plugin_name}' 제거 실패: {e.stderr}")
             return False
     
-    def validate_sigma_rule(self, sigma_rule_path: str) -> bool:
-        """
-        Sigma rule 유효성 검사
-        
-        Args:
-            sigma_rule_path: Sigma rule 파일 경로
-            
-        Returns:
-            유효성 검사 결과
-        """
-        try:
-            cmd = [
-                self.sigma_cli_path, "check",
-                sigma_rule_path
-            ]
-            
-            result = subprocess.run(
-                cmd,
-                capture_output=True,
-                text=True,
-                check=True
-            )
-            
-            return True
-            
-        except subprocess.CalledProcessError:
-            return False
-    
     def get_installation_guide(self) -> str:
         """
         Sigma CLI 설치 가이드 반환
@@ -208,7 +180,7 @@ Sigma CLI 설치 가이드:
    sigma plugin install ecs_windows
 
 4. 설치 확인:
-   sigma --version
+   sigma version
         """
     
     def check_required_plugins(self, required_plugins: List[str]) -> Tuple[bool, List[str]]:
@@ -261,46 +233,3 @@ Sigma CLI 설치 가이드:
         
         print("✅ Sigma CLI 환경 설정 완료")
         return True
-
-
-def test_sigma_cli_manager():
-    """Sigma CLI 관리자 테스트"""
-    print("=== Sigma CLI 관리자 테스트 ===")
-    
-    manager = SigmaCLIManager()
-    
-    # 설치 확인
-    if manager.check_installation():
-        print(f"✅ Sigma CLI 버전: {manager.get_version()}")
-        
-        # 사용 가능한 대상 조회
-        try:
-            targets = manager.list_available_targets()
-            print(f"📋 사용 가능한 변환 대상: {targets}")
-        except Exception as e:
-            print(f"⚠️ 대상 조회 실패: {e}")
-        
-        # 사용 가능한 파이프라인 조회
-        try:
-            pipelines = manager.list_available_pipelines()
-            print(f"🔧 사용 가능한 파이프라인: {pipelines}")
-        except Exception as e:
-            print(f"⚠️ 파이프라인 조회 실패: {e}")
-        
-        # 설치된 플러그인 조회
-        try:
-            plugins = manager.list_installed_plugins()
-            print(f"📦 설치된 플러그인: {plugins}")
-        except Exception as e:
-            print(f"⚠️ 플러그인 조회 실패: {e}")
-        
-        # 환경 설정
-        manager.setup_environment()
-        
-    else:
-        print("❌ Sigma CLI가 설치되지 않았습니다.")
-        print(manager.get_installation_guide())
-
-
-if __name__ == "__main__":
-    test_sigma_cli_manager() 
