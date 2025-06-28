@@ -52,9 +52,21 @@ def get_sigma_converter(sigma_cli_path: str = None):
     return SigmaCLIConverter(sigma_cli_path)
 
 
-def get_default_sigma_cli_path():
+def __get_default_sigma_cli_path():
     """기본 Sigma CLI 경로를 반환합니다."""
     return os.getenv('SIGMA_CLI_PATH', 'sigma')
+
+def __get_default_kibana_url():
+    """기본 Kibana URL을 반환합니다."""
+    return os.getenv('KIBANA_URL', 'http://localhost:5601')
+
+def __get_default_kibana_username():
+    """기본 Kibana 사용자명을 반환합니다."""
+    return os.getenv('KIBANA_USERNAME', 'elastic')
+
+def __get_default_kibana_password():
+    """기본 Kibana 비밀번호를 반환합니다."""
+    return os.getenv('KIBANA_PASSWORD', 'changeme')
 
 
 @click.group()
@@ -64,7 +76,7 @@ def cli():
 
 
 @cli.command()
-@click.option('--sigma-cli-path', default=get_default_sigma_cli_path, help='Sigma CLI 명령어 경로')
+@click.option('--sigma-cli-path', default=__get_default_sigma_cli_path, help='Sigma CLI 명령어 경로')
 def check_sigma_cli(sigma_cli_path):
     """Sigma CLI 설치 상태를 확인합니다."""
     try:
@@ -139,7 +151,7 @@ def setup_sigma_cli(sigma_cli_path, required_plugins):
 @cli.command()
 @click.option('--input', '-i', required=True, help='입력 Sigma rule 파일 경로')
 @click.option('--pipeline', default='ecs_windows', help='Sigma CLI 파이프라인 (기본값: ecs_windows)')
-@click.option('--sigma-cli-path', default=get_default_sigma_cli_path, help='Sigma CLI 명령어 경로')
+@click.option('--sigma-cli-path', default=__get_default_sigma_cli_path, help='Sigma CLI 명령어 경로')
 def convert_to_lucene(input, pipeline, sigma_cli_path):
     """Sigma rule을 단순히 Lucene 쿼리로 변환합니다."""
     try:
@@ -156,7 +168,7 @@ def convert_to_lucene(input, pipeline, sigma_cli_path):
 @click.option('--input', '-i', required=True, help='입력 Sigma rule 파일 경로')
 @click.option('--output', '-o', help='출력 JSON 파일 경로 (선택사항)')
 @click.option('--pipeline', default='ecs_windows', help='Sigma CLI 파이프라인 (기본값: ecs_windows)')
-@click.option('--sigma-cli-path', default=get_default_sigma_cli_path, help='Sigma CLI 명령어 경로')
+@click.option('--sigma-cli-path', default=__get_default_sigma_cli_path, help='Sigma CLI 명령어 경로')
 def convert_to_detection_rule(input, output, pipeline, sigma_cli_path):
     """Sigma rule을 Kibana Detection Rule로 변환합니다."""
     try:
@@ -170,9 +182,9 @@ def convert_to_detection_rule(input, output, pipeline, sigma_cli_path):
 
 @cli.command()
 @click.option('--input', '-i', required=True, help='입력 JSON 파일 경로')
-@click.option('--kibana-url', help='Kibana 서버 URL')
-@click.option('--username', help='Kibana 사용자명')
-@click.option('--password', help='Kibana 비밀번호')
+@click.option('--kibana-url', default=__get_default_kibana_url, help='Kibana 서버 URL')
+@click.option('--username', default=__get_default_kibana_username, help='Kibana 사용자명')
+@click.option('--password', default=__get_default_kibana_password, help='Kibana 비밀번호')
 def create_rule(input, kibana_url, username, password):
     """Detection Rule을 Kibana에 생성합니다."""
     try:
@@ -180,13 +192,32 @@ def create_rule(input, kibana_url, username, password):
         
         # 연결 테스트
         if not client.test_connection():
-            click.echo("Kibana 연결에 실패했습니다.", err=True)
+            click.echo("Kibana 연결에 실패했습니다.\n환경변수를 확인하거나 CLI 옵션을 사용하세요.\n\n예시:")
+            click.echo("python src/main.py create_rule -i examples/suspicious_process_creation.json --kibana-url http://localhost:5601 --username elastic --password changeme")
+            sys.exit(1)
+        
+        # 파일 확장자 확인
+        if not input.lower().endswith('.json'):
+            click.echo(f"❌ 오류: '{input}' 파일이 JSON 형식이 아닙니다.")
+            click.echo("JSON 파일(.json)을 입력해주세요.")
+            click.echo("\n예시:")
+            click.echo("python src/main.py create_rule -i examples/suspicious_process_creation.json")
             sys.exit(1)
         
         # Detection Rule 로드 및 생성
-        with open(input, 'r', encoding='utf-8') as f:
-            import json
-            rule_data = json.load(f)
+        try:
+            with open(input, 'r', encoding='utf-8') as f:
+                import json
+                rule_data = json.load(f)
+        except json.JSONDecodeError as e:
+            click.echo(f"❌ 오류: '{input}' 파일이 유효한 JSON 형식이 아닙니다.")
+            click.echo(f"JSON 파싱 오류: {e}")
+            click.echo("\n올바른 JSON 형식의 Detection Rule 파일을 입력해주세요.")
+            sys.exit(1)
+        except FileNotFoundError:
+            click.echo(f"❌ 오류: '{input}' 파일을 찾을 수 없습니다.")
+            click.echo("파일 경로를 확인해주세요.")
+            sys.exit(1)
         
         rule_id = client.create_detection_rule(rule_data)
         if rule_id:
@@ -203,9 +234,9 @@ def create_rule(input, kibana_url, username, password):
 @cli.command()
 @click.option('--rule-id', required=True, help='업데이트할 규칙 ID')
 @click.option('--input', '-i', required=True, help='업데이트할 JSON 파일 경로')
-@click.option('--kibana-url', help='Kibana 서버 URL')
-@click.option('--username', help='Kibana 사용자명')
-@click.option('--password', help='Kibana 비밀번호')
+@click.option('--kibana-url', default=__get_default_kibana_url, help='Kibana 서버 URL')
+@click.option('--username', default=__get_default_kibana_username, help='Kibana 사용자명')
+@click.option('--password', default=__get_default_kibana_password, help='Kibana 비밀번호')
 def update_rule(rule_id, input, kibana_url, username, password):
     """Detection Rule을 업데이트합니다."""
     try:
@@ -235,9 +266,9 @@ def update_rule(rule_id, input, kibana_url, username, password):
 
 @cli.command()
 @click.option('--rule-id', required=True, help='삭제할 규칙 ID')
-@click.option('--kibana-url', help='Kibana 서버 URL')
-@click.option('--username', help='Kibana 사용자명')
-@click.option('--password', help='Kibana 비밀번호')
+@click.option('--kibana-url', default=__get_default_kibana_url, help='Kibana 서버 URL')
+@click.option('--username', default=__get_default_kibana_username, help='Kibana 사용자명')
+@click.option('--password', default=__get_default_kibana_password, help='Kibana 비밀번호')
 def delete_rule(rule_id, kibana_url, username, password):
     """Detection Rule을 삭제합니다."""
     try:
@@ -262,11 +293,16 @@ def delete_rule(rule_id, kibana_url, username, password):
 
 
 @cli.command()
-@click.option('--kibana-url', help='Kibana 서버 URL')
-@click.option('--username', help='Kibana 사용자명')
-@click.option('--password', help='Kibana 비밀번호')
-def list_rules(kibana_url, username, password):
-    """모든 Detection Rules를 조회합니다."""
+@click.option('--kibana-url', default=__get_default_kibana_url, help='Kibana 서버 URL')
+@click.option('--username', default=__get_default_kibana_username, help='Kibana 사용자명')
+@click.option('--password', default=__get_default_kibana_password, help='Kibana 비밀번호')
+@click.option('--page', default=1, help='페이지 번호 (기본값: 1)')
+@click.option('--per-page', default=100, help='페이지당 규칙 수 (기본값: 100)')
+@click.option('--sort-field', default='created_at', help='정렬 필드 (기본값: created_at)')
+@click.option('--sort-order', default='desc', type=click.Choice(['asc', 'desc']), help='정렬 순서 (기본값: desc)')
+@click.option('--filter', help='필터 쿼리 (예: alert.attributes.name:windows)')
+def list_rules(kibana_url, username, password, page, per_page, sort_field, sort_order, filter):
+    """Detection Rules를 조회합니다."""
     try:
         client = get_kibana_client(kibana_url, username, password)
         
@@ -276,7 +312,13 @@ def list_rules(kibana_url, username, password):
             sys.exit(1)
         
         # Detection Rules 조회
-        rules = client.get_all_rules()
+        rules = client.list_detection_rules(
+            page=page,
+            per_page=per_page,
+            sort_field=sort_field,
+            sort_order=sort_order,
+            filter_query=filter
+        )
         
         if not rules:
             click.echo("등록된 Detection Rules가 없습니다.")
@@ -299,9 +341,9 @@ def list_rules(kibana_url, username, password):
 
 @cli.command()
 @click.option('--rule-id', required=True, help='조회할 규칙 ID')
-@click.option('--kibana-url', help='Kibana 서버 URL')
-@click.option('--username', help='Kibana 사용자명')
-@click.option('--password', help='Kibana 비밀번호')
+@click.option('--kibana-url', default=__get_default_kibana_url, help='Kibana 서버 URL')
+@click.option('--username', default=__get_default_kibana_username, help='Kibana 사용자명')
+@click.option('--password', default=__get_default_kibana_password, help='Kibana 비밀번호')
 def get_rule(rule_id, kibana_url, username, password):
     """특정 Detection Rule을 조회합니다."""
     try:
@@ -333,11 +375,11 @@ def get_rule(rule_id, kibana_url, username, password):
 
 @cli.command()
 @click.option('--input', '-i', required=True, help='입력 Sigma rule 파일 경로')
-@click.option('--kibana-url', help='Kibana 서버 URL')
-@click.option('--username', help='Kibana 사용자명')
-@click.option('--password', help='Kibana 비밀번호')
+@click.option('--kibana-url', default=__get_default_kibana_url, help='Kibana 서버 URL')
+@click.option('--username', default=__get_default_kibana_username, help='Kibana 사용자명')
+@click.option('--password', default=__get_default_kibana_password, help='Kibana 비밀번호')
 @click.option('--pipeline', default='ecs_windows', help='Sigma CLI 파이프라인')
-@click.option('--sigma-cli-path', default=get_default_sigma_cli_path, help='Sigma CLI 명령어 경로')
+@click.option('--sigma-cli-path', default=__get_default_sigma_cli_path, help='Sigma CLI 명령어 경로')
 def convert_and_create(input, kibana_url, username, password, pipeline, sigma_cli_path):
     """Sigma rule을 변환하고 Kibana에 생성합니다."""
     try:
@@ -372,7 +414,7 @@ def convert_and_create(input, kibana_url, username, password, pipeline, sigma_cl
 
 
 @cli.command()
-@click.option('--sigma-cli-path', default=get_default_sigma_cli_path, help='Sigma CLI 명령어 경로')
+@click.option('--sigma-cli-path', default=__get_default_sigma_cli_path, help='Sigma CLI 명령어 경로')
 def list_sigma_cli_info(sigma_cli_path):
     """Sigma CLI 정보를 조회합니다."""
     try:
@@ -403,7 +445,7 @@ def list_sigma_cli_info(sigma_cli_path):
 
 @cli.command()
 @click.option('--input', '-i', required=True, help='입력 Sigma rule 파일 경로')
-@click.option('--sigma-cli-path', default=get_default_sigma_cli_path, help='Sigma CLI 명령어 경로')
+@click.option('--sigma-cli-path', default=__get_default_sigma_cli_path, help='Sigma CLI 명령어 경로')
 def validate_rule(input, sigma_cli_path):
     """Sigma rule의 유효성을 검사합니다."""
     try:
