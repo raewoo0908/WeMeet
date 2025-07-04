@@ -146,33 +146,37 @@ class SigmaCLIConverter:
             os.unlink(temp_file_path)
     
     def convert_to_detection_rule(self, sigma_rule: Dict[str, Any], 
-                                pipeline: str = "ecs_windows") -> Dict[str, Any]:
+                                pipeline: str = "ecs_windows",
+                                additional_fields: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
         """
-        Sigma rule을 Kibana Detection Rule로 변환
+        Sigma rule을 Kibana Detection Rule로 변환합니다.
         
         Args:
             sigma_rule: Sigma rule 딕셔너리
             pipeline: 사용할 처리 파이프라인
+            additional_fields: 추가로 설정할 필드들 (선택사항)
             
         Returns:
-            Kibana Detection Rule 딕셔너리
+            Detection Rule 딕셔너리
         """
         # Sigma CLI로 Lucene 쿼리 생성
         lucene_query = self.convert_sigma_rule_dict(sigma_rule, pipeline)
         
         # Detection Rule 구조 생성
-        detection_rule = self._create_detection_rule_structure(sigma_rule, lucene_query)
+        detection_rule = self._create_detection_rule_structure(sigma_rule, lucene_query, additional_fields)
         
         return detection_rule
     
     def _create_detection_rule_structure(self, sigma_rule: Dict[str, Any], 
-                                       lucene_query: str) -> Dict[str, Any]:
+                                       lucene_query: str,
+                                       additional_fields: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
         """
         Detection Rule 구조를 생성합니다.
         
         Args:
             sigma_rule: Sigma rule 딕셔너리
             lucene_query: Lucene 쿼리 문자열
+            additional_fields: 추가로 설정할 필드들 (선택사항)
             
         Returns:
             Detection Rule 딕셔너리
@@ -187,6 +191,8 @@ class SigmaCLIConverter:
         # 위험도 매핑
         risk_score_map = {'low': 21, 'medium': 47, 'high': 73, 'critical': 99}
         risk_score = risk_score_map.get(level.lower(), 47)
+
+        # TODO 추가 필드 설정
         
         # Detection Rule 구조 생성
         detection_rule = {
@@ -225,6 +231,10 @@ class SigmaCLIConverter:
             }
         }
         
+        # 추가 필드가 있으면 기존 필드를 덮어쓰거나 새 필드 추가
+        if additional_fields:
+            detection_rule.update(additional_fields)
+        
         return detection_rule
     
     def _generate_rule_id(self, title: str) -> str:
@@ -235,6 +245,8 @@ class SigmaCLIConverter:
         rule_id = re.sub(r'_+', '_', rule_id)
         # 앞뒤 언더스코어 제거
         rule_id = rule_id.strip('_')
+        # 언더스코어를 하이픈으로 변환
+        rule_id = rule_id.replace('_', '-')
         return rule_id
     
     def _get_filters(self, sigma_rule: Dict[str, Any]) -> List[Dict[str, Any]]:
@@ -282,7 +294,8 @@ class SigmaCLIConverter:
         return filters
     
     def convert_file(self, input_file: str, output_file: Optional[str] = None, 
-                    pipeline: str = "ecs_windows") -> str:
+                    pipeline: str = "ecs_windows",
+                    additional_fields: Optional[Dict[str, Any]] = None) -> str:
         """
         Sigma rule 파일을 Kibana Detection Rule JSON으로 변환
         
@@ -290,6 +303,7 @@ class SigmaCLIConverter:
             input_file: 입력 Sigma rule 파일 경로
             output_file: 출력 JSON 파일 경로 (선택사항)
             pipeline: 사용할 처리 파이프라인
+            additional_fields: 추가로 설정할 필드들 (선택사항)
             
         Returns:
             출력 파일 경로
@@ -298,7 +312,7 @@ class SigmaCLIConverter:
         sigma_rule = self.load_sigma_rule(input_file)
         
         # Detection Rule로 변환
-        detection_rule = self.convert_to_detection_rule(sigma_rule, pipeline)
+        detection_rule = self.convert_to_detection_rule(sigma_rule, pipeline, additional_fields)
         
         # 출력 파일명 결정
         if output_file is None:
