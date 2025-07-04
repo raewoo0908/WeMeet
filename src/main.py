@@ -124,7 +124,7 @@ def check_sigma_cli(sigma_cli_path):
 
 
 @cli.command()
-@click.option('--sigma-cli-path', default=get_default_sigma_cli_path, help='Sigma CLI 명령어 경로')
+@click.option('--sigma-cli-path', default=__get_default_sigma_cli_path, help='Sigma CLI 명령어 경로')
 @click.option('--required-plugins', help='필요한 플러그인 목록 (쉼표로 구분)')
 def setup_sigma_cli(sigma_cli_path, required_plugins):
     """Sigma CLI 환경을 설정합니다."""
@@ -169,11 +169,26 @@ def convert_to_lucene(input, pipeline, sigma_cli_path):
 @click.option('--output', '-o', help='출력 JSON 파일 경로 (선택사항)')
 @click.option('--pipeline', default='ecs_windows', help='Sigma CLI 파이프라인 (기본값: ecs_windows)')
 @click.option('--sigma-cli-path', default=__get_default_sigma_cli_path, help='Sigma CLI 명령어 경로')
-def convert_to_detection_rule(input, output, pipeline, sigma_cli_path):
+@click.option('--additional-fields', help='추가 필드를 JSON 형식으로 설정 (예: \'{"interval": "10m", "max_signals": 200}\')')
+def convert_to_detection_rule(input, output, pipeline, sigma_cli_path, additional_fields):
     """Sigma rule을 Kibana Detection Rule로 변환합니다."""
     try:
         converter = get_sigma_converter(sigma_cli_path)
-        output_file = converter.convert_file(input, output, pipeline)
+        
+        # 추가 필드 파싱
+        parsed_additional_fields = None
+        if additional_fields:
+            try:
+                import json
+                parsed_additional_fields = json.loads(additional_fields)
+                click.echo(f"추가 필드 설정: {parsed_additional_fields}")
+            except json.JSONDecodeError as e:
+                click.echo(f"❌ 오류: 추가 필드 JSON 파싱 실패: {e}", err=True)
+                click.echo("올바른 JSON 형식으로 입력해주세요.")
+                click.echo("예시: --additional-fields '{\"interval\": \"10m\", \"max_signals\": 200}'")
+                sys.exit(1)
+        
+        output_file = converter.convert_file(input, output, pipeline, parsed_additional_fields)
         click.echo(f"Kibana Detection Rule 변환 완료: {output_file}")
     except Exception as e:
         click.echo(f"변환 실패: {e}", err=True)
@@ -380,12 +395,26 @@ def get_rule(rule_id, kibana_url, username, password):
 @click.option('--password', default=__get_default_kibana_password, help='Kibana 비밀번호')
 @click.option('--pipeline', default='ecs_windows', help='Sigma CLI 파이프라인')
 @click.option('--sigma-cli-path', default=__get_default_sigma_cli_path, help='Sigma CLI 명령어 경로')
-def convert_and_create(input, kibana_url, username, password, pipeline, sigma_cli_path):
+@click.option('--additional-fields', help='추가 필드를 JSON 형식으로 설정 (예: \'{"interval": "10m", "max_signals": 200}\')')
+def convert_and_create(input, kibana_url, username, password, pipeline, sigma_cli_path, additional_fields):
     """Sigma rule을 변환하고 Kibana에 생성합니다."""
     try:
+        # 추가 필드 파싱
+        parsed_additional_fields = None
+        if additional_fields:
+            try:
+                import json
+                parsed_additional_fields = json.loads(additional_fields)
+                click.echo(f"추가 필드 설정: {parsed_additional_fields}")
+            except json.JSONDecodeError as e:
+                click.echo(f"❌ 오류: 추가 필드 JSON 파싱 실패: {e}", err=True)
+                click.echo("올바른 JSON 형식으로 입력해주세요.")
+                click.echo("예시: --additional-fields '{\"interval\": \"10m\", \"max_signals\": 200}'")
+                sys.exit(1)
+        
         # 변환
         converter = get_sigma_converter(sigma_cli_path)
-        output_file = converter.convert_file(input, None, pipeline)
+        output_file = converter.convert_file(input, None, pipeline, parsed_additional_fields)
         click.echo(f"Kibana Detection Rule 변환 완료: {output_file}")
         
         # 생성
