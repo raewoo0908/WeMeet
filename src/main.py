@@ -6,8 +6,10 @@ Sigma CLI를 사용하여 Sigma rule을 Lucene 쿼리로 변환하고 Kibana Det
 
 import os
 import sys
+import json
 import click
 from pathlib import Path
+from typing import List, Dict, Any, Optional
 from dotenv import load_dotenv, find_dotenv
 
 # 프로젝트 루트를 Python 경로에 추가
@@ -67,6 +69,170 @@ def __get_default_kibana_username():
 def __get_default_kibana_password():
     """기본 Kibana 비밀번호를 반환합니다."""
     return os.getenv('KIBANA_PASSWORD', 'changeme')
+
+
+def get_sigma_rule_files(input_path: str) -> List[str]:
+    """
+    입력 경로에서 Sigma rule 파일들을 찾습니다.
+    
+    Args:
+        input_path: 파일 또는 디렉터리 경로
+        
+    Returns:
+        Sigma rule 파일 경로 리스트
+    """
+    path = Path(input_path)
+    
+    if path.is_file():
+        # 단일 파일인 경우
+        if path.suffix.lower() in ['.yml', '.yaml']:
+            return [str(path)]
+        else:
+            raise ValueError(f"지원하지 않는 파일 형식입니다: {path.suffix}")
+    
+    elif path.is_dir():
+        # 디렉터리인 경우 모든 .yml, .yaml 파일 찾기
+        yml_files = []
+        for file_path in path.rglob('*.yml'):
+            yml_files.append(str(file_path))
+        for file_path in path.rglob('*.yaml'):
+            yml_files.append(str(file_path))
+        
+        if not yml_files:
+            raise ValueError(f"디렉터리에서 Sigma rule 파일을 찾을 수 없습니다: {input_path}")
+        
+        return sorted(yml_files)
+    
+    else:
+        raise ValueError(f"존재하지 않는 경로입니다: {input_path}")
+
+
+def validate_sigma_rules(rule_files: List[str], sigma_cli_path: str = None) -> Dict[str, bool]:
+    """
+    Sigma rule 파일들의 유효성을 검사합니다.
+    
+    Args:
+        rule_files: 검사할 Sigma rule 파일 경로 리스트
+        sigma_cli_path: Sigma CLI 경로
+        
+    Returns:
+        파일별 유효성 검사 결과 딕셔너리
+    """
+    converter = get_sigma_converter(sigma_cli_path)
+    results = {}
+    
+    for rule_file in rule_files:
+        try:
+            is_valid = converter.validate_sigma_rule(rule_file)
+            results[rule_file] = is_valid
+            status = "✅ 유효" if is_valid else "❌ 유효하지 않음"
+            click.echo(f"{status}: {rule_file}")
+        except Exception as e:
+            results[rule_file] = False
+            click.echo(f"❌ 검사 실패: {rule_file} - {e}")
+    
+    return results
+
+
+def convert_sigma_rules(rule_files: List[str], output_dir: str = None, 
+                       pipeline: str = "ecs_windows", sigma_cli_path: str = None,
+                       additional_fields: Dict[str, Any] = None) -> List[str]:
+    """
+    Sigma rule 파일들을 Detection Rule로 변환합니다.
+    
+    Args:
+        rule_files: 변환할 Sigma rule 파일 경로 리스트
+        output_dir: 출력 디렉터리 (None이면 각 파일과 같은 위치)
+        pipeline: Sigma CLI 파이프라인
+        sigma_cli_path: Sigma CLI 경로
+        additional_fields: 추가 필드
+        
+    Returns:
+        생성된 Detection Rule JSON 파일 경로 리스트
+    """
+    converter = get_sigma_converter(sigma_cli_path)
+    output_files = []
+    
+    for rule_file in rule_files:
+        try:
+            if output_dir:
+                # 출력 디렉터리가 지정된 경우
+                output_path = Path(output_dir)
+                output_path.mkdir(parents=True, exist_ok=True)
+                
+                input_path = Path(rule_file)
+                output_file = str(output_path / f"{input_path.stem}.detection_rule.json")
+            else:
+                # 출력 디렉터리가 지정되지 않은 경우 (기존 동작)
+                output_file = None
+            
+            converted_file = converter.convert_file(
+                rule_file, 
+                output_file, 
+                pipeline, 
+                additional_fields
+            )
+            output_files.append(converted_file)
+            click.echo(f"✅ 변환 완료: {rule_file} → {converted_file}")
+            
+        except Exception as e:
+            click.echo(f"❌ 변환 실패: {rule_file} - {e}", err=True)
+    
+    return output_files
+
+
+def create_detection_rules_batch(json_files: List[str], kibana_url: str = None, 
+                                username: str = None, password: str = None) -> Dict[str, Any]:
+    """
+    여러 Detection Rule JSON 파일을 일괄로 Kibana에 등록합니다.
+    
+    Args:
+        json_files: 등록할 Detection Rule JSON 파일 경로 리스트
+        kibana_url: Kibana 서버 URL
+        username: Kibana 사용자명
+        password: Kibana 비밀번호
+        
+    Returns:
+        등록 결과 요약
+    """
+    client = get_kibana_client(kibana_url, username, password)
+    results = {
+        'total': len(json_files),
+        'success': 0,
+        'failed': 0,
+        'success_files': [],
+        'failed_files': []
+    }
+    
+    for json_file in json_files:
+        try:
+            # JSON 파일 로드
+            with open(json_file, 'r', encoding='utf-8') as f:
+                detection_rule = json.load(f)
+            
+            # Detection Rule 생성
+            rule_id = client.create_rule(detection_rule)
+            results['success'] += 1
+            results['success_files'].append(json_file)
+            click.echo(f"✅ 등록 완료: {json_file} → Rule ID: {rule_id}")
+            
+        except Exception as e:
+            results['failed'] += 1
+            results['failed_files'].append(json_file)
+            click.echo(f"❌ 등록 실패: {json_file} - {e}", err=True)
+    
+    # 결과 요약 출력
+    click.echo(f"\n📊 일괄 등록 결과:")
+    click.echo(f"   - 총 파일 수: {results['total']}")
+    click.echo(f"   - 성공: {results['success']}")
+    click.echo(f"   - 실패: {results['failed']}")
+    
+    if results['failed'] > 0:
+        click.echo(f"   - 실패한 파일들:")
+        for failed_file in results['failed_files']:
+            click.echo(f"     • {failed_file}")
+    
+    return results
 
 
 @click.group()
@@ -165,21 +331,18 @@ def convert_to_lucene(input, pipeline, sigma_cli_path):
 
 
 @cli.command()
-@click.option('--input', '-i', required=True, help='입력 Sigma rule 파일 경로')
-@click.option('--output', '-o', help='출력 JSON 파일 경로 (선택사항)')
+@click.option('--input', '-i', required=True, help='입력 Sigma rule 파일 또는 디렉터리 경로')
+@click.option('--output', '-o', help='출력 JSON 파일 경로 또는 디렉터리 (선택사항)')
 @click.option('--pipeline', default='ecs_windows', help='Sigma CLI 파이프라인 (기본값: ecs_windows)')
 @click.option('--sigma-cli-path', default=__get_default_sigma_cli_path, help='Sigma CLI 명령어 경로')
 @click.option('--additional-fields', help='추가 필드를 JSON 형식으로 설정 (예: \'{"interval": "10m", "max_signals": 200}\')')
 def convert_to_detection_rule(input, output, pipeline, sigma_cli_path, additional_fields):
-    """Sigma rule을 Kibana Detection Rule로 변환합니다."""
+    """Sigma rule을 Kibana Detection Rule로 변환합니다. (파일 또는 디렉터리 지원)"""
     try:
-        converter = get_sigma_converter(sigma_cli_path)
-        
         # 추가 필드 파싱
         parsed_additional_fields = None
         if additional_fields:
             try:
-                import json
                 parsed_additional_fields = json.loads(additional_fields)
                 click.echo(f"추가 필드 설정: {parsed_additional_fields}")
             except json.JSONDecodeError as e:
@@ -188,8 +351,33 @@ def convert_to_detection_rule(input, output, pipeline, sigma_cli_path, additiona
                 click.echo("예시: --additional-fields '{\"interval\": \"10m\", \"max_signals\": 200}'")
                 sys.exit(1)
         
-        output_file = converter.convert_file(input, output, pipeline, parsed_additional_fields)
-        click.echo(f"Kibana Detection Rule 변환 완료: {output_file}")
+        # 입력 경로에서 Sigma rule 파일들 찾기
+        try:
+            rule_files = get_sigma_rule_files(input)
+            click.echo(f"📁 처리할 Sigma rule 파일 {len(rule_files)}개 발견:")
+            for rule_file in rule_files:
+                click.echo(f"   • {rule_file}")
+        except ValueError as e:
+            click.echo(f"❌ 오류: {e}", err=True)
+            sys.exit(1)
+        
+        # 변환 실행
+        if len(rule_files) == 1:
+            # 단일 파일인 경우 (기존 동작 유지)
+            converter = get_sigma_converter(sigma_cli_path)
+            output_file = converter.convert_file(rule_files[0], output, pipeline, parsed_additional_fields)
+            click.echo(f"✅ Kibana Detection Rule 변환 완료: {output_file}")
+        else:
+            # 여러 파일인 경우 (새로운 기능)
+            output_files = convert_sigma_rules(
+                rule_files, 
+                output,  # output이 디렉터리로 사용됨
+                pipeline, 
+                sigma_cli_path, 
+                parsed_additional_fields
+            )
+            click.echo(f"✅ 총 {len(output_files)}개 파일 변환 완료")
+            
     except Exception as e:
         click.echo(f"변환 실패: {e}", err=True)
         sys.exit(1)
@@ -397,13 +585,12 @@ def get_rule(rule_id, kibana_url, username, password):
 @click.option('--sigma-cli-path', default=__get_default_sigma_cli_path, help='Sigma CLI 명령어 경로')
 @click.option('--additional-fields', help='추가 필드를 JSON 형식으로 설정 (예: \'{"interval": "10m", "max_signals": 200}\')')
 def convert_and_create(input, kibana_url, username, password, pipeline, sigma_cli_path, additional_fields):
-    """Sigma rule을 변환하고 Kibana에 생성합니다."""
+    """Sigma rule을 변환하고 Kibana에 생성합니다. (단일 파일만 지원)"""
     try:
         # 추가 필드 파싱
         parsed_additional_fields = None
         if additional_fields:
             try:
-                import json
                 parsed_additional_fields = json.loads(additional_fields)
                 click.echo(f"추가 필드 설정: {parsed_additional_fields}")
             except json.JSONDecodeError as e:
@@ -412,9 +599,16 @@ def convert_and_create(input, kibana_url, username, password, pipeline, sigma_cl
                 click.echo("예시: --additional-fields '{\"interval\": \"10m\", \"max_signals\": 200}'")
                 sys.exit(1)
         
+        # 단일 파일인지 확인
+        rule_files = get_sigma_rule_files(input)
+        if len(rule_files) != 1:
+            click.echo(f"❌ 오류: convert-and-create 명령어는 단일 파일만 지원합니다.")
+            click.echo(f"디렉터리나 여러 파일을 처리하려면 convert-and-create-batch 명령어를 사용하세요.")
+            sys.exit(1)
+        
         # 변환
         converter = get_sigma_converter(sigma_cli_path)
-        output_file = converter.convert_file(input, None, pipeline, parsed_additional_fields)
+        output_file = converter.convert_file(rule_files[0], None, pipeline, parsed_additional_fields)
         click.echo(f"Kibana Detection Rule 변환 완료: {output_file}")
         
         # 생성
@@ -427,7 +621,6 @@ def convert_and_create(input, kibana_url, username, password, pipeline, sigma_cl
         
         # Detection Rule 생성
         with open(output_file, 'r', encoding='utf-8') as f:
-            import json
             rule_data = json.load(f)
         
         rule_id = client.create_detection_rule(rule_data)
@@ -473,20 +666,172 @@ def list_sigma_cli_info(sigma_cli_path):
 
 
 @cli.command()
-@click.option('--input', '-i', required=True, help='입력 Sigma rule 파일 경로')
+@click.option('--input', '-i', required=True, help='입력 Sigma rule 파일 또는 디렉터리 경로')
 @click.option('--sigma-cli-path', default=__get_default_sigma_cli_path, help='Sigma CLI 명령어 경로')
 def validate_rule(input, sigma_cli_path):
-    """Sigma rule의 유효성을 검사합니다."""
+    """Sigma rule의 유효성을 검사합니다. (파일 또는 디렉터리 지원)"""
     try:
-        converter = get_sigma_converter(sigma_cli_path)
-        is_valid = converter.validate_sigma_rule(input)
-        if is_valid:
-            click.echo(f"✅ {input} 규칙이 유효합니다.")
-        else:
-            click.echo(f"❌ {input} 규칙이 유효하지 않습니다.")
+        # 입력 경로에서 Sigma rule 파일들 찾기
+        try:
+            rule_files = get_sigma_rule_files(input)
+            click.echo(f"📁 검사할 Sigma rule 파일 {len(rule_files)}개 발견:")
+            for rule_file in rule_files:
+                click.echo(f"   • {rule_file}")
+        except ValueError as e:
+            click.echo(f"❌ 오류: {e}", err=True)
             sys.exit(1)
+        
+        # 유효성 검사 실행
+        results = validate_sigma_rules(rule_files, sigma_cli_path)
+        
+        # 결과 요약
+        valid_count = sum(1 for is_valid in results.values() if is_valid)
+        invalid_count = len(results) - valid_count
+        
+        click.echo(f"\n📊 유효성 검사 결과:")
+        click.echo(f"   - 총 파일 수: {len(results)}")
+        click.echo(f"   - 유효한 파일: {valid_count}")
+        click.echo(f"   - 유효하지 않은 파일: {invalid_count}")
+        
+        if invalid_count > 0:
+            click.echo(f"\n❌ 유효하지 않은 파일들:")
+            for rule_file, is_valid in results.items():
+                if not is_valid:
+                    click.echo(f"   • {rule_file}")
+            sys.exit(1)
+        else:
+            click.echo(f"\n✅ 모든 파일이 유효합니다!")
+            
     except Exception as e:
         click.echo(f"검사 실패: {e}", err=True)
+        sys.exit(1)
+
+
+@cli.command()
+@click.option('--input', '-i', required=True, help='입력 Sigma rule 파일 또는 디렉터리 경로')
+@click.option('--output', '-o', help='출력 디렉터리 (선택사항)')
+@click.option('--pipeline', default='ecs_windows', help='Sigma CLI 파이프라인 (기본값: ecs_windows)')
+@click.option('--sigma-cli-path', default=__get_default_sigma_cli_path, help='Sigma CLI 명령어 경로')
+@click.option('--additional-fields', help='추가 필드를 JSON 형식으로 설정 (예: \'{"interval": "10m", "max_signals": 200}\')')
+@click.option('--kibana-url', default=__get_default_kibana_url, help='Kibana 서버 URL')
+@click.option('--username', default=__get_default_kibana_username, help='Kibana 사용자명')
+@click.option('--password', default=__get_default_kibana_password, help='Kibana 비밀번호')
+def convert_and_create_batch(input, output, pipeline, sigma_cli_path, additional_fields, kibana_url, username, password):
+    """Sigma rule을 변환하고 Kibana에 일괄 생성합니다. (파일 또는 디렉터리 지원)"""
+    try:
+        # 추가 필드 파싱
+        parsed_additional_fields = None
+        if additional_fields:
+            try:
+                parsed_additional_fields = json.loads(additional_fields)
+                click.echo(f"추가 필드 설정: {parsed_additional_fields}")
+            except json.JSONDecodeError as e:
+                click.echo(f"❌ 오류: 추가 필드 JSON 파싱 실패: {e}", err=True)
+                click.echo("올바른 JSON 형식으로 입력해주세요.")
+                click.echo("예시: --additional-fields '{\"interval\": \"10m\", \"max_signals\": 200}'")
+                sys.exit(1)
+        
+        # 입력 경로에서 Sigma rule 파일들 찾기
+        try:
+            rule_files = get_sigma_rule_files(input)
+            click.echo(f"📁 처리할 Sigma rule 파일 {len(rule_files)}개 발견:")
+            for rule_file in rule_files:
+                click.echo(f"   • {rule_file}")
+        except ValueError as e:
+            click.echo(f"❌ 오류: {e}", err=True)
+            sys.exit(1)
+        
+        # 1단계: 변환
+        click.echo(f"\n🔄 1단계: Sigma rule 변환 중...")
+        output_files = convert_sigma_rules(
+            rule_files, 
+            output, 
+            pipeline, 
+            sigma_cli_path, 
+            parsed_additional_fields
+        )
+        
+        if not output_files:
+            click.echo("❌ 변환된 파일이 없습니다.")
+            sys.exit(1)
+        
+        # 2단계: Kibana 연결 테스트
+        click.echo(f"\n🔗 2단계: Kibana 연결 테스트 중...")
+        client = get_kibana_client(kibana_url, username, password)
+        if not client.test_connection():
+            click.echo("❌ Kibana 연결에 실패했습니다.", err=True)
+            sys.exit(1)
+        click.echo("✅ Kibana 연결 성공")
+        
+        # 3단계: 일괄 등록
+        click.echo(f"\n📤 3단계: Detection Rules 일괄 등록 중...")
+        results = create_detection_rules_batch(output_files, kibana_url, username, password)
+        
+        # 최종 결과
+        if results['failed'] == 0:
+            click.echo(f"\n🎉 모든 Detection Rules가 성공적으로 등록되었습니다!")
+        else:
+            click.echo(f"\n⚠️ 일부 Detection Rules 등록에 실패했습니다.")
+            sys.exit(1)
+            
+    except Exception as e:
+        click.echo(f"처리 실패: {e}", err=True)
+        sys.exit(1)
+
+
+@cli.command()
+@click.option('--input', '-i', required=True, help='입력 JSON 파일 또는 디렉터리 경로')
+@click.option('--kibana-url', default=__get_default_kibana_url, help='Kibana 서버 URL')
+@click.option('--username', default=__get_default_kibana_username, help='Kibana 사용자명')
+@click.option('--password', default=__get_default_kibana_password, help='Kibana 비밀번호')
+def create_rules_batch(input, kibana_url, username, password):
+    """여러 Detection Rule JSON 파일을 일괄로 Kibana에 등록합니다."""
+    try:
+        # 입력 경로에서 JSON 파일들 찾기
+        path = Path(input)
+        json_files = []
+        
+        if path.is_file():
+            # 단일 파일인 경우
+            if path.suffix.lower() == '.json':
+                json_files = [str(path)]
+            else:
+                raise ValueError(f"지원하지 않는 파일 형식입니다: {path.suffix}")
+        elif path.is_dir():
+            # 디렉터리인 경우 모든 .json 파일 찾기
+            for file_path in path.rglob('*.json'):
+                json_files.append(str(file_path))
+            
+            if not json_files:
+                raise ValueError(f"디렉터리에서 JSON 파일을 찾을 수 없습니다: {input}")
+        else:
+            raise ValueError(f"존재하지 않는 경로입니다: {input}")
+        
+        click.echo(f"📁 등록할 Detection Rule JSON 파일 {len(json_files)}개 발견:")
+        for json_file in json_files:
+            click.echo(f"   • {json_file}")
+        
+        # Kibana 연결 테스트
+        click.echo(f"\n🔗 Kibana 연결 테스트 중...")
+        client = get_kibana_client(kibana_url, username, password)
+        if not client.test_connection():
+            click.echo("❌ Kibana 연결에 실패했습니다.", err=True)
+            sys.exit(1)
+        click.echo("✅ Kibana 연결 성공")
+        
+        # 일괄 등록
+        click.echo(f"\n📤 Detection Rules 일괄 등록 중...")
+        results = create_detection_rules_batch(json_files, kibana_url, username, password)
+        
+        # 최종 결과
+        if results['failed'] == 0:
+            click.echo(f"\n🎉 모든 Detection Rules가 성공적으로 등록되었습니다!")
+        else:
+            click.echo(f"\n⚠️ 일부 Detection Rules 등록에 실패했습니다.")
+            sys.exit(1)
+            
+    except Exception as e:
+        click.echo(f"등록 실패: {e}", err=True)
         sys.exit(1)
 
 
