@@ -167,6 +167,207 @@ python src/main.py delete-rule --rule-id your-rule-id
 python src/main.py convert-and-create -i examples/suspicious_process_creation.yml
 ```
 
+## 🔄 배치 처리 기능
+
+여러 Sigma 규칙을 한 번에 처리할 수 있는 배치 처리 기능을 제공합니다. 단일 파일뿐만 아니라 디렉터리 내의 모든 Sigma 규칙 파일을 처리할 수 있습니다.
+
+### 배치 변환 및 유효성 검사
+
+```bash
+# 디렉터리 내 모든 Sigma 규칙을 Detection Rule로 변환
+python src/main.py convert-to-detection-rule -i rules_directory/ -o output_directory/
+
+# 디렉터리 내 모든 Sigma 규칙 유효성 검사
+python src/main.py validate-rule -i rules_directory/
+
+# 추가 필드와 함께 배치 변환
+python src/main.py convert-to-detection-rule \
+    -i rules_directory/ \
+    -o output_directory/ \
+    --additional-fields '{"interval": "10m", "max_signals": 500, "enabled": false}'
+```
+
+### 일괄 변환 및 등록
+
+```bash
+# 1단계: 변환, 2단계: Kibana에 일괄 등록
+python src/main.py convert-and-create-batch \
+    -i rules_directory/ \
+    -o output_directory/ \
+    --pipeline ecs_windows \
+    --additional-fields '{"interval": "5m", "max_signals": 1000}'
+
+# 기존 JSON 파일들을 Kibana에 일괄 등록
+python src/main.py create-rules-batch -i json_files_directory/
+```
+
+### 배치 처리 예제
+
+#### 1. 단일 파일 처리 (기존 방식)
+```bash
+# 단일 파일 변환
+python src/main.py convert-to-detection-rule -i rule.yml -o rule.json
+
+# 단일 파일 유효성 검사
+python src/main.py validate-rule -i rule.yml
+```
+
+#### 2. 디렉터리 배치 처리 (새로운 방식)
+```bash
+# 디렉터리 내 모든 .yml 파일 변환
+python src/main.py convert-to-detection-rule -i ./sigma_rules/ -o ./detection_rules/
+
+# 디렉터리 내 모든 .yml 파일 유효성 검사
+python src/main.py validate-rule -i ./sigma_rules/
+
+# 디렉터리 내 모든 .yml 파일을 변환하고 Kibana에 등록
+python src/main.py convert-and-create-batch -i ./sigma_rules/ -o ./temp_output/
+
+# 디렉터리 내 모든 .json 파일을 Kibana에 등록
+python src/main.py create-rules-batch -i ./detection_rules/
+```
+
+#### 3. 복잡한 배치 처리 예제
+
+```bash
+# MITRE ATT&CK 정보와 함께 배치 변환
+python src/main.py convert-to-detection-rule \
+    -i ./threat_rules/ \
+    -o ./output/ \
+    --pipeline ecs_windows \
+    --additional-fields '{
+        "interval": "10m",
+        "max_signals": 500,
+        "enabled": true,
+        "risk_score": 85,
+        "threat": [{
+            "framework": "MITRE ATT&CK",
+            "tactic": {
+                "id": "TA0002",
+                "name": "Execution"
+            },
+            "technique": [{
+                "id": "T1059.001",
+                "name": "PowerShell"
+            }]
+        }],
+        "references": [
+            "https://attack.mitre.org/techniques/T1059/001/"
+        ]
+    }'
+
+# 변환 후 일괄 등록
+python src/main.py convert-and-create-batch \
+    -i ./threat_rules/ \
+    -o ./temp/ \
+    --additional-fields '{"interval": "5m", "max_signals": 1000, "enabled": false}'
+```
+
+### 배치 처리 기능 상세 설명
+
+#### 지원하는 파일 형식
+- **입력**: `.yml`, `.yaml` (Sigma 규칙 파일)
+- **출력**: `.json` (Kibana Detection Rule 파일)
+
+#### 디렉터리 처리 규칙
+1. **재귀 검색**: 하위 디렉터리까지 모두 검색
+2. **파일 필터링**: `.yml`, `.yaml` 확장자만 처리
+3. **중복 방지**: 동일한 파일명이 여러 디렉터리에 있어도 한 번만 처리
+4. **에러 처리**: 개별 파일 처리 실패 시에도 다른 파일들은 계속 처리
+
+#### 출력 디렉터리 옵션
+```bash
+# 출력 디렉터리 지정
+python src/main.py convert-to-detection-rule -i ./rules/ -o ./output/
+
+# 출력 디렉터리 미지정 (입력 파일과 같은 위치에 생성)
+python src/main.py convert-to-detection-rule -i ./rules/
+```
+
+#### 배치 처리 진행 상황 표시
+```
+처리할 Sigma rule 파일 3개 발견:
+  • /path/to/rule1.yml
+  • /path/to/rule2.yml
+  • /path/to/rule3.yml
+
+✅ 변환 완료: rule1.yml → rule1.detection_rule.json
+✅ 변환 완료: rule2.yml → rule2.detection_rule.json
+✅ 변환 완료: rule3.yml → rule3.detection_rule.json
+
+총 3개 파일 변환 완료
+```
+
+#### 일괄 등록 진행 상황 표시
+```
+등록할 Detection Rule JSON 파일 3개 발견:
+  • /path/to/rule1.detection_rule.json
+  • /path/to/rule2.detection_rule.json
+  • /path/to/rule3.detection_rule.json
+
+✅ 등록 완료: rule1.detection_rule.json → Rule ID: abc123
+✅ 등록 완료: rule2.detection_rule.json → Rule ID: def456
+✅ 등록 완료: rule3.detection_rule.json → Rule ID: ghi789
+
+📊 일괄 등록 결과:
+   - 총 파일 수: 3
+   - 성공: 3
+   - 실패: 0
+```
+
+### 배치 처리 명령어 옵션
+
+#### `convert-to-detection-rule` (배치 변환)
+```bash
+python src/main.py convert-to-detection-rule [OPTIONS]
+
+Options:
+  -i, --input PATH           입력 Sigma rule 파일 또는 디렉터리 경로 [필수]
+  -o, --output PATH          출력 JSON 파일 경로 또는 디렉터리 (선택사항)
+  --pipeline TEXT            Sigma CLI 파이프라인 (기본값: ecs_windows)
+  --sigma-cli-path TEXT      Sigma CLI 명령어 경로
+  --additional-fields TEXT   추가 필드를 JSON 형식으로 설정
+  --help                     도움말 표시
+```
+
+#### `validate-rule` (배치 유효성 검사)
+```bash
+python src/main.py validate-rule [OPTIONS]
+
+Options:
+  -i, --input PATH           입력 Sigma rule 파일 또는 디렉터리 경로 [필수]
+  --sigma-cli-path TEXT      Sigma CLI 명령어 경로
+  --help                     도움말 표시
+```
+
+#### `convert-and-create-batch` (일괄 변환 및 등록)
+```bash
+python src/main.py convert-and-create-batch [OPTIONS]
+
+Options:
+  -i, --input PATH           입력 Sigma rule 파일 또는 디렉터리 경로 [필수]
+  -o, --output PATH          출력 디렉터리 (선택사항)
+  --pipeline TEXT            Sigma CLI 파이프라인 (기본값: ecs_windows)
+  --sigma-cli-path TEXT      Sigma CLI 명령어 경로
+  --additional-fields TEXT   추가 필드를 JSON 형식으로 설정
+  --kibana-url TEXT          Kibana 서버 URL
+  --username TEXT            Kibana 사용자명
+  --password TEXT            Kibana 비밀번호
+  --help                     도움말 표시
+```
+
+#### `create-rules-batch` (JSON 파일 일괄 등록)
+```bash
+python src/main.py create-rules-batch [OPTIONS]
+
+Options:
+  -i, --input PATH           입력 JSON 파일 또는 디렉터리 경로 [필수]
+  --kibana-url TEXT          Kibana 서버 URL
+  --username TEXT            Kibana 사용자명
+  --password TEXT            Kibana 비밀번호
+  --help                     도움말 표시
+```
+
 ## 🔧 추가 필드 기능
 
 추가 필드 기능을 사용하면 Sigma 규칙을 Detection Rule로 변환할 때 기본 필드 외에 추가적인 커스텀 필드를 설정할 수 있습니다.
@@ -513,6 +714,77 @@ python src/main.py list-rules --filter "alert.attributes.severity:high"
 python src/main.py list-rules --page 1 --per-page 5
 ```
 
+### 5. 배치 처리 예제
+
+```bash
+# 디렉터리 내 모든 Sigma 규칙 변환
+python src/main.py convert-to-detection-rule -i ./sigma_rules/ -o ./detection_rules/
+
+# 디렉터리 내 모든 Sigma 규칙 유효성 검사
+python src/main.py validate-rule -i ./sigma_rules/
+
+# 추가 필드와 함께 배치 변환
+python src/main.py convert-to-detection-rule \
+    -i ./threat_rules/ \
+    -o ./output/ \
+    --additional-fields '{"interval": "10m", "max_signals": 500, "enabled": false}'
+
+# 변환 후 일괄 등록
+python src/main.py convert-and-create-batch \
+    -i ./sigma_rules/ \
+    -o ./temp/ \
+    --additional-fields '{"interval": "5m", "max_signals": 1000}'
+
+# 기존 JSON 파일들 일괄 등록
+python src/main.py create-rules-batch -i ./detection_rules/
+```
+
+### 6. 실제 사용 시나리오 예제
+
+#### 시나리오 1: 새로운 Sigma 규칙 세트 배포
+```bash
+# 1단계: 규칙 유효성 검사
+python src/main.py validate-rule -i ./new_rules/
+
+# 2단계: Detection Rule로 변환
+python src/main.py convert-to-detection-rule \
+    -i ./new_rules/ \
+    -o ./converted_rules/ \
+    --additional-fields '{"interval": "10m", "max_signals": 500}'
+
+# 3단계: Kibana에 등록
+python src/main.py create-rules-batch -i ./converted_rules/
+```
+
+#### 시나리오 2: 한 번에 처리
+```bash
+# 변환과 등록을 한 번에 처리
+python src/main.py convert-and-create-batch \
+    -i ./new_rules/ \
+    -o ./temp/ \
+    --additional-fields '{"interval": "5m", "max_signals": 1000, "enabled": true}'
+```
+
+#### 시나리오 3: MITRE ATT&CK 정보 포함
+```bash
+# 위협 정보와 함께 배치 처리
+python src/main.py convert-and-create-batch \
+    -i ./attack_rules/ \
+    -o ./temp/ \
+    --additional-fields '{
+        "interval": "10m",
+        "max_signals": 500,
+        "enabled": true,
+        "risk_score": 85,
+        "threat": [{
+            "framework": "MITRE ATT&CK",
+            "tactic": {"id": "TA0002", "name": "Execution"},
+            "technique": [{"id": "T1059.001", "name": "PowerShell"}]
+        }],
+        "references": ["https://attack.mitre.org/techniques/T1059/001/"]
+    }'
+```
+
 ## 🧪 테스트
 
 ### 테스트 실행
@@ -527,8 +799,41 @@ python -m unittest tests.test_kibana_client.TestKibanaDetectionClient.test_01_cr
 # 추가 필드 테스트 실행
 python tests/test_additional_fields.py
 
+# 배치 처리 기능 테스트 실행
+python tests/test_batch_processing.py
+
+# CLI 배치 명령어 테스트 실행
+python tests/test_cli_batch_commands.py
+
 # 테스트 파일 직접 실행
 python tests/test_kibana_client.py
+```
+
+### 배치 처리 테스트
+
+배치 처리 기능은 다음 테스트들을 통해 검증됩니다:
+
+```bash
+# 배치 처리 기능 테스트
+python tests/test_batch_processing.py
+
+# 테스트 내용:
+# - 단일 파일 처리
+# - 디렉터리 처리
+# - 유효성 검사
+# - 일괄 변환
+# - 에러 처리
+# - 추가 필드 통합
+
+# CLI 배치 명령어 테스트
+python tests/test_cli_batch_commands.py
+
+# 테스트 내용:
+# - CLI 명령어 실행
+# - 디렉터리 배치 처리
+# - 일괄 등록 명령어
+# - 에러 처리
+# - 도움말 명령어
 ```
 
 ### 테스트 환경 설정
