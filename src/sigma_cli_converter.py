@@ -59,7 +59,7 @@ class SigmaCLIConverter:
         except subprocess.CalledProcessError:
             return False
     
-    def convert_to_lucene(self, sigma_rule_path: str, pipeline: str = "ecs_windows") -> str:
+    def convert_to_lucene(self, sigma_rule_path: str, pipeline: str) -> str:
         """
         Sigma rule을 Lucene 쿼리로 변환
         
@@ -85,45 +85,14 @@ class SigmaCLIConverter:
                 check=True
             )
             
-            return result.stdout.strip()
+            lucene_query = result.stdout.strip()
+
+            return lucene_query
             
         except subprocess.CalledProcessError as e:
             raise RuntimeError(f"Sigma CLI 변환 실패: {e.stderr}")
-    
-    def convert_to_elasticsearch(self, sigma_rule_path: str, pipeline: str = "ecs_windows") -> str:
-        """
-        Sigma rule을 Elasticsearch 쿼리로 변환
-        
-        Args:
-            sigma_rule_path: Sigma rule 파일 경로
-            pipeline: 사용할 처리 파이프라인 (기본값: "ecs_windows")
-            
-        Returns:
-            변환된 Elasticsearch 쿼리 문자열
-        """
-        try:
-            cmd = [
-                self.sigma_cli_path, "convert",
-                "-t", "elasticsearch",
-                "-p", pipeline,
-                sigma_rule_path
-            ]
-            
-            result = subprocess.run(
-                cmd,
-                capture_output=True,
-                text=True,
-                check=True
-            )
-            
-            return result.stdout.strip()
-            
-        except subprocess.CalledProcessError as e:
-            # elasticsearch 백엔드가 없으면 lucene으로 폴백
-            print(f"⚠️ elasticsearch 백엔드 실패, lucene으로 폴백: {e.stderr}")
-            return self.convert_to_lucene(sigma_rule_path, pipeline)
-    
-    def convert_sigma_rule_dict(self, sigma_rule: Dict[str, Any], 
+
+    def convert_sigma_rule_to_lucene(self, sigma_rule: Dict[str, Any], 
                                pipeline: str = "ecs_windows") -> str:
         """
         Sigma rule 딕셔너리를 임시 파일로 저장하고 Lucene으로 변환
@@ -146,21 +115,25 @@ class SigmaCLIConverter:
             os.unlink(temp_file_path)
     
     def convert_to_detection_rule(self, sigma_rule: Dict[str, Any], 
-                                pipeline: str = "ecs_windows",
+                                pipeline: str = None,
                                 additional_fields: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
         """
         Sigma rule을 Kibana Detection Rule로 변환합니다.
         
         Args:
             sigma_rule: Sigma rule 딕셔너리
-            pipeline: 사용할 처리 파이프라인
+            pipeline: 사용할 처리 파이프라인 (None이면 자동 선택)
             additional_fields: 추가로 설정할 필드들 (선택사항)
             
         Returns:
             Detection Rule 딕셔너리
         """
+        # 파이프라인이 지정되지 않으면 자동 선택
+        if pipeline is None:
+            pipeline = self._select_appropriate_pipeline(sigma_rule)
+        
         # Sigma CLI로 Lucene 쿼리 생성
-        lucene_query = self.convert_sigma_rule_dict(sigma_rule, pipeline)
+        lucene_query = self.convert_sigma_rule_to_lucene(sigma_rule, pipeline)
         
         # Detection Rule 구조 생성
         detection_rule = self._create_detection_rule_structure(sigma_rule, lucene_query, additional_fields)
@@ -191,8 +164,6 @@ class SigmaCLIConverter:
         # 위험도 매핑
         risk_score_map = {'low': 21, 'medium': 47, 'high': 73, 'critical': 99}
         risk_score = risk_score_map.get(level.lower(), 47)
-
-        # TODO 추가 필드 설정
         
         # Detection Rule 구조 생성
         detection_rule = {
@@ -202,7 +173,7 @@ class SigmaCLIConverter:
             "name": title,
             "severity": level,
             "type": "query",
-            "language": "kuery",
+            "language": "lucene",
             "query": lucene_query,  # Sigma CLI가 생성한 Lucene 쿼리 사용
             "filters": self._get_filters(sigma_rule),
             "enabled": True,
@@ -218,17 +189,15 @@ class SigmaCLIConverter:
             "related_integrations": [],
             "required_fields": [],
             "setup": "",
-            "author": sigma_rule.get('author', []),
+            "author": [sigma_rule.get('author', "none")],
             "false_positives": sigma_rule.get('falsepositives', []),
             "license": sigma_rule.get('license', 'DRL'),
-            "rule_name_override": "",
-            "timestamp_override": "",
-            "throttle": "",
             "output_index": "",
+            "index":["apm-*-transaction*","auditbeat-*","endgame-*","filebeat-*","logs-*","packetbeat-*","traces-apm*","winlogbeat-*","-*elastic-cloud-logs-*"],
             "meta": {
-                "from": "1m",
                 "kibana_siem_app_url": ""
-            }
+            },
+            "actions":[]
         }
         
         # 추가 필드가 있으면 기존 필드를 덮어쓰거나 새 필드 추가
@@ -293,8 +262,67 @@ class SigmaCLIConverter:
         
         return filters
     
+    def _select_appropriate_pipeline(self, sigma_rule: Dict[str, Any]) -> str:
+        """
+        Sigma rule의 로그소스에 따라 적절한 파이프라인을 선택합니다.
+        
+        Args:
+            sigma_rule: Sigma rule 딕셔너리
+            
+        Returns:
+            선택된 파이프라인 이름
+        """
+        logsource = sigma_rule.get('logsource', {})
+        product = logsource.get('product', '').lower()
+        service = logsource.get('service', '').lower()
+        category = logsource.get('category', '').lower()
+        
+        # Windows 이벤트 관련 서비스/카테고리들은 ecs_windows 파이프라인 사용
+        windows_services = [
+            'sysmon',
+            'windefend',
+            'taskscheduler'
+        ]
+        
+        windows_categories = [
+            'pipe_created',
+            'network_connection', 
+            'image_load',
+            'driver_load',
+            'dns_query',
+            'create_stream_hash',
+            'create_remote_thread'
+        ]
+        
+        # 서비스 체크
+        if any(service == s for s in windows_services) or service.startswith('terminalservices'):
+            return 'ecs_windows'
+        
+        # 카테고리 체크
+        if any(category == c for c in windows_categories) or category.startswith('file_'):
+            return 'ecs_windows'
+        
+        # PowerShell 관련 카테고리는 sysmon 파이프라인 사용
+        if category.startswith('ps_'):
+            return 'sysmon'
+        
+        # WMI 이벤트는 ecs_windows_old 파이프라인 사용
+        if category == 'wmi_event':
+            return 'ecs_windows_old'
+        
+        # Kubernetes 이벤트
+        if product == 'kubernetes':
+            return 'ecs_kubernetes'
+        
+        # Zeek 네트워크 로그
+        if product == 'zeek':
+            return 'ecs_zeek_beats'
+        
+        # 기본적으로 ecs_windows 사용
+        return 'ecs_windows'
+    
     def convert_file(self, input_file: str, output_file: Optional[str] = None, 
-                    pipeline: str = "ecs_windows",
+                    pipeline: str = None,
                     additional_fields: Optional[Dict[str, Any]] = None) -> str:
         """
         Sigma rule 파일을 Kibana Detection Rule JSON으로 변환

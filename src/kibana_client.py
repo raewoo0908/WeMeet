@@ -276,4 +276,60 @@ class KibanaDetectionClient:
                 
         except Exception as e:
             self.logger.error(f"Detection Rule 비활성화 중 오류 발생: {e}")
-            return False 
+            return False
+    
+    def find_failed_rules(self) -> List[Dict[str, Any]]:
+        """
+        execution_summary.last_execution.status가 failed인 Detection Rule들을 찾습니다.
+        
+        Returns:
+            failed 상태인 규칙 목록
+        """
+        try:
+            # 모든 규칙을 조회
+            all_rules = self.list_detection_rules(per_page=1000)  # 충분히 큰 수로 설정
+            failed_rules = []
+            
+            for rule in all_rules:
+                # execution_summary.last_execution.status 필드 확인
+                execution_summary = rule.get('execution_summary', {})
+                if isinstance(execution_summary, dict):
+                    last_execution = execution_summary.get('last_execution', {})
+                    if isinstance(last_execution, dict):
+                        status = last_execution.get('status', '')
+                        # failed, partial failure, error 등의 상태를 failed로 간주
+                        if status in ['failed', 'partial failure', 'error']:
+                            failed_rules.append(rule)
+            
+            self.logger.info(f"Failed 상태인 규칙 수: {len(failed_rules)}")
+            return failed_rules
+            
+        except Exception as e:
+            self.logger.error(f"Failed 규칙 조회 중 오류 발생: {e}")
+            return []
+    
+    def delete_failed_rules(self, rule_ids: List[str]) -> Dict[str, bool]:
+        """
+        지정된 규칙 ID들을 삭제합니다.
+        
+        Args:
+            rule_ids: 삭제할 규칙 ID 리스트
+            
+        Returns:
+            규칙별 삭제 결과 딕셔너리
+        """
+        results = {}
+        
+        for rule_id in rule_ids:
+            try:
+                success = self.delete_detection_rule(rule_id)
+                results[rule_id] = success
+                if success:
+                    self.logger.info(f"규칙 삭제 성공: {rule_id}")
+                else:
+                    self.logger.error(f"규칙 삭제 실패: {rule_id}")
+            except Exception as e:
+                self.logger.error(f"규칙 삭제 중 오류 발생: {rule_id} - {e}")
+                results[rule_id] = False
+        
+        return results 

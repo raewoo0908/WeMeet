@@ -211,7 +211,7 @@ Sigma CLI 설치 가이드:
             설정 성공 여부
         """
         if required_plugins is None:
-            required_plugins = ["lucene", "ecs_windows"]
+            required_plugins = ["lucene", "ecs_windows", "sysmon", "ecs_windows_old", "ecs_kubernetes", "ecs_zeek_beats"]
         
         # Sigma CLI 설치 확인
         if not self.check_installation():
