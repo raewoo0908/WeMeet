@@ -1,0 +1,61 @@
+{
+  "rule_id": "75d0a94e-6252-448d-a7be-d953dff527bb",
+  "risk_score": 73,
+  "description": "Detects the execution of the \"msxsl\" binary with an \"http\" keyword in the command line. This might indicate a potential remote execution of XSL files.",
+  "name": "Remote XSL Execution Via Msxsl.EXE",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "process.command_line:*http* AND process.executable:*\\\\msxsl.exe",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.defense-evasion",
+    "attack.t1220"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Swachchhanda Shrawan Poudel"
+  ],
+  "false_positives": [
+    "Msxsl is not installed by default and is deprecated, so unlikely on most systems."
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

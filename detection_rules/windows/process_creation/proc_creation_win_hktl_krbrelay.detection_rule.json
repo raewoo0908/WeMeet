@@ -1,0 +1,61 @@
+{
+  "rule_id": "e96253b8-6b3b-4f90-9e59-3b24b99cf9b4",
+  "risk_score": 73,
+  "description": "Detects the use of KrbRelay, a Kerberos relaying tool",
+  "name": "HackTool - KrbRelay Execution",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "(process.command_line:*\\ \\-spn\\ * AND process.command_line:*\\ \\-clsid\\ * AND process.command_line:*\\ \\-rbcd\\ *) OR (process.command_line:*shadowcred* AND process.command_line:*clsid* AND process.command_line:*spn*) OR (process.command_line:*spn\\ * AND process.command_line:*session\\ * AND process.command_line:*clsid\\ *) OR (process.executable:*\\\\KrbRelay.exe OR process.pe.original_file_name:KrbRelay.exe)",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.credential-access",
+    "attack.t1558.003"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Florian Roth (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Unlikely"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

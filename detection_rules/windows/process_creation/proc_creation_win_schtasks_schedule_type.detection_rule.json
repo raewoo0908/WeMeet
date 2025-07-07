@@ -1,0 +1,61 @@
+{
+  "rule_id": "24c8392b-aa3c-46b7-a545-43f71657fe98",
+  "risk_score": 73,
+  "description": "Detects scheduled task creations or modification on a suspicious schedule type",
+  "name": "Suspicious Schtasks Schedule Types",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "((process.executable:*\\\\schtasks.exe OR process.pe.original_file_name:schtasks.exe) AND (process.command_line:(*\\ ONLOGON\\ * OR *\\ ONSTART\\ * OR *\\ ONCE\\ * OR *\\ ONIDLE\\ *))) AND (NOT (process.command_line:(*NT\\ AUT* OR *\\ SYSTEM* OR *HIGHEST*)))",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.execution",
+    "attack.t1053.005"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Nasreddine Bencherchali (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Legitimate processes that run at logon. Filter according to your environment"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

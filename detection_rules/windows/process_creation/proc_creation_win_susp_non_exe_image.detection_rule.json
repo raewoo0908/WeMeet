@@ -1,0 +1,60 @@
+{
+  "rule_id": "c09dad97-1c78-4f71-b127-7edb2b8e491a",
+  "risk_score": 47,
+  "description": "Detects whether the image specified in a process creation event doesn't refer to an \".exe\" (or other known executable extension) file. This can be caused by process ghosting or other unorthodox methods to start a process.\nThis rule might require some initial baselining to align with some third party tooling in the user environment.\n",
+  "name": "Execution of Suspicious File Type Extension",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "(NOT (process.executable:(*.bin OR *.cgi OR *.com OR *.exe OR *.scr OR *.tmp))) AND (NOT (process.executable:*\\:\\\\$Extend\\\\$Deleted\\\\* OR process.executable:*\\:\\\\Windows\\\\System32\\\\DriverStore\\\\FileRepository\\\\* OR (process.executable:(\\- OR \"\")) OR (process.executable:(System OR Registry OR MemCompression OR vmmem)) OR process.executable:*\\:\\\\Windows\\\\Installer\\\\MSI* OR (process.executable:*\\:\\\\Config.Msi\\\\* AND (process.executable:(*.rbf OR *.rbs))) OR (NOT _exists_:process.executable) OR (process.parent.executable:*\\:\\\\Windows\\\\Temp\\\\* OR process.executable:*\\:\\\\Windows\\\\Temp\\\\*))) AND (NOT (process.parent.executable:*\\:\\\\ProgramData\\\\Avira\\\\* OR (process.executable:*com.docker.service AND process.parent.executable:C\\:\\\\Windows\\\\System32\\\\services.exe) OR process.executable:*\\:\\\\Program\\ Files\\\\Mozilla\\ Firefox\\\\* OR process.executable:*\\\\LZMA_EXE OR (process.executable:(*\\:\\\\Program\\ Files\\ \\(x86\\)\\\\MyQ\\\\Server\\\\pcltool.dll OR *\\:\\\\Program\\ Files\\\\MyQ\\\\Server\\\\pcltool.dll)) OR (process.executable:*NVIDIA\\\\NvBackend\\\\* AND process.executable:*.dat) OR ((process.executable:(*\\:\\\\Program\\ Files\\ \\(x86\\)\\\\WINPAKPRO\\\\* OR *\\:\\\\Program\\ Files\\\\WINPAKPRO\\\\*)) AND process.executable:*.ngn) OR (process.executable:*\\\\AppData\\\\Local\\\\Packages\\\\* AND process.executable:*\\\\LocalState\\\\rootfs\\\\*)))",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.defense-evasion"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Max Altgelt (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

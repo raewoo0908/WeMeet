@@ -1,0 +1,59 @@
+{
+  "rule_id": "ca2092a1-c273-4878-9b4b-0d60115bf5ea",
+  "risk_score": 73,
+  "description": "Detects suspicious powershell process starts with base64 encoded commands (e.g. Emotet)",
+  "name": "Suspicious Encoded PowerShell Command Line",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "((process.executable:(*\\\\powershell.exe OR *\\\\pwsh.exe)) OR (process.pe.original_file_name:(PowerShell.EXE OR pwsh.dll))) AND (((process.command_line:(*\\ JAB* OR *\\ SUVYI* OR *\\ SQBFAFgA* OR *\\ aQBlAHgA* OR *\\ aWV4I* OR *\\ IAA* OR *\\ IAB* OR *\\ UwB* OR *\\ cwB*)) AND process.command_line:*\\ \\-e*) OR (process.command_line:(*.exe\\ \\-ENCOD\\ * OR *\\ BA\\^J\\ e\\-*))) AND (NOT process.command_line:*\\ \\-ExecutionPolicy\\ remotesigned\\ *)",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.execution",
+    "attack.t1059.001"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Florian Roth (Nextron Systems), Markus Neis, Jonhnathan Ribeiro, Daniil Yugoslavskiy, Anton Kutepov, oscd.community"
+  ],
+  "false_positives": [],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

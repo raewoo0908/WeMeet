@@ -1,0 +1,63 @@
+{
+  "rule_id": "18988e1b-9087-4f8a-82fe-0414dce49878",
+  "risk_score": 47,
+  "description": "Detects code execution via Pester.bat (Pester - Powershell Modulte for testing)",
+  "name": "Execute Code with Pester.bat as Parent",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "(process.parent.command_line:(*\\{\\ Invoke\\-Pester\\ \\-EnableExit\\ ;* OR *\\{\\ Get\\-Help\\ \\\"*)) AND (process.parent.command_line:*\\\\WindowsPowerShell\\\\Modules\\\\Pester\\\\* AND (process.parent.executable:(*\\\\powershell.exe OR *\\\\pwsh.exe)))",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.execution",
+    "attack.t1059.001",
+    "attack.defense-evasion",
+    "attack.t1216"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "frack113, Nasreddine Bencherchali"
+  ],
+  "false_positives": [
+    "Legitimate use of Pester for writing tests for Powershell scripts and modules"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

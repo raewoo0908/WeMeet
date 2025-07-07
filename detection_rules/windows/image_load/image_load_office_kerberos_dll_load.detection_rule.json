@@ -1,0 +1,50 @@
+{
+  "rule_id": "7417e29e-c2e7-4cf6-a2e8-767228c64837",
+  "risk_score": 47,
+  "description": "Detects Kerberos DLL being loaded by an Office Product",
+  "name": "Active Directory Kerberos DLL Loaded Via Office Application",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "file.path:*\\\\kerberos.dll AND (process.executable:(*\\\\excel.exe OR *\\\\mspub.exe OR *\\\\onenote.exe OR *\\\\onenoteim.exe OR *\\\\outlook.exe OR *\\\\powerpnt.exe OR *\\\\winword.exe))",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.execution",
+    "attack.t1204.002"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Antonlovesdnb"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

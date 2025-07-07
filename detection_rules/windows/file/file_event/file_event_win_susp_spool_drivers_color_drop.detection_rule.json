@@ -1,0 +1,60 @@
+{
+  "rule_id": "ce7066a6-508a-42d3-995b-2952c65dc2ce",
+  "risk_score": 47,
+  "description": "Detects the creation of suspcious binary files inside the \"\\windows\\system32\\spool\\drivers\\color\\\" as seen in the blog referenced below",
+  "name": "Drop Binaries Into Spool Drivers Color Folder",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "(file.path:(*.dll OR *.exe OR *.sys)) AND file.path:C\\:\\\\Windows\\\\System32\\\\spool\\\\drivers\\\\color\\\\*",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "File Create (rule: FileCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.defense-evasion"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Nasreddine Bencherchali (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

@@ -1,0 +1,61 @@
+{
+  "rule_id": "c260b6db-48ba-4b4a-a76f-2f67644e99d2",
+  "risk_score": 73,
+  "description": "Detects suspicious command lines used in Covenant luanchers",
+  "name": "HackTool - Covenant PowerShell Launcher",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "((process.command_line:(*\\-Command* OR *\\-EncodedCommand*)) AND (process.command_line:*\\-Sta* AND process.command_line:*\\-Nop* AND process.command_line:*\\-Window* AND process.command_line:*Hidden*)) OR (process.command_line:(*sv\\ o\\ \\(New\\-Object\\ IO.MemorySteam\\);sv\\ d\\ * OR *mshta\\ file.hta* OR *GruntHTTP* OR *\\-EncodedCommand\\ cwB2ACAAbwAgA*))",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.execution",
+    "attack.defense-evasion",
+    "attack.t1059.001",
+    "attack.t1564.003"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Florian Roth (Nextron Systems), Jonhnathan Ribeiro, oscd.community"
+  ],
+  "false_positives": [],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

@@ -1,0 +1,50 @@
+{
+  "rule_id": "c9eb55c3-b468-40ab-9089-db2862e42137",
+  "risk_score": 47,
+  "description": "Detects an installation of a device that is forbidden by the system policy",
+  "name": "Device Installation Blocked",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "winlog.channel:Security AND event.code:6423",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.initial-access",
+    "attack.t1200"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "frack113"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

@@ -1,0 +1,61 @@
+{
+  "rule_id": "e52cb31c-10ed-4aea-bcb7-593c9f4a315b",
+  "risk_score": 47,
+  "description": "Detects attempts to bypass User Account Control (UAC) by hijacking the Microsoft Management Console (MMC) Windows Firewall snap-in",
+  "name": "UAC Bypass via Windows Firewall Snap-In Hijack",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "(process.parent.command_line:*WF.msc* AND process.parent.executable:*\\\\mmc.exe) AND (NOT process.executable:*\\\\WerFault.exe)",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.privilege-escalation",
+    "attack.t1548"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Tim Rauch, Elastic (idea)"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

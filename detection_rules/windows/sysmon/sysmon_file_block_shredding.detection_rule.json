@@ -1,0 +1,40 @@
+{
+  "rule_id": "c3e5c1b1-45e9-4632-b242-27939c170239",
+  "risk_score": 73,
+  "description": "Triggers on any Sysmon \"FileBlockShredding\" event, which indicates a violation of the configured shredding policy.",
+  "name": "Sysmon Blocked File Shredding",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "winlog.channel:Microsoft\\-Windows\\-Sysmon\\/Operational AND event.code:28",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.defense-evasion"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "frack113"
+  ],
+  "false_positives": [
+    "Unlikely"
+  ],
+  "license": "DRL",
+  "rule_name_override": "",
+  "timestamp_override": "",
+  "output_index": "",
+  "meta": {
+    "from": "1m",
+    "kibana_siem_app_url": ""
+  }
+}

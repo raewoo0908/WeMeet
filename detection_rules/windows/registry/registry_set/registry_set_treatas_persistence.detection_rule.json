@@ -1,0 +1,50 @@
+{
+  "rule_id": "dc5c24af-6995-49b2-86eb-a9ff62199e82",
+  "risk_score": 47,
+  "description": "Detect modification of TreatAs key to enable \"rundll32.exe -sta\" command",
+  "name": "COM Hijacking via TreatAs",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "registry.path:*TreatAs\\\\\\(Default\\) AND (NOT ((process.executable:(C\\:\\\\Windows\\\\system32\\\\msiexec.exe OR C\\:\\\\Windows\\\\SysWOW64\\\\msiexec.exe)) OR (process.executable:*\\\\OfficeClickToRun.exe AND process.executable:C\\:\\\\Program\\ Files\\\\Common\\ Files\\\\Microsoft\\ Shared\\\\ClickToRun\\\\*) OR process.executable:C\\:\\\\Program\\ Files\\ \\(x86\\)\\\\Microsoft\\ Office\\\\root\\\\integration\\\\integrator.exe OR process.executable:C\\:\\\\Windows\\\\system32\\\\svchost.exe))",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.persistence",
+    "attack.t1546.015"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "frack113"
+  ],
+  "false_positives": [
+    "Legitimate use"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

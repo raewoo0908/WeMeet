@@ -1,0 +1,61 @@
+{
+  "rule_id": "93d94efc-d7ad-4161-ad7d-1638c4f908d8",
+  "risk_score": 99,
+  "description": "Detects the creation of the default dump file used by Outflank Dumpert tool. A process dumper, which dumps the lsass process memory",
+  "name": "HackTool - Dumpert Process Dumper Default File",
+  "severity": "critical",
+  "type": "query",
+  "language": "lucene",
+  "query": "file.path:*dumpert.dmp",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "File Create (rule: FileCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.credential-access",
+    "attack.t1003.001"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Florian Roth (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Very unlikely"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

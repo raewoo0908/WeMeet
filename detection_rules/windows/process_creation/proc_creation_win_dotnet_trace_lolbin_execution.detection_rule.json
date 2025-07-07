@@ -1,0 +1,62 @@
+{
+  "rule_id": "9257c05b-4a4a-48e5-a670-b7b073cf401b",
+  "risk_score": 47,
+  "description": "Detects commandline arguments for executing a child process via dotnet-trace.exe",
+  "name": "Binary Proxy Execution Via Dotnet-Trace.EXE",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "(process.command_line:*\\-\\-\\ * AND process.command_line:*collect*) AND (process.executable:*\\\\dotnet\\-trace.exe OR process.pe.original_file_name:dotnet\\-trace.dll)",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.execution",
+    "attack.defense-evasion",
+    "attack.t1218"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Jimmy Bayne (@bohops)"
+  ],
+  "false_positives": [
+    "Legitimate usage of the utility in order to debug and trace a program."
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

@@ -1,0 +1,49 @@
+{
+  "rule_id": "09d3b48b-be17-47f5-bf4e-94e7e75d09ce",
+  "risk_score": 47,
+  "description": "Detects potential installation or installation attempts of known malicious appx packages",
+  "name": "Potential Malicious AppX Package Installation Attempts",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "winlog.channel:Microsoft\\-Windows\\-AppXDeploymentServer\\/Operational AND ((event.code:(400 OR 401)) AND winlog.event_data.PackageFullName:*3669e262\\-ec02\\-4e9d\\-bcb4\\-3d008b4afac9*)",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.defense-evasion"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Nasreddine Bencherchali (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Rare occasions where a malicious package uses the exact same name and version as a legtimate application"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

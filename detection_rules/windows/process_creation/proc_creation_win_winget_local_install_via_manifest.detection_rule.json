@@ -1,0 +1,62 @@
+{
+  "rule_id": "313d6012-51a0-4d93-8dfc-de8553239e25",
+  "risk_score": 47,
+  "description": "Detects usage of winget to install applications via manifest file. Adversaries can abuse winget to download payloads remotely and execute them.\nThe manifest option enables you to install an application by passing in a YAML file directly to the client.\nWinget can be used to download and install exe, msi or msix files later.\n",
+  "name": "Install New Package Via Winget Local Manifest",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "(process.executable:*\\\\winget.exe OR process.pe.original_file_name:winget.exe) AND (process.command_line:(*install* OR *\\ add\\ *)) AND (process.command_line:(*\\-m\\ * OR *\\-\\-manifest*))",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.defense-evasion",
+    "attack.execution",
+    "attack.t1059"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Sreeman, Florian Roth (Nextron Systems), frack113"
+  ],
+  "false_positives": [
+    "Some false positives are expected in some environment that may use this functionality to install and test their custom applications"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

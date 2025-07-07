@@ -1,0 +1,62 @@
+{
+  "rule_id": "e94b9ddc-eec5-4bb8-8a58-b9dc5f4e185f",
+  "risk_score": 73,
+  "description": "Detects creation of a file named \"wpbbin\" in the \"%systemroot%\\system32\\\" directory. Which could be indicative of UEFI based persistence method",
+  "name": "UEFI Persistence Via Wpbbin - FileCreation",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "file.path:C\\:\\\\Windows\\\\System32\\\\wpbbin.exe",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "File Create (rule: FileCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.persistence",
+    "attack.defense-evasion",
+    "attack.t1542.001"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Nasreddine Bencherchali (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Legitimate usage of the file by hardware manufacturer such as lenovo (Thanks @0gtweet for the tip)"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

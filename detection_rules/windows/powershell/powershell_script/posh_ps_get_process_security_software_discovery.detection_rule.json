@@ -1,0 +1,51 @@
+{
+  "rule_id": "904e8e61-8edf-4350-b59c-b905fc8e810c",
+  "risk_score": 47,
+  "description": "Detects calls to \"get-process\" where the output is piped to a \"where-object\" filter to search for security solution processes.\nAdversaries may attempt to get a listing of security software, configurations, defensive tools, and sensors that are installed on a system or in a cloud environment. This may include things such as firewall rules and anti-virus\n",
+  "name": "Security Software Discovery Via Powershell Script",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "(powershell.file.script_block_text:(*get\\-process\\ \\|\\ \\?* OR *get\\-process\\ \\|\\ where* OR *gps\\ \\|\\ \\?* OR *gps\\ \\|\\ where*)) AND (powershell.file.script_block_text:(*Company\\ \\-like* OR *Description\\ \\-like* OR *Name\\ \\-like* OR *Path\\ \\-like* OR *Product\\ \\-like*)) AND (powershell.file.script_block_text:(*\\*avira\\** OR *\\*carbonblack\\** OR *\\*cylance\\** OR *\\*defender\\** OR *\\*kaspersky\\** OR *\\*malware\\** OR *\\*sentinel\\** OR *\\*symantec\\** OR *\\*virus\\**))",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.discovery",
+    "attack.t1518.001"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "frack113, Anish Bogati, Nasreddine Bencherchali (Nextron Systems)"
+  ],
+  "false_positives": [
+    "False positives might occur due to the nature of the ScriptBlock being ingested as a big blob. Initial tuning is required.",
+    "As the \"selection_cmdlet\" is common in scripts the matching engine might slow down the search. Change into regex or a more accurate string to avoid heavy resource consumption if experienced"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

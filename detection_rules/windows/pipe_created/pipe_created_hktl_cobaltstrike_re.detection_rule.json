@@ -1,0 +1,51 @@
+{
+  "rule_id": "0e7163d4-9e19-4fa7-9be6-000c61aad77a",
+  "risk_score": 99,
+  "description": "Detects the creation of a named pipe matching a pattern used by CobaltStrike Malleable C2 profiles",
+  "name": "CobaltStrike Named Pipe Pattern Regex",
+  "severity": "critical",
+  "type": "query",
+  "language": "lucene",
+  "query": "file.name:/\\\\mojo\\.5688\\.8052\\.(?:183894939787088877|35780273329370473)[0-9a-f]{2}/ OR file.name:/\\\\wkssvc_?[0-9a-f]{2}/ OR file.name:/\\\\ntsvcs[0-9a-f]{2}/ OR file.name:/\\\\DserNamePipe[0-9a-f]{2}/ OR file.name:/\\\\SearchTextHarvester[0-9a-f]{2}/ OR file.name:/\\\\mypipe-(?:f|h)[0-9a-f]{2}/ OR file.name:/\\\\windows\\.update\\.manager[0-9a-f]{2,3}/ OR file.name:/\\\\ntsvcs_[0-9a-f]{2}/ OR file.name:/\\\\scerpc_?[0-9a-f]{2}/ OR file.name:/\\\\PGMessagePipe[0-9a-f]{2}/ OR file.name:/\\\\MsFteWds[0-9a-f]{2}/ OR file.name:/\\\\f4c3[0-9a-f]{2}/ OR file.name:/\\\\fullduplex_[0-9a-f]{2}/ OR file.name:/\\\\msrpc_[0-9a-f]{4}/ OR file.name:/\\\\win\\\\msrpc_[0-9a-f]{2}/ OR file.name:/\\\\f53f[0-9a-f]{2}/ OR file.name:/\\\\rpc_[0-9a-f]{2}/ OR file.name:/\\\\spoolss_[0-9a-f]{2}/ OR file.name:/\\\\Winsock2\\\\CatalogChangeListener-[0-9a-f]{3}-0,/",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.defense-evasion",
+    "attack.privilege-escalation",
+    "attack.t1055"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Florian Roth (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

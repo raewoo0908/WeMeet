@@ -1,0 +1,50 @@
+{
+  "rule_id": "05936ce2-ee05-4dae-9d03-9a391cf2d2c6",
+  "risk_score": 73,
+  "description": "Detects WMI command line event consumers",
+  "name": "WMI Persistence - Command Line Event Consumer",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "process.executable:C\\:\\\\Windows\\\\System32\\\\wbem\\\\WmiPrvSE.exe AND file.path:*\\\\wbemcons.dll",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.t1546.003",
+    "attack.persistence"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Thomas Patzke"
+  ],
+  "false_positives": [
+    "Unknown (data set is too small; further testing needed)"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

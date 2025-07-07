@@ -1,0 +1,61 @@
+{
+  "rule_id": "847d5ff3-8a31-4737-a970-aeae8fe21765",
+  "risk_score": 73,
+  "description": "Detects uninstallation or termination of security products using the WMIC utility",
+  "name": "Potential Tampering With Security Products Via WMIC",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "((process.command_line:*wmic* AND process.command_line:*product\\ where\\ * AND process.command_line:*call* AND process.command_line:*uninstall* AND process.command_line:*\\/nointeractive*) OR ((process.command_line:(*call\\ delete* OR *call\\ terminate*)) AND (process.command_line:*wmic* AND process.command_line:*caption\\ like\\ *)) OR (process.command_line:*process\\ * AND process.command_line:*where\\ * AND process.command_line:*delete*)) AND (process.command_line:(*%carbon%* OR *%cylance%* OR *%endpoint%* OR *%eset%* OR *%malware%* OR *%Sophos%* OR *%symantec%* OR *Antivirus* OR *AVG\\ * OR *Carbon\\ Black* OR *CarbonBlack* OR *Cb\\ Defense\\ Sensor\\ 64\\-bit* OR *Crowdstrike\\ Sensor* OR *Cylance\\ * OR *Dell\\ Threat\\ Defense* OR *DLP\\ Endpoint* OR *Endpoint\\ Detection* OR *Endpoint\\ Protection* OR *Endpoint\\ Security* OR *Endpoint\\ Sensor* OR *ESET\\ File\\ Security* OR *LogRhythm\\ System\\ Monitor\\ Service* OR *Malwarebytes* OR *McAfee\\ Agent* OR *Microsoft\\ Security\\ Client* OR *Sophos\\ Anti\\-Virus* OR *Sophos\\ AutoUpdate* OR *Sophos\\ Credential\\ Store* OR *Sophos\\ Management\\ Console* OR *Sophos\\ Management\\ Database* OR *Sophos\\ Management\\ Server* OR *Sophos\\ Remote\\ Management\\ System* OR *Sophos\\ Update\\ Manager* OR *Threat\\ Protection* OR *VirusScan* OR *Webroot\\ SecureAnywhere* OR *Windows\\ Defender*))",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.defense-evasion",
+    "attack.t1562.001"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Florian Roth (Nextron Systems), Nasreddine Bencherchali (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Legitimate administration"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

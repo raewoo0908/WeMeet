@@ -1,0 +1,51 @@
+{
+  "rule_id": "c4b890e5-8d8c-4496-8c66-c805753817cd",
+  "risk_score": 47,
+  "description": "Detects when a memory process image does not match the disk image, indicative of process hollowing.",
+  "name": "Potential Process Hollowing Activity",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "winlog.event_data.Type:Image\\ is\\ replaced AND (NOT (process.executable:(*\\:\\\\Program\\ Files\\ \\(x86\\)* OR *\\:\\\\Program\\ Files\\\\* OR *\\:\\\\Windows\\\\System32\\\\wbem\\\\WMIADAP.exe* OR *\\:\\\\Windows\\\\SysWOW64\\\\wbem\\\\WMIADAP.exe*))) AND (NOT (process.executable:*\\\\WindowsApps\\\\MicrosoftEdge.exe OR (process.executable:*\\\\AppData\\\\Local\\\\Programs\\\\Opera\\\\* AND process.executable:*\\\\opera.exe)))",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.defense-evasion",
+    "attack.privilege-escalation",
+    "attack.t1055.012"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Christopher Peacock '@securepeacock', SCYTHE '@scythe_io', Sittikorn S"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

@@ -1,0 +1,61 @@
+{
+  "rule_id": "54786ddc-5b8a-11ed-9b6a-0242ac120002",
+  "risk_score": 73,
+  "description": "Detects a method often used by ransomware. Which combines the \"ping\" to wait a couple of seconds and then \"del\" to delete the file in question. Its used to hide the file responsible for the initial infection for example",
+  "name": "Suspicious Ping/Del Command Combination",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "(process.command_line:*ping* AND process.command_line:*del\\ *) AND process.command_line:(*\\ \\-n\\ * OR *\\ \\/n\\ * OR *\\ –n\\ * OR *\\ —n\\ * OR *\\ ―n\\ *) AND (process.command_line:(*\\ \\-f\\ * OR *\\ \\/f\\ * OR *\\ –f\\ * OR *\\ —f\\ * OR *\\ ―f\\ *) OR process.command_line:(*\\ \\-q\\ * OR *\\ \\/q\\ * OR *\\ –q\\ * OR *\\ —q\\ * OR *\\ ―q\\ *)) AND process.command_line:*Nul*",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.defense-evasion",
+    "attack.t1070.004"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Ilya Krestinichev"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

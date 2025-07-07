@@ -1,0 +1,64 @@
+{
+  "rule_id": "b5c7395f-e501-4a08-94d4-57fe7a9da9d2",
+  "risk_score": 47,
+  "description": "Detects usage of \"cdb.exe\" to launch arbitrary processes or commands from a debugger script file",
+  "name": "Potential Binary Proxy Execution Via Cdb.EXE",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "(process.command_line:(*\\ \\-c\\ * OR *\\ \\-cf\\ *)) AND (process.executable:*\\\\cdb.exe OR process.pe.original_file_name:CDB.Exe)",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.execution",
+    "attack.t1106",
+    "attack.defense-evasion",
+    "attack.t1218",
+    "attack.t1127"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Beyu Denis, oscd.community, Nasreddine Bencherchali (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Legitimate use of debugging tools"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

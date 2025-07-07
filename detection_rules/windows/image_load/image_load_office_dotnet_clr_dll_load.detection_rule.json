@@ -1,0 +1,50 @@
+{
+  "rule_id": "d13c43f0-f66b-4279-8b2c-5912077c1780",
+  "risk_score": 47,
+  "description": "Detects CLR DLL being loaded by an Office Product",
+  "name": "CLR DLL Loaded Via Office Applications",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "file.path:*\\\\clr.dll* AND (process.executable:(*\\\\excel.exe OR *\\\\mspub.exe OR *\\\\outlook.exe OR *\\\\onenote.exe OR *\\\\onenoteim.exe OR *\\\\powerpnt.exe OR *\\\\winword.exe))",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.execution",
+    "attack.t1204.002"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Antonlovesdnb"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

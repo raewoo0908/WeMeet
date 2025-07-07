@@ -1,0 +1,52 @@
+{
+  "rule_id": "86b896ba-ffa1-4fea-83e3-ee28a4c915c7",
+  "risk_score": 73,
+  "description": "Detects Obfuscated Powershell via Stdin in Scripts",
+  "name": "Invoke-Obfuscation Via Stdin - Powershell",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "powershell.file.script_block_text:/(?i)(set).*&&\\s?set.*(environment|invoke|\\$\\{?input).*&&.*\"/",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.defense-evasion",
+    "attack.t1027",
+    "attack.execution",
+    "attack.t1059.001"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Nikita Nazarov, oscd.community"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

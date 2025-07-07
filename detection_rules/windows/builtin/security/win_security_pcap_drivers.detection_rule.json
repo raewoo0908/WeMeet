@@ -1,0 +1,51 @@
+{
+  "rule_id": "7b687634-ab20-11ea-bb37-0242ac130002",
+  "risk_score": 47,
+  "description": "Detects Windows Pcap driver installation based on a list of associated .sys files.",
+  "name": "Windows Pcap Drivers",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "winlog.channel:Security AND (event.code:4697 AND (winlog.event_data.ServiceFileName:(*pcap* OR *npcap* OR *npf* OR *nm3* OR *ndiscap* OR *nmnt* OR *windivert* OR *USBPcap* OR *pktmon*)))",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.discovery",
+    "attack.credential-access",
+    "attack.t1040"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Cian Heasley"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

@@ -1,0 +1,50 @@
+{
+  "rule_id": "7cff77e1-9663-46a3-8260-17f2e1aa9d0a",
+  "risk_score": 47,
+  "description": "Detects DNS queries made by \"AppInstaller.EXE\". The AppInstaller is the default handler for the \"ms-appinstaller\" URI. It attempts to load/install a package from the referenced URL\n",
+  "name": "AppX Package Installation Attempts Via AppInstaller.EXE",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "process.executable:*\\\\AppInstaller.exe AND process.executable:C\\:\\\\Program\\ Files\\\\WindowsApps\\\\Microsoft.DesktopAppInstaller_*",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.command-and-control",
+    "attack.t1105"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "frack113"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

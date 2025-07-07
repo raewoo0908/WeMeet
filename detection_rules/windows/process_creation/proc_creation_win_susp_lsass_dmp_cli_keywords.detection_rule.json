@@ -1,0 +1,61 @@
+{
+  "rule_id": "ffa6861c-4461-4f59-8a41-578c39f3f23e",
+  "risk_score": 73,
+  "description": "Detects the presence of the keywords \"lsass\" and \".dmp\" in the commandline, which could indicate a potential attempt to dump or create a dump of the lsass process.\n",
+  "name": "LSASS Dump Keyword In CommandLine",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "(process.command_line:(*lsass.dmp* OR *lsass.zip* OR *lsass.rar* OR *Andrew.dmp* OR *Coredump.dmp* OR *NotLSASS.zip* OR *lsass_2* OR *lsassdump* OR *lsassdmp*)) OR (process.command_line:*lsass* AND process.command_line:*.dmp*) OR (process.command_line:*SQLDmpr* AND process.command_line:*.mdmp*) OR (process.command_line:*nanodump* AND process.command_line:*.dmp*)",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.credential-access",
+    "attack.t1003.001"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "E.M. Anhaus, Tony Lambert, oscd.community, Nasreddine Bencherchali (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Unlikely"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

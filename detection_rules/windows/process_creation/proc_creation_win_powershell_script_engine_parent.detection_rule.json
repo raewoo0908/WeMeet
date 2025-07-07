@@ -1,0 +1,62 @@
+{
+  "rule_id": "95eadcb2-92e4-4ed1-9031-92547773a6db",
+  "risk_score": 47,
+  "description": "Detects suspicious powershell invocations from interpreters or unusual programs",
+  "name": "Suspicious PowerShell Invocation From Script Engines",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "((process.executable:(*\\\\powershell.exe OR *\\\\pwsh.exe)) AND (process.parent.executable:(*\\\\wscript.exe OR *\\\\cscript.exe))) AND (NOT process.working_directory:*\\\\Health\\ Service\\ State\\\\*)",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.execution",
+    "attack.t1059.001"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Florian Roth (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Microsoft Operations Manager (MOM)",
+    "Other scripts"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

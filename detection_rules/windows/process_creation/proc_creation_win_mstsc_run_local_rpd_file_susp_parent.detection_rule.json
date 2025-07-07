@@ -1,0 +1,60 @@
+{
+  "rule_id": "ff3b6b39-e765-42f9-bb2c-ea6761e0e0f6",
+  "risk_score": 73,
+  "description": "Detects potential RDP connection via Mstsc using a local \".rdp\" file located in suspicious locations.",
+  "name": "Mstsc.EXE Execution From Uncommon Parent",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "(process.executable:*\\\\mstsc.exe OR process.pe.original_file_name:mstsc.exe) AND (process.parent.executable:(*\\\\brave.exe OR *\\\\CCleanerBrowser.exe OR *\\\\chrome.exe OR *\\\\chromium.exe OR *\\\\firefox.exe OR *\\\\iexplore.exe OR *\\\\microsoftedge.exe OR *\\\\msedge.exe OR *\\\\opera.exe OR *\\\\vivaldi.exe OR *\\\\whale.exe OR *\\\\outlook.exe))",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.lateral-movement"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Nasreddine Bencherchali (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Unlikely"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

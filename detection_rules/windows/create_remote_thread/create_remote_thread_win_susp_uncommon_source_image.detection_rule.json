@@ -1,0 +1,51 @@
+{
+  "rule_id": "66d31e5f-52d6-40a4-9615-002d3789a119",
+  "risk_score": 47,
+  "description": "Detects uncommon processes creating remote threads.",
+  "name": "Remote Thread Creation By Uncommon Source Image",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "(process.executable:(*\\\\explorer.exe OR *\\\\iexplore.exe OR *\\\\msiexec.exe OR *\\\\powerpnt.exe OR *\\\\schtasks.exe OR *\\\\winlogon.exe)) AND (NOT (winlog.event_data.TargetImage:\"\" OR (process.executable:C\\:\\\\Windows\\\\explorer.exe AND (winlog.event_data.TargetImage:(C\\:\\\\Program\\ Files\\ \\(x86\\)\\\\* OR C\\:\\\\Program\\ Files\\\\* OR C\\:\\\\Windows\\\\System32\\\\* OR C\\:\\\\Windows\\\\SysWOW64\\\\*))) OR (process.executable:*\\\\msiexec.exe AND (winlog.event_data.TargetImage:(*\\\\AppData\\\\Local\\\\* OR *C\\:\\\\Program\\ Files\\ \\(x86\\)\\\\* OR *C\\:\\\\Program\\ Files\\\\*))) OR (NOT _exists_:winlog.event_data.TargetImage) OR ((process.executable:(C\\:\\\\Windows\\\\System32\\\\schtasks.exe OR C\\:\\\\Windows\\\\SysWOW64\\\\schtasks.exe)) AND winlog.event_data.TargetImage:C\\:\\\\Windows\\\\System32\\\\conhost.exe) OR winlog.event_data.TargetImage:System OR (process.executable:C\\:\\\\Windows\\\\System32\\\\winlogon.exe AND (winlog.event_data.TargetImage:(C\\:\\\\Windows\\\\System32\\\\services.exe OR C\\:\\\\Windows\\\\System32\\\\wininit.exe OR C\\:\\\\Windows\\\\System32\\\\csrss.exe OR C\\:\\\\Windows\\\\System32\\\\LogonUI.exe))) OR (process.executable:C\\:\\\\Windows\\\\System32\\\\winlogon.exe AND winlog.event_data.TargetParentProcessId:4))) AND (NOT (((winlog.event_data.SourceCommandLine:*https\\:\\/\\/* AND winlog.event_data.SourceCommandLine:*.checkpoint.com\\/documents\\/* AND winlog.event_data.SourceCommandLine:*SmartConsole_OLH\\/* AND winlog.event_data.SourceCommandLine:*default.htm#cshid\\=*) AND process.executable:C\\:\\\\Program\\ Files\\\\internet\\ explorer\\\\iexplore.exe) OR (process.executable:C\\:\\\\Program\\ Files\\\\internet\\ explorer\\\\iexplore.exe AND (winlog.event_data.SourceParentImage:*\\\\CheckPoint\\\\SmartConsole\\\\* AND winlog.event_data.SourceParentImage:*\\\\SmartConsole.exe*) AND (winlog.event_data.SourceParentImage:(C\\:\\\\Program\\ Files\\\\* OR C\\:\\\\Program\\ Files\\ \\(x86\\)\\\\*))) OR (process.executable:*\\\\Microsoft\\ Office\\\\* AND process.executable:*\\\\POWERPNT.EXE AND winlog.event_data.TargetImage:C\\:\\\\Windows\\\\System32\\\\csrss.exe)))",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.privilege-escalation",
+    "attack.defense-evasion",
+    "attack.t1055"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Perez Diego (@darkquassar), oscd.community"
+  ],
+  "false_positives": [
+    "This rule is best put in testing first in order to create a baseline that reflects the data in your environment."
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

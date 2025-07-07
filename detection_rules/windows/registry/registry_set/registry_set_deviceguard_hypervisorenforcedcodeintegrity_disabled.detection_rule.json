@@ -1,0 +1,50 @@
+{
+  "rule_id": "8b7273a4-ba5d-4d8a-b04f-11f2900d043a",
+  "risk_score": 73,
+  "description": "Detects changes to the HypervisorEnforcedCodeIntegrity registry key and the \"Enabled\" value being set to 0 in order to disable the Hypervisor Enforced Code Integrity feature. This allows an attacker to load unsigned and untrusted code to be run in the kernel\n",
+  "name": "Hypervisor Enforced Code Integrity Disabled",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "winlog.event_data.Details:DWORD\\ \\(0x00000000\\) AND (registry.path:(*\\\\Microsoft\\\\Windows\\\\DeviceGuard\\\\HypervisorEnforcedCodeIntegrity OR *\\\\Control\\\\DeviceGuard\\\\HypervisorEnforcedCodeIntegrity OR *\\\\Control\\\\DeviceGuard\\\\Scenarios\\\\HypervisorEnforcedCodeIntegrity\\\\Enabled))",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.defense-evasion",
+    "attack.t1562.001"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Nasreddine Bencherchali (Nextron Systems), Anish Bogati"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

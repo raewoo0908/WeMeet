@@ -1,0 +1,61 @@
+{
+  "rule_id": "bd1212e5-78da-431e-95fa-c58e3237a8e6",
+  "risk_score": 73,
+  "description": "Detects suspicious file type dropped by an Exchange component in IIS into a suspicious folder",
+  "name": "Suspicious ASPX File Drop by Exchange",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "(winlog.event_data.CommandLine:*MSExchange* AND process.executable:*\\\\w3wp.exe AND (file.path:(*FrontEnd\\\\HttpProxy\\\\* OR *\\\\inetpub\\\\wwwroot\\\\aspnet_client\\\\*))) AND (file.path:(*.aspx OR *.asp OR *.ashx))",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "File Create (rule: FileCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.persistence",
+    "attack.t1505.003"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Florian Roth (Nextron Systems), MSTI (query, idea)"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

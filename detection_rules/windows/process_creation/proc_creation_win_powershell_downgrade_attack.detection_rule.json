@@ -1,0 +1,62 @@
+{
+  "rule_id": "b3512211-c67e-4707-bedc-66efc7848863",
+  "risk_score": 47,
+  "description": "Detects PowerShell downgrade attack by comparing the host versions with the actually used engine version 2.0",
+  "name": "Potential PowerShell Downgrade Attack",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "(process.command_line:(*\\ \\-version\\ 2\\ * OR *\\ \\-versio\\ 2\\ * OR *\\ \\-versi\\ 2\\ * OR *\\ \\-vers\\ 2\\ * OR *\\ \\-ver\\ 2\\ * OR *\\ \\-ve\\ 2\\ * OR *\\ \\-v\\ 2\\ *)) AND process.executable:*\\\\powershell.exe",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.defense-evasion",
+    "attack.execution",
+    "attack.t1059.001"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Harish Segar (rule)"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

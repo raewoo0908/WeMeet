@@ -1,0 +1,49 @@
+{
+  "rule_id": "f5d1def8-1de0-4a0e-9794-1f6f27dd605c",
+  "risk_score": 47,
+  "description": "Detects call to \"Win32_QuickFixEngineering\" in order to enumerate installed hotfixes often used in \"enum\" scripts by attackers",
+  "name": "PowerShell Hotfix Enumeration",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "powershell.file.script_block_text:*Win32_QuickFixEngineering* AND powershell.file.script_block_text:*HotFixID*",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.discovery"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Nasreddine Bencherchali (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Legitimate administration scripts"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

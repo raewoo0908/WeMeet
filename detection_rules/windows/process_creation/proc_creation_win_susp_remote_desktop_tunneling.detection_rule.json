@@ -1,0 +1,61 @@
+{
+  "rule_id": "8a3038e8-9c9d-46f8-b184-66234a160f6f",
+  "risk_score": 47,
+  "description": "Detects potential use of an SSH utility to establish RDP over a reverse SSH Tunnel. This can be used by attackers to enable routing of network packets that would otherwise not reach their intended destination.",
+  "name": "Potential Remote Desktop Tunneling",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "process.command_line:*\\:3389* AND (process.command_line:(*\\ \\-L\\ * OR *\\ \\-P\\ * OR *\\ \\-R\\ * OR *\\ \\-pw\\ * OR *\\ \\-ssh\\ *))",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.lateral-movement",
+    "attack.t1021"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Tim Rauch, Elastic (idea)"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

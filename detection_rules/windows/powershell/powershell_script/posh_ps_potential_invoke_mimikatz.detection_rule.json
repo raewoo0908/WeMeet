@@ -1,0 +1,50 @@
+{
+  "rule_id": "189e3b02-82b2-4b90-9662-411eb64486d4",
+  "risk_score": 73,
+  "description": "Detects Invoke-Mimikatz PowerShell script and alike. Mimikatz is a credential dumper capable of obtaining plaintext Windows account logins and passwords.",
+  "name": "Potential Invoke-Mimikatz PowerShell Script",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "(powershell.file.script_block_text:*DumpCreds* AND powershell.file.script_block_text:*DumpCerts*) OR powershell.file.script_block_text:*sekurlsa\\:\\:logonpasswords* OR (powershell.file.script_block_text:*crypto\\:\\:certificates* AND powershell.file.script_block_text:*CERT_SYSTEM_STORE_LOCAL_MACHINE*)",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.credential-access",
+    "attack.t1003"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Tim Rauch, Elastic (idea)"
+  ],
+  "false_positives": [
+    "Mimikatz can be useful for testing the security of networks"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

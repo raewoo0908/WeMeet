@@ -1,0 +1,51 @@
+{
+  "rule_id": "32e19d25-4aed-4860-a55a-be99cb0bf7ed",
+  "risk_score": 47,
+  "description": "Detects DCShadow via create new SPN",
+  "name": "Possible DC Shadow Attack",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "winlog.channel:Security AND ((event.code:4742 AND winlog.event_data.ServicePrincipalNames:*GC\\/*) OR (winlog.event_data.AttributeLDAPDisplayName:servicePrincipalName AND winlog.event_data.AttributeValue:GC\\/* AND event.code:5136))",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.credential-access",
+    "attack.defense-evasion",
+    "attack.t1207"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Ilyas Ochkov, oscd.community, Chakib Gzenayi (@Chak092), Hosni Mribah"
+  ],
+  "false_positives": [
+    "Valid on domain controllers; exclude known DCs"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

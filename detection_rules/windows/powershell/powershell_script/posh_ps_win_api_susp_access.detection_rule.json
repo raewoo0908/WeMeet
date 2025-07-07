@@ -1,0 +1,51 @@
+{
+  "rule_id": "03d83090-8cba-44a0-b02f-0b756a050306",
+  "risk_score": 73,
+  "description": "Detects use of WinAPI functions in PowerShell scripts",
+  "name": "Potential WinAPI Calls Via PowerShell Scripts",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "(powershell.file.script_block_text:*OpenProcessToken* AND powershell.file.script_block_text:*DuplicateTokenEx* AND powershell.file.script_block_text:*CloseHandle*) OR (powershell.file.script_block_text:*VirtualAlloc* AND powershell.file.script_block_text:*OpenProcess* AND powershell.file.script_block_text:*WriteProcessMemory* AND powershell.file.script_block_text:*CreateRemoteThread*) OR (powershell.file.script_block_text:*WriteProcessMemory* AND powershell.file.script_block_text:*VirtualAlloc* AND powershell.file.script_block_text:*ReadProcessMemory* AND powershell.file.script_block_text:*VirtualFree*) OR (powershell.file.script_block_text:*OpenProcessToken* AND powershell.file.script_block_text:*LookupPrivilegeValue* AND powershell.file.script_block_text:*AdjustTokenPrivileges*)",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.execution",
+    "attack.t1059.001",
+    "attack.t1106"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Nasreddine Bencherchali (Nextron Systems), Nikita Nazarov, oscd.community"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

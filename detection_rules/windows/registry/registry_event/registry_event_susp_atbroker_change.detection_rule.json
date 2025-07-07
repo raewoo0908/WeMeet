@@ -1,0 +1,52 @@
+{
+  "rule_id": "9577edbb-851f-4243-8c91-1d5b50c1a39b",
+  "risk_score": 47,
+  "description": "Detects creation/modification of Assistive Technology applications and persistence with usage of 'at'",
+  "name": "Atbroker Registry Change",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "(registry.path:(*Software\\\\Microsoft\\\\Windows\\ NT\\\\CurrentVersion\\\\Accessibility\\\\ATs* OR *Software\\\\Microsoft\\\\Windows\\ NT\\\\CurrentVersion\\\\Accessibility\\\\Configuration*)) AND (NOT ((winlog.event_data.Details:\\(Empty\\) AND process.executable:C\\:\\\\Windows\\\\system32\\\\atbroker.exe AND registry.path:*\\\\Microsoft\\\\Windows\\ NT\\\\CurrentVersion\\\\Accessibility\\\\Configuration*) OR (process.executable:C\\:\\\\Windows\\\\Installer\\\\MSI* AND registry.path:*Software\\\\Microsoft\\\\Windows\\ NT\\\\CurrentVersion\\\\Accessibility\\\\ATs*)))",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.defense-evasion",
+    "attack.t1218",
+    "attack.persistence",
+    "attack.t1547"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Mateusz Wydra, oscd.community"
+  ],
+  "false_positives": [
+    "Creation of non-default, legitimate at usage"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

@@ -1,0 +1,61 @@
+{
+  "rule_id": "e4a6b256-3e47-40fc-89d2-7a477edd6915",
+  "risk_score": 73,
+  "description": "Detects the execution of a Windows system binary that is usually located in the system folder from an uncommon location.\n",
+  "name": "System File Execution Location Anomaly",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "(process.executable:(*\\\\atbroker.exe OR *\\\\audiodg.exe OR *\\\\bcdedit.exe OR *\\\\bitsadmin.exe OR *\\\\certreq.exe OR *\\\\certutil.exe OR *\\\\cmstp.exe OR *\\\\conhost.exe OR *\\\\consent.exe OR *\\\\cscript.exe OR *\\\\csrss.exe OR *\\\\dashost.exe OR *\\\\defrag.exe OR *\\\\dfrgui.exe OR *\\\\dism.exe OR *\\\\dllhost.exe OR *\\\\dllhst3g.exe OR *\\\\dwm.exe OR *\\\\eventvwr.exe OR *\\\\logonui.exe OR *\\\\LsaIso.exe OR *\\\\lsass.exe OR *\\\\lsm.exe OR *\\\\msiexec.exe OR *\\\\ntoskrnl.exe OR *\\\\powershell_ise.exe OR *\\\\powershell.exe OR *\\\\pwsh.exe OR *\\\\regsvr32.exe OR *\\\\rundll32.exe OR *\\\\runonce.exe OR *\\\\RuntimeBroker.exe OR *\\\\schtasks.exe OR *\\\\services.exe OR *\\\\sihost.exe OR *\\\\smartscreen.exe OR *\\\\smss.exe OR *\\\\spoolsv.exe OR *\\\\svchost.exe OR *\\\\taskhost.exe OR *\\\\Taskmgr.exe OR *\\\\userinit.exe OR *\\\\wininit.exe OR *\\\\winlogon.exe OR *\\\\winver.exe OR *\\\\wlanext.exe OR *\\\\wscript.exe OR *\\\\wsl.exe OR *\\\\wsmprovhost.exe)) AND (NOT ((process.executable:(C\\:\\\\$WINDOWS.\\~BT\\\\* OR C\\:\\\\$WinREAgent\\\\* OR C\\:\\\\Windows\\\\SoftwareDistribution\\\\* OR C\\:\\\\Windows\\\\System32\\\\* OR C\\:\\\\Windows\\\\SystemTemp\\\\* OR C\\:\\\\Windows\\\\SysWOW64\\\\* OR C\\:\\\\Windows\\\\uus\\\\* OR C\\:\\\\Windows\\\\WinSxS\\\\*)) OR (process.executable:(C\\:\\\\Program\\ Files\\\\PowerShell\\\\7\\\\pwsh.exe OR C\\:\\\\Program\\ Files\\\\PowerShell\\\\7\\-preview\\\\pwsh.exe)) OR (process.executable:*\\\\wsl.exe AND process.executable:C\\:\\\\Program\\ Files\\\\WindowsApps\\\\MicrosoftCorporationII.WindowsSubsystemForLinux*))) AND (NOT process.executable:*\\\\SystemRoot\\\\System32\\\\*)",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.defense-evasion",
+    "attack.t1036"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Florian Roth (Nextron Systems), Patrick Bareiss, Anton Kutepov, oscd.community, Nasreddine Bencherchali (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

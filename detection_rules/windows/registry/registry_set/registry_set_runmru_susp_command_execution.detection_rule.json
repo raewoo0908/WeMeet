@@ -1,0 +1,50 @@
+{
+  "rule_id": "a7df0e9e-91a5-459a-a003-4cde67c2ff5d",
+  "risk_score": 73,
+  "description": "Detects execution of commands via the run dialog box on Windows by checking values of the \"RunMRU\" registry key.\nThis technique was seen being abused by threat actors to deceive users into pasting and executing malicious commands, often disguised as CAPTCHA verification steps.\n",
+  "name": "Potentially Suspicious Command Executed Via Run Dialog Box - Registry",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "registry.path:*\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Explorer\\\\RunMRU* AND (((winlog.event_data.Details:(*powershell* OR *pwsh*)) AND (winlog.event_data.Details:(*\\ \\-e\\ * OR *\\ \\-ec\\ * OR *\\ \\-en\\ * OR *\\ \\-enc\\ * OR *\\ \\-enco* OR *ftp* OR *Hidden* OR *http* OR *iex* OR *Invoke\\-*))) OR (winlog.event_data.Details:*wmic* AND (winlog.event_data.Details:(*shadowcopy* OR *process\\ call\\ create*))))",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.execution",
+    "attack.t1059.001"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Ahmed Farouk, Nasreddine Bencherchali"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

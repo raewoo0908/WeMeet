@@ -1,0 +1,61 @@
+{
+  "rule_id": "8e1cb247-6cf6-42fa-b440-3f27d57e9936",
+  "risk_score": 73,
+  "description": "Detects potential persistence activity via startup add-ins that load when Microsoft Office starts (.wll/.xll are simply .dll fit for Word or Excel).",
+  "name": "Potential Persistence Via Microsoft Office Add-In",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "(file.path:*\\\\Microsoft\\\\Addins\\\\* AND (file.path:(*.xlam OR *.xla OR *.ppam))) OR (file.path:*\\\\Microsoft\\\\Word\\\\Startup\\\\* AND file.path:*.wll) OR (file.path:*Microsoft\\\\Excel\\\\XLSTART\\\\* AND file.path:*.xlam) OR (file.path:*\\\\Microsoft\\\\Excel\\\\Startup\\\\* AND file.path:*.xll)",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "File Create (rule: FileCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.persistence",
+    "attack.t1137.006"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "NVISO"
+  ],
+  "false_positives": [
+    "Legitimate add-ins"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

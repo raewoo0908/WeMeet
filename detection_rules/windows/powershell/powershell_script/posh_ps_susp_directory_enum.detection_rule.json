@@ -1,0 +1,50 @@
+{
+  "rule_id": "162e69a7-7981-4344-84a9-0f1c9a217a52",
+  "risk_score": 47,
+  "description": "Detects technique used by MAZE ransomware to enumerate directories using Powershell",
+  "name": "Powershell Directory Enumeration",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "powershell.file.script_block_text:*foreach* AND powershell.file.script_block_text:*Get\\-ChildItem* AND powershell.file.script_block_text:*\\-Path\\ * AND powershell.file.script_block_text:*\\-ErrorAction\\ * AND powershell.file.script_block_text:*SilentlyContinue* AND powershell.file.script_block_text:*Out\\-File\\ * AND powershell.file.script_block_text:*\\-append*",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.discovery",
+    "attack.t1083"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "frack113"
+  ],
+  "false_positives": [
+    "Legitimate PowerShell scripts"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

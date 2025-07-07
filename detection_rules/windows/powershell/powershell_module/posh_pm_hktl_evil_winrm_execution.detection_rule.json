@@ -1,0 +1,49 @@
+{
+  "rule_id": "9fe55ea2-4cd6-4491-8a54-dd6871651b51",
+  "risk_score": 73,
+  "description": "Detects the execution of Evil-WinRM via PowerShell Module logs by leveraging the hardcoded strings inside the utility.\n",
+  "name": "HackTool - Evil-WinRm Execution - PowerShell Module",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "(ContextInfo:(*\\:\\\\Windows\\\\System32\\\\wsmprovhost.exe* OR *\\:\\\\Windows\\\\SysWOW64\\\\wsmprovhost.exe*)) AND ((Payload:(*value\\=\\\"\\(get\\-location\\).path* OR *value\\=\\\"\\(get\\-item*\\).length* OR *Invoke\\-Binary\\ * OR *Donut\\-Loader\\ \\-process_id*\\-donutfile* OR *Bypass\\-4MSI* OR *IEX\\ \\(\\[System.Text.Encoding\\]\\:\\:ASCII.GetString\\(\\[System.Convert\\]\\:\\:FromBase64String\\($a\\)\\)\\).replace\\('???',''\\)*)) OR (Payload:*$servicios\\ \\=\\ Get\\-ItemProperty\\ \\\"registry\\:\\:HKLM\\\\System\\\\CurrentControlSet\\\\Services\\\\\\\"* AND Payload:*Where\\-Object\\ \\{$_.imagepath\\ \\-notmatch\\ \\\"system\\\"\\ \\-and\\ $_.imagepath\\ \\-ne\\ $null\\ \\}\\ \\|\\ Select\\-Object\\ pschildname,imagepath*) OR (Payload:*$a\\ \\+\\=\\ \\ \\\\\\\"$\\($_.FullName.Replace\\('\\\\','\\/'\\)\\)\\/\\\\\\\"\\}else\\{\\ \\ $a\\ \\+\\=\\ \\\\\\\"$\\($_.FullName.Replace\\('\\\\',\\ '\\/'\\)\\)\\\\\\\"\\ \\}* AND Payload:*$a\\=@\\(\\);$*))",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.lateral-movement"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Nasreddine Bencherchali (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

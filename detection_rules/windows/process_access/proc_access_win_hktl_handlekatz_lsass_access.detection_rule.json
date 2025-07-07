@@ -1,0 +1,53 @@
+{
+  "rule_id": "b1bd3a59-c1fd-4860-9f40-4dd161a7d1f5",
+  "risk_score": 73,
+  "description": "Detects HandleKatz opening LSASS to duplicate its handle to later dump the memory without opening any new handles",
+  "name": "HackTool - HandleKatz Duplicating LSASS Handle",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "winlog.event_data.CallTrace:*\\|UNKNOWN\\(* AND winlog.event_data.CallTrace:*\\) AND winlog.event_data.CallTrace:C\\:\\\\Windows\\\\System32\\\\ntdll.dll\\+* AND winlog.event_data.GrantedAccess:0x1440 AND winlog.event_data.TargetImage:*\\\\lsass.exe",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.execution",
+    "attack.t1106",
+    "attack.defense-evasion",
+    "attack.t1003.001",
+    "attack.credential-access"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Bhabesh Raj (rule), @thefLinkk"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

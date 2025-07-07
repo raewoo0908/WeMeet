@@ -1,0 +1,61 @@
+{
+  "rule_id": "27ba3207-dd30-4812-abbf-5d20c57d474e",
+  "risk_score": 73,
+  "description": "Detects a suspicious process spawning a Chromium based browser process with the 'load-extension' flag to start an instance with a custom extension",
+  "name": "Suspicious Chromium Browser Instance Executed With Custom Extension",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "process.command_line:*\\-\\-load\\-extension\\=* AND (process.executable:(*\\\\brave.exe OR *\\\\chrome.exe OR *\\\\msedge.exe OR *\\\\opera.exe OR *\\\\vivaldi.exe)) AND (process.parent.executable:(*\\\\cmd.exe OR *\\\\cscript.exe OR *\\\\mshta.exe OR *\\\\powershell.exe OR *\\\\pwsh.exe OR *\\\\regsvr32.exe OR *\\\\rundll32.exe OR *\\\\wscript.exe))",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.persistence",
+    "attack.t1176"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Aedan Russell, frack113, X__Junior (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

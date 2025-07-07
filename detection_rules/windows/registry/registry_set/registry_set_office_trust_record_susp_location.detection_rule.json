@@ -1,0 +1,50 @@
+{
+  "rule_id": "a166f74e-bf44-409d-b9ba-ea4b2dd8b3cd",
+  "risk_score": 73,
+  "description": "Detects registry changes to Office trust records where the path is located in a potentially suspicious location",
+  "name": "Macro Enabled In A Potentially Suspicious Document",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "(registry.path:(*\\/AppData\\/Local\\/Microsoft\\/Windows\\/INetCache\\/* OR *\\/AppData\\/Local\\/Temp\\/* OR *\\/PerfLogs\\/* OR *C\\:\\/Users\\/Public\\/* OR *file\\:\\/\\/\\/D\\:\\/* OR *file\\:\\/\\/\\/E\\:\\/*)) AND registry.path:*\\\\Security\\\\Trusted\\ Documents\\\\TrustRecords*",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.defense-evasion",
+    "attack.t1112"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Nasreddine Bencherchali (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Unlikely"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

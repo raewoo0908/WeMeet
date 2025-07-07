@@ -1,0 +1,60 @@
+{
+  "rule_id": "378a05d8-963c-46c9-bcce-13c7657eac99",
+  "risk_score": 47,
+  "description": "Detects potentially suspicious CommandLine of electron apps (teams, discord, slack, etc.). This could be a sign of abuse to proxy execution through a signed binary.",
+  "name": "Potentially Suspicious Electron Application CommandLine",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "(process.command_line:(*\\-\\-browser\\-subprocess\\-path* OR *\\-\\-gpu\\-launcher* OR *\\-\\-renderer\\-cmd\\-prefix* OR *\\-\\-utility\\-cmd\\-prefix*)) AND ((process.executable:(*\\\\chrome.exe OR *\\\\code.exe OR *\\\\discord.exe OR *\\\\GitHubDesktop.exe OR *\\\\keybase.exe OR *\\\\msedge_proxy.exe OR *\\\\msedge.exe OR *\\\\msedgewebview2.exe OR *\\\\msteams.exe OR *\\\\slack.exe OR *\\\\Teams.exe)) OR (process.pe.original_file_name:(chrome.exe OR code.exe OR discord.exe OR GitHubDesktop.exe OR keybase.exe OR msedge_proxy.exe OR msedge.exe OR msedgewebview2.exe OR msteams.exe OR slack.exe OR Teams.exe)))",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.execution"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "frack113, Nasreddine Bencherchali (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Legitimate usage for debugging purposes"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

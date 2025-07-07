@@ -1,0 +1,40 @@
+{
+  "rule_id": "23b71bc5-953e-4971-be4c-c896cda73fc2",
+  "risk_score": 73,
+  "description": "Triggers on any Sysmon \"FileBlockExecutable\" event, which indicates a violation of the configured block policy",
+  "name": "Sysmon Blocked Executable",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "winlog.channel:Microsoft\\-Windows\\-Sysmon\\/Operational AND event.code:27",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.defense-evasion"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Nasreddine Bencherchali (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Unlikely"
+  ],
+  "license": "DRL",
+  "rule_name_override": "",
+  "timestamp_override": "",
+  "output_index": "",
+  "meta": {
+    "from": "1m",
+    "kibana_siem_app_url": ""
+  }
+}

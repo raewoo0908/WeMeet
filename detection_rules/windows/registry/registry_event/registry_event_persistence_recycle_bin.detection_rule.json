@@ -1,0 +1,50 @@
+{
+  "rule_id": "277efb8f-60be-4f10-b4d3-037802f37167",
+  "risk_score": 73,
+  "description": "Detects persistence registry keys for Recycle Bin",
+  "name": "Registry Persistence Mechanisms in Recycle Bin",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "(winlog.event_data.EventType:RenameKey AND winlog.event_data.NewName:*\\\\CLSID\\\\\\{645FF040\\-5081\\-101B\\-9F08\\-00AA002F954E\\}\\\\shell\\\\open*) OR (winlog.event_data.EventType:SetValue AND registry.path:*\\\\CLSID\\\\\\{645FF040\\-5081\\-101B\\-9F08\\-00AA002F954E\\}\\\\shell\\\\open\\\\command\\\\\\(Default\\)*)",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.persistence",
+    "attack.t1547"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "frack113"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

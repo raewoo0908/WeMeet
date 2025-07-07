@@ -1,0 +1,52 @@
+{
+  "rule_id": "0adc67e0-a68f-4ffd-9c43-28905aad5d6a",
+  "risk_score": 99,
+  "description": "Detects creation of default named pipes used by the Koh tool",
+  "name": "HackTool - Koh Default Named Pipe",
+  "severity": "critical",
+  "type": "query",
+  "language": "lucene",
+  "query": "file.name:(*\\\\imposecost* OR *\\\\imposingcost*)",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.privilege-escalation",
+    "attack.credential-access",
+    "attack.t1528",
+    "attack.t1134.001"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Nasreddine Bencherchali (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Unlikely"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

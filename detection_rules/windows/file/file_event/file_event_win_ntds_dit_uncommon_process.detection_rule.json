@@ -1,0 +1,62 @@
+{
+  "rule_id": "11b1ed55-154d-4e82-8ad7-83739298f720",
+  "risk_score": 73,
+  "description": "Detects creation of a file named \"ntds.dit\" (Active Directory Database) by an uncommon process or a process located in a suspicious directory",
+  "name": "NTDS.DIT Creation By Uncommon Process",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "file.path:*\\\\ntds.dit AND ((process.executable:(*\\\\cmd.exe OR *\\\\cscript.exe OR *\\\\mshta.exe OR *\\\\powershell.exe OR *\\\\pwsh.exe OR *\\\\regsvr32.exe OR *\\\\rundll32.exe OR *\\\\wscript.exe OR *\\\\wsl.exe OR *\\\\wt.exe)) OR (process.executable:(*\\\\AppData\\\\* OR *\\\\Temp\\\\* OR *\\\\Public\\\\* OR *\\\\PerfLogs\\\\*)))",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "File Create (rule: FileCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.credential-access",
+    "attack.t1003.002",
+    "attack.t1003.003"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Florian Roth (Nextron Systems), Nasreddine Bencherchali (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

@@ -1,0 +1,60 @@
+{
+  "rule_id": "d65aee4d-2292-4cea-b832-83accd6cfa43",
+  "risk_score": 47,
+  "description": "Detects execution of the Notepad++ updater (gup) to launch other commands or executables",
+  "name": "Arbitrary Binary Execution Using GUP Utility",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "(process.executable:*\\\\explorer.exe AND process.parent.executable:*\\\\gup.exe) AND (NOT ((process.command_line:*\\\\Notepad\\+\\+\\\\notepad\\+\\+.exe* AND process.executable:*\\\\explorer.exe) OR (NOT _exists_:process.command_line) OR process.parent.executable:*\\\\Notepad\\+\\+\\\\updater\\\\*))",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.execution"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Nasreddine Bencherchali (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Other parent binaries using GUP not currently identified"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

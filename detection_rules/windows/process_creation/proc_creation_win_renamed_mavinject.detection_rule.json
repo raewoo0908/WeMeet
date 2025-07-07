@@ -1,0 +1,63 @@
+{
+  "rule_id": "e6474a1b-5390-49cd-ab41-8d88655f7394",
+  "risk_score": 73,
+  "description": "Detects the execution of a renamed version of the \"Mavinject\" process. Which can be abused to perform process injection using the \"/INJECTRUNNING\" flag",
+  "name": "Renamed Mavinject.EXE Execution",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "(process.pe.original_file_name:(mavinject32.exe OR mavinject64.exe)) AND (NOT (process.executable:(*\\\\mavinject32.exe OR *\\\\mavinject64.exe)))",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.defense-evasion",
+    "attack.privilege-escalation",
+    "attack.t1055.001",
+    "attack.t1218.013"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "frack113, Florian Roth"
+  ],
+  "false_positives": [
+    "Unlikely"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

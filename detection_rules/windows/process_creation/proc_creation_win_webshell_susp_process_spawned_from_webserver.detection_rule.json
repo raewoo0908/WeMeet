@@ -1,0 +1,62 @@
+{
+  "rule_id": "8202070f-edeb-4d31-a010-a26c72ac5600",
+  "risk_score": 73,
+  "description": "Detects potentially suspicious processes being spawned by a web server process which could be the result of a successfully placed web shell or exploitation\n",
+  "name": "Suspicious Process By Web Server Process",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "(((process.parent.executable:(*\\-tomcat\\-* OR *\\\\tomcat*)) AND (process.parent.executable:(*\\\\java.exe OR *\\\\javaw.exe))) OR ((process.parent.command_line:(*CATALINA_HOME* OR *catalina.home* OR *catalina.jar*)) AND (process.parent.executable:(*\\\\java.exe OR *\\\\javaw.exe))) OR (process.parent.executable:(*\\\\caddy.exe OR *\\\\httpd.exe OR *\\\\nginx.exe OR *\\\\php\\-cgi.exe OR *\\\\php.exe OR *\\\\tomcat.exe OR *\\\\UMWorkerProcess.exe OR *\\\\w3wp.exe OR *\\\\ws_TomcatService.exe))) AND (process.executable:(*\\\\arp.exe OR *\\\\at.exe OR *\\\\bash.exe OR *\\\\bitsadmin.exe OR *\\\\certutil.exe OR *\\\\cmd.exe OR *\\\\cscript.exe OR *\\\\dsget.exe OR *\\\\hostname.exe OR *\\\\nbtstat.exe OR *\\\\net.exe OR *\\\\net1.exe OR *\\\\netdom.exe OR *\\\\netsh.exe OR *\\\\nltest.exe OR *\\\\ntdsutil.exe OR *\\\\powershell_ise.exe OR *\\\\powershell.exe OR *\\\\pwsh.exe OR *\\\\qprocess.exe OR *\\\\query.exe OR *\\\\qwinsta.exe OR *\\\\reg.exe OR *\\\\rundll32.exe OR *\\\\sc.exe OR *\\\\sh.exe OR *\\\\wmic.exe OR *\\\\wscript.exe OR *\\\\wusa.exe)) AND (NOT ((process.command_line:*Windows\\\\system32\\\\cmd.exe\\ \\/c\\ C\\:\\\\ManageEngine\\\\ADManager\\ \\\"Plus\\\\ES\\\\bin\\\\elasticsearch.bat\\ \\-Enode.name\\=RMP\\-NODE1\\ \\-pelasticsearch\\-pid.txt AND process.parent.executable:*\\\\java.exe) OR ((process.command_line:*sc\\ query* AND process.command_line:*ADManager\\ Plus*) AND process.parent.executable:*\\\\java.exe)))",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.persistence",
+    "attack.t1505.003",
+    "attack.t1190"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Thomas Patzke, Florian Roth (Nextron Systems), Zach Stanford @svch0st, Tim Shelton, Nasreddine Bencherchali (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Particular web applications may spawn a shell process legitimately"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

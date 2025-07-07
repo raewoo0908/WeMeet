@@ -1,0 +1,50 @@
+{
+  "rule_id": "f65e22f9-819e-4f96-9c7b-498364ae7a25",
+  "risk_score": 73,
+  "description": "Detects PowerShell module creation where the module Contents are set to \"function Get-VMRemoteFXPhysicalVideoAdapter\". This could be a sign of potential abuse of  the \"RemoteFXvGPUDisablement.exe\" binary which is known to be vulnerable to module load-order hijacking.",
+  "name": "Potential RemoteFXvGPUDisablement.EXE Abuse",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "winlog.channel:Windows\\ PowerShell AND winlog.event_data.Data:*ModuleContents\\=function\\ Get\\-VMRemoteFXPhysicalVideoAdapter\\ \\{*",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.defense-evasion",
+    "attack.t1218"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "frack113, Nasreddine Bencherchali (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

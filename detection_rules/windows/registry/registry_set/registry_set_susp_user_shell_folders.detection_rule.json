@@ -1,0 +1,51 @@
+{
+  "rule_id": "9c226817-8dc9-46c2-a58d-66655aafd7dc",
+  "risk_score": 73,
+  "description": "Detect modification of the startup key to a path where a payload could be stored to be launched during startup",
+  "name": "Modify User Shell Folders Startup Value",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "registry.path:*SOFTWARE\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Explorer\\\\User\\ Shell\\ Folders* AND registry.path:*Startup",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.persistence",
+    "attack.privilege-escalation",
+    "attack.t1547.001"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "frack113"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

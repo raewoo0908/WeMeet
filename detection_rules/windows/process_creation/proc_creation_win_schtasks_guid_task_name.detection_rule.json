@@ -1,0 +1,61 @@
+{
+  "rule_id": "ff2fff64-4cd6-4a2b-ba7d-e28a30bbe66b",
+  "risk_score": 47,
+  "description": "Detects creation of a scheduled task with a GUID like name",
+  "name": "Suspicious Scheduled Task Name As GUID",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "(process.command_line:(*\\}\\\"* OR *\\}'* OR *\\}\\ *)) AND (process.command_line:*\\/Create\\ * AND process.executable:*\\\\schtasks.exe) AND (process.command_line:(*\\/TN\\ \\\"\\{* OR *\\/TN\\ '\\{* OR *\\/TN\\ \\{*))",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.execution",
+    "attack.t1053.005"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Nasreddine Bencherchali (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Legitimate software naming their tasks as GUIDs"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

@@ -1,0 +1,63 @@
+{
+  "rule_id": "a746c9b8-a2fb-4ee5-a428-92bee9e99060",
+  "risk_score": 47,
+  "description": "This rule detects execution of a PowerShell code through the sqltoolsps.exe utility, which is included in the standard set of utilities supplied with the Microsoft SQL Server Management studio.\nScript blocks are not logged in this case, so this utility helps to bypass protection mechanisms based on the analysis of these logs.\n",
+  "name": "SQL Client Tools PowerShell Session Detection",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "(process.executable:*\\\\sqltoolsps.exe OR process.parent.executable:*\\\\sqltoolsps.exe OR process.pe.original_file_name:\\\\sqltoolsps.exe) AND (NOT process.parent.executable:*\\\\smss.exe)",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.execution",
+    "attack.t1059.001",
+    "attack.defense-evasion",
+    "attack.t1127"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Agro (@agro_sev) oscd.communitly"
+  ],
+  "false_positives": [
+    "Direct PS command execution through SQLToolsPS.exe is uncommon, childprocess sqltoolsps.exe spawned by smss.exe is a legitimate action."
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

@@ -1,0 +1,50 @@
+{
+  "rule_id": "18beca67-ab3e-4ee3-ba7a-a46ca8d7d0cc",
+  "risk_score": 73,
+  "description": "Potential threat actor tampering with Sysmon manifest and eventually disabling it",
+  "name": "Sysmon Channel Reference Deletion",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "winlog.channel:Security AND ((event.code:4657 AND winlog.event_data.NewValue:0 AND (winlog.event_data.ObjectName:(*WINEVT\\\\Publishers\\\\\\{5770385f\\-c22a\\-43e0\\-bf4c\\-06f5698ffbd9\\}* OR *WINEVT\\\\Channels\\\\Microsoft\\-Windows\\-Sysmon\\/Operational*)) AND winlog.event_data.ObjectValueName:Enabled) OR (winlog.event_data.AccessMask:65536 AND event.code:4663 AND (winlog.event_data.ObjectName:(*WINEVT\\\\Publishers\\\\\\{5770385f\\-c22a\\-43e0\\-bf4c\\-06f5698ffbd9\\}* OR *WINEVT\\\\Channels\\\\Microsoft\\-Windows\\-Sysmon\\/Operational*))))",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.defense-evasion",
+    "attack.t1112"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Roberto Rodriguez (Cyb3rWard0g), OTR (Open Threat Research)"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

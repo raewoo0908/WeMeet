@@ -1,0 +1,55 @@
+{
+  "rule_id": "aa35a627-33fb-4d04-a165-d33b4afca3e8",
+  "risk_score": 73,
+  "description": "Detects remote access to the LSASS process via WinRM. This could be a sign of credential dumping from tools like mimikatz.",
+  "name": "Remote LSASS Process Access Through Windows Remote Management",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "(process.executable:*\\:\\\\Windows\\\\system32\\\\wsmprovhost.exe AND winlog.event_data.TargetImage:*\\\\lsass.exe) AND (NOT winlog.event_data.GrantedAccess:0x80000000)",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.credential-access",
+    "attack.execution",
+    "attack.t1003.001",
+    "attack.t1059.001",
+    "attack.lateral-movement",
+    "attack.t1021.006",
+    "attack.s0002"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Patryk Prauze - ING Tech"
+  ],
+  "false_positives": [
+    "Unlikely"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

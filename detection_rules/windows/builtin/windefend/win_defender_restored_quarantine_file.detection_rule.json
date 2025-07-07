@@ -1,0 +1,50 @@
+{
+  "rule_id": "bc92ca75-cd42-4d61-9a37-9d5aa259c88b",
+  "risk_score": 73,
+  "description": "Detects the restoration of files from the defender quarantine",
+  "name": "Win Defender Restored Quarantine File",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "winlog.channel:Microsoft\\-Windows\\-Windows\\ Defender\\/Operational AND event.code:1009",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.defense-evasion",
+    "attack.t1562.001"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Nasreddine Bencherchali (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Legitimate administrator activity restoring a file"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

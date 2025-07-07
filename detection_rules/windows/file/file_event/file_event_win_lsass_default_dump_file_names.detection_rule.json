@@ -1,0 +1,61 @@
+{
+  "rule_id": "a5a2d357-1ab8-4675-a967-ef9990a59391",
+  "risk_score": 73,
+  "description": "Detects creation of files with names used by different memory dumping tools to create a memory dump of the LSASS process memory, which contains user credentials.",
+  "name": "LSASS Process Memory Dump Files",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "(file.path:(*\\\\Andrew.dmp OR *\\\\Coredump.dmp OR *\\\\lsass.dmp OR *\\\\lsass.rar OR *\\\\lsass.zip OR *\\\\NotLSASS.zip OR *\\\\PPLBlade.dmp OR *\\\\rustive.dmp)) OR (file.path:(*\\\\lsass_2* OR *\\\\lsassdmp* OR *\\\\lsassdump*)) OR (file.path:*\\\\lsass* AND file.path:*.dmp*) OR (file.path:*SQLDmpr* AND file.path:*.mdmp) OR ((file.path:(*\\\\nanodump* OR *\\\\proc_*)) AND file.path:*.dmp)",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "File Create (rule: FileCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.credential-access",
+    "attack.t1003.001"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Florian Roth (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

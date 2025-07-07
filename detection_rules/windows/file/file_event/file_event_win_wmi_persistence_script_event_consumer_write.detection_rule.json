@@ -1,0 +1,61 @@
+{
+  "rule_id": "33f41cdd-35ac-4ba8-814b-c6a4244a1ad4",
+  "risk_score": 73,
+  "description": "Detects file writes of WMI script event consumer",
+  "name": "WMI Persistence - Script Event Consumer File Write",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "process.executable:C\\:\\\\WINDOWS\\\\system32\\\\wbem\\\\scrcons.exe",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "File Create (rule: FileCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.t1546.003",
+    "attack.persistence"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Thomas Patzke"
+  ],
+  "false_positives": [
+    "Dell Power Manager (C:\\Program Files\\Dell\\PowerManager\\DpmPowerPlanSetup.exe)"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

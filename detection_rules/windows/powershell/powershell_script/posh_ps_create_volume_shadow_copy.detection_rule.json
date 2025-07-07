@@ -1,0 +1,50 @@
+{
+  "rule_id": "afd12fed-b0ec-45c9-a13d-aa86625dac81",
+  "risk_score": 73,
+  "description": "Adversaries may attempt to access or create a copy of the Active Directory domain database in order to steal credential information",
+  "name": "Create Volume Shadow Copy with Powershell",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "powershell.file.script_block_text:*Win32_ShadowCopy* AND powershell.file.script_block_text:*\\).Create\\(* AND powershell.file.script_block_text:*ClientAccessible*",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.credential-access",
+    "attack.t1003.003"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "frack113"
+  ],
+  "false_positives": [
+    "Legitimate PowerShell scripts"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

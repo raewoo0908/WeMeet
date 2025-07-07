@@ -1,0 +1,61 @@
+{
+  "rule_id": "41421f44-58f9-455d-838a-c398859841d4",
+  "risk_score": 73,
+  "description": "Detects changes to environment variables related to ETW logging via the CommandLine.\nThis could indicate potential adversaries stopping ETW providers recording loaded .NET assemblies.\n",
+  "name": "ETW Logging Tamper In .NET Processes Via CommandLine",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "process.command_line:(*COMPlus_ETWEnabled* OR *COMPlus_ETWFlags*)",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.defense-evasion",
+    "attack.t1562"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Roberto Rodriguez (Cyb3rWard0g), OTR (Open Threat Research)"
+  ],
+  "false_positives": [
+    "Unlikely"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

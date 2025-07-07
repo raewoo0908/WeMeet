@@ -1,0 +1,61 @@
+{
+  "rule_id": "7892ec59-c5bb-496d-8968-e5d210ca3ac4",
+  "risk_score": 73,
+  "description": "Detects file names with specific patterns seen generated and used by tools such as Mimikatz and DSInternals related to exported or stolen DPAPI backup keys and certificates.\n",
+  "name": "DPAPI Backup Keys And Certificate Export Activity IOC",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "(file.path:(*ntds_capi_* OR *ntds_legacy_* OR *ntds_unknown_*)) AND (file.path:(*.cer OR *.key OR *.pfx OR *.pvk))",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "File Create (rule: FileCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.t1555",
+    "attack.t1552.004"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Nounou Mbeiri, Nasreddine Bencherchali (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Unlikely"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

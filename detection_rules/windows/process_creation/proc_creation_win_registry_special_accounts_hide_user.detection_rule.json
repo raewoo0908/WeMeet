@@ -1,0 +1,61 @@
+{
+  "rule_id": "9ec9fb1b-e059-4489-9642-f270c207923d",
+  "risk_score": 47,
+  "description": "Detects changes to the registry key \"HKLM\\Software\\Microsoft\\Windows NT\\CurrentVersion\\Winlogon\\SpecialAccounts\\Userlist\" where the value is set to \"0\" in order to hide user account from being listed on the logon screen.\n",
+  "name": "Hiding User Account Via SpecialAccounts Registry Key - CommandLine",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "(process.command_line:*\\\\SOFTWARE\\\\Microsoft\\\\Windows\\ NT\\\\CurrentVersion\\\\Winlogon\\\\SpecialAccounts\\\\UserList* AND process.command_line:*add* AND process.command_line:*\\/v* AND process.command_line:*\\/d\\ 0*) AND process.executable:*\\\\reg.exe",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.defense-evasion",
+    "attack.t1564.002"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "@Kostastsale, TheDFIRReport"
+  ],
+  "false_positives": [
+    "System administrator activities"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

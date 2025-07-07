@@ -1,0 +1,50 @@
+{
+  "rule_id": "13addce7-47b2-4ca0-a98f-1de964d1d669",
+  "risk_score": 47,
+  "description": "Detects non-system users failing to get a handle of the SCM database.",
+  "name": "SCM Database Handle Failure",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "winlog.channel:Security AND ((winlog.event_data.AccessMask:0xf003f AND event.code:4656 AND winlog.event_data.ObjectName:ServicesActive AND winlog.event_data.ObjectType:SC_MANAGER\\ OBJECT) AND (NOT winlog.logon.id:0x3e4))",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.discovery",
+    "attack.t1010"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Roberto Rodriguez @Cyb3rWard0g"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

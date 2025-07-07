@@ -1,0 +1,61 @@
+{
+  "rule_id": "f26307d8-14cd-47e3-a26b-4b4769f24af6",
+  "risk_score": 73,
+  "description": "Detects suspicious process patterns found in logs when CrackMapExec is used",
+  "name": "HackTool - CrackMapExec Process Patterns",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "((process.command_line:(*cmd.exe\\ \\/c\\ * OR *cmd.exe\\ \\/r\\ * OR *cmd.exe\\ \\/k\\ * OR *cmd\\ \\/c\\ * OR *cmd\\ \\/r\\ * OR *cmd\\ \\/k\\ *)) AND (process.command_line:*tasklist\\ \\/fi\\ * AND process.command_line:*Imagename\\ eq\\ lsass.exe*) AND (user.name:(*AUTHORI* OR *AUTORI*))) OR (process.command_line:*do\\ rundll32.exe\\ C\\:\\\\windows\\\\System32\\\\comsvcs.dll,\\ MiniDump* AND process.command_line:*\\\\Windows\\\\Temp\\\\* AND process.command_line:*\\ full* AND process.command_line:*%%B*) OR (process.command_line:*tasklist\\ \\/v\\ \\/fo\\ csv* AND process.command_line:*findstr\\ \\/i\\ \\\"lsass\\\"*)",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.credential-access",
+    "attack.t1003.001"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Florian Roth (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

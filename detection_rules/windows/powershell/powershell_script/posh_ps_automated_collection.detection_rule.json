@@ -1,0 +1,50 @@
+{
+  "rule_id": "c1dda054-d638-4c16-afc8-53e007f3fbc5",
+  "risk_score": 47,
+  "description": "Once established within a system or network, an adversary may use automated techniques for collecting internal data.",
+  "name": "Automated Collection Command PowerShell",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "(powershell.file.script_block_text:*Get\\-ChildItem* AND powershell.file.script_block_text:*\\ \\-Recurse\\ * AND powershell.file.script_block_text:*\\ \\-Include\\ *) AND (powershell.file.script_block_text:(*.doc* OR *.docx* OR *.xls* OR *.xlsx* OR *.ppt* OR *.pptx* OR *.rtf* OR *.pdf* OR *.txt*))",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.collection",
+    "attack.t1119"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "frack113"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

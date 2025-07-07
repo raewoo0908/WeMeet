@@ -1,0 +1,60 @@
+{
+  "rule_id": "c740d4cf-a1e9-41de-bb16-8a46a4f57918",
+  "risk_score": 47,
+  "description": "Detects usage of the built-in PowerShell cmdlet \"Enable-WindowsOptionalFeature\" used as a Deployment Image Servicing and Management tool.\nSimilar to DISM.exe, this cmdlet is used to enumerate, install, uninstall, configure, and update features and packages in Windows images\n",
+  "name": "Potential Suspicious Windows Feature Enabled - ProcCreation",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "(process.command_line:*Enable\\-WindowsOptionalFeature* AND process.command_line:*\\-Online* AND process.command_line:*\\-FeatureName*) AND (process.command_line:(*TelnetServer* OR *Internet\\-Explorer\\-Optional\\-amd64* OR *TFTP* OR *SMB1Protocol* OR *Client\\-ProjFS* OR *Microsoft\\-Windows\\-Subsystem\\-Linux*))",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.defense-evasion"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Nasreddine Bencherchali (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Legitimate usage of the features listed in the rule."
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

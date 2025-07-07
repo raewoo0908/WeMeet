@@ -1,0 +1,51 @@
+{
+  "rule_id": "f64c9b2d-b0ad-481d-9d03-7fc75020892a",
+  "risk_score": 47,
+  "description": "Detects potential DLL sideloading of \"roboform.dll\", a DLL used by RoboForm Password Manager",
+  "name": "Potential RoboForm.DLL Sideloading",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "(file.path:(*\\\\roboform.dll OR *\\\\roboform\\-x64.dll)) AND (NOT ((process.executable:(*\\\\robotaskbaricon.exe OR *\\\\robotaskbaricon\\-x64.exe)) AND (process.executable:(\\ C\\:\\\\Program\\ Files\\ \\(x86\\)\\\\Siber\\ Systems\\\\AI\\ RoboForm\\\\* OR \\ C\\:\\\\Program\\ Files\\\\Siber\\ Systems\\\\AI\\ RoboForm\\\\*))))",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.defense-evasion",
+    "attack.privilege-escalation",
+    "attack.t1574.001"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "X__Junior (Nextron Systems), Nasreddine Bencherchali (Nextron Systems)"
+  ],
+  "false_positives": [
+    "If installed on a per-user level, the path would be located in \"AppData\\Local\". Add additional filters to reflect this mode of installation"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

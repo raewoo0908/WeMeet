@@ -1,0 +1,50 @@
+{
+  "rule_id": "46490193-1b22-4c29-bdd6-5bf63907216f",
+  "risk_score": 73,
+  "description": "Detects VBScript content stored into registry keys as seen being used by UNC2452 group",
+  "name": "VBScript Payload Stored in Registry",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "((winlog.event_data.Details:(*vbscript\\:* OR *jscript\\:* OR *mshtml,* OR *RunHTMLApplication* OR *Execute\\(* OR *CreateObject* OR *window.close*)) AND registry.path:*Software\\\\Microsoft\\\\Windows\\\\CurrentVersion*) AND (NOT (registry.path:*Software\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Run* OR ((winlog.event_data.Details:(*\\\\Microsoft.NET\\\\Primary\\ Interop\\ Assemblies\\\\Microsoft.mshtml.dll* OR *\\<\\\\Microsoft.mshtml,fileVersion\\=* OR *_mshtml_dll_* OR *\\<\\\\Microsoft.mshtml,culture\\=*)) AND process.executable:*\\\\msiexec.exe AND registry.path:*\\\\SOFTWARE\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Installer\\\\UserData\\\\*)))",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.persistence",
+    "attack.t1547.001"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Florian Roth (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

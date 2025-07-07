@@ -1,0 +1,61 @@
+{
+  "rule_id": "e62a9f0c-ca1e-46b2-85d5-a6da77f86d1a",
+  "risk_score": 47,
+  "description": "Detects the execution of certutil with the \"encode\" flag to encode a file to base64. This can be abused by threat actors and attackers for data exfiltration",
+  "name": "File Encoded To Base64 Via Certutil.EXE",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "process.command_line:(*\\-encode* OR *\\/encode* OR *–encode* OR *—encode* OR *―encode*) AND (process.executable:*\\\\certutil.exe OR process.pe.original_file_name:CertUtil.exe)",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.defense-evasion",
+    "attack.t1027"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Florian Roth (Nextron Systems), Jonhnathan Ribeiro, oscd.community, Nasreddine Bencherchali (Nextron Systems)"
+  ],
+  "false_positives": [
+    "As this is a general purpose rule, legitimate usage of the encode functionality will trigger some false positives. Apply additional filters accordingly"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

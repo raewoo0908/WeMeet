@@ -1,0 +1,61 @@
+{
+  "rule_id": "4a6713f6-3331-11ed-a261-0242ac120002",
+  "risk_score": 73,
+  "description": "Detects one of the possible scenarios for disabling Symantec Endpoint Protection.\nSymantec Endpoint Protection antivirus software services incorrectly implement the protected service mechanism.\nAs a result, the NT AUTHORITY/SYSTEM user can execute the taskkill /im command several times ccSvcHst.exe /f, thereby killing the process belonging to the service, and thus shutting down the service.\n",
+  "name": "Taskkill Symantec Endpoint Protection",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "process.command_line:*taskkill* AND process.command_line:*\\ \\/F\\ * AND process.command_line:*\\ \\/IM\\ * AND process.command_line:*ccSvcHst.exe*",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.defense-evasion",
+    "attack.t1562.001"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Ilya Krestinichev, Florian Roth (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

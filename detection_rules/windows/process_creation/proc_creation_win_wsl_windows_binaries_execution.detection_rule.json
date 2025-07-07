@@ -1,0 +1,62 @@
+{
+  "rule_id": "ed825c86-c009-4014-b413-b76003e33d35",
+  "risk_score": 47,
+  "description": "Detects the execution of Windows binaries from within a WSL instance.\nThis could be used to masquerade parent-child relationships\n",
+  "name": "Windows Binary Executed From WSL",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "process.working_directory:*\\\\\\\\wsl.localhost* AND process.executable:/[a-zA-Z]:\\\\/",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.execution",
+    "attack.defense-evasion",
+    "attack.t1202"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Nasreddine Bencherchali (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

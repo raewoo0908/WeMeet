@@ -1,0 +1,62 @@
+{
+  "rule_id": "edd8a48c-1b9f-4ba1-83aa-490338cd1ccb",
+  "risk_score": 73,
+  "description": "Detects the execution of a renamed \"jusched.exe\" as seen used by the cobalt group",
+  "name": "Renamed Jusched.EXE Execution",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "(process.pe.description:(Java\\ Update\\ Scheduler OR Java\\(TM\\)\\ Update\\ Scheduler)) AND (NOT process.executable:*\\\\jusched.exe)",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.execution",
+    "attack.defense-evasion",
+    "attack.t1036.003"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Markus Neis, Swisscom"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

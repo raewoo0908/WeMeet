@@ -1,0 +1,62 @@
+{
+  "rule_id": "70bc5215-526f-4477-963c-a47a5c9ebd12",
+  "risk_score": 47,
+  "description": "Detects usage of the \"Import-Module\" cmdlet to load the \"Microsoft.ActiveDirectory.Management.dl\" DLL. Which is often used by attackers to perform AD enumeration.",
+  "name": "Potential Active Directory Enumeration Using AD Module - ProcCreation",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "(process.command_line:(*Import\\-Module\\ * OR *ipmo\\ *)) AND process.command_line:*Microsoft.ActiveDirectory.Management.dll* AND ((process.executable:(*\\\\powershell.exe OR *\\\\pwsh.exe)) OR (process.pe.original_file_name:(PowerShell.EXE OR pwsh.dll)))",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.reconnaissance",
+    "attack.discovery",
+    "attack.impact"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "frack113"
+  ],
+  "false_positives": [
+    "Legitimate use of the library for administrative activity"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

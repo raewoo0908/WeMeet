@@ -1,0 +1,61 @@
+{
+  "rule_id": "1193d960-2369-499f-a158-7b50a31df682",
+  "risk_score": 47,
+  "description": "Detects when a browser process or browser tab is launched from an application that handles document files such as Adobe, Microsoft Office, etc. And connects to a web application over http(s), this could indicate a possible phishing attempt.\n",
+  "name": "Potential Suspicious Browser Launch From Document Reader Process",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "process.command_line:*http* AND (process.executable:(*\\\\brave.exe OR *\\\\chrome.exe OR *\\\\firefox.exe OR *\\\\msedge.exe OR *\\\\opera.exe OR *\\\\maxthon.exe OR *\\\\seamonkey.exe OR *\\\\vivaldi.exe OR *)) AND (process.parent.executable:(*Acrobat\\ Reader* OR *Microsoft\\ Office* OR *PDF\\ Reader*))",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.execution",
+    "attack.t1204.002"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Joseph Kamau"
+  ],
+  "false_positives": [
+    "Unlikely in most cases, further investigation should be done in the commandline of the browser process to determine the context of the URL accessed."
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

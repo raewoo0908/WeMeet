@@ -1,0 +1,50 @@
+{
+  "rule_id": "46612ae6-86be-4802-bc07-39b59feb1309",
+  "risk_score": 47,
+  "description": "Detects file access requests to the the Windows Data Protection API Master keys by an uncommon application.\nThis can be a sign of credential stealing. Example case would be usage of mimikatz \"dpapi::masterkey\" function\n",
+  "name": "Access To Windows DPAPI Master Keys By Uncommon Applications",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "(file.path:(*\\\\Microsoft\\\\Protect\\\\S\\-1\\-5\\-18\\\\* OR *\\\\Microsoft\\\\Protect\\\\S\\-1\\-5\\-21\\-*)) AND (NOT (process.executable:(C\\:\\\\Program\\ Files\\\\* OR C\\:\\\\Program\\ Files\\ \\(x86\\)\\\\* OR C\\:\\\\Windows\\\\system32\\\\* OR C\\:\\\\Windows\\\\SysWOW64\\\\*)))",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.credential-access",
+    "attack.t1555.004"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Nasreddine Bencherchali (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

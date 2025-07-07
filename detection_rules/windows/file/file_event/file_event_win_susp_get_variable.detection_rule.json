@@ -1,0 +1,63 @@
+{
+  "rule_id": "0c3fac91-5627-46e8-a6a8-a0d7b9b8ae1b",
+  "risk_score": 73,
+  "description": "Get-Variable is a valid PowerShell cmdlet\nWindowsApps is by default in the path where PowerShell is executed.\nSo when the Get-Variable command is issued on PowerShell execution, the system first looks for the Get-Variable executable in the path and executes the malicious binary instead of looking for the PowerShell cmdlet.\n",
+  "name": "Suspicious Get-Variable.exe Creation",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "file.path:*Local\\\\Microsoft\\\\WindowsApps\\\\Get\\-Variable.exe",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "File Create (rule: FileCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.persistence",
+    "attack.t1546",
+    "attack.defense-evasion",
+    "attack.t1027"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "frack113"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

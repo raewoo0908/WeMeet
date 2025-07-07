@@ -1,0 +1,61 @@
+{
+  "rule_id": "c0b40568-b1e9-4b03-8d6c-b096da6da9ab",
+  "risk_score": 73,
+  "description": "Detects execution of the AgentExecutor.exe binary. Which can be abused as a LOLBIN to execute powershell scripts with the ExecutionPolicy \"Bypass\" or any binary named \"powershell.exe\" located in the path provided by 6th positional argument",
+  "name": "Suspicious AgentExecutor PowerShell Execution",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "((process.command_line:(*\\ \\-powershell* OR *\\ \\-remediationScript*)) AND (process.executable:*\\\\AgentExecutor.exe OR process.pe.original_file_name:AgentExecutor.exe)) AND (NOT (process.parent.executable:*\\\\Microsoft.Management.Services.IntuneWindowsAgent.exe OR (process.command_line:(*C\\:\\\\Windows\\\\System32\\\\WindowsPowerShell\\\\v1.0\\\\* OR *C\\:\\\\Windows\\\\SysWOW64\\\\WindowsPowerShell\\\\v1.0\\\\*))))",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.defense-evasion",
+    "attack.t1218"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Nasreddine Bencherchali (Nextron Systems), memory-shards"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

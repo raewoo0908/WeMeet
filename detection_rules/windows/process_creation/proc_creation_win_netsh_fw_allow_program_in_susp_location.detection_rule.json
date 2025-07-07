@@ -1,0 +1,61 @@
+{
+  "rule_id": "a35f5a72-f347-4e36-8895-9869b0d5fc6d",
+  "risk_score": 73,
+  "description": "Detects Netsh command execution that whitelists a program located in a suspicious location in the Windows Firewall",
+  "name": "Suspicious Program Location Whitelisted In Firewall Via Netsh.EXE",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "((process.command_line:*firewall* AND process.command_line:*add* AND process.command_line:*allowedprogram*) OR (process.command_line:*advfirewall* AND process.command_line:*firewall* AND process.command_line:*add* AND process.command_line:*rule* AND process.command_line:*action\\=allow* AND process.command_line:*program\\=*)) AND (process.executable:*\\\\netsh.exe OR process.pe.original_file_name:netsh.exe) AND (process.command_line:(*\\:\\\\$Recycle.bin\\\\* OR *\\:\\\\RECYCLER.BIN\\\\* OR *\\:\\\\RECYCLERS.BIN\\\\* OR *\\:\\\\SystemVolumeInformation\\\\* OR *\\:\\\\Temp\\\\* OR *\\:\\\\Users\\\\Default\\\\* OR *\\:\\\\Users\\\\Desktop\\\\* OR *\\:\\\\Users\\\\Public\\\\* OR *\\:\\\\Windows\\\\addins\\\\* OR *\\:\\\\Windows\\\\cursors\\\\* OR *\\:\\\\Windows\\\\debug\\\\* OR *\\:\\\\Windows\\\\drivers\\\\* OR *\\:\\\\Windows\\\\fonts\\\\* OR *\\:\\\\Windows\\\\help\\\\* OR *\\:\\\\Windows\\\\system32\\\\tasks\\\\* OR *\\:\\\\Windows\\\\Tasks\\\\* OR *\\:\\\\Windows\\\\Temp\\\\* OR *\\\\Downloads\\\\* OR *\\\\Local\\ Settings\\\\Temporary\\ Internet\\ Files\\\\* OR *\\\\Temporary\\ Internet\\ Files\\\\Content.Outlook\\\\* OR *%Public%\\\\* OR *%TEMP%* OR *%TMP%*))",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.defense-evasion",
+    "attack.t1562.004"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Sander Wiebing, Jonhnathan Ribeiro, Daniil Yugoslavskiy, oscd.community"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

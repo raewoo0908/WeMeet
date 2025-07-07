@@ -1,0 +1,61 @@
+{
+  "rule_id": "36210e0d-5b19-485d-a087-c096088885f0",
+  "risk_score": 73,
+  "description": "Detects suspicious PowerShell invocation with a parameter substring",
+  "name": "Suspicious PowerShell Parameter Substring",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "(process.command_line:(*\\ \\-windowstyle\\ h\\ * OR *\\ \\-windowstyl\\ h* OR *\\ \\-windowsty\\ h* OR *\\ \\-windowst\\ h* OR *\\ \\-windows\\ h* OR *\\ \\-windo\\ h* OR *\\ \\-wind\\ h* OR *\\ \\-win\\ h* OR *\\ \\-wi\\ h* OR *\\ \\-win\\ h\\ * OR *\\ \\-win\\ hi\\ * OR *\\ \\-win\\ hid\\ * OR *\\ \\-win\\ hidd\\ * OR *\\ \\-win\\ hidde\\ * OR *\\ \\-NoPr\\ * OR *\\ \\-NoPro\\ * OR *\\ \\-NoProf\\ * OR *\\ \\-NoProfi\\ * OR *\\ \\-NoProfil\\ * OR *\\ \\-nonin\\ * OR *\\ \\-nonint\\ * OR *\\ \\-noninte\\ * OR *\\ \\-noninter\\ * OR *\\ \\-nonintera\\ * OR *\\ \\-noninterac\\ * OR *\\ \\-noninteract\\ * OR *\\ \\-noninteracti\\ * OR *\\ \\-noninteractiv\\ * OR *\\ \\-ec\\ * OR *\\ \\-encodedComman\\ * OR *\\ \\-encodedComma\\ * OR *\\ \\-encodedComm\\ * OR *\\ \\-encodedCom\\ * OR *\\ \\-encodedCo\\ * OR *\\ \\-encodedC\\ * OR *\\ \\-encoded\\ * OR *\\ \\-encode\\ * OR *\\ \\-encod\\ * OR *\\ \\-enco\\ * OR *\\ \\-en\\ * OR *\\ \\-executionpolic\\ * OR *\\ \\-executionpoli\\ * OR *\\ \\-executionpol\\ * OR *\\ \\-executionpo\\ * OR *\\ \\-executionp\\ * OR *\\ \\-execution\\ bypass* OR *\\ \\-executio\\ bypass* OR *\\ \\-executi\\ bypass* OR *\\ \\-execut\\ bypass* OR *\\ \\-execu\\ bypass* OR *\\ \\-exec\\ bypass* OR *\\ \\-exe\\ bypass* OR *\\ \\-ex\\ bypass* OR *\\ \\-ep\\ bypass* OR *\\ \\/windowstyle\\ h\\ * OR *\\ \\/windowstyl\\ h* OR *\\ \\/windowsty\\ h* OR *\\ \\/windowst\\ h* OR *\\ \\/windows\\ h* OR *\\ \\/windo\\ h* OR *\\ \\/wind\\ h* OR *\\ \\/win\\ h* OR *\\ \\/wi\\ h* OR *\\ \\/win\\ h\\ * OR *\\ \\/win\\ hi\\ * OR *\\ \\/win\\ hid\\ * OR *\\ \\/win\\ hidd\\ * OR *\\ \\/win\\ hidde\\ * OR *\\ \\/NoPr\\ * OR *\\ \\/NoPro\\ * OR *\\ \\/NoProf\\ * OR *\\ \\/NoProfi\\ * OR *\\ \\/NoProfil\\ * OR *\\ \\/nonin\\ * OR *\\ \\/nonint\\ * OR *\\ \\/noninte\\ * OR *\\ \\/noninter\\ * OR *\\ \\/nonintera\\ * OR *\\ \\/noninterac\\ * OR *\\ \\/noninteract\\ * OR *\\ \\/noninteracti\\ * OR *\\ \\/noninteractiv\\ * OR *\\ \\/ec\\ * OR *\\ \\/encodedComman\\ * OR *\\ \\/encodedComma\\ * OR *\\ \\/encodedComm\\ * OR *\\ \\/encodedCom\\ * OR *\\ \\/encodedCo\\ * OR *\\ \\/encodedC\\ * OR *\\ \\/encoded\\ * OR *\\ \\/encode\\ * OR *\\ \\/encod\\ * OR *\\ \\/enco\\ * OR *\\ \\/en\\ * OR *\\ \\/executionpolic\\ * OR *\\ \\/executionpoli\\ * OR *\\ \\/executionpol\\ * OR *\\ \\/executionpo\\ * OR *\\ \\/executionp\\ * OR *\\ \\/execution\\ bypass* OR *\\ \\/executio\\ bypass* OR *\\ \\/executi\\ bypass* OR *\\ \\/execut\\ bypass* OR *\\ \\/execu\\ bypass* OR *\\ \\/exec\\ bypass* OR *\\ \\/exe\\ bypass* OR *\\ \\/ex\\ bypass* OR *\\ \\/ep\\ bypass*)) AND (process.executable:(*\\\\powershell.exe OR *\\\\pwsh.exe))",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.execution",
+    "attack.t1059.001"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Florian Roth (Nextron Systems), Daniel Bohannon (idea), Roberto Rodriguez (Fix)"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

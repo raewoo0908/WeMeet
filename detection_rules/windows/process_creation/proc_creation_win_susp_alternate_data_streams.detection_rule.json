@@ -1,0 +1,61 @@
+{
+  "rule_id": "7f43c430-5001-4f8b-aaa9-c3b88f18fa5c",
+  "risk_score": 47,
+  "description": "Detects execution from an Alternate Data Stream (ADS). Adversaries may use NTFS file attributes to hide their malicious data in order to evade detection",
+  "name": "Execute From Alternate Data Streams",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "process.command_line:*txt\\:* AND ((process.command_line:*esentutl\\ * AND process.command_line:*\\ \\/y\\ * AND process.command_line:*\\ \\/d\\ * AND process.command_line:*\\ \\/o\\ *) OR (process.command_line:*makecab\\ * AND process.command_line:*.cab*) OR (process.command_line:*reg\\ * AND process.command_line:*\\ export\\ *) OR (process.command_line:*regedit\\ * AND process.command_line:*\\ \\/E\\ *) OR (process.command_line:*type\\ * AND process.command_line:*\\ \\>\\ *))",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.defense-evasion",
+    "attack.t1564.004"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "frack113"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

@@ -1,0 +1,52 @@
+{
+  "rule_id": "b6188d2f-b3c4-4d2c-a17d-9706e0851af0",
+  "risk_score": 47,
+  "description": "Detects potential DLL sideloading of \"goopdate.dll\", a DLL used by googleupdate.exe",
+  "name": "Potential Goopdate.DLL Sideloading",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "file.path:*\\\\goopdate.dll AND (NOT (file.path:(C\\:\\\\Program\\ Files\\ \\(x86\\)\\\\* OR C\\:\\\\Program\\ Files\\\\*))) AND (NOT ((file.path:*\\\\AppData\\\\Local\\\\Temp\\\\GUM* AND file.path:*.tmp\\\\goopdate.dll*) AND (process.executable:*\\\\AppData\\\\Local\\\\Temp\\\\GUM* AND process.executable:*.tmp\\\\Dropbox*)))",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.defense-evasion",
+    "attack.privilege-escalation",
+    "attack.t1574.001"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "X__Junior (Nextron Systems), Nasreddine Bencherchali (Nextron Systems)"
+  ],
+  "false_positives": [
+    "False positives are expected from Google Chrome installations running from user locations (AppData) and other custom locations. Apply additional filters accordingly.",
+    "Other third party chromium browsers located in AppData"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

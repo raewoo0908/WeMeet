@@ -1,0 +1,51 @@
+{
+  "rule_id": "24b6cf51-6122-469e-861a-22974e9c1e5b",
+  "risk_score": 73,
+  "description": "Detects potential DLL sideloading of \"SmadHook.dll\", a DLL used by SmadAV antivirus",
+  "name": "Potential SmadHook.DLL Sideloading",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "(file.path:(*\\\\SmadHook32c.dll OR *\\\\SmadHook64c.dll)) AND (NOT ((process.executable:(C\\:\\\\Program\\ Files\\ \\(x86\\)\\\\SMADAV\\\\SmadavProtect32.exe OR C\\:\\\\Program\\ Files\\ \\(x86\\)\\\\SMADAV\\\\SmadavProtect64.exe OR C\\:\\\\Program\\ Files\\\\SMADAV\\\\SmadavProtect32.exe OR C\\:\\\\Program\\ Files\\\\SMADAV\\\\SmadavProtect64.exe)) AND (file.path:(C\\:\\\\Program\\ Files\\ \\(x86\\)\\\\SMADAV\\\\* OR C\\:\\\\Program\\ Files\\\\SMADAV\\\\*))))",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.defense-evasion",
+    "attack.privilege-escalation",
+    "attack.t1574.001"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "X__Junior (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Unlikely"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

@@ -1,0 +1,64 @@
+{
+  "rule_id": "7ec2c172-dceb-4c10-92c9-87c1881b7e18",
+  "risk_score": 99,
+  "description": "Detects the execution of the hacktool Rubeus via PE information of command line parameters",
+  "name": "HackTool - Rubeus Execution",
+  "severity": "critical",
+  "type": "query",
+  "language": "lucene",
+  "query": "process.executable:*\\\\Rubeus.exe OR process.pe.original_file_name:Rubeus.exe OR process.pe.description:Rubeus OR (process.command_line:(*asreproast\\ * OR *dump\\ \\/service\\:krbtgt\\ * OR *dump\\ \\/luid\\:0x* OR *kerberoast\\ * OR *createnetonly\\ \\/program\\:* OR *ptt\\ \\/ticket\\:* OR *\\/impersonateuser\\:* OR *renew\\ \\/ticket\\:* OR *asktgt\\ \\/user\\:* OR *harvest\\ \\/interval\\:* OR *s4u\\ \\/user\\:* OR *s4u\\ \\/ticket\\:* OR *hash\\ \\/password\\:* OR *golden\\ \\/aes256\\:* OR *silver\\ \\/user\\:*))",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.credential-access",
+    "attack.t1003",
+    "attack.t1558.003",
+    "attack.lateral-movement",
+    "attack.t1550.003"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Florian Roth (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Unlikely"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

@@ -1,0 +1,63 @@
+{
+  "rule_id": "c4eeeeae-89f4-43a7-8b48-8d1bdfa66c78",
+  "risk_score": 73,
+  "description": "Detects the creation of a schtask that potentially executes a base64 encoded payload stored in the Windows Registry using PowerShell.",
+  "name": "Scheduled Task Executing Encoded Payload from Registry",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "process.command_line:*\\/Create* AND (process.command_line:(*FromBase64String* OR *encodedcommand*)) AND (process.command_line:(*Get\\-ItemProperty* OR *\\ gp\\ *)) AND (process.command_line:(*HKCU\\:* OR *HKLM\\:* OR *registry\\:\\:* OR *HKEY_*)) AND (process.executable:*\\\\schtasks.exe OR process.pe.original_file_name:schtasks.exe)",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.execution",
+    "attack.persistence",
+    "attack.t1053.005",
+    "attack.t1059.001"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "pH-T (Nextron Systems), @Kostastsale, TheDFIRReport, X__Junior (Nextron Systems), Nasreddine Bencherchali (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Unlikely"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

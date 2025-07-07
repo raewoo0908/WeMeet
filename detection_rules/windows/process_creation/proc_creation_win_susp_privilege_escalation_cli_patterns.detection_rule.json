@@ -1,0 +1,60 @@
+{
+  "rule_id": "50d66fb0-03f8-4da0-8add-84e77d12a020",
+  "risk_score": 47,
+  "description": "Detects suspicious command line flags that let the user set a target user and command as e.g. seen in PsExec-like tools",
+  "name": "Suspicious RunAs-Like Flag Combination",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "(process.command_line:(*\\ \\-c\\ cmd* OR *\\ \\-c\\ \\\"cmd* OR *\\ \\-c\\ powershell* OR *\\ \\-c\\ \\\"powershell* OR *\\ \\-\\-command\\ cmd* OR *\\ \\-\\-command\\ powershell* OR *\\ \\-c\\ whoami* OR *\\ \\-c\\ wscript* OR *\\ \\-c\\ cscript*)) AND (process.command_line:(*\\ \\-u\\ system\\ * OR *\\ \\-\\-user\\ system\\ * OR *\\ \\-u\\ NT* OR *\\ \\-u\\ \\\"NT* OR *\\ \\-u\\ 'NT* OR *\\ \\-\\-system\\ * OR *\\ \\-u\\ administrator\\ *))",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.privilege-escalation"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Florian Roth (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

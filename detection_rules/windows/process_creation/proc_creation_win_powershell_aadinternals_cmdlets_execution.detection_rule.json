@@ -1,0 +1,64 @@
+{
+  "rule_id": "c86500e9-a645-4680-98d7-f882c70c1ea3",
+  "risk_score": 73,
+  "description": "Detects ADDInternals Cmdlet execution. A tool for administering Azure AD and Office 365. Which can be abused by threat actors to attack Azure AD or Office 365.",
+  "name": "AADInternals PowerShell Cmdlets Execution - ProccessCreation",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "(process.command_line:(*Add\\-AADInt* OR *ConvertTo\\-AADInt* OR *Disable\\-AADInt* OR *Enable\\-AADInt* OR *Export\\-AADInt* OR *Find\\-AADInt* OR *Get\\-AADInt* OR *Grant\\-AADInt* OR *Initialize\\-AADInt* OR *Install\\-AADInt* OR *Invoke\\-AADInt* OR *Join\\-AADInt* OR *New\\-AADInt* OR *Open\\-AADInt* OR *Read\\-AADInt* OR *Register\\-AADInt* OR *Remove\\-AADInt* OR *Reset\\-AADInt* OR *Resolve\\-AADInt* OR *Restore\\-AADInt* OR *Save\\-AADInt* OR *Search\\-AADInt* OR *Send\\-AADInt* OR *Set\\-AADInt* OR *Start\\-AADInt* OR *Unprotect\\-AADInt* OR *Update\\-AADInt*)) AND ((process.executable:(*\\\\powershell.exe OR *\\\\powershell_ise.exe OR *\\\\pwsh.exe)) OR (process.pe.original_file_name:(PowerShell.Exe OR pwsh.dll)))",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.execution",
+    "attack.reconnaissance",
+    "attack.discovery",
+    "attack.credential-access",
+    "attack.impact"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Austin Songer (@austinsonger), Nasreddine Bencherchali (Nextron Systems), Swachchhanda Shrawan Poudel (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Legitimate use of the library for administrative activity"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

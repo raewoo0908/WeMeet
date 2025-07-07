@@ -1,0 +1,61 @@
+{
+  "rule_id": "52753ea4-b3a0-4365-910d-36cff487b789",
+  "risk_score": 73,
+  "description": "Detects the usage of tsclient share to place a backdoor on the RDP source machine's startup folder",
+  "name": "Hijack Legit RDP Session to Move Laterally",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "process.executable:*\\\\mstsc.exe AND file.path:*\\\\Microsoft\\\\Windows\\\\Start\\ Menu\\\\Programs\\\\Startup\\\\*",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "File Create (rule: FileCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.command-and-control",
+    "attack.t1219"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Samir Bousseaden"
+  ],
+  "false_positives": [
+    "Unlikely"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

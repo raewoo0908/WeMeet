@@ -1,0 +1,62 @@
+{
+  "rule_id": "6ea858a8-ba71-4a12-b2cc-5d83312404c7",
+  "risk_score": 73,
+  "description": "Detects files written by the different tools that exploit HiveNightmare",
+  "name": "HackTool - Typical HiveNightmare SAM File Export",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "(file.path:(*\\\\hive_sam_* OR *\\\\SAM\\-2021\\-* OR *\\\\SAM\\-2022\\-* OR *\\\\SAM\\-2023\\-* OR *\\\\SAM\\-haxx* OR *\\\\Sam.save*)) OR file.path:C\\:\\\\windows\\\\temp\\\\sam",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "File Create (rule: FileCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.credential-access",
+    "attack.t1552.001",
+    "cve.2021-36934"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Florian Roth (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Files that accidentally contain these strings"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

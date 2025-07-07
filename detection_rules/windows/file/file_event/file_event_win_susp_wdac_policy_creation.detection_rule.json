@@ -1,0 +1,60 @@
+{
+  "rule_id": "1d2de8a6-4803-4fde-b85b-f58f3aa7a705",
+  "risk_score": 47,
+  "description": "Detects suspicious Windows Defender Application Control (WDAC) policy file creation from abnormal processes that could be abused by attacker to block EDR/AV components while allowing their own malicious code to run on the system.\n",
+  "name": "Potentially Suspicious WDAC Policy File Creation",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "file.path:*\\\\Windows\\\\System32\\\\CodeIntegrity\\\\* AND (NOT (((winlog.event_data.CommandLine:*ConvertFrom\\-CIPolicy\\ \\-XmlFilePath* AND winlog.event_data.CommandLine:*\\-BinaryFilePath\\ *) OR winlog.event_data.CommandLine:*CiTool\\ \\-\\-update\\-policy* OR (winlog.event_data.CommandLine:*Copy\\-Item\\ \\-Path* AND winlog.event_data.CommandLine:*\\-Destination*)) OR (process.executable:(*\\\\Microsoft.ConfigurationManagement.exe OR *\\\\WDAC\\ Wizard.exe OR *C\\:\\\\Program\\ Files\\\\PowerShell\\\\7\\-preview\\\\pwsh.exe OR *C\\:\\\\Program\\ Files\\\\PowerShell\\\\7\\\\pwsh.exe OR *C\\:\\\\Windows\\\\System32\\\\dllhost.exe OR *C\\:\\\\Windows\\\\System32\\\\WindowsPowerShell\\\\v1.0\\\\powershell_ise.exe OR *C\\:\\\\Windows\\\\System32\\\\WindowsPowerShell\\\\v1.0\\\\powershell.exe OR *C\\:\\\\Windows\\\\SysWOW64\\\\dllhost.exe OR *C\\:\\\\Windows\\\\SysWOW64\\\\WindowsPowerShell\\\\v1.0\\\\powershell_ise.exe OR *C\\:\\\\Windows\\\\SysWOW64\\\\WindowsPowerShell\\\\v1.0\\\\powershell.exe)) OR process.executable:System))",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "File Create (rule: FileCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.defense-evasion"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "X__Junior"
+  ],
+  "false_positives": [
+    "Administrators and security vendors could leverage WDAC, apply additional filters as needed."
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

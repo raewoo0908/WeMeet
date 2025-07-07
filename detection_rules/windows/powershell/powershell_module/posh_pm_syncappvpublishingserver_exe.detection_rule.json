@@ -1,0 +1,50 @@
+{
+  "rule_id": "fe5ce7eb-dad8-467c-84a9-31ec23bd644a",
+  "risk_score": 47,
+  "description": "Detects SyncAppvPublishingServer process execution which usually utilized by adversaries to bypass PowerShell execution restrictions.",
+  "name": "SyncAppvPublishingServer Bypass Powershell Restriction - PS Module",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "ContextInfo:*SyncAppvPublishingServer.exe*",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.defense-evasion",
+    "attack.t1218"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Ensar Şamil, @sblmsrsn, OSCD Community"
+  ],
+  "false_positives": [
+    "App-V clients"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

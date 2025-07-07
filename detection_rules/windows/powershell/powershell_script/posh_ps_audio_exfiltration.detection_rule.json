@@ -1,0 +1,49 @@
+{
+  "rule_id": "e4f93c99-396f-47c8-bb0f-201b1fa69034",
+  "risk_score": 47,
+  "description": "Detects potential exfiltration attempt via audio file using PowerShell",
+  "name": "Potential Data Exfiltration Via Audio File",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "(powershell.file.script_block_text:*\\[System.Math\\]\\:\\:* AND powershell.file.script_block_text:*\\[IO.FileMode\\]\\:\\:* AND powershell.file.script_block_text:*BinaryWriter*) AND (powershell.file.script_block_text:*0x52* AND powershell.file.script_block_text:*0x49* AND powershell.file.script_block_text:*0x46* AND powershell.file.script_block_text:*0x57* AND powershell.file.script_block_text:*0x41* AND powershell.file.script_block_text:*0x56* AND powershell.file.script_block_text:*0x45* AND powershell.file.script_block_text:*0xAC*)",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.exfiltration"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Nasreddine Bencherchali (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

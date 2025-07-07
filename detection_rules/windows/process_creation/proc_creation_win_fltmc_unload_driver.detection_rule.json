@@ -1,0 +1,63 @@
+{
+  "rule_id": "4931188c-178e-4ee7-a348-39e8a7a56821",
+  "risk_score": 47,
+  "description": "Detect filter driver unloading activity via fltmc.exe",
+  "name": "Filter Driver Unloaded Via Fltmc.EXE",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "(process.command_line:*unload* AND (process.executable:*\\\\fltMC.exe OR process.pe.original_file_name:fltMC.exe)) AND (NOT ((process.command_line:*unload\\ rtp_filesystem_filter AND process.parent.executable:*\\\\AppData\\\\Local\\\\Temp\\\\* AND process.parent.executable:*\\\\endpoint\\-protection\\-installer\\-x64.tmp AND process.parent.executable:C\\:\\\\Users\\\\*) OR (process.command_line:*unload\\ DFMFilter AND process.parent.executable:C\\:\\\\Program\\ Files\\ \\(x86\\)\\\\ManageEngine\\\\uems_agent\\\\bin\\\\dcfaservice64.exe)))",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.defense-evasion",
+    "attack.t1070",
+    "attack.t1562",
+    "attack.t1562.002"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Nasreddine Bencherchali (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

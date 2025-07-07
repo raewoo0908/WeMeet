@@ -1,0 +1,50 @@
+{
+  "rule_id": "516376b4-05cd-4122-bae0-ad7641c38d48",
+  "risk_score": 99,
+  "description": "Detects a successful export of an Exchange mailbox to untypical directory or with aspx name suffix which can be used to place a webshell or the needed role assignment for it",
+  "name": "Mailbox Export to Exchange Webserver",
+  "severity": "critical",
+  "type": "query",
+  "language": "lucene",
+  "query": "winlog.channel:MSExchange\\ Management AND (((*New\\-MailboxExportRequest* AND *\\ \\-Mailbox\\ *) AND (*\\-FilePath\\ \\\"\\\\\\\\* OR *.aspx*)) OR (*New\\-ManagementRoleAssignment* AND *\\ \\-Role\\ \\\"Mailbox\\ Import\\ Export\\\"* AND *\\ \\-User\\ *))",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.persistence",
+    "attack.t1505.003"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Florian Roth (Nextron Systems), Rich Warren, Christian Burkard (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Unlikely"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

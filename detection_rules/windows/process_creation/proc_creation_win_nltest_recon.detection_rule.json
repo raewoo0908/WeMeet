@@ -1,0 +1,62 @@
+{
+  "rule_id": "5cc90652-4cbd-4241-aa3b-4b462fa5a248",
+  "risk_score": 47,
+  "description": "Detects nltest commands that can be used for information discovery",
+  "name": "Potential Recon Activity Via Nltest.EXE",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "(process.executable:*\\\\nltest.exe OR process.pe.original_file_name:nltestrk.exe) AND ((process.command_line:*server* AND process.command_line:*query*) OR (process.command_line:(*\\/user* OR *all_trusts* OR *dclist\\:* OR *dnsgetdc\\:* OR *domain_trusts* OR *dsgetdc\\:* OR *parentdomain* OR *trusted_domains*)))",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.discovery",
+    "attack.t1016",
+    "attack.t1482"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Craig Young, oscd.community, Georg Lauenstein"
+  ],
+  "false_positives": [
+    "Legitimate administration use but user and host must be investigated"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

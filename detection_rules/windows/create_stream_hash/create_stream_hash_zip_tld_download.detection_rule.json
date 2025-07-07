@@ -1,0 +1,49 @@
+{
+  "rule_id": "0bb4bbeb-fe52-4044-b40c-430a04577ebe",
+  "risk_score": 73,
+  "description": "Detects the download of a file with a potentially suspicious extension from a .zip top level domain.",
+  "name": "Potentially Suspicious File Download From ZIP TLD",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "winlog.event_data.Contents:*.zip\\/* AND (file.path:(*.bat\\:Zone* OR *.dat\\:Zone* OR *.dll\\:Zone* OR *.doc\\:Zone* OR *.docm\\:Zone* OR *.exe\\:Zone* OR *.hta\\:Zone* OR *.pptm\\:Zone* OR *.ps1\\:Zone* OR *.rar\\:Zone* OR *.rtf\\:Zone* OR *.sct\\:Zone* OR *.vbe\\:Zone* OR *.vbs\\:Zone* OR *.ws\\:Zone* OR *.wsf\\:Zone* OR *.xll\\:Zone* OR *.xls\\:Zone* OR *.xlsm\\:Zone* OR *.zip\\:Zone*))",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.defense-evasion"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Florian Roth (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Legitimate file downloads from a websites and web services that uses the \".zip\" top level domain."
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

@@ -1,0 +1,61 @@
+{
+  "rule_id": "be58d2e2-06c8-4f58-b666-b99f6dc3b6cd",
+  "risk_score": 73,
+  "description": "Detects a suspicious process that is masquerading as the legitimate \"svchost.exe\" by naming its binary \"svchost.exe\" and executing from an uncommon location.\nAdversaries often disguise their malicious binaries by naming them after legitimate system processes like \"svchost.exe\" to evade detection.\n",
+  "name": "Suspicious Process Masquerading As SvcHost.EXE",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "process.executable:*\\\\svchost.exe AND (NOT ((process.executable:(C\\:\\\\Windows\\\\System32\\\\svchost.exe OR C\\:\\\\Windows\\\\SysWOW64\\\\svchost.exe)) OR process.pe.original_file_name:svchost.exe))",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.defense-evasion",
+    "attack.t1036.005"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Swachchhanda Shrawan Poudel"
+  ],
+  "false_positives": [
+    "Unlikely"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

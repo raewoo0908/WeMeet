@@ -1,0 +1,53 @@
+{
+  "rule_id": "78d5cab4-557e-454f-9fb9-a222bd0d5edc",
+  "risk_score": 73,
+  "description": "Detects successful logon from public IP address via SMB. This can indicate a publicly-exposed SMB port.",
+  "name": "External Remote SMB Logon from Public IP",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "winlog.channel:Security AND ((event.code:4624 AND winlog.event_data.LogonType:3) AND (NOT (source.ip:\\- OR (source.ip:\\:\\:1\\/128 OR source.ip:10.0.0.0\\/8 OR source.ip:127.0.0.0\\/8 OR source.ip:172.16.0.0\\/12 OR source.ip:192.168.0.0\\/16 OR source.ip:169.254.0.0\\/16 OR source.ip:fc00\\:\\:\\/7 OR source.ip:fe80\\:\\:\\/10))))",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.initial-access",
+    "attack.credential-access",
+    "attack.t1133",
+    "attack.t1078",
+    "attack.t1110"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Micah Babinski (@micahbabinski), Zach Mathis (@yamatosecurity)"
+  ],
+  "false_positives": [
+    "Legitimate or intentional inbound connections from public IP addresses on the SMB port."
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

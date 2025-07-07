@@ -1,0 +1,61 @@
+{
+  "rule_id": "bbb7e38c-0b41-4a11-b306-d2a457b7ac2b",
+  "risk_score": 47,
+  "description": "Detects suspicious file based on their extension being created in \"C:\\PerfLogs\\\". Note that this directory mostly contains \".etl\" files",
+  "name": "Suspicious File Created In PerfLogs",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "(file.path:(*.7z OR *.bat OR *.bin OR *.chm OR *.dll OR *.exe OR *.hta OR *.lnk OR *.ps1 OR *.psm1 OR *.py OR *.scr OR *.sys OR *.vbe OR *.vbs OR *.zip)) AND file.path:C\\:\\\\PerfLogs\\\\*",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "File Create (rule: FileCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.execution",
+    "attack.t1059"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Nasreddine Bencherchali (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Unlikely"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

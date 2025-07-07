@@ -1,0 +1,53 @@
+{
+  "rule_id": "a5ea83a7-05a5-44c1-be2e-addccbbd8c03",
+  "risk_score": 73,
+  "description": "Attempts to load dismcore.dll after dropping it",
+  "name": "UAC Bypass With Fake DLL",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "(file.path:*\\\\dismcore.dll AND process.executable:*\\\\dism.exe) AND (NOT file.path:C\\:\\\\Windows\\\\System32\\\\Dism\\\\dismcore.dll)",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.persistence",
+    "attack.defense-evasion",
+    "attack.privilege-escalation",
+    "attack.t1548.002",
+    "attack.t1574.001"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "oscd.community, Dmitry Uchakin"
+  ],
+  "false_positives": [
+    "Actions of a legitimate telnet client"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

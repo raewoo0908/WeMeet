@@ -1,0 +1,52 @@
+{
+  "rule_id": "1d61f71d-59d2-479e-9562-4ff5f4ead16b",
+  "risk_score": 73,
+  "description": "Detects suspicious service installation commands",
+  "name": "Suspicious Service Installation",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "winlog.channel:System AND (event.code:7045 AND (winlog.event_data.ImagePath:(*\\ \\-nop\\ * OR *\\ \\-sta\\ * OR *\\ \\-w\\ hidden\\ * OR *\\:\\\\Temp\\\\* OR *.downloadfile\\(* OR *.downloadstring\\(* OR *\\\\ADMIN$\\\\* OR *\\\\Perflogs\\\\* OR *\\&\\&*)) AND winlog.provider_name:Service\\ Control\\ Manager)",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.persistence",
+    "attack.privilege-escalation",
+    "car.2013-09-005",
+    "attack.t1543.003"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "pH-T (Nextron Systems), Florian Roth (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

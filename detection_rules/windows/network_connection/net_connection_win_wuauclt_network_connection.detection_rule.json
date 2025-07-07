@@ -1,0 +1,61 @@
+{
+  "rule_id": "c649a6c7-cd8c-4a78-9c04-000fc76df954",
+  "risk_score": 47,
+  "description": "Detects the use of the Windows Update Client binary (wuauclt.exe) to proxy execute code and making network connections.\nOne could easily make the DLL spawn a new process and inject to it to proxy the network connection and bypass this rule.\n",
+  "name": "Potentially Suspicious Wuauclt Network Connection",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "(winlog.event_data.CommandLine:*\\ \\/RunHandlerComServer* AND process.executable:*wuauclt*) AND (NOT (winlog.event_data.CommandLine:\"\" OR (NOT _exists_:winlog.event_data.CommandLine) OR (destination.ip:127.0.0.0\\/8 OR destination.ip:10.0.0.0\\/8 OR destination.ip:169.254.0.0\\/16 OR destination.ip:172.16.0.0\\/12 OR destination.ip:192.168.0.0\\/16 OR destination.ip:\\:\\:1\\/128 OR destination.ip:fe80\\:\\:\\/10 OR destination.ip:fc00\\:\\:\\/7) OR (destination.ip:20.184.0.0\\/13 OR destination.ip:20.192.0.0\\/10 OR destination.ip:23.79.0.0\\/16 OR destination.ip:51.10.0.0\\/15 OR destination.ip:51.103.0.0\\/16 OR destination.ip:51.104.0.0\\/15 OR destination.ip:52.224.0.0\\/11) OR (winlog.event_data.CommandLine:(*\\:\\\\Windows\\\\UUS\\\\Packages\\\\Preview\\\\amd64\\\\updatedeploy.dll\\ \\/ClassId* OR *\\:\\\\Windows\\\\UUS\\\\amd64\\\\UpdateDeploy.dll\\ \\/ClassId*)) OR (winlog.event_data.CommandLine:*\\:\\\\Windows\\\\WinSxS\\\\* AND winlog.event_data.CommandLine:*\\\\UpdateDeploy.dll\\ \\/ClassId\\ *)))",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Network connection detected (rule: NetworkConnect)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.defense-evasion",
+    "attack.t1218"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Roberto Rodriguez (Cyb3rWard0g), OTR (Open Threat Research)"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

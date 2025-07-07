@@ -1,0 +1,61 @@
+{
+  "rule_id": "a66bc059-c370-472c-a0d7-f8fd1bf9d583",
+  "risk_score": 73,
+  "description": "Detects network connections from the Equation Editor process \"eqnedt32.exe\".",
+  "name": "Network Connection Initiated By Eqnedt32.EXE",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "process.executable:*\\\\eqnedt32.exe",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Network connection detected (rule: NetworkConnect)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.execution",
+    "attack.t1203"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Max Altgelt (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Unlikely"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

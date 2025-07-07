@@ -1,0 +1,50 @@
+{
+  "rule_id": "42821614-9264-4761-acfc-5772c3286f76",
+  "risk_score": 47,
+  "description": "Adversaries may install a root certificate on a compromised system to avoid warnings when connecting to adversary controlled web servers.",
+  "name": "Root Certificate Installed - PowerShell",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "(powershell.file.script_block_text:*Move\\-Item* AND powershell.file.script_block_text:*Cert\\:\\\\LocalMachine\\\\Root*) OR (powershell.file.script_block_text:*Import\\-Certificate* AND powershell.file.script_block_text:*Cert\\:\\\\LocalMachine\\\\Root*)",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.defense-evasion",
+    "attack.t1553.004"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "oscd.community, @redcanary, Zach Stanford @svch0st"
+  ],
+  "false_positives": [
+    "Help Desk or IT may need to manually add a corporate Root CA on occasion. Need to test if GPO push doesn't trigger FP"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

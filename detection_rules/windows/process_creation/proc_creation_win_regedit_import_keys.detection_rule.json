@@ -1,0 +1,62 @@
+{
+  "rule_id": "73bba97f-a82d-42ce-b315-9182e76c57b1",
+  "risk_score": 47,
+  "description": "Detects the import of the specified file to the registry with regedit.exe.",
+  "name": "Imports Registry Key From a File",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "((process.command_line:(*\\ \\/i\\ * OR *\\ \\/s\\ * OR *.reg*)) AND (process.executable:*\\\\regedit.exe OR process.pe.original_file_name:REGEDIT.EXE)) AND (NOT ((process.command_line:(*\\ \\-e\\ * OR *\\ \\/e\\ * OR *\\ –e\\ * OR *\\ —e\\ * OR *\\ ―e\\ *) OR process.command_line:(*\\ \\-a\\ * OR *\\ \\/a\\ * OR *\\ –a\\ * OR *\\ —a\\ * OR *\\ ―a\\ *) OR process.command_line:(*\\ \\-c\\ * OR *\\ \\/c\\ * OR *\\ –c\\ * OR *\\ —c\\ * OR *\\ ―c\\ *)) AND process.command_line:/:[^ \\\\]/))",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.t1112",
+    "attack.defense-evasion"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Oddvar Moe, Sander Wiebing, oscd.community"
+  ],
+  "false_positives": [
+    "Legitimate import of keys",
+    "Evernote"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

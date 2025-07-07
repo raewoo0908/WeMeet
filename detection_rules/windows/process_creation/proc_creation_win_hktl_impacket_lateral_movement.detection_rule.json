@@ -1,0 +1,63 @@
+{
+  "rule_id": "10c14723-61c7-4c75-92ca-9af245723ad2",
+  "risk_score": 73,
+  "description": "Detects wmiexec/dcomexec/atexec/smbexec from Impacket framework",
+  "name": "HackTool - Potential Impacket Lateral Movement Activity",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "((process.command_line:*cmd.exe* AND process.command_line:*\\/C* AND process.command_line:*Windows\\\\Temp\\\\* AND process.command_line:*\\&1*) AND (process.parent.command_line:(*svchost.exe\\ \\-k\\ netsvcs* OR *taskeng.exe*))) OR ((process.command_line:*cmd.exe* AND process.command_line:*\\/Q* AND process.command_line:*\\/c* AND process.command_line:*\\\\\\\\127.0.0.1\\\\* AND process.command_line:*\\&1*) AND (process.parent.executable:(*\\\\wmiprvse.exe OR *\\\\mmc.exe OR *\\\\explorer.exe OR *\\\\services.exe)))",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.execution",
+    "attack.t1047",
+    "attack.lateral-movement",
+    "attack.t1021.003"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Ecco, oscd.community, Jonhnathan Ribeiro, Tim Rauch"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

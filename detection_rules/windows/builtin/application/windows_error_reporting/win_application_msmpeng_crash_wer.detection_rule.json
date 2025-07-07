@@ -1,0 +1,51 @@
+{
+  "rule_id": "6c82cf5c-090d-4d57-9188-533577631108",
+  "risk_score": 73,
+  "description": "This rule detects a suspicious crash of the Microsoft Malware Protection Engine",
+  "name": "Microsoft Malware Protection Engine Crash - WER",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "winlog.channel:Application AND ((winlog.event_data.Data:*MsMpEng.exe* AND winlog.event_data.Data:*mpengine.dll*) AND event.code:1001 AND winlog.provider_name:Windows\\ Error\\ Reporting)",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.defense-evasion",
+    "attack.t1211",
+    "attack.t1562.001"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Florian Roth (Nextron Systems)"
+  ],
+  "false_positives": [
+    "MsMpEng might crash if the \"C:\\\" partition is full"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

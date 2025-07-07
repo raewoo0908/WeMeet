@@ -1,0 +1,60 @@
+{
+  "rule_id": "34746e8c-5fb8-415a-b135-0abc167e912a",
+  "risk_score": 47,
+  "description": "Detects the creation of binaries in the WinSxS folder by non-system processes",
+  "name": "WinSxS Executable File Creation By Non-System Process",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "(file.path:*.exe AND file.path:C\\:\\\\Windows\\\\WinSxS\\\\*) AND (NOT (process.executable:(C\\:\\\\Windows\\\\Systems32\\\\* OR C\\:\\\\Windows\\\\SysWOW64\\\\* OR C\\:\\\\Windows\\\\WinSxS\\\\*)))",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "File Create (rule: FileCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.execution"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Nasreddine Bencherchali (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

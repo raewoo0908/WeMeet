@@ -1,0 +1,51 @@
+{
+  "rule_id": "5a2b21ee-6aaa-4234-ac9d-59a59edf90a1",
+  "risk_score": 47,
+  "description": "Detects when an attacker register a new SIP provider for persistence and defense evasion",
+  "name": "Persistence Via New SIP Provider",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "((registry.path:(*\\\\Dll* OR *\\\\$DLL*)) AND (registry.path:(*\\\\SOFTWARE\\\\Microsoft\\\\Cryptography\\\\Providers\\\\* OR *\\\\SOFTWARE\\\\Microsoft\\\\Cryptography\\\\OID\\\\EncodingType* OR *\\\\SOFTWARE\\\\WOW6432Node\\\\Microsoft\\\\Cryptography\\\\Providers\\\\* OR *\\\\SOFTWARE\\\\WOW6432Node\\\\Microsoft\\\\Cryptography\\\\OID\\\\EncodingType*))) AND (NOT ((winlog.event_data.Details:(WINTRUST.DLL OR mso.dll)) OR (winlog.event_data.Details:C\\:\\\\Windows\\\\System32\\\\PsfSip.dll AND process.executable:C\\:\\\\Windows\\\\System32\\\\poqexec.exe AND registry.path:*\\\\CryptSIPDll*)))",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.persistence",
+    "attack.defense-evasion",
+    "attack.t1553.003"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Nasreddine Bencherchali (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Legitimate SIP being registered by the OS or different software."
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

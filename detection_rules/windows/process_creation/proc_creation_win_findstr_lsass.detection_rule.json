@@ -1,0 +1,61 @@
+{
+  "rule_id": "fe63010f-8823-4864-a96b-a7b4a0f7b929",
+  "risk_score": 73,
+  "description": "Detects findstring commands that include the keyword lsass, which indicates recon actviity for the LSASS process PID",
+  "name": "LSASS Process Reconnaissance Via Findstr.EXE",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "(process.command_line:*lsass* AND ((process.executable:(*\\\\find.exe OR *\\\\findstr.exe)) OR (process.pe.original_file_name:(FIND.EXE OR FINDSTR.EXE)))) OR (process.command_line:(*\\ \\-i\\ \\\"lsass* OR *\\ \\/i\\ \\\"lsass* OR *\\ –i\\ \\\"lsass* OR *\\ —i\\ \\\"lsass* OR *\\ ―i\\ \\\"lsass*) OR process.command_line:(*\\ \\-i\\ lsass.exe* OR *\\ \\/i\\ lsass.exe* OR *\\ –i\\ lsass.exe* OR *\\ —i\\ lsass.exe* OR *\\ ―i\\ lsass.exe*) OR process.command_line:(*findstr\\ \\\"lsass*) OR process.command_line:(*findstr\\ lsass*) OR process.command_line:(*findstr.exe\\ \\\"lsass*) OR process.command_line:(*findstr.exe\\ lsass*))",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.credential-access",
+    "attack.t1552.006"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Florian Roth (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

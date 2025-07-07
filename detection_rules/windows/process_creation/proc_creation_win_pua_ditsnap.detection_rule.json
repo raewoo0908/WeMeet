@@ -1,0 +1,61 @@
+{
+  "rule_id": "d3b70aad-097e-409c-9df2-450f80dc476b",
+  "risk_score": 73,
+  "description": "Detects the use of Ditsnap tool, an inspection tool for Active Directory database, ntds.dit.",
+  "name": "PUA - DIT Snapshot Viewer",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "process.executable:*\\\\ditsnap.exe OR process.command_line:*ditsnap.exe*",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.credential-access",
+    "attack.t1003.003"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Furkan Caliskan (@caliskanfurkan_)"
+  ],
+  "false_positives": [
+    "Legitimate admin usage"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

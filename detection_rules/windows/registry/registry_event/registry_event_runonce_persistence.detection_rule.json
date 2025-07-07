@@ -1,0 +1,50 @@
+{
+  "rule_id": "c74d7efc-8826-45d9-b8bb-f04fac9e4eff",
+  "risk_score": 47,
+  "description": "Rule to detect the configuration of Run Once registry key. Configured payload can be run by runonce.exe /AlternateShellStartup",
+  "name": "Run Once Task Configuration in Registry",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "(registry.path:*\\\\Microsoft\\\\Active\\ Setup\\\\Installed\\ Components* AND registry.path:*\\\\StubPath) AND (NOT ((winlog.event_data.Details:*C\\:\\\\Program\\ Files\\\\Google\\\\Chrome\\\\Application\\\\* AND winlog.event_data.Details:*\\\\Installer\\\\chrmstp.exe\\\"\\ \\-\\-configure\\-user\\-settings\\ \\-\\-verbose\\-logging\\ \\-\\-system\\-level*) OR ((winlog.event_data.Details:(*C\\:\\\\Program\\ Files\\ \\(x86\\)\\\\Microsoft\\\\Edge\\\\Application\\\\* OR *C\\:\\\\Program\\ Files\\\\Microsoft\\\\Edge\\\\Application\\\\*)) AND winlog.event_data.Details:*\\\\Installer\\\\setup.exe\\\"\\ \\-\\-configure\\-user\\-settings\\ \\-\\-verbose\\-logging\\ \\-\\-system\\-level\\ \\-\\-msedge\\ \\-\\-channel\\=stable)))",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.defense-evasion",
+    "attack.t1112"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Avneet Singh @v3t0_, oscd.community"
+  ],
+  "false_positives": [
+    "Legitimate modification of the registry key by legitimate program"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

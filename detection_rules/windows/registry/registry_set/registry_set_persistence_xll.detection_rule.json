@@ -1,0 +1,50 @@
+{
+  "rule_id": "961e33d1-4f86-4fcf-80ab-930a708b2f82",
+  "risk_score": 73,
+  "description": "Detect potential persistence via the creation of an excel add-in (XLL) file to make it run automatically when Excel is started.",
+  "name": "Potential Persistence Via Excel Add-in - Registry",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "winlog.event_data.Details:*.xll AND winlog.event_data.Details:\\/R\\ * AND registry.path:*Software\\\\Microsoft\\\\Office\\\\* AND registry.path:*\\\\Excel\\\\Options",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.persistence",
+    "attack.t1137.006"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "frack113"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

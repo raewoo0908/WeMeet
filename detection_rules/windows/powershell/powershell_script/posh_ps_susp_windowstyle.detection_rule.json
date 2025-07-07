@@ -1,0 +1,50 @@
+{
+  "rule_id": "313fbb0a-a341-4682-848d-6d6f8c4fab7c",
+  "risk_score": 47,
+  "description": "Adversaries may use hidden windows to conceal malicious activity from the plain sight of users.\nIn some cases, windows that would typically be displayed when an application carries out an operation can be hidden\n",
+  "name": "Suspicious PowerShell WindowStyle Option",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "(powershell.file.script_block_text:*powershell* AND powershell.file.script_block_text:*WindowStyle* AND powershell.file.script_block_text:*Hidden*) AND (NOT (powershell.file.script_block_text:*\\:\\\\Program\\ Files\\\\Amazon\\\\WorkSpacesConfig\\\\Scripts\\\\* AND powershell.file.script_block_text:*$PSScriptRoot\\\\Module\\\\WorkspaceScriptModule\\\\WorkspaceScriptModule*))",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.defense-evasion",
+    "attack.t1564.003"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "frack113, Tim Shelton (fp AWS)"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

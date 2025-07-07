@@ -1,0 +1,50 @@
+{
+  "rule_id": "e3fdf743-f05b-4051-990a-b66919be1743",
+  "risk_score": 73,
+  "description": "Detect change of the user account associated with the FAX service to avoid the escalation problem.",
+  "name": "Change User Account Associated with the FAX Service",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "registry.path:HKLM\\\\System\\\\CurrentControlSet\\\\Services\\\\Fax\\\\ObjectName AND (NOT winlog.event_data.Details:*NetworkService*)",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.defense-evasion",
+    "attack.t1112"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "frack113"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

@@ -1,0 +1,60 @@
+{
+  "rule_id": "7047d730-036f-4f40-b9d8-1c63e36d5e62",
+  "risk_score": 47,
+  "description": "Detects PowerShell creating a binary executable or a script file.",
+  "name": "Potential Binary Or Script Dropper Via PowerShell",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "((process.executable:(*\\\\powershell.exe OR *\\\\pwsh.exe)) AND (file.path:(*.bat OR *.chm OR *.cmd OR *.com OR *.dll OR *.exe OR *.hta OR *.jar OR *.js OR *.ocx OR *.scr OR *.sys OR *.vbe OR *.vbs OR *.wsf))) AND (NOT (((file.path:(*.dll OR *.exe)) AND (file.path:(C\\:\\\\Windows\\\\Temp\\\\* OR C\\:\\\\Windows\\\\SystemTemp\\\\*))) OR (file.path:*\\\\AppData\\\\Local\\\\Temp\\\\* AND (file.path:(*.dll OR *.exe)) AND file.path:C\\:\\\\Users\\\\*)))",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "File Create (rule: FileCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.persistence"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "frack113, Nasreddine Bencherchali (Nextron Systems)"
+  ],
+  "false_positives": [
+    "False positives will differ depending on the environment and scripts used. Apply additional filters accordingly."
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

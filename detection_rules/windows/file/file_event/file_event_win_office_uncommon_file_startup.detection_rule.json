@@ -1,0 +1,61 @@
+{
+  "rule_id": "a10a2c40-2c4d-49f8-b557-1a946bc55d9d",
+  "risk_score": 73,
+  "description": "Detects the creation of a file with an uncommon extension in an Office application startup folder",
+  "name": "Uncommon File Created In Office Startup Folder",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "(((file.path:*\\\\Microsoft\\\\Word\\\\STARTUP* OR (file.path:*\\\\Office* AND file.path:*\\\\Program\\ Files* AND file.path:*\\\\STARTUP*)) AND (NOT (file.path:(*.docb OR *.docm OR *.docx OR *.dotm OR *.mdb OR *.mdw OR *.pdf OR *.wll OR *.wwl)))) OR ((file.path:*\\\\Microsoft\\\\Excel\\\\XLSTART* OR (file.path:*\\\\Office* AND file.path:*\\\\Program\\ Files* AND file.path:*\\\\XLSTART*)) AND (NOT (file.path:(*.xll OR *.xls OR *.xlsm OR *.xlsx OR *.xlt OR *.xltm OR *.xlw))))) AND (NOT (((process.executable:(*\\:\\\\Program\\ Files\\\\Microsoft\\ Office\\\\* OR *\\:\\\\Program\\ Files\\ \\(x86\\)\\\\Microsoft\\ Office\\\\*)) AND (process.executable:(*\\\\winword.exe OR *\\\\excel.exe))) OR (process.executable:*\\:\\\\Program\\ Files\\\\Common\\ Files\\\\Microsoft\\ Shared\\\\ClickToRun\\\\* AND process.executable:*\\\\OfficeClickToRun.exe)))",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "File Create (rule: FileCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.resource-development",
+    "attack.t1587.001"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "frack113, Nasreddine Bencherchali (Nextron Systems)"
+  ],
+  "false_positives": [
+    "False positive might stem from rare extensions used by other Office utilities."
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

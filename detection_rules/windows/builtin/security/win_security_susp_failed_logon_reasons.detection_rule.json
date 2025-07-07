@@ -1,0 +1,53 @@
+{
+  "rule_id": "9eb99343-d336-4020-a3cd-67f3819e68ee",
+  "risk_score": 47,
+  "description": "This method uses uncommon error codes on failed logons to determine suspicious activity and tampering with accounts that have been disabled or somehow restricted.",
+  "name": "Account Tampering - Suspicious Failed Logon Reasons",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "winlog.channel:Security AND (((event.code:(4625 OR 4776)) AND (winlog.event_data.Status:(0xC0000072 OR 0xC000006F OR 0xC0000070 OR 0xC0000413 OR 0xC000018C OR 0xC000015B))) AND (NOT user.id:S\\-1\\-0\\-0))",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.persistence",
+    "attack.defense-evasion",
+    "attack.privilege-escalation",
+    "attack.initial-access",
+    "attack.t1078"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Florian Roth (Nextron Systems)"
+  ],
+  "false_positives": [
+    "User using a disabled account"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

@@ -1,0 +1,63 @@
+{
+  "rule_id": "409f8a98-4496-4aaa-818a-c931c0a8b832",
+  "risk_score": 47,
+  "description": "This rule detects suspicious files created by Microsoft Sync Center (mobsync)",
+  "name": "Created Files by Microsoft Sync Center",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "process.executable:*\\\\mobsync.exe AND (file.path:(*.dll OR *.exe))",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "File Create (rule: FileCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.t1055",
+    "attack.t1218",
+    "attack.execution",
+    "attack.defense-evasion"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "elhoim"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

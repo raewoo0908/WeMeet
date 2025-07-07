@@ -1,0 +1,55 @@
+{
+  "rule_id": "5bed80b6-b3e8-428e-a3ae-d3c757589e41",
+  "risk_score": 73,
+  "description": "Detects svchost hosting RDP termsvcs communicating with the loopback address",
+  "name": "RDP over Reverse SSH Tunnel WFP",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "winlog.channel:Security AND (event.code:5156 AND (((destination.ip:(127.* OR \\:\\:1)) AND source.port:3389) OR (destination.port:3389 AND (source.ip:(127.* OR \\:\\:1)))) AND (NOT (winlog.event_data.FilterOrigin:AppContainer\\ Loopback OR (process.executable:(*\\\\thor.exe OR *\\\\thor64.exe)))))",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.defense-evasion",
+    "attack.command-and-control",
+    "attack.lateral-movement",
+    "attack.t1090.001",
+    "attack.t1090.002",
+    "attack.t1021.001",
+    "car.2013-07-002"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Samir Bousseaden"
+  ],
+  "false_positives": [
+    "Programs that connect locally to the RDP port"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

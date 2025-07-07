@@ -1,0 +1,52 @@
+{
+  "rule_id": "0c718a5e-4284-4fb9-b4d9-b9a50b3a1974",
+  "risk_score": 73,
+  "description": "Detects Obfuscated use of stdin to execute PowerShell",
+  "name": "Invoke-Obfuscation STDIN+ Launcher - Security",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "winlog.channel:Security AND ((event.code:4697 AND (winlog.event_data.ServiceFileName:*cmd* AND winlog.event_data.ServiceFileName:*powershell*)) AND (winlog.event_data.ServiceFileName:(*$\\{input\\}* OR *noexit*)) AND (winlog.event_data.ServiceFileName:(*\\ \\/c\\ * OR *\\ \\/r\\ *)))",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.defense-evasion",
+    "attack.t1027",
+    "attack.execution",
+    "attack.t1059.001"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Jonathan Cheong, oscd.community"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

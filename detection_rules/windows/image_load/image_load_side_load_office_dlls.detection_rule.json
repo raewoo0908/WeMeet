@@ -1,0 +1,52 @@
+{
+  "rule_id": "829a3bdf-34da-4051-9cf4-8ed221a8ae4f",
+  "risk_score": 73,
+  "description": "Detects DLL sideloading of DLLs that are part of Microsoft Office from non standard location",
+  "name": "Microsoft Office DLL Sideload",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "file.path:*\\\\outllib.dll AND (NOT (file.path:(C\\:\\\\Program\\ Files\\\\Microsoft\\ Office\\\\OFFICE* OR C\\:\\\\Program\\ Files\\ \\(x86\\)\\\\Microsoft\\ Office\\\\OFFICE* OR C\\:\\\\Program\\ Files\\\\Microsoft\\ Office\\\\Root\\\\OFFICE* OR C\\:\\\\Program\\ Files\\ \\(x86\\)\\\\Microsoft\\ Office\\\\Root\\\\OFFICE*)))",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.defense-evasion",
+    "attack.persistence",
+    "attack.privilege-escalation",
+    "attack.t1574.001"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Nasreddine Bencherchali (Nextron Systems), Wietze Beukema (project and research)"
+  ],
+  "false_positives": [
+    "Unlikely"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

@@ -1,0 +1,63 @@
+{
+  "rule_id": "dff1e1cc-d3fd-47c8-bfc2-aeb878a754c0",
+  "risk_score": 47,
+  "description": "Detects shell spawned from Java host process, which could be a sign of exploitation (e.g. log4j exploitation)",
+  "name": "Shell Process Spawned by Java.EXE",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "((process.executable:(*\\\\bash.exe OR *\\\\cmd.exe OR *\\\\powershell.exe OR *\\\\pwsh.exe)) AND process.parent.executable:*\\\\java.exe) AND (NOT (process.command_line:*build* AND process.parent.executable:*build*))",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.initial-access",
+    "attack.persistence",
+    "attack.privilege-escalation"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Andreas Hunkeler (@Karneades), Nasreddine Bencherchali"
+  ],
+  "false_positives": [
+    "Legitimate calls to system binaries",
+    "Company specific internal usage"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

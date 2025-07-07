@@ -1,0 +1,61 @@
+{
+  "rule_id": "c7a74c80-ba5a-486e-9974-ab9e682bc5e4",
+  "risk_score": 73,
+  "description": "Detects the creation of files with an executable or script extension by an Office application.",
+  "name": "File With Uncommon Extension Created By An Office Application",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "((process.executable:(*\\\\excel.exe OR *\\\\msaccess.exe OR *\\\\mspub.exe OR *\\\\powerpnt.exe OR *\\\\visio.exe OR *\\\\winword.exe)) AND (file.path:(*.bat OR *.cmd OR *.com OR *.dll OR *.exe OR *.hta OR *.ocx OR *.proj OR *.ps1 OR *.scf OR *.scr OR *.sys OR *.vbe OR *.vbs OR *.wsf OR *.wsh))) AND (NOT (file.path:*\\\\AppData\\\\Local\\\\assembly\\\\tmp\\\\* AND file.path:*.dll)) AND (NOT ((process.executable:*\\\\winword.exe AND file.path:*\\\\AppData\\\\Local\\\\Temp\\\\webexdelta\\\\* AND (file.path:(*.dll OR *.exe))) OR ((file.path:*C\\:\\\\Users\\\\* AND file.path:*\\\\AppData\\\\Local\\\\Microsoft\\\\Office\\\\* AND file.path:*\\\\WebServiceCache\\\\AllUsers*) AND file.path:*.com)))",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "File Create (rule: FileCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.t1204.002",
+    "attack.execution"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Vadim Khrykov (ThreatIntel), Cyb3rEng (Rule), Nasreddine Bencherchali (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

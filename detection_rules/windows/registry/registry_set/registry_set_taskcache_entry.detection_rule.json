@@ -1,0 +1,51 @@
+{
+  "rule_id": "4720b7df-40c3-48fd-bbdf-fd4b3c464f0d",
+  "risk_score": 73,
+  "description": "Monitor the creation of a new key under 'TaskCache' when a new scheduled task is registered by a process that is not svchost.exe, which is suspicious",
+  "name": "Scheduled TaskCache Change by Uncommon Program",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "registry.path:*SOFTWARE\\\\Microsoft\\\\Windows\\ NT\\\\CurrentVersion\\\\Schedule\\\\TaskCache\\\\* AND (NOT ((registry.path:(*Microsoft\\\\Windows\\\\UpdateOrchestrator* OR *Microsoft\\\\Windows\\\\SoftwareProtectionPlatform\\\\SvcRestartTask\\\\Index* OR *Microsoft\\\\Windows\\\\Flighting\\\\OneSettings\\\\RefreshCache\\\\Index*)) OR (process.executable:(C\\:\\\\Program\\ Files\\ \\(x86\\)\\\\Dropbox\\\\Update\\\\DropboxUpdate.exe OR C\\:\\\\Program\\ Files\\\\Dropbox\\\\Update\\\\DropboxUpdate.exe)) OR (process.executable:C\\:\\\\Windows\\\\explorer.exe AND registry.path:*\\\\Microsoft\\\\Windows\\ NT\\\\CurrentVersion\\\\Schedule\\\\TaskCache\\\\Tree\\\\Microsoft\\\\Windows\\\\PLA\\\\Server\\ Manager\\ Performance\\ Monitor\\\\*) OR process.executable:C\\:\\\\Windows\\\\System32\\\\msiexec.exe OR (process.executable:*\\\\ngen.exe AND process.executable:C\\:\\\\Windows\\\\Microsoft.NET\\\\Framework* AND (registry.path:(*\\\\Microsoft\\\\Windows\\ NT\\\\CurrentVersion\\\\Schedule\\\\TaskCache\\\\Tasks\\\\\\{B66B135D\\-DA06\\-4FC4\\-95F8\\-7458E1D10129\\}* OR *\\\\Microsoft\\\\Windows\\ NT\\\\CurrentVersion\\\\Schedule\\\\TaskCache\\\\Tree\\\\Microsoft\\\\Windows\\\\.NET\\ Framework\\\\.NET\\ Framework\\ NGEN*))) OR (process.executable:(C\\:\\\\Program\\ Files\\\\Microsoft\\ Office\\\\root\\\\Integration\\\\Integrator.exe OR C\\:\\\\Program\\ Files\\ \\(x86\\)\\\\Microsoft\\ Office\\\\root\\\\Integration\\\\Integrator.exe)) OR process.executable:C\\:\\\\WINDOWS\\\\system32\\\\svchost.exe OR process.executable:System OR (process.executable:*\\\\TiWorker.exe AND process.executable:C\\:\\\\Windows\\\\*)))",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.persistence",
+    "attack.t1053",
+    "attack.t1053.005"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Syed Hasan (@syedhasan009)"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

@@ -1,0 +1,51 @@
+{
+  "rule_id": "d67572a0-e2ec-45d6-b8db-c100d14b8ef2",
+  "risk_score": 73,
+  "description": "Detects NetNTLM downgrade attack",
+  "name": "NetNTLM Downgrade Attack - Registry",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "(registry.path:*SYSTEM\\\\* AND registry.path:*ControlSet* AND registry.path:*\\\\Control\\\\Lsa*) AND (((winlog.event_data.Details:(DWORD\\ \\(0x00000000\\) OR DWORD\\ \\(0x00000001\\) OR DWORD\\ \\(0x00000002\\))) AND registry.path:*\\\\lmcompatibilitylevel) OR ((winlog.event_data.Details:(DWORD\\ \\(0x00000000\\) OR DWORD\\ \\(0x00000010\\) OR DWORD\\ \\(0x00000020\\) OR DWORD\\ \\(0x00000030\\))) AND registry.path:*\\\\NtlmMinClientSec) OR registry.path:*\\\\RestrictSendingNTLMTraffic)",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.defense-evasion",
+    "attack.t1562.001",
+    "attack.t1112"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Florian Roth (Nextron Systems), wagga, Nasreddine Bencherchali (Splunk STRT)"
+  ],
+  "false_positives": [
+    "Services or tools that set the values to more restrictive values"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

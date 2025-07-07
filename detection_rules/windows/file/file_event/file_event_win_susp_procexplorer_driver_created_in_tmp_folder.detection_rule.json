@@ -1,0 +1,61 @@
+{
+  "rule_id": "3da70954-0f2c-4103-adff-b7440368f50e",
+  "risk_score": 47,
+  "description": "Detects the creation of the PROCEXP152.sys file in the application-data local temporary folder.\nThis driver is used by Sysinternals Process Explorer but also by KDU (https://github.com/hfiref0x/KDU) or Ghost-In-The-Logs (https://github.com/bats3c/Ghost-In-The-Logs), which uses KDU.\n",
+  "name": "Suspicious PROCEXP152.sys File Created In TMP",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "(file.path:*\\\\AppData\\\\Local\\\\Temp\\\\* AND file.path:*PROCEXP152.sys) AND (NOT (process.executable:(*\\\\procexp64.exe* OR *\\\\procexp.exe* OR *\\\\procmon64.exe* OR *\\\\procmon.exe*)))",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "File Create (rule: FileCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.t1562.001",
+    "attack.defense-evasion"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "xknow (@xknow_infosec), xorxes (@xor_xes)"
+  ],
+  "false_positives": [
+    "Other legimate tools using this driver and filename (like Sysinternals). Note - Clever attackers may easily bypass this detection by just renaming the driver filename. Therefore just Medium-level and don't rely on it."
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

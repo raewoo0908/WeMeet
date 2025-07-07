@@ -1,0 +1,52 @@
+{
+  "rule_id": "70f00d10-60b2-4f34-b9a0-dc3df3fe762a",
+  "risk_score": 73,
+  "description": "Detects suspicious service installation scripts",
+  "name": "Suspicious Service Installation Script",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "winlog.channel:System AND ((winlog.event_data.ImagePath:(*cscript* OR *mshta* OR *powershell* OR *pwsh* OR *regsvr32* OR *rundll32* OR *wscript*)) AND (winlog.event_data.ImagePath:(*\\ \\-c\\ * OR *\\ \\/c\\ * OR *\\ –c\\ * OR *\\ —c\\ * OR *\\ ―c\\ *) OR winlog.event_data.ImagePath:(*\\ \\-r\\ * OR *\\ \\/r\\ * OR *\\ –r\\ * OR *\\ —r\\ * OR *\\ ―r\\ *) OR winlog.event_data.ImagePath:(*\\ \\-k\\ * OR *\\ \\/k\\ * OR *\\ –k\\ * OR *\\ —k\\ * OR *\\ ―k\\ *)) AND (event.code:7045 AND winlog.provider_name:Service\\ Control\\ Manager))",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.persistence",
+    "attack.privilege-escalation",
+    "car.2013-09-005",
+    "attack.t1543.003"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "pH-T (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

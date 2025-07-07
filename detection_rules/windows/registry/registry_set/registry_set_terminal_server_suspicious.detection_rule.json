@@ -1,0 +1,51 @@
+{
+  "rule_id": "a2863fbc-d5cb-48d5-83fb-d976d4b1743b",
+  "risk_score": 47,
+  "description": "Detects tampering of RDP Terminal Service/Server sensitive settings.\nSuch as allowing unauthorized users access to a system via the 'fAllowUnsolicited' or enabling RDP via 'fDenyTSConnections', etc.\n",
+  "name": "RDP Sensitive Settings Changed to Zero",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "winlog.event_data.Details:DWORD\\ \\(0x00000000\\) AND (registry.path:(*\\\\fDenyTSConnections OR *\\\\fSingleSessionPerUser OR *\\\\UserAuthentication))",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.defense-evasion",
+    "attack.persistence",
+    "attack.t1112"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Samir Bousseaden, David ANDRE, Roberto Rodriguez @Cyb3rWard0g, Nasreddine Bencherchali"
+  ],
+  "false_positives": [
+    "Some of the keys mentioned here could be modified by an administrator while setting group policy (it should be investigated either way)"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

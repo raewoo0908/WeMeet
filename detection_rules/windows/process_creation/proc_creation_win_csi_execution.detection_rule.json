@@ -1,0 +1,63 @@
+{
+  "rule_id": "40b95d31-1afc-469e-8d34-9a3a667d058e",
+  "risk_score": 47,
+  "description": "Csi.exe is a signed binary from Microsoft that comes with Visual Studio and provides C# interactive capabilities. It can be used to run C# code from a file passed as a parameter in command line. Early version of this utility provided with Microsoft “Roslyn” Community Technology Preview was named 'rcsi.exe'",
+  "name": "Suspicious Csi.exe Usage",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "process.pe.company:Microsoft\\ Corporation AND ((process.executable:(*\\\\csi.exe OR *\\\\rcsi.exe)) OR (process.pe.original_file_name:(csi.exe OR rcsi.exe)))",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.execution",
+    "attack.t1072",
+    "attack.defense-evasion",
+    "attack.t1218"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Konstantin Grishchenko, oscd.community"
+  ],
+  "false_positives": [
+    "Legitimate usage by software developers"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

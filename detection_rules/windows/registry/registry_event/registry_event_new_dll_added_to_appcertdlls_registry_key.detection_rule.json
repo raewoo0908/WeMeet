@@ -1,0 +1,50 @@
+{
+  "rule_id": "6aa1d992-5925-4e9f-a49b-845e51d1de01",
+  "risk_score": 47,
+  "description": "Dynamic-link libraries (DLLs) that are specified in the AppCertDLLs value in the Registry key can be abused to obtain persistence and privilege escalation\nby causing a malicious DLL to be loaded and run in the context of separate processes on the computer.\n",
+  "name": "New DLL Added to AppCertDlls Registry Key",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "registry.path:HKLM\\\\SYSTEM\\\\CurrentControlSet\\\\Control\\\\Session\\ Manager\\\\AppCertDlls OR winlog.event_data.NewName:HKLM\\\\SYSTEM\\\\CurentControlSet\\\\Control\\\\Session\\ Manager\\\\AppCertDlls",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.persistence",
+    "attack.t1546.009"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Ilyas Ochkov, oscd.community"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

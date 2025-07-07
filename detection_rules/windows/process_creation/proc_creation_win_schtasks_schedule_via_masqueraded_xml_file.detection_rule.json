@@ -1,0 +1,63 @@
+{
+  "rule_id": "dd2a821e-3b07-4d3b-a9ac-929fe4c6ca0c",
+  "risk_score": 47,
+  "description": "Detects the creation of a scheduled task using the \"-XML\" flag with a file without the '.xml' extension. This behavior could be indicative of potential defense evasion attempt during persistence",
+  "name": "Suspicious Scheduled Task Creation via Masqueraded XML File",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "((process.command_line:(*\\/create* OR *\\-create*)) AND (process.command_line:(*\\/xml* OR *\\-xml*)) AND (process.executable:*\\\\schtasks.exe OR process.pe.original_file_name:schtasks.exe)) AND (NOT (process.command_line:*.xml* OR ((process.parent.command_line:*\\:\\\\WINDOWS\\\\Installer\\\\MSI* AND process.parent.command_line:*.tmp,zzzzInvokeManagedCustomActionOutOfProc*) AND process.parent.executable:*\\\\rundll32.exe) OR (winlog.event_data.IntegrityLevel:(System OR S\\-1\\-16\\-16384)))) AND (NOT (process.parent.executable:(*\\:\\\\ProgramData\\\\OEM\\\\UpgradeTool\\\\CareCenter_*\\\\BUnzip\\\\Setup_msi.exe OR *\\:\\\\Program\\ Files\\\\Axis\\ Communications\\\\AXIS\\ Camera\\ Station\\\\SetupActions.exe OR *\\:\\\\Program\\ Files\\\\Axis\\ Communications\\\\AXIS\\ Device\\ Manager\\\\AdmSetupActions.exe OR *\\:\\\\Program\\ Files\\ \\(x86\\)\\\\Zemana\\\\AntiMalware\\\\AntiMalware.exe OR *\\:\\\\Program\\ Files\\\\Dell\\\\SupportAssist\\\\pcdrcui.exe)))",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.defense-evasion",
+    "attack.persistence",
+    "attack.t1036.005",
+    "attack.t1053.005"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Swachchhanda Shrawan Poudel, Elastic (idea)"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

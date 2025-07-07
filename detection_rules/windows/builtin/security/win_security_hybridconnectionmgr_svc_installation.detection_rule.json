@@ -1,0 +1,50 @@
+{
+  "rule_id": "0ee4d8a5-4e67-4faf-acfa-62a78457d1f2",
+  "risk_score": 73,
+  "description": "Rule to detect the Hybrid Connection Manager service installation.",
+  "name": "HybridConnectionManager Service Installation",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "winlog.channel:Security AND (event.code:4697 AND winlog.event_data.ServiceFileName:*HybridConnectionManager* AND service.name:HybridConnectionManager)",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.persistence",
+    "attack.t1554"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Roberto Rodriguez (Cyb3rWard0g), OTR (Open Threat Research)"
+  ],
+  "false_positives": [
+    "Legitimate use of Hybrid Connection Manager via Azure function apps."
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

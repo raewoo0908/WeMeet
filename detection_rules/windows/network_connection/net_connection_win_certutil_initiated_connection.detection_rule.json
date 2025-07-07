@@ -1,0 +1,61 @@
+{
+  "rule_id": "0dba975d-a193-4ed1-a067-424df57570d1",
+  "risk_score": 73,
+  "description": "Detects a network connection initiated by the certutil.exe utility.\nAttackers can abuse the utility in order to download malware or additional payloads.\n",
+  "name": "Uncommon Network Connection Initiated By Certutil.EXE",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "(destination.port:(80 OR 135 OR 443 OR 445)) AND process.executable:*\\\\certutil.exe AND network.direction:true",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Network connection detected (rule: NetworkConnect)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.command-and-control",
+    "attack.t1105"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "frack113, Florian Roth (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

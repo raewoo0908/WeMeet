@@ -1,0 +1,51 @@
+{
+  "rule_id": "8028c2c3-e25a-46e3-827f-bbb5abf181d7",
+  "risk_score": 73,
+  "description": "Detects parameters used by WMImplant",
+  "name": "WMImplant Hack Tool",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "powershell.file.script_block_text:(*WMImplant* OR *\\ change_user\\ * OR *\\ gen_cli\\ * OR *\\ command_exec\\ * OR *\\ disable_wdigest\\ * OR *\\ disable_winrm\\ * OR *\\ enable_wdigest\\ * OR *\\ enable_winrm\\ * OR *\\ registry_mod\\ * OR *\\ remote_posh\\ * OR *\\ sched_job\\ * OR *\\ service_mod\\ * OR *\\ process_kill\\ * OR *\\ active_users\\ * OR *\\ basic_info\\ * OR *\\ power_off\\ * OR *\\ vacant_system\\ * OR *\\ logon_events\\ *)",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.execution",
+    "attack.t1047",
+    "attack.t1059.001"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "NVISO"
+  ],
+  "false_positives": [
+    "Administrative scripts that use the same keywords."
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

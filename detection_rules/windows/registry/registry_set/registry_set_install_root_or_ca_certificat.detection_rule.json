@@ -1,0 +1,50 @@
+{
+  "rule_id": "d223b46b-5621-4037-88fe-fda32eead684",
+  "risk_score": 47,
+  "description": "Detects the addition of new root, CA or AuthRoot certificates to the Windows registry",
+  "name": "New Root or CA or AuthRoot Certificate to Store",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "winlog.event_data.Details:Binary\\ Data AND (registry.path:(*\\\\SOFTWARE\\\\Microsoft\\\\SystemCertificates\\\\Root\\\\Certificates\\\\* OR *\\\\SOFTWARE\\\\Policies\\\\Microsoft\\\\SystemCertificates\\\\Root\\\\Certificates\\\\* OR *\\\\SOFTWARE\\\\Microsoft\\\\EnterpriseCertificates\\\\Root\\\\Certificates\\\\* OR *\\\\SOFTWARE\\\\Microsoft\\\\SystemCertificates\\\\CA\\\\Certificates\\\\* OR *\\\\SOFTWARE\\\\Policies\\\\Microsoft\\\\SystemCertificates\\\\CA\\\\Certificates\\\\* OR *\\\\SOFTWARE\\\\Microsoft\\\\EnterpriseCertificates\\\\CA\\\\Certificates\\\\* OR *\\\\SOFTWARE\\\\Microsoft\\\\SystemCertificates\\\\AuthRoot\\\\Certificates\\\\* OR *\\\\SOFTWARE\\\\Policies\\\\Microsoft\\\\SystemCertificates\\\\AuthRoot\\\\Certificates\\\\* OR *\\\\SOFTWARE\\\\Microsoft\\\\EnterpriseCertificates\\\\AuthRoot\\\\Certificates\\\\*)) AND registry.path:*\\\\Blob",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.impact",
+    "attack.t1490"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "frack113"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

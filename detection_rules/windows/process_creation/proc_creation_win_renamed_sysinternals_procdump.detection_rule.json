@@ -1,0 +1,62 @@
+{
+  "rule_id": "4a0b2c7e-7cb2-495d-8b63-5f268e7bfd67",
+  "risk_score": 73,
+  "description": "Detects the execution of a renamed ProcDump executable.\nThis often done by attackers or malware in order to evade defensive mechanisms.\n",
+  "name": "Renamed ProcDump Execution",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "(process.pe.original_file_name:procdump OR ((process.command_line:(*\\ \\-ma\\ * OR *\\ \\/ma\\ * OR *\\ –ma\\ * OR *\\ —ma\\ * OR *\\ ―ma\\ *) OR process.command_line:(*\\ \\-mp\\ * OR *\\ \\/mp\\ * OR *\\ –mp\\ * OR *\\ —mp\\ * OR *\\ ―mp\\ *)) AND process.command_line:(*\\ \\-accepteula* OR *\\ \\/accepteula* OR *\\ –accepteula* OR *\\ —accepteula* OR *\\ ―accepteula*))) AND (NOT (process.executable:(*\\\\procdump.exe OR *\\\\procdump64.exe)))",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.defense-evasion",
+    "attack.t1036.003"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Florian Roth (Nextron Systems), Nasreddine Bencherchali (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Procdump illegally bundled with legitimate software.",
+    "Administrators who rename binaries (should be investigated)."
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

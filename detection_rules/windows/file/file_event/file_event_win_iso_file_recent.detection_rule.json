@@ -1,0 +1,61 @@
+{
+  "rule_id": "4358e5a5-7542-4dcb-b9f3-87667371839b",
+  "risk_score": 47,
+  "description": "Detects the creation of recent element file that points to an .ISO, .IMG, .VHD or .VHDX file as often used in phishing attacks.\nThis can be a false positive on server systems but on workstations users should rarely mount .iso or .img files.\n",
+  "name": "ISO or Image Mount Indicator in Recent Files",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "file.path:*\\\\Microsoft\\\\Windows\\\\Recent\\\\* AND (file.path:(*.iso.lnk OR *.img.lnk OR *.vhd.lnk OR *.vhdx.lnk))",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "File Create (rule: FileCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.initial-access",
+    "attack.t1566.001"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Florian Roth (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Cases in which a user mounts an image file for legitimate reasons"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

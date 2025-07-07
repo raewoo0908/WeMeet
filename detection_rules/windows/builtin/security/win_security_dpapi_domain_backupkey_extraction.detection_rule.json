@@ -1,0 +1,50 @@
+{
+  "rule_id": "4ac1f50b-3bd0-4968-902d-868b4647937e",
+  "risk_score": 73,
+  "description": "Detects tools extracting LSA secret DPAPI domain backup key from Domain Controllers",
+  "name": "DPAPI Domain Backup Key Extraction",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "winlog.channel:Security AND (winlog.event_data.AccessMask:0x2 AND event.code:4662 AND winlog.event_data.ObjectName:*BCKUPKEY* AND winlog.event_data.ObjectType:SecretObject)",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.credential-access",
+    "attack.t1003.004"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Roberto Rodriguez @Cyb3rWard0g"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

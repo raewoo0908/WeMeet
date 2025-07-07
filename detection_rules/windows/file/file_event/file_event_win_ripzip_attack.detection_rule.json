@@ -1,0 +1,61 @@
+{
+  "rule_id": "a6976974-ea6f-4e97-818e-ea08625c52cb",
+  "risk_score": 73,
+  "description": "Detects a phishing attack which expands a ZIP file containing a malicious shortcut.\nIf the victim expands the ZIP file via the explorer process, then the explorer process expands the malicious ZIP file and drops a malicious shortcut redirected to a backdoor into the Startup folder.\nAdditionally, the file name of the malicious shortcut in Startup folder contains {0AFACED1-E828-11D1-9187-B532F1E9575D} meaning the folder shortcut operation.\n",
+  "name": "Potential RipZip Attack on Startup Folder",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "process.executable:*\\\\explorer.exe AND (file.path:*\\\\Microsoft\\\\Windows\\\\Start\\ Menu\\\\Programs\\\\Startup* AND file.path:*.lnk.\\{0AFACED1\\-E828\\-11D1\\-9187\\-B532F1E9575D\\}*)",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "File Create (rule: FileCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.persistence",
+    "attack.t1547"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Greg (rule)"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

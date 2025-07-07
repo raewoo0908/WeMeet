@@ -1,0 +1,52 @@
+{
+  "rule_id": "6414b5cd-b19d-447e-bb5e-9f03940b5784",
+  "risk_score": 47,
+  "description": "Detects potential DLL sideloading of \"dbghelp.dll\"",
+  "name": "Potential DLL Sideloading Of DBGHELP.DLL",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "file.path:*\\\\dbghelp.dll AND (NOT (file.path:(C\\:\\\\Program\\ Files\\ \\(x86\\)\\\\* OR C\\:\\\\Program\\ Files\\\\* OR C\\:\\\\Windows\\\\SoftwareDistribution\\\\* OR C\\:\\\\Windows\\\\System32\\\\* OR C\\:\\\\Windows\\\\SystemTemp\\\\* OR C\\:\\\\Windows\\\\SysWOW64\\\\* OR C\\:\\\\Windows\\\\WinSxS\\\\*))) AND (NOT ((file.path:(*\\\\Anaconda3\\\\Lib\\\\site\\-packages\\\\vtrace\\\\platforms\\\\windll\\\\amd64\\\\dbghelp.dll OR *\\\\Anaconda3\\\\Lib\\\\site\\-packages\\\\vtrace\\\\platforms\\\\windll\\\\i386\\\\dbghelp.dll)) OR (file.path:(*\\\\Epic\\ Games\\\\Launcher\\\\Engine\\\\Binaries\\\\ThirdParty\\\\DbgHelp\\\\dbghelp.dll OR *\\\\Epic\\ Games\\\\MagicLegends\\\\x86\\\\dbghelp.dll))))",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.defense-evasion",
+    "attack.persistence",
+    "attack.privilege-escalation",
+    "attack.t1574.001"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Nasreddine Bencherchali (Nextron Systems), Wietze Beukema (project and research)"
+  ],
+  "false_positives": [
+    "Legitimate applications loading their own versions of the DLL mentioned in this rule"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

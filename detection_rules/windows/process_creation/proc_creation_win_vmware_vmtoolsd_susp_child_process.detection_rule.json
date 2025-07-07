@@ -1,0 +1,62 @@
+{
+  "rule_id": "5687f942-867b-4578-ade7-1e341c46e99a",
+  "risk_score": 73,
+  "description": "Detects suspicious child process creations of VMware Tools process which may indicate persistence setup",
+  "name": "VMToolsd Suspicious Child Process",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "(((process.executable:(*\\\\cmd.exe OR *\\\\cscript.exe OR *\\\\mshta.exe OR *\\\\powershell.exe OR *\\\\pwsh.exe OR *\\\\regsvr32.exe OR *\\\\rundll32.exe OR *\\\\wscript.exe)) OR (process.pe.original_file_name:(Cmd.Exe OR cscript.exe OR MSHTA.EXE OR PowerShell.EXE OR pwsh.dll OR REGSVR32.EXE OR RUNDLL32.EXE OR wscript.exe))) AND process.parent.executable:*\\\\vmtoolsd.exe) AND (NOT ((process.command_line:\"\" AND process.executable:*\\\\cmd.exe) OR ((NOT _exists_:process.command_line) AND process.executable:*\\\\cmd.exe) OR ((process.command_line:(*\\\\VMware\\\\VMware\\ Tools\\\\poweron\\-vm\\-default.bat* OR *\\\\VMware\\\\VMware\\ Tools\\\\poweroff\\-vm\\-default.bat* OR *\\\\VMware\\\\VMware\\ Tools\\\\resume\\-vm\\-default.bat* OR *\\\\VMware\\\\VMware\\ Tools\\\\suspend\\-vm\\-default.bat*)) AND process.executable:*\\\\cmd.exe)))",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.execution",
+    "attack.persistence",
+    "attack.t1059"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "bohops, Bhabesh Raj"
+  ],
+  "false_positives": [
+    "Legitimate use by VM administrator"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

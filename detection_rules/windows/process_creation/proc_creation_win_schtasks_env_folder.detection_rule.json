@@ -1,0 +1,62 @@
+{
+  "rule_id": "81325ce1-be01-4250-944f-b4789644556f",
+  "risk_score": 47,
+  "description": "Detects Schtask creations that point to a suspicious folder or an environment variable often used by malware",
+  "name": "Schedule Task Creation From Env Variable Or Potentially Suspicious Path Via Schtasks.EXE",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "(((process.command_line:(*\\:\\\\Perflogs* OR *\\:\\\\Users\\\\All\\ Users\\\\* OR *\\:\\\\Users\\\\Default\\\\* OR *\\:\\\\Users\\\\Public* OR *\\:\\\\Windows\\\\Temp* OR *\\\\AppData\\\\Local\\\\* OR *\\\\AppData\\\\Roaming\\\\* OR *%AppData%* OR *%Public%*)) AND (process.command_line:*\\ \\/create\\ * AND process.executable:*\\\\schtasks.exe)) OR (process.parent.command_line:*\\\\svchost.exe\\ \\-k\\ netsvcs\\ \\-p\\ \\-s\\ Schedule AND (process.command_line:(*\\:\\\\Perflogs* OR *\\:\\\\Windows\\\\Temp* OR *\\\\Users\\\\Public* OR *%Public%*)))) AND (NOT ((process.command_line:*\\/Create\\ \\/Xml\\ \\\"C\\:\\\\Users\\\\* AND process.command_line:*\\\\AppData\\\\Local\\\\Temp\\\\.CR.* AND process.command_line:*Avira_Security_Installation.xml*) OR ((process.command_line:(*.tmp\\\\UpdateFallbackTask.xml* OR *.tmp\\\\WatchdogServiceControlManagerTimeout.xml* OR *.tmp\\\\SystrayAutostart.xml* OR *.tmp\\\\MaintenanceTask.xml*)) AND (process.command_line:*\\/Create\\ \\/F\\ \\/TN* AND process.command_line:*\\/Xml\\ * AND process.command_line:*\\\\AppData\\\\Local\\\\Temp\\\\is\\-* AND process.command_line:*Avira_*)) OR (process.command_line:*\\\\AppData\\\\Local\\\\Temp\\\\* AND process.command_line:*\\/Create\\ \\/TN\\ \\\"klcp_update\\\"\\ \\/XML\\ * AND process.command_line:*\\\\klcp_update_task.xml*) OR (process.parent.command_line:*unattended.ini* OR process.command_line:*update_task.xml*) OR process.command_line:*\\/Create\\ \\/TN\\ TVInstallRestore\\ \\/TR*))",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.execution",
+    "attack.t1053.005"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Florian Roth (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Benign scheduled tasks creations or executions that happen often during software installations",
+    "Software that uses the AppData folder and scheduled tasks to update the software in the AppData folders"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

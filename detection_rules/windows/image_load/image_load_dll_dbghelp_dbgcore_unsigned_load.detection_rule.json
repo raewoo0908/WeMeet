@@ -1,0 +1,50 @@
+{
+  "rule_id": "bdc64095-d59a-42a2-8588-71fd9c9d9abc",
+  "risk_score": 73,
+  "description": "Detects the load of dbghelp/dbgcore DLL (used to make memory dumps) by suspicious processes.\nTools like ProcessHacker and some attacker tradecract use MiniDumpWriteDump API found in dbghelp.dll or dbgcore.dll.\nAs an example, SilentTrynity C2 Framework has a module that leverages this API to dump the contents of Lsass.exe and transfer it over the network back to the attacker's machine.\n",
+  "name": "Suspicious Unsigned Dbghelp/Dbgcore DLL Loaded",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "(file.path:(*\\\\dbghelp.dll OR *\\\\dbgcore.dll)) AND file.code_signature.signed:false",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.credential-access",
+    "attack.t1003.001"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Perez Diego (@darkquassar), oscd.community, Ecco"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

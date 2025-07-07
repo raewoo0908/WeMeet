@@ -1,0 +1,50 @@
+{
+  "rule_id": "7d995e63-ec83-4aa3-89d5-8a17b5c87c86",
+  "risk_score": 47,
+  "description": "Detects enabling TurnOffCheck which can be used to bypass defense of MSDT Follina vulnerability",
+  "name": "Scripted Diagnostics Turn Off Check Enabled - Registry",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "winlog.event_data.Details:DWORD\\ \\(0x00000001\\) AND registry.path:*\\\\Policies\\\\Microsoft\\\\Windows\\\\ScriptedDiagnostics\\\\TurnOffCheck",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.defense-evasion",
+    "attack.t1562.001"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Christopher Peacock @securepeacock, SCYTHE @scythe_io"
+  ],
+  "false_positives": [
+    "Administrator actions"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

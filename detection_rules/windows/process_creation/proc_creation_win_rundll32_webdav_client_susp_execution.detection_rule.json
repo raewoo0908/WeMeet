@@ -1,0 +1,62 @@
+{
+  "rule_id": "982e9f2d-1a85-4d5b-aea4-31f5e97c6555",
+  "risk_score": 73,
+  "description": "Detects \"svchost.exe\" spawning \"rundll32.exe\" with command arguments like C:\\windows\\system32\\davclnt.dll,DavSetCookie. This could be an indicator of exfiltration or use of WebDav to launch code (hosted on WebDav Server) or potentially a sign of exploitation of CVE-2023-23397\n",
+  "name": "Suspicious WebDav Client Execution Via Rundll32.EXE",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "(process.command_line:*C\\:\\\\windows\\\\system32\\\\davclnt.dll,DavSetCookie* AND process.command_line:/:\\/\\/\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}/ AND process.executable:*\\\\rundll32.exe AND process.parent.command_line:*\\-s\\ WebClient* AND process.parent.executable:*\\\\svchost.exe) AND (NOT (process.command_line:(*\\:\\/\\/10.* OR *\\:\\/\\/192.168.* OR *\\:\\/\\/172.16.* OR *\\:\\/\\/172.17.* OR *\\:\\/\\/172.18.* OR *\\:\\/\\/172.19.* OR *\\:\\/\\/172.20.* OR *\\:\\/\\/172.21.* OR *\\:\\/\\/172.22.* OR *\\:\\/\\/172.23.* OR *\\:\\/\\/172.24.* OR *\\:\\/\\/172.25.* OR *\\:\\/\\/172.26.* OR *\\:\\/\\/172.27.* OR *\\:\\/\\/172.28.* OR *\\:\\/\\/172.29.* OR *\\:\\/\\/172.30.* OR *\\:\\/\\/172.31.* OR *\\:\\/\\/127.* OR *\\:\\/\\/169.254.*)))",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.exfiltration",
+    "attack.t1048.003",
+    "cve.2023-23397"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Nasreddine Bencherchali (Nextron Systems), Florian Roth (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

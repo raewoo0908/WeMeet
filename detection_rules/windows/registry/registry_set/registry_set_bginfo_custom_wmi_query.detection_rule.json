@@ -1,0 +1,50 @@
+{
+  "rule_id": "cd277474-5c52-4423-a52b-ac2d7969902f",
+  "risk_score": 47,
+  "description": "Detects setting of a new registry value related to BgInfo configuration, which can be abused to execute custom WMI query via \"BgInfo.exe\"",
+  "name": "New BgInfo.EXE Custom WMI Query Registry Configuration",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "winlog.event_data.Details:6* AND winlog.event_data.EventType:SetValue AND registry.path:*\\\\Software\\\\Winternals\\\\BGInfo\\\\UserFields\\\\*",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.defense-evasion",
+    "attack.t1112"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Nasreddine Bencherchali (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Legitimate WMI query"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

@@ -1,0 +1,51 @@
+{
+  "rule_id": "6331d09b-4785-4c13-980f-f96661356249",
+  "risk_score": 47,
+  "description": "Detects PowerShell downgrade attack by comparing the host versions with the actually used engine version 2.0",
+  "name": "PowerShell Downgrade Attack - PowerShell",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "Data:*EngineVersion\\=2.* AND (NOT Data:*HostVersion\\=2.*)",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.defense-evasion",
+    "attack.execution",
+    "attack.t1059.001"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Florian Roth (Nextron Systems), Lee Holmes (idea), Harish Segar (improvements)"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

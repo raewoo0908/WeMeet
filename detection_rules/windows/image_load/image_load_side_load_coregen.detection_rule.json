@@ -1,0 +1,51 @@
+{
+  "rule_id": "0fa66f66-e3f6-4a9c-93f8-4f2610b00171",
+  "risk_score": 47,
+  "description": "Detect usage of the \"coregen.exe\" (Microsoft CoreCLR Native Image Generator) binary to sideload arbitrary DLLs.",
+  "name": "Potential DLL Sideloading Using Coregen.exe",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "process.executable:*\\\\coregen.exe AND (NOT (file.path:(C\\:\\\\Program\\ Files\\ \\(x86\\)\\\\Microsoft\\ Silverlight\\\\* OR C\\:\\\\Program\\ Files\\\\Microsoft\\ Silverlight\\\\* OR C\\:\\\\Windows\\\\System32\\\\* OR C\\:\\\\Windows\\\\SysWOW64\\\\*)))",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.defense-evasion",
+    "attack.t1218",
+    "attack.t1055"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "frack113"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

@@ -1,0 +1,62 @@
+{
+  "rule_id": "d20ee2f4-822c-4827-9e15-41500b1fff10",
+  "risk_score": 47,
+  "description": "Detects potential Amazon SSM agent hijack attempts as outlined in the Mitiga research report.",
+  "name": "Potential Amazon SSM Agent Hijacking",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "(process.command_line:*\\-register\\ * AND process.command_line:*\\-code\\ * AND process.command_line:*\\-id\\ * AND process.command_line:*\\-region\\ *) AND process.executable:*\\\\amazon\\-ssm\\-agent.exe",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.command-and-control",
+    "attack.persistence",
+    "attack.t1219"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Muhammad Faisal"
+  ],
+  "false_positives": [
+    "Legitimate activity of system administrators"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

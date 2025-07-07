@@ -1,0 +1,61 @@
+{
+  "rule_id": "e593cf51-88db-4ee1-b920-37e89012a3c9",
+  "risk_score": 47,
+  "description": "Detects suspicious execution of rundll32, with specific calls to some DLLs with known LOLBIN functionalities",
+  "name": "Potentially Suspicious Rundll32 Activity",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "((process.command_line:*javascript\\:* AND process.command_line:*.RegisterXLL*) OR (process.command_line:*url.dll* AND process.command_line:*OpenURL*) OR (process.command_line:*url.dll* AND process.command_line:*OpenURLA*) OR (process.command_line:*url.dll* AND process.command_line:*FileProtocolHandler*) OR (process.command_line:*zipfldr.dll* AND process.command_line:*RouteTheCall*) OR (process.command_line:*shell32.dll* AND process.command_line:*Control_RunDLL*) OR (process.command_line:*shell32.dll* AND process.command_line:*ShellExec_RunDLL*) OR (process.command_line:*mshtml.dll* AND process.command_line:*PrintHTML*) OR (process.command_line:*advpack.dll* AND process.command_line:*LaunchINFSection*) OR (process.command_line:*advpack.dll* AND process.command_line:*RegisterOCX*) OR (process.command_line:*ieadvpack.dll* AND process.command_line:*LaunchINFSection*) OR (process.command_line:*ieadvpack.dll* AND process.command_line:*RegisterOCX*) OR (process.command_line:*ieframe.dll* AND process.command_line:*OpenURL*) OR (process.command_line:*shdocvw.dll* AND process.command_line:*OpenURL*) OR (process.command_line:*syssetup.dll* AND process.command_line:*SetupInfObjectInstallAction*) OR (process.command_line:*setupapi.dll* AND process.command_line:*InstallHinfSection*) OR (process.command_line:*pcwutl.dll* AND process.command_line:*LaunchApplication*) OR (process.command_line:*dfshim.dll* AND process.command_line:*ShOpenVerbApplication*) OR (process.command_line:*dfshim.dll* AND process.command_line:*ShOpenVerbShortcut*) OR (process.command_line:*scrobj.dll* AND process.command_line:*GenerateTypeLib* AND process.command_line:*http*) OR (process.command_line:*shimgvw.dll* AND process.command_line:*ImageView_Fullscreen* AND process.command_line:*http*) OR (process.command_line:*comsvcs.dll* AND process.command_line:*MiniDump*)) AND (NOT (((process.command_line:*Shell32.dll* AND process.command_line:*Control_RunDLL* AND process.command_line:*.cpl*) AND process.parent.command_line:*.cpl* AND process.parent.executable:C\\:\\\\Windows\\\\System32\\\\control.exe) OR process.command_line:*shell32.dll,Control_RunDLL\\ desk.cpl,screensaver,@screensaver* OR (process.command_line:*.cpl\\\", AND process.command_line:\\\"C\\:\\\\Windows\\\\system32\\\\rundll32.exe\\\"\\ Shell32.dll,Control_RunDLL\\ \\\"C\\:\\\\Windows\\\\System32\\\\* AND process.parent.executable:C\\:\\\\Windows\\\\System32\\\\control.exe)))",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.defense-evasion",
+    "attack.t1218.011"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "juju4, Jonhnathan Ribeiro, oscd.community, Nasreddine Bencherchali (Nextron Systems)"
+  ],
+  "false_positives": [
+    "False positives depend on scripts and administrative tools used in the monitored environment"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

@@ -1,0 +1,61 @@
+{
+  "rule_id": "584bca0f-3608-4402-80fd-4075ff6072e3",
+  "risk_score": 73,
+  "description": "Detects potential commandline obfuscation using unicode characters.\nAdversaries may attempt to make an executable or file difficult to discover or analyze by encrypting, encoding, or otherwise obfuscating its contents on the system or in transit.\n",
+  "name": "Potential CommandLine Obfuscation Using Unicode Characters From Suspicious Image",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "((process.executable:(*\\\\cmd.exe OR *\\\\cscript.exe OR *\\\\powershell.exe OR *\\\\pwsh.exe OR *\\\\wscript.exe)) AND (process.pe.original_file_name:(Cmd.EXE OR cscript.exe OR PowerShell.EXE OR pwsh.dll OR wscript.exe))) AND (process.command_line:(*ˣ* OR *˪* OR *ˢ* OR *∕* OR *⁄* OR *―* OR *—* OR * * OR *¯* OR *®* OR *¶*))",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.defense-evasion",
+    "attack.t1027"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "frack113, Florian Roth (Nextron Systems), Josh Nickels"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

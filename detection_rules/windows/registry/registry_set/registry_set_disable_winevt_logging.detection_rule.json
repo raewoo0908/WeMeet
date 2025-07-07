@@ -1,0 +1,50 @@
+{
+  "rule_id": "2f78da12-f7c7-430b-8b19-a28f269b77a3",
+  "risk_score": 73,
+  "description": "Detects tampering with the \"Enabled\" registry key in order to disable Windows logging of a Windows event channel",
+  "name": "Disable Windows Event Logging Via Registry",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "(winlog.event_data.Details:DWORD\\ \\(0x00000000\\) AND registry.path:*\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\WINEVT\\\\Channels\\\\* AND registry.path:*\\\\Enabled) AND (NOT ((process.executable:*\\\\TiWorker.exe AND process.executable:C\\:\\\\Windows\\\\winsxs\\\\*) OR (process.executable:C\\:\\\\Windows\\\\System32\\\\svchost.exe AND (registry.path:(*\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\WINEVT\\\\Channels\\\\Microsoft\\-Windows\\-FileInfoMinifilter* OR *\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\WINEVT\\\\Channels\\\\Microsoft\\-Windows\\-ASN1\\\\* OR *\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\WINEVT\\\\Channels\\\\Microsoft\\-Windows\\-Kernel\\-AppCompat\\\\* OR *\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\WINEVT\\\\Channels\\\\Microsoft\\-Windows\\-Runtime\\\\Error\\\\* OR *\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\WINEVT\\\\Channels\\\\Microsoft\\-Windows\\-CAPI2\\/Operational\\\\*))) OR (process.executable:C\\:\\\\Windows\\\\servicing\\\\TrustedInstaller.exe AND registry.path:*\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\WINEVT\\\\Channels\\\\Microsoft\\-Windows\\-Compat\\-Appraiser*) OR process.executable:C\\:\\\\Windows\\\\system32\\\\wevtutil.exe)) AND (NOT (process.executable:\"\" OR (NOT _exists_:process.executable)))",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.defense-evasion",
+    "attack.t1562.002"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "frack113, Nasreddine Bencherchali (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Rare falsepositives may occur from legitimate administrators disabling specific event log for troubleshooting"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

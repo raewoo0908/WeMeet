@@ -1,0 +1,61 @@
+{
+  "rule_id": "f24bcaea-0cd1-11eb-adc1-0242ac120002",
+  "risk_score": 47,
+  "description": "Detects the start of a non built-in assistive technology applications via \"Atbroker.EXE\".",
+  "name": "Uncommon  Assistive Technology Applications Execution Via AtBroker.EXE",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "(process.command_line:*start* AND (process.executable:*\\\\AtBroker.exe OR process.pe.original_file_name:AtBroker.exe)) AND (NOT (process.command_line:(*animations* OR *audiodescription* OR *caretbrowsing* OR *caretwidth* OR *colorfiltering* OR *cursorindicator* OR *cursorscheme* OR *filterkeys* OR *focusborderheight* OR *focusborderwidth* OR *highcontrast* OR *keyboardcues* OR *keyboardpref* OR *livecaptions* OR *magnifierpane* OR *messageduration* OR *minimumhitradius* OR *mousekeys* OR *Narrator* OR *osk* OR *overlappedcontent* OR *showsounds* OR *soundsentry* OR *speechreco* OR *stickykeys* OR *togglekeys* OR *voiceaccess* OR *windowarranging* OR *windowtracking* OR *windowtrackingtimeout* OR *windowtrackingzorder*))) AND (NOT process.command_line:*Oracle_JavaAccessBridge*)",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.defense-evasion",
+    "attack.t1218"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Mateusz Wydra, oscd.community"
+  ],
+  "false_positives": [
+    "Legitimate, non-default assistive technology applications execution"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

@@ -1,0 +1,62 @@
+{
+  "rule_id": "318557a5-150c-4c8d-b70e-a9910e199857",
+  "risk_score": 73,
+  "description": "Detects msdt.exe creating files in suspicious directories which could be a sign of exploitation of either Follina or Dogwalk vulnerabilities",
+  "name": "File Creation In Suspicious Directory By Msdt.EXE",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "process.executable:*\\\\msdt.exe AND (file.path:(*\\\\Desktop\\\\* OR *\\\\Start\\ Menu\\\\Programs\\\\Startup\\\\* OR *C\\:\\\\PerfLogs\\\\* OR *C\\:\\\\ProgramData\\\\* OR *C\\:\\\\Users\\\\Public\\\\*))",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "File Create (rule: FileCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.persistence",
+    "attack.t1547.001",
+    "cve.2022-30190"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Vadim Varganov, Florian Roth (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

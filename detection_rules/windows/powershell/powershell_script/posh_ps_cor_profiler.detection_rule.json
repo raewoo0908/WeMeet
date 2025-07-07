@@ -1,0 +1,50 @@
+{
+  "rule_id": "23590215-4702-4a70-8805-8dc9e58314a2",
+  "risk_score": 47,
+  "description": "Adversaries may leverage the COR_PROFILER environment variable to hijack the execution flow of programs that load the .NET CLR.\nThe COR_PROFILER is a .NET Framework feature which allows developers to specify an unmanaged (or external of .NET) profiling DLL to be loaded into each .NET process that loads the Common Language Runtime (CLR).\nThese profiliers are designed to monitor, troubleshoot, and debug managed code executed by the .NET CLR.\n(Citation: Microsoft Profiling Mar 2017)\n(Citation: Microsoft COR_PROFILER Feb 2013)\n",
+  "name": "Registry-Free Process Scope COR_PROFILER",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "powershell.file.script_block_text:*$env\\:COR_ENABLE_PROFILING* AND powershell.file.script_block_text:*$env\\:COR_PROFILER* AND powershell.file.script_block_text:*$env\\:COR_PROFILER_PATH*",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.persistence",
+    "attack.t1574.012"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "frack113"
+  ],
+  "false_positives": [
+    "Legitimate administrative script"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

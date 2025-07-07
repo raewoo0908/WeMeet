@@ -1,0 +1,61 @@
+{
+  "rule_id": "ded2b07a-d12f-4284-9b76-653e37b6c8b0",
+  "risk_score": 47,
+  "description": "Detects uncommon and potentially suspicious one-liner command containing both \"ping\" and \"copy\" at the same time, which is usually used by malware.\n",
+  "name": "Potentially Suspicious Ping/Copy Command Combination",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "(process.command_line:*ping* AND process.command_line:*copy\\ *) AND process.command_line:(*\\ \\-n\\ * OR *\\ \\/n\\ * OR *\\ –n\\ * OR *\\ —n\\ * OR *\\ ―n\\ *) AND process.command_line:(*\\ \\-y\\ * OR *\\ \\/y\\ * OR *\\ –y\\ * OR *\\ —y\\ * OR *\\ ―y\\ *) AND (process.executable:*\\\\cmd.exe OR process.pe.original_file_name:Cmd.Exe)",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.defense-evasion",
+    "attack.t1070.004"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "X__Junior (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

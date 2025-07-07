@@ -1,0 +1,63 @@
+{
+  "rule_id": "2433a154-bb3d-42e4-86c3-a26bdac91c45",
+  "risk_score": 73,
+  "description": "Detects the execution of a renamed \"PingCastle\" binary based on the PE metadata fields.",
+  "name": "Renamed PingCastle Binary Execution",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "((process.pe.original_file_name:(PingCastleReporting.exe OR PingCastleCloud.exe OR PingCastle.exe)) OR (process.command_line:(*\\-\\-scanner\\ aclcheck* OR *\\-\\-scanner\\ antivirus* OR *\\-\\-scanner\\ computerversion* OR *\\-\\-scanner\\ foreignusers* OR *\\-\\-scanner\\ laps_bitlocker* OR *\\-\\-scanner\\ localadmin* OR *\\-\\-scanner\\ nullsession* OR *\\-\\-scanner\\ nullsession\\-trust* OR *\\-\\-scanner\\ oxidbindings* OR *\\-\\-scanner\\ remote* OR *\\-\\-scanner\\ share* OR *\\-\\-scanner\\ smb* OR *\\-\\-scanner\\ smb3querynetwork* OR *\\-\\-scanner\\ spooler* OR *\\-\\-scanner\\ startup* OR *\\-\\-scanner\\ zerologon*)) OR process.command_line:*\\-\\-no\\-enum\\-limit* OR (process.command_line:*\\-\\-healthcheck* AND process.command_line:*\\-\\-level\\ Full*) OR (process.command_line:*\\-\\-healthcheck* AND process.command_line:*\\-\\-server\\ *)) AND (NOT (process.executable:(*\\\\PingCastleReporting.exe OR *\\\\PingCastleCloud.exe OR *\\\\PingCastle.exe)))",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.execution",
+    "attack.t1059",
+    "attack.defense-evasion",
+    "attack.t1202"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Nasreddine Bencherchali (Nextron Systems), X__Junior (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

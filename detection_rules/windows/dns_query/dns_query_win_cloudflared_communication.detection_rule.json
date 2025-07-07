@@ -1,0 +1,50 @@
+{
+  "rule_id": "a1d9eec5-33b2-4177-8d24-27fe754d0812",
+  "risk_score": 47,
+  "description": "Detects DNS requests to Cloudflared tunnels domains.\nAttackers can abuse that feature to establish a reverse shell or persistence on a machine.\n",
+  "name": "Cloudflared Tunnels Related DNS Requests",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "dns.question.name:(*.v2.argotunnel.com OR *protocol\\-v2.argotunnel.com OR *trycloudflare.com OR *update.argotunnel.com)",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.command-and-control",
+    "attack.t1071.001"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Nasreddine Bencherchali (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Legitimate use of cloudflare tunnels will also trigger this."
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

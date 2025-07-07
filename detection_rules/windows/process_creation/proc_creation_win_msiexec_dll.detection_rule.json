@@ -1,0 +1,61 @@
+{
+  "rule_id": "84f52741-8834-4a8c-a413-2eb2269aa6c8",
+  "risk_score": 47,
+  "description": "Detects MsiExec loading a DLL and calling its DllUnregisterServer function",
+  "name": "DllUnregisterServer Function Call Via Msiexec.EXE",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "process.command_line:*.dll* AND process.command_line:(*\\ \\-z\\ * OR *\\ \\/z\\ * OR *\\ –z\\ * OR *\\ —z\\ * OR *\\ ―z\\ *) AND (process.executable:*\\\\msiexec.exe OR process.pe.original_file_name:\\\\msiexec.exe)",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.defense-evasion",
+    "attack.t1218.007"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "frack113"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

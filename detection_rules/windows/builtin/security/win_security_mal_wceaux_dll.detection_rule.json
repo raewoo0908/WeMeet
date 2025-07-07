@@ -1,0 +1,51 @@
+{
+  "rule_id": "1de68c67-af5c-4097-9c85-fe5578e09e67",
+  "risk_score": 99,
+  "description": "Detects wceaux.dll access while WCE pass-the-hash remote command execution on source host",
+  "name": "WCE wceaux.dll Access",
+  "severity": "critical",
+  "type": "query",
+  "language": "lucene",
+  "query": "winlog.channel:Security AND ((event.code:(4656 OR 4663)) AND winlog.event_data.ObjectName:*\\\\wceaux.dll)",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.credential-access",
+    "attack.t1003",
+    "attack.s0005"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Thomas Patzke"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

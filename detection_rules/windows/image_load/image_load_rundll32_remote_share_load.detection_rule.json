@@ -1,0 +1,50 @@
+{
+  "rule_id": "f40017b3-cb2e-4335-ab5d-3babf679c1de",
+  "risk_score": 47,
+  "description": "Detects a remote DLL load event via \"rundll32.exe\".",
+  "name": "Remote DLL Load Via Rundll32.EXE",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "file.path:\\\\\\\\* AND process.executable:*\\\\rundll32.exe",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.execution",
+    "attack.t1204.002"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Nasreddine Bencherchali (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

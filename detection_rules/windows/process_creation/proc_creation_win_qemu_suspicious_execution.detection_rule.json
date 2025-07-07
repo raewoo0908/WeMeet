@@ -1,0 +1,62 @@
+{
+  "rule_id": "5fc297ae-25b6-488a-8f25-cc12ac29b744",
+  "risk_score": 47,
+  "description": "Detects potentially suspicious execution of the Qemu utility in a Windows environment.\nThreat actors have leveraged this utility and this technique for achieving network access as reported by Kaspersky.\n",
+  "name": "Potentially Suspicious Usage Of Qemu",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "((process.command_line:(*\\-m\\ 1M* OR *\\-m\\ 2M* OR *\\-m\\ 3M*)) AND (process.command_line:*restrict\\=off* AND process.command_line:*\\-netdev\\ * AND process.command_line:*connect\\=* AND process.command_line:*\\-nographic*)) AND (NOT (process.command_line:(*\\ \\-cdrom\\ * OR *\\ type\\=virt\\ * OR *\\ \\-blockdev\\ *)))",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.command-and-control",
+    "attack.t1090",
+    "attack.t1572"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Muhammad Faisal (@faisalusuf), Hunter Juhan (@threatHNTR)"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

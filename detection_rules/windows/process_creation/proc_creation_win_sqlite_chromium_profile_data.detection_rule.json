@@ -1,0 +1,64 @@
+{
+  "rule_id": "24c77512-782b-448a-8950-eddb0785fc71",
+  "risk_score": 73,
+  "description": "Detect usage of the \"sqlite\" binary to query databases in Chromium-based browsers for potential data stealing.",
+  "name": "SQLite Chromium Profile Data DB Access",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "(process.command_line:(*\\\\User\\ Data\\\\* OR *\\\\Opera\\ Software\\\\* OR *\\\\ChromiumViewer\\\\*)) AND (process.command_line:(*Login\\ Data* OR *Cookies* OR *Web\\ Data* OR *History* OR *Bookmarks*)) AND (process.pe.product:SQLite OR (process.executable:(*\\\\sqlite.exe OR *\\\\sqlite3.exe)))",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.credential-access",
+    "attack.t1539",
+    "attack.t1555.003",
+    "attack.collection",
+    "attack.t1005"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "TropChaud"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

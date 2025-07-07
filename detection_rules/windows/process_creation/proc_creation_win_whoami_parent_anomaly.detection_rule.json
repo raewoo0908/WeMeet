@@ -1,0 +1,64 @@
+{
+  "rule_id": "8de1cbe8-d6f5-496d-8237-5f44a721c7a0",
+  "risk_score": 47,
+  "description": "Detects the execution of whoami.exe with suspicious parent processes.",
+  "name": "Whoami.EXE Execution Anomaly",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "(process.executable:*\\\\whoami.exe OR process.pe.original_file_name:whoami.exe) AND (NOT ((process.parent.executable:(*\\\\cmd.exe OR *\\\\powershell_ise.exe OR *\\\\powershell.exe OR *\\\\pwsh.exe)) OR (process.parent.executable:(\"\" OR \\-)) OR (NOT _exists_:process.parent.executable))) AND (NOT process.parent.executable:*\\:\\\\Program\\ Files\\\\Microsoft\\ Monitoring\\ Agent\\\\Agent\\\\MonitoringHost.exe)",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.discovery",
+    "attack.t1033",
+    "car.2016-03-001"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Florian Roth (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Admin activity",
+    "Scripts and administrative tools used in the monitored environment",
+    "Monitoring activity"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

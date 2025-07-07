@@ -1,0 +1,61 @@
+{
+  "rule_id": "480e7e51-e797-47e3-8d72-ebfce65b6d8d",
+  "risk_score": 73,
+  "description": "Detects python spawning a pretty tty",
+  "name": "Python Spawning Pretty TTY on Windows",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "(process.executable:(*python.exe OR *python3.exe OR *python2.exe)) AND ((process.command_line:*import\\ pty* AND process.command_line:*.spawn\\(*) OR process.command_line:*from\\ pty\\ import\\ spawn*)",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.execution",
+    "attack.t1059"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Nextron Systems"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

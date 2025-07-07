@@ -1,0 +1,63 @@
+{
+  "rule_id": "cc4e02ba-9c06-48e2-b09e-2500cace9ae0",
+  "risk_score": 73,
+  "description": "The Tasks folder in system32 and syswow64 are globally writable paths.\nAdversaries can take advantage of this and load or influence any script hosts or ANY .NET Application\nin Tasks to load and execute a custom assembly into cscript, wscript, regsvr32, mshta, eventvwr\n",
+  "name": "Tasks Folder Evasion",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "(process.command_line:(*echo\\ * OR *copy\\ * OR *type\\ * OR *file\\ createnew*)) AND (process.command_line:(*\\ C\\:\\\\Windows\\\\System32\\\\Tasks\\\\* OR *\\ C\\:\\\\Windows\\\\SysWow64\\\\Tasks\\\\*))",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.defense-evasion",
+    "attack.persistence",
+    "attack.execution",
+    "attack.t1574.001"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Sreeman"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

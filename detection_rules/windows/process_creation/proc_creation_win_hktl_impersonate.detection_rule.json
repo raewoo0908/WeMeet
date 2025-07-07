@@ -1,0 +1,63 @@
+{
+  "rule_id": "cf0c254b-22f1-4b2b-8221-e137b3c0af94",
+  "risk_score": 47,
+  "description": "Detects execution of the Impersonate tool. Which can be used to manipulate tokens on a Windows computers remotely (PsExec/WmiExec) or interactively",
+  "name": "HackTool - Impersonate Execution",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "(process.command_line:*impersonate.exe* AND (process.command_line:(*\\ list\\ * OR *\\ exec\\ * OR *\\ adduser\\ *))) OR (winlog.event_data.Hashes:(*MD5\\=9520714AB576B0ED01D1513691377D01* OR *SHA256\\=E81CC96E2118DC4FBFE5BAD1604E0AC7681960143E2101E1A024D52264BB0A8A* OR *IMPHASH\\=0A358FFC1697B7A07D0E817AC740DF62*))",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.privilege-escalation",
+    "attack.defense-evasion",
+    "attack.t1134.001",
+    "attack.t1134.003"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Sai Prashanth Pulisetti @pulisettis"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

@@ -1,0 +1,49 @@
+{
+  "rule_id": "c7c8aa1c-5aff-408e-828b-998e3620b341",
+  "risk_score": 47,
+  "description": "Detects MSI package installation from suspicious locations",
+  "name": "MSI Installation From Suspicious Locations",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "winlog.channel:Application AND (((winlog.event_data.Data:(*\\:\\\\Windows\\\\TEMP\\\\* OR *\\\\\\\\* OR *\\\\Desktop\\\\* OR *\\\\PerfLogs\\\\* OR *\\\\Users\\\\Public\\\\*)) AND (event.code:(1040 OR 1042)) AND winlog.provider_name:MsiInstaller) AND (NOT (winlog.event_data.Data:(*C\\:\\\\Windows\\\\TEMP\\\\UpdHealthTools.msi* OR *\\\\AppData\\\\Local\\\\Temp\\\\WinGet\\\\*))))",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.execution"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Nasreddine Bencherchali (Nextron Systems)"
+  ],
+  "false_positives": [
+    "False positives may occur if you allow installation from folders such as the desktop, the public folder or remote shares. A baseline is required before production use."
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

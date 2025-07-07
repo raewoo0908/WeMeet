@@ -1,0 +1,52 @@
+{
+  "rule_id": "612e47e9-8a59-43a6-b404-f48683f45bd6",
+  "risk_score": 47,
+  "description": "Detects changes to the \"ServiceDLL\" value related to a service in the registry.\nThis is often used as a method of persistence.\n",
+  "name": "ServiceDll Hijack",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "((registry.path:*\\\\System\\\\* AND registry.path:*ControlSet* AND registry.path:*\\\\Services\\\\*) AND registry.path:*\\\\Parameters\\\\ServiceDll) AND (NOT ((winlog.event_data.Details:%%systemroot%%\\\\system32\\\\ntdsa.dll AND process.executable:C\\:\\\\Windows\\\\system32\\\\lsass.exe AND registry.path:*\\\\Services\\\\NTDS\\\\Parameters\\\\ServiceDll) OR process.executable:C\\:\\\\Windows\\\\System32\\\\poqexec.exe OR winlog.event_data.Details:C\\:\\\\Windows\\\\system32\\\\spool\\\\drivers\\\\x64\\\\3\\\\PrintConfig.dll)) AND (NOT (winlog.event_data.Details:C\\:\\\\Windows\\\\System32\\\\STAgent.dll AND process.executable:*\\\\regsvr32.exe))",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.persistence",
+    "attack.privilege-escalation",
+    "attack.t1543.003"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "frack113"
+  ],
+  "false_positives": [
+    "Administrative scripts",
+    "Installation of a service"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

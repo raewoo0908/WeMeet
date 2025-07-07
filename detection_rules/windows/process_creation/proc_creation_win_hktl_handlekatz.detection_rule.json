@@ -1,0 +1,61 @@
+{
+  "rule_id": "ca621ba5-54ab-4035-9942-d378e6fcde3c",
+  "risk_score": 73,
+  "description": "Detects the use of HandleKatz, a tool that demonstrates the usage of cloned handles to Lsass in order to create an obfuscated memory dump of the same",
+  "name": "HackTool - HandleKatz LSASS Dumper Execution",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "((process.command_line:(*.dmp* OR *lsass* OR *.obf* OR *dump*)) AND (process.command_line:*\\-\\-pid\\:* AND process.command_line:*\\-\\-outfile\\:*)) OR (process.command_line:*\\-\\-pid\\:* AND process.executable:*\\\\loader.exe) OR (winlog.event_data.Hashes:(*IMPHASH\\=38D9E015591BBFD4929E0D0F47FA0055* OR *IMPHASH\\=0E2216679CA6E1094D63322E3412D650*))",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.credential-access",
+    "attack.t1003.001"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Florian Roth (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

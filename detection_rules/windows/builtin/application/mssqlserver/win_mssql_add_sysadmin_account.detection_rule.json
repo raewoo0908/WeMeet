@@ -1,0 +1,49 @@
+{
+  "rule_id": "08200f85-2678-463e-9c32-88dce2f073d1",
+  "risk_score": 73,
+  "description": "Detects when an attacker tries to backdoor the MSSQL server by adding a backdoor account to the sysadmin fixed server role",
+  "name": "MSSQL Add Account To Sysadmin Role",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "winlog.channel:Application AND ((winlog.event_data.Data:*object_name\\:sysadmin* AND winlog.event_data.Data:*statement\\:alter\\ server\\ role\\ \\[sysadmin\\]\\ add\\ member\\ *) AND event.code:33205 AND winlog.provider_name:*MSSQL*)",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.persistence"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Nasreddine Bencherchali (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Rare legitimate administrative activity"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

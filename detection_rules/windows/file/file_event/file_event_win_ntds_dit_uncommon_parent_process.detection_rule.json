@@ -1,0 +1,61 @@
+{
+  "rule_id": "4e7050dd-e548-483f-b7d6-527ab4fa784d",
+  "risk_score": 73,
+  "description": "Detects creation of a file named \"ntds.dit\" (Active Directory Database) by an uncommon parent process or directory",
+  "name": "NTDS.DIT Creation By Uncommon Parent Process",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "file.path:*\\\\ntds.dit AND ((process.parent.executable:(*\\\\cscript.exe OR *\\\\httpd.exe OR *\\\\nginx.exe OR *\\\\php\\-cgi.exe OR *\\\\powershell.exe OR *\\\\pwsh.exe OR *\\\\w3wp.exe OR *\\\\wscript.exe)) OR (process.parent.executable:(*\\\\apache* OR *\\\\tomcat* OR *\\\\AppData\\\\* OR *\\\\Temp\\\\* OR *\\\\Public\\\\* OR *\\\\PerfLogs\\\\*)))",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "File Create (rule: FileCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.credential-access",
+    "attack.t1003.003"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Florian Roth (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

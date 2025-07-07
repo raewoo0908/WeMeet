@@ -1,0 +1,61 @@
+{
+  "rule_id": "f6d1dd2f-b8ce-40ca-bc23-062efb686b34",
+  "risk_score": 73,
+  "description": "Detects a suspicious child process of Script Event Consumer (scrcons.exe).",
+  "name": "Script Event Consumer Spawning Process",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "(process.executable:(*\\\\svchost.exe OR *\\\\dllhost.exe OR *\\\\powershell.exe OR *\\\\pwsh.exe OR *\\\\wscript.exe OR *\\\\cscript.exe OR *\\\\schtasks.exe OR *\\\\regsvr32.exe OR *\\\\mshta.exe OR *\\\\rundll32.exe OR *\\\\msiexec.exe OR *\\\\msbuild.exe)) AND process.parent.executable:*\\\\scrcons.exe",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.execution",
+    "attack.t1047"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Sittikorn S"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

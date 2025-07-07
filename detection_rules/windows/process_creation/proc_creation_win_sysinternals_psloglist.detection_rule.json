@@ -1,0 +1,64 @@
+{
+  "rule_id": "aae1243f-d8af-40d8-ab20-33fc6d0c55bc",
+  "risk_score": 47,
+  "description": "Detects usage of the PsLogList utility to dump event log in order to extract admin accounts and perform account discovery or delete events logs",
+  "name": "Suspicious Use of PsLogList",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "(process.command_line:(*\\ security* OR *\\ application* OR *\\ system*)) AND (process.command_line:(*\\ \\-d* OR *\\ \\/d* OR *\\ –d* OR *\\ —d* OR *\\ ―d*) OR process.command_line:(*\\ \\-x* OR *\\ \\/x* OR *\\ –x* OR *\\ —x* OR *\\ ―x*) OR process.command_line:(*\\ \\-s* OR *\\ \\/s* OR *\\ –s* OR *\\ —s* OR *\\ ―s*) OR process.command_line:(*\\ \\-c* OR *\\ \\/c* OR *\\ –c* OR *\\ —c* OR *\\ ―c*) OR process.command_line:(*\\ \\-g* OR *\\ \\/g* OR *\\ –g* OR *\\ —g* OR *\\ ―g*)) AND (process.pe.original_file_name:psloglist.exe OR (process.executable:(*\\\\psloglist.exe OR *\\\\psloglist64.exe)))",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.discovery",
+    "attack.t1087",
+    "attack.t1087.001",
+    "attack.t1087.002"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Nasreddine Bencherchali (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Another tool that uses the command line switches of PsLogList",
+    "Legitimate use of PsLogList by an administrator"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

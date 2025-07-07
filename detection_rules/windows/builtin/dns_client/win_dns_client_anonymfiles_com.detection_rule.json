@@ -1,0 +1,50 @@
+{
+  "rule_id": "29f171d7-aa47-42c7-9c7b-3c87938164d9",
+  "risk_score": 73,
+  "description": "Detects DNS queries for anonfiles.com, which is an anonymous file upload platform often used for malicious purposes",
+  "name": "DNS Query for Anonfiles.com Domain - DNS Client",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "winlog.channel:Microsoft\\-Windows\\-DNS\\ Client\\ Events\\/Operational AND (event.code:3008 AND dns.question.name:*.anonfiles.com*)",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.exfiltration",
+    "attack.t1567.002"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Nasreddine Bencherchali (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Rare legitimate access to anonfiles.com"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

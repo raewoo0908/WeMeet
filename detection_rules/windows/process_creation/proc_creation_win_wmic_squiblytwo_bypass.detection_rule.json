@@ -1,0 +1,65 @@
+{
+  "rule_id": "8d63dadf-b91b-4187-87b6-34a1114577ea",
+  "risk_score": 47,
+  "description": "Detects potential SquiblyTwo attack technique with possible renamed WMIC via Imphash and OriginalFileName fields",
+  "name": "Potential SquiblyTwo Technique Execution",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "(process.command_line:*format\\:* AND process.command_line:*http*) AND (process.executable:*\\\\wmic.exe OR process.pe.original_file_name:wmic.exe OR (winlog.event_data.Hashes:(*IMPHASH\\=1B1A3F43BF37B5BFE60751F2EE2F326E* OR *IMPHASH\\=37777A96245A3C74EB217308F3546F4C* OR *IMPHASH\\=9D87C9D67CE724033C0B40CC4CA1B206*)))",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.defense-evasion",
+    "attack.t1047",
+    "attack.t1220",
+    "attack.execution",
+    "attack.t1059.005",
+    "attack.t1059.007"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Markus Neis, Florian Roth"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

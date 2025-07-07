@@ -1,0 +1,61 @@
+{
+  "rule_id": "a7c3d773-caef-227e-a7e7-c2f13c622329",
+  "risk_score": 73,
+  "description": "Detects attackers using tooling with bad opsec defaults.\nE.g. spawning a sacrificial process to inject a capability into the process without taking into account how the process is normally run.\nOne trivial example of this is using rundll32.exe without arguments as a sacrificial process (default in CS, now highlighted by c2lint), running WerFault without arguments (Kraken - credit am0nsec), and other examples.\n",
+  "name": "Bad Opsec Defaults Sacrificial Processes With Improper Arguments",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "((process.command_line:*regasm.exe AND process.executable:*\\\\regasm.exe) OR (process.command_line:*regsvcs.exe AND process.executable:*\\\\regsvcs.exe) OR (process.command_line:*regsvr32.exe AND process.executable:*\\\\regsvr32.exe) OR (process.command_line:*rundll32.exe AND process.executable:*\\\\rundll32.exe) OR (process.command_line:*WerFault.exe AND process.executable:*\\\\WerFault.exe)) AND (NOT ((process.command_line:*rundll32.exe AND process.executable:*\\\\rundll32.exe AND process.parent.command_line:*\\-\\-uninstall\\ * AND (process.parent.executable:(*\\\\AppData\\\\Local\\\\BraveSoftware\\\\Brave\\-Browser\\\\Application\\\\* OR *\\\\AppData\\\\Local\\\\Google\\\\Chrome\\\\Application\\\\*)) AND process.parent.executable:*\\\\Installer\\\\setup.exe) OR (process.command_line:*rundll32.exe AND process.executable:*\\\\rundll32.exe AND process.parent.executable:*\\\\AppData\\\\Local\\\\Microsoft\\\\EdgeUpdate\\\\Install\\\\\\{*)))",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.defense-evasion",
+    "attack.t1218.011"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Oleg Kolesnikov @securonix invrep_de, oscd.community, Florian Roth (Nextron Systems), Christian Burkard (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Unlikely"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

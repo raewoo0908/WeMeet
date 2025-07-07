@@ -1,0 +1,50 @@
+{
+  "rule_id": "fbc5e92f-3044-4e73-a5c6-1c4359b539de",
+  "risk_score": 47,
+  "description": "Detects PowerShell scripts that have capabilities to read files, loop through them and resolve DNS host entries.",
+  "name": "PowerShell Script With File Hostname Resolving Capabilities",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "powershell.file.script_block_text:*Get\\-content\\ * AND powershell.file.script_block_text:*foreach* AND powershell.file.script_block_text:*\\[System.Net.Dns\\]\\:\\:GetHostEntry* AND powershell.file.script_block_text:*Out\\-File*",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.exfiltration",
+    "attack.t1020"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Nasreddine Bencherchali (Nextron Systems)"
+  ],
+  "false_positives": [
+    "The same functionality can be implemented by admin scripts, correlate with name and creator"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

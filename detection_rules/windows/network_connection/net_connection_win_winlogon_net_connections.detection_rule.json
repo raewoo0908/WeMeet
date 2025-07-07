@@ -1,0 +1,63 @@
+{
+  "rule_id": "7610a4ea-c06d-495f-a2ac-0a696abcfd3b",
+  "risk_score": 47,
+  "description": "Detects a \"winlogon.exe\" process that initiate network communications with public IP addresses",
+  "name": "Outbound Network Connection To Public IP Via Winlogon",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "(process.executable:*\\\\winlogon.exe AND network.direction:true) AND (NOT (destination.ip:127.0.0.0\\/8 OR destination.ip:10.0.0.0\\/8 OR destination.ip:172.16.0.0\\/12 OR destination.ip:192.168.0.0\\/16 OR destination.ip:169.254.0.0\\/16 OR destination.ip:\\:\\:1\\/128 OR destination.ip:fe80\\:\\:\\/10 OR destination.ip:fc00\\:\\:\\/7))",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Network connection detected (rule: NetworkConnect)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.defense-evasion",
+    "attack.execution",
+    "attack.command-and-control",
+    "attack.t1218.011"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Christopher Peacock @securepeacock, SCYTHE @scythe_io"
+  ],
+  "false_positives": [
+    "Communication to other corporate systems that use IP addresses from public address spaces"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

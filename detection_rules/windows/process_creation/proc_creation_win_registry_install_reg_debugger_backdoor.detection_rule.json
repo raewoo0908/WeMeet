@@ -1,0 +1,62 @@
+{
+  "rule_id": "ae215552-081e-44c7-805f-be16f975c8a2",
+  "risk_score": 73,
+  "description": "Detects the registration of a debugger for a program that is available in the logon screen (sticky key backdoor).",
+  "name": "Suspicious Debugger Registration Cmdline",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "process.command_line:*\\\\CurrentVersion\\\\Image\\ File\\ Execution\\ Options\\\\* AND (process.command_line:(*sethc.exe* OR *utilman.exe* OR *osk.exe* OR *magnify.exe* OR *narrator.exe* OR *displayswitch.exe* OR *atbroker.exe* OR *HelpPane.exe*))",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.persistence",
+    "attack.privilege-escalation",
+    "attack.t1546.008"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Florian Roth (Nextron Systems), oscd.community, Jonhnathan Ribeiro"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

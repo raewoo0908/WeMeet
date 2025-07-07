@@ -1,0 +1,49 @@
+{
+  "rule_id": "d6b5520d-3934-48b4-928c-2aa3f92d6963",
+  "risk_score": 73,
+  "description": "Detects important or interesting Windows services that got terminated for whatever reason",
+  "name": "Important Windows Service Terminated With Error",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "winlog.channel:System AND ((event.code:7023 AND winlog.provider_name:Service\\ Control\\ Manager) AND ((winlog.event_data.param1:(*\\ Antivirus* OR *\\ Firewall* OR *Application\\ Guard* OR *BitLocker\\ Drive\\ Encryption\\ Service* OR *Encrypting\\ File\\ System* OR *Microsoft\\ Defender* OR *Threat\\ Protection* OR *Windows\\ Event\\ Log*)) OR (winlog.event_data.Binary:(*770069006e0064006500660065006e006400* OR *4500760065006e0074004c006f006700* OR *6d0070007300730076006300* OR *530065006e0073006500* OR *450046005300* OR *420044004500530056004300*))))",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.defense-evasion"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Nasreddine Bencherchali (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Rare false positives could occur since service termination could happen due to multiple reasons"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

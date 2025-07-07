@@ -1,0 +1,52 @@
+{
+  "rule_id": "e54f5149-6ba3-49cf-b153-070d24679126",
+  "risk_score": 73,
+  "description": "Detects Obfuscated Powershell via VAR++ LAUNCHER",
+  "name": "Invoke-Obfuscation VAR++ LAUNCHER OBFUSCATION - PowerShell",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "powershell.file.script_block_text:/(?i)&&set.*(\\{\\d\\}){2,}\\\\\"\\s+?-f.*&&.*cmd.*\\/c/",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.defense-evasion",
+    "attack.t1027",
+    "attack.execution",
+    "attack.t1059.001"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Timur Zinniatullin, oscd.community"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

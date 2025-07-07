@@ -1,0 +1,50 @@
+{
+  "rule_id": "504d63cb-0dba-4d02-8531-e72981aace2c",
+  "risk_score": 47,
+  "description": "Detect use of X509Enrollment",
+  "name": "Suspicious X509Enrollment - Ps Script",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "powershell.file.script_block_text:(*X509Enrollment.CBinaryConverter* OR *884e2002\\-217d\\-11da\\-b2a4\\-000e7bbb2b09*)",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.defense-evasion",
+    "attack.t1553.004"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "frack113"
+  ],
+  "false_positives": [
+    "Legitimate administrative script"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

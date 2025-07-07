@@ -1,0 +1,64 @@
+{
+  "rule_id": "d059842b-6b9d-4ed1-b5c3-5b89143c6ede",
+  "risk_score": 47,
+  "description": "Detects usage of bitsadmin downloading a file",
+  "name": "File Download Via Bitsadmin",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "(process.executable:*\\\\bitsadmin.exe OR process.pe.original_file_name:bitsadmin.exe) AND (process.command_line:*\\ \\/transfer\\ * OR ((process.command_line:(*\\ \\/create\\ * OR *\\ \\/addfile\\ *)) AND process.command_line:*http*))",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.defense-evasion",
+    "attack.persistence",
+    "attack.t1197",
+    "attack.s0190",
+    "attack.t1036.003"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Michael Haag, FPT.EagleEye"
+  ],
+  "false_positives": [
+    "Some legitimate apps use this, but limited."
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

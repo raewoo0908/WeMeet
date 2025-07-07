@@ -1,0 +1,61 @@
+{
+  "rule_id": "c048f047-7e2a-4888-b302-55f509d4a91d",
+  "risk_score": 47,
+  "description": "Detects the creation of screensaver files (.scr) outside of system folders. Attackers may execute an application as an \".SCR\" file using \"rundll32.exe desk.cpl,InstallScreenSaver\" for example.",
+  "name": "SCR File Write Event",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "file.path:*.scr AND (NOT (file.path:(*\\:\\\\$WINDOWS.\\~BT\\\\NewOS\\\\* OR *\\:\\\\Windows\\\\System32\\\\* OR *\\:\\\\Windows\\\\SysWOW64\\\\* OR *\\:\\\\Windows\\\\WinSxS\\\\* OR *\\:\\\\WUDownloadCache\\\\*)))",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "File Create (rule: FileCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.defense-evasion",
+    "attack.t1218.011"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Christopher Peacock @securepeacock, SCYTHE @scythe_io"
+  ],
+  "false_positives": [
+    "The installation of new screen savers by third party software"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

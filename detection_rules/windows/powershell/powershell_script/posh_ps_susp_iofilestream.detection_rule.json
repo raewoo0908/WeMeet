@@ -1,0 +1,50 @@
+{
+  "rule_id": "70ad982f-67c8-40e0-a955-b920c2fa05cb",
+  "risk_score": 47,
+  "description": "Open a handle on the drive volume via the \\\\.\\ DOS device path specifier and perform direct access read of the first few bytes of the volume.",
+  "name": "Suspicious IO.FileStream",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "powershell.file.script_block_text:*New\\-Object* AND powershell.file.script_block_text:*IO.FileStream* AND powershell.file.script_block_text:*\\\\\\\\.\\\\*",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.defense-evasion",
+    "attack.t1070.003"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "frack113"
+  ],
+  "false_positives": [
+    "Legitimate PowerShell scripts"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

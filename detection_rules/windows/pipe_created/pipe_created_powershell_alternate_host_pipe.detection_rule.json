@@ -1,0 +1,50 @@
+{
+  "rule_id": "58cb02d5-78ce-4692-b3e1-dce850aae41a",
+  "risk_score": 47,
+  "description": "Detects alternate PowerShell hosts potentially bypassing detections looking for powershell.exe",
+  "name": "Alternate PowerShell Hosts Pipe",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "file.name:\\\\PSHost* AND (NOT ((process.executable:(*\\:\\\\Program\\ Files\\\\PowerShell\\\\7\\-preview\\\\pwsh.exe* OR *\\:\\\\Program\\ Files\\\\PowerShell\\\\7\\\\pwsh.exe* OR *\\:\\\\Windows\\\\system32\\\\dsac.exe* OR *\\:\\\\Windows\\\\system32\\\\inetsrv\\\\w3wp.exe* OR *\\:\\\\Windows\\\\System32\\\\sdiagnhost.exe* OR *\\:\\\\Windows\\\\system32\\\\ServerManager.exe* OR *\\:\\\\Windows\\\\system32\\\\wbem\\\\wmiprvse.exe* OR *\\:\\\\Windows\\\\System32\\\\WindowsPowerShell\\\\v1.0\\\\powershell_ise.exe* OR *\\:\\\\Windows\\\\System32\\\\WindowsPowerShell\\\\v1.0\\\\powershell.exe* OR *\\:\\\\Windows\\\\System32\\\\wsmprovhost.exe* OR *\\:\\\\Windows\\\\SysWOW64\\\\WindowsPowerShell\\\\v1.0\\\\powershell_ise.exe* OR *\\:\\\\Windows\\\\SysWOW64\\\\WindowsPowerShell\\\\v1.0\\\\powershell.exe*)) OR (NOT _exists_:process.executable))) AND (NOT ((process.executable:*\\\\GC\\\\gc_worker.exe AND process.executable:C\\:\\\\Program\\ Files\\\\AzureConnectedMachineAgent\\\\GCArcService*) OR process.executable:C\\:\\\\Program\\ Files\\\\Citrix\\\\* OR process.executable:C\\:\\\\Program\\ Files\\\\Microsoft\\\\Exchange\\ Server\\\\* OR (process.executable:*\\\\Microsoft\\ SQL\\ Server\\\\* AND process.executable:*\\\\Tools\\\\Binn\\\\SQLPS.exe AND (process.executable:(C\\:\\\\Program\\ Files\\ \\(x86\\)\\\\* OR C\\:\\\\Program\\ Files\\\\*)))))",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.execution",
+    "attack.t1059.001"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Roberto Rodriguez @Cyb3rWard0g, Tim Shelton"
+  ],
+  "false_positives": [
+    "Programs using PowerShell directly without invocation of a dedicated interpreter."
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

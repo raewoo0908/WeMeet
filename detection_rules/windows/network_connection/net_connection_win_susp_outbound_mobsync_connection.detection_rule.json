@@ -1,0 +1,63 @@
+{
+  "rule_id": "9f2cc74d-78af-4eb2-bb64-9cd1d292b87b",
+  "risk_score": 47,
+  "description": "Detects suspicious connections from Microsoft Sync Center to non-private IPs.",
+  "name": "Microsoft Sync Center Suspicious Network Connections",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "process.executable:*\\\\mobsync.exe AND (NOT (destination.ip:127.0.0.0\\/8 OR destination.ip:10.0.0.0\\/8 OR destination.ip:172.16.0.0\\/12 OR destination.ip:192.168.0.0\\/16 OR destination.ip:169.254.0.0\\/16 OR destination.ip:\\:\\:1\\/128 OR destination.ip:fe80\\:\\:\\/10 OR destination.ip:fc00\\:\\:\\/7))",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Network connection detected (rule: NetworkConnect)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.t1055",
+    "attack.t1218",
+    "attack.execution",
+    "attack.defense-evasion"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "elhoim"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

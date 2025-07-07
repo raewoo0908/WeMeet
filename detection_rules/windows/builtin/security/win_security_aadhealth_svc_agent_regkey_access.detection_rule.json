@@ -1,0 +1,50 @@
+{
+  "rule_id": "1d2ab8ac-1a01-423b-9c39-001510eae8e8",
+  "risk_score": 47,
+  "description": "This detection uses Windows security events to detect suspicious access attempts to the registry key values and sub-keys of Azure AD Health service agents (e.g AD FS).\nInformation from AD Health service agents can be used to potentially abuse some of the features provided by those services in the cloud (e.g. Federation).\nThis detection requires an access control entry (ACE) on the system access control list (SACL) of the following securable object: HKLM:\\SOFTWARE\\Microsoft\\ADHealthAgent.\nMake sure you set the SACL to propagate to its sub-keys.\n",
+  "name": "Azure AD Health Service Agents Registry Keys Access",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "winlog.channel:Security AND (((event.code:(4656 OR 4663)) AND winlog.event_data.ObjectName:\\\\REGISTRY\\\\MACHINE\\\\SOFTWARE\\\\Microsoft\\\\ADHealthAgent AND winlog.event_data.ObjectType:Key) AND (NOT (process.executable:(*Microsoft.Identity.Health.Adfs.DiagnosticsAgent.exe* OR *Microsoft.Identity.Health.Adfs.InsightsService.exe* OR *Microsoft.Identity.Health.Adfs.MonitoringAgent.Startup.exe* OR *Microsoft.Identity.Health.Adfs.PshSurrogate.exe* OR *Microsoft.Identity.Health.Common.Clients.ResourceMonitor.exe*))))",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.discovery",
+    "attack.t1012"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Roberto Rodriguez (Cyb3rWard0g), OTR (Open Threat Research), MSTIC"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

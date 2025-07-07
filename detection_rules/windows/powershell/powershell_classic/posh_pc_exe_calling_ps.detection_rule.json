@@ -1,0 +1,51 @@
+{
+  "rule_id": "c70e019b-1479-4b65-b0cc-cd0c6093a599",
+  "risk_score": 73,
+  "description": "Detects PowerShell called from an executable by the version mismatch method",
+  "name": "PowerShell Called from an Executable Version Mismatch",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "(Data:(*EngineVersion\\=2.* OR *EngineVersion\\=4.* OR *EngineVersion\\=5.*)) AND Data:*HostVersion\\=3.*",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.defense-evasion",
+    "attack.execution",
+    "attack.t1059.001"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Sean Metcalf (source), Florian Roth (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

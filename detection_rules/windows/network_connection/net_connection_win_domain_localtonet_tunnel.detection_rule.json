@@ -1,0 +1,63 @@
+{
+  "rule_id": "3ab65069-d82a-4d44-a759-466661a082d1",
+  "risk_score": 73,
+  "description": "Detects an executable initiating a network connection to \"LocaltoNet\" tunneling sub-domains.\nLocaltoNet is a reverse proxy that enables localhost services to be exposed to the Internet.\nAttackers have been seen to use this service for command-and-control activities to bypass MFA and perimeter controls.\n",
+  "name": "Communication To LocaltoNet Tunneling Service Initiated",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "(destination.domain:(*.localto.net OR *.localtonet.com)) AND network.direction:true",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Network connection detected (rule: NetworkConnect)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.command-and-control",
+    "attack.t1572",
+    "attack.t1090",
+    "attack.t1102"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Andreas Braathen (mnemonic.io)"
+  ],
+  "false_positives": [
+    "Legitimate use of the LocaltoNet service."
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

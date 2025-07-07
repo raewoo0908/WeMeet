@@ -1,0 +1,62 @@
+{
+  "rule_id": "c8da0dfd-4ed0-4b68-962d-13c9c884384e",
+  "risk_score": 99,
+  "description": "Detects a suspicious LSASS process process clone that could be a sign of credential dumping activity",
+  "name": "Potential Credential Dumping Via LSASS Process Clone",
+  "severity": "critical",
+  "type": "query",
+  "language": "lucene",
+  "query": "process.executable:*\\\\Windows\\\\System32\\\\lsass.exe AND process.parent.executable:*\\\\Windows\\\\System32\\\\lsass.exe",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.credential-access",
+    "attack.t1003",
+    "attack.t1003.001"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Florian Roth (Nextron Systems), Samir Bousseaden"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

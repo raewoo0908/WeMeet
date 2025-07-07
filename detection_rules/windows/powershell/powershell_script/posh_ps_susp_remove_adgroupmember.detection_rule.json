@@ -1,0 +1,50 @@
+{
+  "rule_id": "48a45d45-8112-416b-8a67-46e03a4b2107",
+  "risk_score": 47,
+  "description": "Adversaries may interrupt availability of system and network resources by inhibiting access to accounts utilized by legitimate users.\nAccounts may be deleted, locked, or manipulated (ex: changed credentials) to remove access to accounts.\n",
+  "name": "Remove Account From Domain Admin Group",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "powershell.file.script_block_text:*Remove\\-ADGroupMember* AND powershell.file.script_block_text:*\\-Identity\\ * AND powershell.file.script_block_text:*\\-Members\\ *",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.impact",
+    "attack.t1531"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "frack113"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

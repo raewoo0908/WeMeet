@@ -1,0 +1,49 @@
+{
+  "rule_id": "83c161b6-ca67-4f33-8ad0-644a0737cf07",
+  "risk_score": 47,
+  "description": "Detects suspicious application installed by looking at the added shortcut to the app resolver cache",
+  "name": "Suspicious Application Installed",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "winlog.channel:Microsoft\\-Windows\\-Shell\\-Core\\/Operational AND ((event.code:28115 AND (winlog.event_data.Name:(*Zenmap* OR *AnyDesk* OR *wireshark* OR *openvpn*))) OR ((winlog.event_data.AppID:(*zenmap.exe* OR *prokzult\\ ad* OR *wireshark* OR *openvpn*)) AND event.code:28115))",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.execution"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Nasreddine Bencherchali (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Packages or applications being legitimately used by users or administrators"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

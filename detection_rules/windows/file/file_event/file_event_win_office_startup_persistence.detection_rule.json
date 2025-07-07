@@ -1,0 +1,62 @@
+{
+  "rule_id": "0e20c89d-2264-44ae-8238-aeeaba609ece",
+  "risk_score": 73,
+  "description": "Detects creation of Microsoft Office files inside of one of the default startup folders in order to achieve persistence.",
+  "name": "Potential Persistence Via Microsoft Office Startup Folder",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "(((file.path:(*.doc OR *.docm OR *.docx OR *.dot OR *.dotm OR *.rtf)) AND (file.path:*\\\\Microsoft\\\\Word\\\\STARTUP* OR (file.path:*\\\\Office* AND file.path:*\\\\Program\\ Files* AND file.path:*\\\\STARTUP*))) OR ((file.path:(*.xls OR *.xlsm OR *.xlsx OR *.xlt OR *.xltm)) AND (file.path:*\\\\Microsoft\\\\Excel\\\\XLSTART* OR (file.path:*\\\\Office* AND file.path:*\\\\Program\\ Files* AND file.path:*\\\\XLSTART*)))) AND (NOT (process.executable:(*\\\\WINWORD.exe OR *\\\\EXCEL.exe)))",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "File Create (rule: FileCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.persistence",
+    "attack.t1137"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Max Altgelt (Nextron Systems), Nasreddine Bencherchali (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Loading a user environment from a backup or a domain controller",
+    "Synchronization of templates"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

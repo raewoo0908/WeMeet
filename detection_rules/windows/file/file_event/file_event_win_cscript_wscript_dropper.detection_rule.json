@@ -1,0 +1,62 @@
+{
+  "rule_id": "002bdb95-0cf1-46a6-9e08-d38c128a6127",
+  "risk_score": 73,
+  "description": "Detects a file ending in jse, vbe, js, vba, vbs written by cscript.exe or wscript.exe",
+  "name": "WScript or CScript Dropper - File",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "(process.executable:(*\\\\wscript.exe OR *\\\\cscript.exe)) AND (file.path:(*.jse OR *.vbe OR *.js OR *.vba OR *.vbs)) AND (file.path:(C\\:\\\\Users\\\\* OR C\\:\\\\ProgramData*))",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "File Create (rule: FileCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.execution",
+    "attack.t1059.005",
+    "attack.t1059.007"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Tim Shelton"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

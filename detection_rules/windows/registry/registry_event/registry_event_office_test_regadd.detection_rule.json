@@ -1,0 +1,50 @@
+{
+  "rule_id": "3d27f6dd-1c74-4687-b4fa-ca849d128d1c",
+  "risk_score": 47,
+  "description": "Detects the addition of office test registry that allows a user to specify an arbitrary DLL that will be executed every time an Office application is started",
+  "name": "Office Application Startup - Office Test",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "registry.path:*\\\\Software\\\\Microsoft\\\\Office\\ test\\\\Special\\\\Perf*",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.persistence",
+    "attack.t1137.002"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "omkar72"
+  ],
+  "false_positives": [
+    "Unlikely"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

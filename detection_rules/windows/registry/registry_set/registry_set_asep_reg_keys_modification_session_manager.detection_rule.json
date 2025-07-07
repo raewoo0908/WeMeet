@@ -1,0 +1,52 @@
+{
+  "rule_id": "046218bd-e0d8-4113-a3c3-895a12b2b298",
+  "risk_score": 47,
+  "description": "Detects modification of autostart extensibility point (ASEP) in registry.",
+  "name": "Session Manager Autorun Keys Modification",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "registry.path:*\\\\System\\\\CurrentControlSet\\\\Control\\\\Session\\ Manager* AND (registry.path:(*\\\\SetupExecute* OR *\\\\S0InitialCommand* OR *\\\\KnownDlls* OR *\\\\Execute* OR *\\\\BootExecute* OR *\\\\AppCertDlls*)) AND (NOT winlog.event_data.Details:\\(Empty\\))",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.persistence",
+    "attack.t1547.001",
+    "attack.t1546.009"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Victor Sergeev, Daniil Yugoslavskiy, Gleb Sukhodolskiy, Timur Zinniatullin, oscd.community, Tim Shelton, frack113 (split)"
+  ],
+  "false_positives": [
+    "Legitimate software automatically (mostly, during installation) sets up autorun keys for legitimate reason",
+    "Legitimate administrator sets up autorun keys for legitimate reason"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

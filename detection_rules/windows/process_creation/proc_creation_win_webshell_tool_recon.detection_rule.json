@@ -1,0 +1,61 @@
+{
+  "rule_id": "f64e5c19-879c-4bae-b471-6d84c8339677",
+  "risk_score": 73,
+  "description": "Detects processes spawned from web servers (PHP, Tomcat, IIS, etc.) that perform reconnaissance looking for the existence of popular scripting tools (perl, python, wget) on the system via the help commands\n",
+  "name": "Webshell Tool Reconnaissance Activity",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "(((process.parent.executable:(*\\-tomcat\\-* OR *\\\\tomcat*)) AND (process.parent.executable:(*\\\\java.exe OR *\\\\javaw.exe))) OR ((process.command_line:(*CATALINA_HOME* OR *catalina.jar*)) AND (process.parent.executable:(*\\\\java.exe OR *\\\\javaw.exe))) OR (process.parent.executable:(*\\\\caddy.exe OR *\\\\httpd.exe OR *\\\\nginx.exe OR *\\\\php\\-cgi.exe OR *\\\\w3wp.exe OR *\\\\ws_tomcatservice.exe))) AND (process.command_line:(*perl\\ \\-\\-help* OR *perl\\ \\-h* OR *python\\ \\-\\-help* OR *python\\ \\-h* OR *python3\\ \\-\\-help* OR *python3\\ \\-h* OR *wget\\ \\-\\-help*))",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.persistence",
+    "attack.t1505.003"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Cian Heasley, Florian Roth (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

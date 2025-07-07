@@ -1,0 +1,61 @@
+{
+  "rule_id": "a7ee1722-c3c5-aeff-3212-c777e4733217",
+  "risk_score": 73,
+  "description": "Detects attackers attempting to disable Windows Defender using Powershell",
+  "name": "Disable Windows Defender AV Security Monitoring",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "(((process.executable:(*\\\\powershell.exe OR *\\\\pwsh.exe)) OR (process.pe.original_file_name:(PowerShell.EXE OR pwsh.dll))) AND (process.command_line:(*\\-DisableBehaviorMonitoring\\ $true* OR *\\-DisableRuntimeMonitoring\\ $true*))) OR ((process.executable:*\\\\sc.exe OR process.pe.original_file_name:sc.exe) AND ((process.command_line:*delete* AND process.command_line:*WinDefend*) OR (process.command_line:*config* AND process.command_line:*WinDefend* AND process.command_line:*start\\=disabled*) OR (process.command_line:*stop* AND process.command_line:*WinDefend*)))",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.defense-evasion",
+    "attack.t1562.001"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "ok @securonix invrep-de, oscd.community, frack113"
+  ],
+  "false_positives": [
+    "Minimal, for some older versions of dev tools, such as pycharm, developers were known to sometimes disable Windows Defender to improve performance, but this generally is not considered a good security practice."
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

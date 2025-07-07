@@ -1,0 +1,61 @@
+{
+  "rule_id": "25eabf56-22f0-4915-a1ed-056b8dae0a68",
+  "risk_score": 73,
+  "description": "Detects an executable that isn't dropbox but communicates with the Dropbox API",
+  "name": "Suspicious Dropbox API Usage",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "((destination.domain:(*api.dropboxapi.com OR *content.dropboxapi.com)) AND network.direction:true) AND (NOT process.executable:*\\\\Dropbox*)",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Network connection detected (rule: NetworkConnect)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.command-and-control",
+    "attack.t1105"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Florian Roth (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Legitimate use of the API with a tool that the author wasn't aware of"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

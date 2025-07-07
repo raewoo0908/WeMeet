@@ -1,0 +1,62 @@
+{
+  "rule_id": "bef37fa2-f205-4a7b-b484-0759bfd5f86f",
+  "risk_score": 47,
+  "description": "Detects the use of Advanced IP Scanner. Seems to be a popular tool for ransomware groups.",
+  "name": "PUA - Advanced IP Scanner Execution",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "(process.command_line:*\\/portable* AND process.command_line:*\\/lng*) OR (process.executable:*\\\\advanced_ip_scanner* OR process.pe.original_file_name:*advanced_ip_scanner* OR process.pe.description:*Advanced\\ IP\\ Scanner*)",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.discovery",
+    "attack.t1046",
+    "attack.t1135"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Nasreddine Bencherchali (Nextron Systems), @ROxPinTeddy"
+  ],
+  "false_positives": [
+    "Legitimate administrative use"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

@@ -1,0 +1,51 @@
+{
+  "rule_id": "90f138c1-f578-4ac3-8c49-eecfd847c8b7",
+  "risk_score": 73,
+  "description": "Detects a BITS transfer job downloading file(s) from a direct IP address.",
+  "name": "BITS Transfer Job Download From Direct IP",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "winlog.channel:Microsoft\\-Windows\\-Bits\\-Client\\/Operational AND ((event.code:16403 AND (winlog.event_data.RemoteName:(*http\\:\\/\\/1* OR *http\\:\\/\\/2* OR *http\\:\\/\\/3* OR *http\\:\\/\\/4* OR *http\\:\\/\\/5* OR *http\\:\\/\\/6* OR *http\\:\\/\\/7* OR *http\\:\\/\\/8* OR *http\\:\\/\\/9* OR *https\\:\\/\\/1* OR *https\\:\\/\\/2* OR *https\\:\\/\\/3* OR *https\\:\\/\\/4* OR *https\\:\\/\\/5* OR *https\\:\\/\\/6* OR *https\\:\\/\\/7* OR *https\\:\\/\\/8* OR *https\\:\\/\\/9*))) AND (NOT ((winlog.event_data.RemoteName:(*\\:\\/\\/10.* OR *\\:\\/\\/192.168.* OR *\\:\\/\\/172.16.* OR *\\:\\/\\/172.17.* OR *\\:\\/\\/172.18.* OR *\\:\\/\\/172.19.* OR *\\:\\/\\/172.20.* OR *\\:\\/\\/172.21.* OR *\\:\\/\\/172.22.* OR *\\:\\/\\/172.23.* OR *\\:\\/\\/172.24.* OR *\\:\\/\\/172.25.* OR *\\:\\/\\/172.26.* OR *\\:\\/\\/172.27.* OR *\\:\\/\\/172.28.* OR *\\:\\/\\/172.29.* OR *\\:\\/\\/172.30.* OR *\\:\\/\\/172.31.* OR *\\:\\/\\/127.* OR *\\:\\/\\/169.254.*)) OR (winlog.event_data.RemoteName:(*https\\:\\/\\/7\\-* OR *http\\:\\/\\/7\\-*)))))",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.defense-evasion",
+    "attack.persistence",
+    "attack.t1197"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Nasreddine Bencherchali (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

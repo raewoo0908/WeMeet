@@ -1,0 +1,50 @@
+{
+  "rule_id": "e2482f8d-3443-4237-b906-cc145d87a076",
+  "risk_score": 47,
+  "description": "Detects registry modifications that change features of internal Windows tools (malware like Agent Tesla uses this technique)",
+  "name": "Disable Internal Tools or Feature in Registry",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "(winlog.event_data.Details:DWORD\\ \\(0x00000000\\) AND (registry.path:(*SOFTWARE\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Policies\\\\System\\\\ConsentPromptBehaviorAdmin OR *SOFTWARE\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Policies\\\\System\\\\shutdownwithoutlogon OR *SOFTWARE\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\PushNotifications\\\\ToastEnabled OR *SYSTEM\\\\CurrentControlSet\\\\Control\\\\Storage\\\\Write\\ Protection OR *SYSTEM\\\\CurrentControlSet\\\\Control\\\\StorageDevicePolicies\\\\WriteProtect))) OR (winlog.event_data.Details:DWORD\\ \\(0x00000001\\) AND (registry.path:(*SOFTWARE\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Policies\\\\Explorer\\\\StartMenuLogOff OR *SOFTWARE\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Policies\\\\System\\\\DisableChangePassword OR *SOFTWARE\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Policies\\\\System\\\\DisableLockWorkstation OR *SOFTWARE\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Policies\\\\System\\\\DisableRegistryTools OR *SOFTWARE\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Policies\\\\System\\\\DisableTaskmgr OR *SOFTWARE\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Policies\\\\System\\\\NoDispBackgroundPage OR *SOFTWARE\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Policies\\\\System\\\\NoDispCPL OR *SOFTWARE\\\\Policies\\\\Microsoft\\\\Windows\\\\Explorer\\\\DisableNotificationCenter OR *SOFTWARE\\\\Policies\\\\Microsoft\\\\Windows\\\\System\\\\DisableCMD)))",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.defense-evasion",
+    "attack.t1112"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "frack113, Nasreddine Bencherchali (Nextron Systems), CrimpSec"
+  ],
+  "false_positives": [
+    "Legitimate admin script"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

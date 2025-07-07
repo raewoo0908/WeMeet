@@ -1,0 +1,61 @@
+{
+  "rule_id": "c3a99af4-35a9-4668-879e-c09aeb4f2bdf",
+  "risk_score": 47,
+  "description": "Detects the execution of rundll32 with a command line that doesn't contain a common extension",
+  "name": "Rundll32 Execution With Uncommon DLL Extension",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "(process.executable:*\\\\rundll32.exe OR process.pe.original_file_name:RUNDLL32.EXE) AND (NOT (process.command_line:\"\" OR ((process.command_line:(*.cpl\\ * OR *.cpl,* OR *.cpl\\\"* OR *.cpl'* OR *.dll\\ * OR *.dll,* OR *.dll\\\"* OR *.dll'* OR *.inf\\ * OR *.inf,* OR *.inf\\\"* OR *.inf'*)) OR (process.command_line:(*.cpl OR *.dll OR *.inf))) OR process.command_line:*\\ \\-localserver\\ * OR (NOT _exists_:process.command_line) OR ((process.command_line:*\\:\\\\Windows\\\\Installer\\\\* AND process.command_line:*.tmp* AND process.command_line:*zzzzInvokeManagedCustomActionOutOfProc*) AND process.parent.executable:*\\\\msiexec.exe))) AND (NOT (process.parent.command_line:*\\:\\\\Users\\\\* AND process.parent.command_line:*\\\\AppData\\\\Local\\\\Microsoft\\\\EdgeUpdate\\\\Install\\\\\\{* AND process.parent.command_line:*\\\\EDGEMITMP_* AND process.parent.command_line:*.tmp\\\\setup.exe* AND process.parent.command_line:*\\-\\-install\\-archive\\=* AND process.parent.command_line:*\\-\\-previous\\-version\\=* AND process.parent.command_line:*\\-\\-msedgewebview\\ \\-\\-verbose\\-logging\\ \\-\\-do\\-not\\-launch\\-msedge\\ \\-\\-user\\-level*))",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.defense-evasion",
+    "attack.t1218.011"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Tim Shelton, Florian Roth (Nextron Systems), Yassine Oukessou"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

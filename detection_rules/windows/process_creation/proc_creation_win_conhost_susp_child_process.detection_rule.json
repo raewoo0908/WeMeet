@@ -1,0 +1,61 @@
+{
+  "rule_id": "7dc2dedd-7603-461a-bc13-15803d132355",
+  "risk_score": 47,
+  "description": "Detects uncommon \"conhost\" child processes. This could be a sign of \"conhost\" usage as a LOLBIN or potential process injection activity.",
+  "name": "Uncommon Child Process Of Conhost.EXE",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "process.parent.executable:*\\\\conhost.exe AND (NOT (process.executable:*\\:\\\\Windows\\\\System32\\\\conhost.exe OR process.executable:\"\" OR (NOT _exists_:process.executable))) AND (NOT winlog.provider_name:SystemTraceProvider\\-Process)",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.defense-evasion",
+    "attack.t1202"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "omkar72"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

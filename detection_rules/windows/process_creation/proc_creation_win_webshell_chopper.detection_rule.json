@@ -1,0 +1,65 @@
+{
+  "rule_id": "fa3c117a-bc0d-416e-a31b-0c0e80653efb",
+  "risk_score": 73,
+  "description": "Detects patterns found in process executions cause by China Chopper like tiny (ASPX) webshells",
+  "name": "Chopper Webshell Process Pattern",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "(process.command_line:(*\\&ipconfig\\&echo* OR *\\&quser\\&echo* OR *\\&whoami\\&echo* OR *\\&c\\:\\&echo* OR *\\&cd\\&echo* OR *\\&dir\\&echo* OR *\\&echo\\ \\[E\\]* OR *\\&echo\\ \\[S\\]*)) AND (process.executable:*\\\\w3wp.exe OR process.parent.executable:*\\\\w3wp.exe)",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.persistence",
+    "attack.discovery",
+    "attack.t1505.003",
+    "attack.t1018",
+    "attack.t1033",
+    "attack.t1087"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Florian Roth (Nextron Systems), MSTI (query)"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

@@ -1,0 +1,62 @@
+{
+  "rule_id": "d3c3861d-c504-4c77-ba55-224ba82d0118",
+  "risk_score": 47,
+  "description": "Detects the execution of netsh with the \"trace\" flag in order to start a network capture",
+  "name": "New Network Trace Capture Started Via Netsh.EXE",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "(process.command_line:*trace* AND process.command_line:*start*) AND (process.executable:*\\\\netsh.exe OR process.pe.original_file_name:netsh.exe)",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.discovery",
+    "attack.credential-access",
+    "attack.t1040"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Kutepov Anton, oscd.community"
+  ],
+  "false_positives": [
+    "Legitimate administration activity"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

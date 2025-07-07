@@ -1,0 +1,51 @@
+{
+  "rule_id": "123e4e6d-b123-48f8-b261-7214938acaf0",
+  "risk_score": 47,
+  "description": "Detects the modification of Group Policy Objects (GPO) to add a startup/logon script to users or computer objects.\n",
+  "name": "Startup/Logon Script Added to Group Policy Object",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "winlog.channel:Security AND ((event.code:(5136 OR 5145)) AND ((((winlog.event_data.AttributeLDAPDisplayName:(gPCMachineExtensionNames OR gPCUserExtensionNames)) AND winlog.event_data.AttributeValue:*42B5FAAE\\-6536\\-11D2\\-AE5A\\-0000F87571E3*) AND (winlog.event_data.AttributeValue:(*40B6664F\\-4972\\-11D1\\-A7CA\\-0000F87571E3* OR *40B66650\\-4972\\-11D1\\-A7CA\\-0000F87571E3*))) OR (winlog.event_data.AccessList:*%%4417* AND (winlog.event_data.RelativeTargetName:(*\\\\scripts.ini OR *\\\\psscripts.ini)) AND winlog.event_data.ShareName:*\\\\SYSVOL)))",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.privilege-escalation",
+    "attack.t1484.001",
+    "attack.t1547"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Elastic, Josh Nickels, Marius Rothenbücher"
+  ],
+  "false_positives": [
+    "Legitimate execution by system administrators."
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

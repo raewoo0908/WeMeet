@@ -1,0 +1,60 @@
+{
+  "rule_id": "7c8af9b2-dcae-41a2-a9db-b28c288b5f08",
+  "risk_score": 47,
+  "description": "Detects usage of \"appcmd\" to create new global URL rewrite rules. This behaviour has been observed being used by threat actors to add new rules so they can access their webshells.",
+  "name": "Suspicious IIS URL GlobalRules Rewrite Via AppCmd",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "(process.command_line:*set* AND process.command_line:*config* AND process.command_line:*section\\:system.webServer\\/rewrite\\/globalRules* AND process.command_line:*commit\\:*) AND (process.executable:*\\\\appcmd.exe OR process.pe.original_file_name:appcmd.exe)",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.defense-evasion"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Nasreddine Bencherchali (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Legitimate usage of appcmd to add new URL rewrite rules"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

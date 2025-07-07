@@ -1,0 +1,50 @@
+{
+  "rule_id": "5df86130-4e95-4a54-90f7-26541b40aec2",
+  "risk_score": 47,
+  "description": "Hides the file extension through modification of the registry",
+  "name": "Registry Modification to Hidden File Extension",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "(winlog.event_data.Details:DWORD\\ \\(0x00000002\\) AND registry.path:*\\\\SOFTWARE\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Explorer\\\\Advanced\\\\Hidden) OR (winlog.event_data.Details:DWORD\\ \\(0x00000001\\) AND registry.path:*\\\\SOFTWARE\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Explorer\\\\Advanced\\\\HideFileExt)",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.persistence",
+    "attack.t1137"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "frack113"
+  ],
+  "false_positives": [
+    "Administrative scripts"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

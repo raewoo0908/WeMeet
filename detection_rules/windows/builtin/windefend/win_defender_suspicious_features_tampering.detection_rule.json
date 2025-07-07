@@ -1,0 +1,50 @@
+{
+  "rule_id": "801bd44f-ceed-4eb6-887c-11544633c0aa",
+  "risk_score": 73,
+  "description": "Detects suspicious changes to the Windows Defender configuration",
+  "name": "Windows Defender Configuration Changes",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "winlog.channel:Microsoft\\-Windows\\-Windows\\ Defender\\/Operational AND (event.code:5007 AND (winlog.event_data.NewValue:(*\\\\Windows\\ Defender\\\\DisableAntiSpyware\\ * OR *\\\\Windows\\ Defender\\\\Scan\\\\DisableRemovableDriveScanning\\ * OR *\\\\Windows\\ Defender\\\\Scan\\\\DisableScanningMappedNetworkDrivesForFullScan\\ * OR *\\\\Windows\\ Defender\\\\SpyNet\\\\DisableBlockAtFirstSeen\\ * OR *\\\\Real\\-Time\\ Protection\\\\SpyNetReporting\\ *)))",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.defense-evasion",
+    "attack.t1562.001"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Nasreddine Bencherchali (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Administrator activity (must be investigated)"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

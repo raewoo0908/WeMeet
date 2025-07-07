@@ -1,0 +1,61 @@
+{
+  "rule_id": "afe52666-401e-4a02-b4ff-5d128990b8cb",
+  "risk_score": 73,
+  "description": "Detects RAR usage that creates an archive from a suspicious folder, either a system folder or one of the folders often used by attackers for staging purposes",
+  "name": "Suspicious Greedy Compression Using Rar.EXE",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "((process.executable:*\\\\rar.exe OR process.pe.description:Command\\ line\\ RAR) OR (process.command_line:(*.exe\\ a\\ * OR *\\ a\\ \\-m*))) AND ((process.command_line:*\\ \\-hp* AND process.command_line:*\\ \\-r\\ *) AND (process.command_line:(*\\ ?\\:\\\\\\*.* OR *\\ ?\\:\\\\\\\\\\*.* OR *\\ ?\\:\\\\$Recycle.bin\\\\* OR *\\ ?\\:\\\\PerfLogs\\\\* OR *\\ ?\\:\\\\Temp* OR *\\ ?\\:\\\\Users\\\\Public\\\\* OR *\\ ?\\:\\\\Windows\\\\* OR *\\ %public%*)))",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.execution",
+    "attack.t1059"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "X__Junior (Nextron Systems), Florian Roth (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

@@ -1,0 +1,53 @@
+{
+  "rule_id": "a54f842a-3713-4b45-8c84-5f136fdebd3c",
+  "risk_score": 47,
+  "description": "Detects the modification of the PortProxy registry key which is used for port forwarding.",
+  "name": "New PortProxy Registry Entry Added",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "registry.path:*\\\\Services\\\\PortProxy\\\\v4tov4\\\\tcp\\\\*",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.lateral-movement",
+    "attack.defense-evasion",
+    "attack.command-and-control",
+    "attack.t1090"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Andreas Hunkeler (@Karneades)"
+  ],
+  "false_positives": [
+    "WSL2 network bridge PowerShell script used for WSL/Kubernetes/Docker (e.g. https://github.com/microsoft/WSL/issues/4150#issuecomment-504209723)",
+    "Synergy Software KVM (https://symless.com/synergy)"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

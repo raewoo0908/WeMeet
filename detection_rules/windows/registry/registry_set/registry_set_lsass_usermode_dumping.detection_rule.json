@@ -1,0 +1,50 @@
+{
+  "rule_id": "33efc23c-6ea2-4503-8cfe-bdf82ce8f719",
+  "risk_score": 73,
+  "description": "Detects the setting of the \"DumpType\" registry value to \"2\" which stands for a \"Full Dump\". Technique such as LSASS Shtinkering requires this value to be \"2\" in order to dump LSASS.",
+  "name": "Lsass Full Dump Request Via DumpType Registry Settings",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "winlog.event_data.Details:DWORD\\ \\(0x00000002\\) AND (registry.path:(*\\\\SOFTWARE\\\\Microsoft\\\\Windows\\\\Windows\\ Error\\ Reporting\\\\LocalDumps\\\\DumpType* OR *\\\\SOFTWARE\\\\Microsoft\\\\Windows\\\\Windows\\ Error\\ Reporting\\\\LocalDumps\\\\lsass.exe\\\\DumpType*))",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.credential-access",
+    "attack.t1003.001"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "@pbssubhash"
+  ],
+  "false_positives": [
+    "Legitimate application that needs to do a full dump of their process"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

@@ -1,0 +1,51 @@
+{
+  "rule_id": "f59c3faf-50f3-464b-9f4c-1b67ab512d99",
+  "risk_score": 47,
+  "description": "Detects modification of autostart extensibility point (ASEP) in registry.",
+  "name": "Common Autorun Keys Modification",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "(registry.path:(*\\\\SOFTWARE\\\\Wow6432Node\\\\Microsoft\\\\Windows\\ CE\\ Services\\\\AutoStart* OR *\\\\Software\\\\Wow6432Node\\\\Microsoft\\\\Command\\ Processor\\\\Autorun* OR *\\\\SOFTWARE\\\\Wow6432Node\\\\Microsoft\\\\Active\\ Setup\\\\Installed\\ Components* OR *\\\\SOFTWARE\\\\Microsoft\\\\Windows\\ CE\\ Services\\\\AutoStartOnDisconnect* OR *\\\\SOFTWARE\\\\Microsoft\\\\Windows\\ CE\\ Services\\\\AutoStartOnConnect* OR *\\\\SYSTEM\\\\Setup\\\\CmdLine* OR *\\\\Software\\\\Microsoft\\\\Ctf\\\\LangBarAddin* OR *\\\\Software\\\\Microsoft\\\\Command\\ Processor\\\\Autorun* OR *\\\\SOFTWARE\\\\Microsoft\\\\Active\\ Setup\\\\Installed\\ Components* OR *\\\\SOFTWARE\\\\Classes\\\\Protocols\\\\Handler* OR *\\\\SOFTWARE\\\\Classes\\\\Protocols\\\\Filter* OR *\\\\SOFTWARE\\\\Classes\\\\Htmlfile\\\\Shell\\\\Open\\\\Command\\\\\\(Default\\)* OR *\\\\Environment\\\\UserInitMprLogonScript* OR *\\\\SOFTWARE\\\\Policies\\\\Microsoft\\\\Windows\\\\Control\\ Panel\\\\Desktop\\\\Scrnsave.exe* OR *\\\\Software\\\\Microsoft\\\\Internet\\ Explorer\\\\UrlSearchHooks* OR *\\\\SOFTWARE\\\\Microsoft\\\\Internet\\ Explorer\\\\Desktop\\\\Components* OR *\\\\Software\\\\Classes\\\\Clsid\\\\\\{AB8902B4\\-09CA\\-4bb6\\-B78D\\-A8F59079A8D5\\}\\\\Inprocserver32* OR *\\\\Control\\ Panel\\\\Desktop\\\\Scrnsave.exe*)) AND (NOT (registry.path:*\\\\Software\\\\Microsoft\\\\Active\\ Setup\\\\Installed\\ Components\\\\\\{89820200\\-ECBD\\-11cf\\-8B85\\-00AA005B4383\\}* OR registry.path:*\\\\SOFTWARE\\\\Microsoft\\\\Active\\ Setup\\\\Installed\\ Components\\\\\\{8A69D345\\-D564\\-463c\\-AFF1\\-A69D9E530F96\\}* OR registry.path:*\\\\SOFTWARE\\\\Microsoft\\\\Active\\ Setup\\\\Installed\\ Components\\\\\\{9459C573\\-B17A\\-45AE\\-9F64\\-1857B5D58CEE\\}* OR winlog.event_data.Details:\\(Empty\\) OR (process.executable:(C\\:\\\\Windows\\\\System32\\\\poqexec.exe OR C\\:\\\\Program\\ Files\\ \\(x86\\)\\\\Microsoft\\ Office\\\\root\\\\integration\\\\integrator.exe)) OR ((registry.path:(*\\\\Office\\\\ClickToRun\\\\REGISTRY\\\\MACHINE\\\\Software\\\\Classes\\\\PROTOCOLS\\\\Handler\\\\* OR *\\\\ClickToRunStore\\\\HKMU\\\\SOFTWARE\\\\Classes\\\\PROTOCOLS\\\\Handler\\\\*)) OR (winlog.event_data.Details:(\\{314111c7\\-a502\\-11d2\\-bbca\\-00c04f8ec294\\} OR \\{3459B272\\-CC19\\-4448\\-86C9\\-DDC3B4B2FAD3\\} OR \\{42089D2D\\-912D\\-4018\\-9087\\-2B87803E93FB\\} OR \\{5504BE45\\-A83B\\-4808\\-900A\\-3A5C36E7F77A\\} OR \\{807583E5\\-5146\\-11D5\\-A672\\-00B0D022E945\\}))) OR (process.executable:*\\\\OfficeClickToRun.exe AND (process.executable:(C\\:\\\\Program\\ Files\\\\Common\\ Files\\\\Microsoft\\ Shared\\\\ClickToRun\\\\* OR C\\:\\\\Program\\ Files\\\\Common\\ Files\\\\Microsoft\\ Shared\\\\ClickToRun\\\\Updates\\\\*)))))",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.persistence",
+    "attack.t1547.001"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Victor Sergeev, Daniil Yugoslavskiy, Gleb Sukhodolskiy, Timur Zinniatullin, oscd.community, Tim Shelton, frack113 (split), wagga (name)"
+  ],
+  "false_positives": [
+    "Legitimate software automatically (mostly, during installation) sets up autorun keys for legitimate reason",
+    "Legitimate administrator sets up autorun keys for legitimate reason"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

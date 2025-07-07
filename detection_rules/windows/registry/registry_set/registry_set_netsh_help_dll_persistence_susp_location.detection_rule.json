@@ -1,0 +1,50 @@
+{
+  "rule_id": "e7b18879-676e-4a0e-ae18-27039185a8e7",
+  "risk_score": 73,
+  "description": "Detects changes to the Netsh registry key to add a new DLL value that is located on a suspicious location. This change might be an indication of a potential persistence attempt by adding a malicious Netsh helper\n",
+  "name": "New Netsh Helper DLL Registered From A Suspicious Location",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "registry.path:*\\\\SOFTWARE\\\\Microsoft\\\\NetSh* AND ((winlog.event_data.Details:(*\\:\\\\Perflogs\\\\* OR *\\:\\\\Users\\\\Public\\\\* OR *\\:\\\\Windows\\\\Temp\\\\* OR *\\\\AppData\\\\Local\\\\Temp\\\\* OR *\\\\Temporary\\ Internet*)) OR ((winlog.event_data.Details:*\\:\\\\Users\\\\* AND winlog.event_data.Details:*\\\\Favorites\\\\*) OR (winlog.event_data.Details:*\\:\\\\Users\\\\* AND winlog.event_data.Details:*\\\\Favourites\\\\*) OR (winlog.event_data.Details:*\\:\\\\Users\\\\* AND winlog.event_data.Details:*\\\\Contacts\\\\*) OR (winlog.event_data.Details:*\\:\\\\Users\\\\* AND winlog.event_data.Details:*\\\\Pictures\\\\*)))",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.persistence",
+    "attack.t1546.007"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Nasreddine Bencherchali (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

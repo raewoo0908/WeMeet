@@ -1,0 +1,50 @@
+{
+  "rule_id": "e0d1ad53-c7eb-48ec-a87a-72393cc6cedc",
+  "risk_score": 47,
+  "description": "Detects a Mesh Agent service installation. Mesh Agent is used to remotely manage computers",
+  "name": "Mesh Agent Service Installation",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "winlog.channel:System AND ((event.code:7045 AND winlog.provider_name:Service\\ Control\\ Manager) AND (winlog.event_data.ImagePath:*MeshAgent.exe* OR winlog.event_data.ServiceName:*Mesh\\ Agent*))",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.command-and-control",
+    "attack.t1219"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Nasreddine Bencherchali (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Legitimate use of the tool"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

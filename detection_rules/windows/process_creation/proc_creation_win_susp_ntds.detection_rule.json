@@ -1,0 +1,61 @@
+{
+  "rule_id": "8bc64091-6875-4881-aaf9-7bd25b5dda08",
+  "risk_score": 73,
+  "description": "Detects suspicious process patterns used in NTDS.DIT exfiltration",
+  "name": "Suspicious Process Patterns NTDS.DIT Exfil",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "((process.command_line:*ac\\ i\\ ntds* AND process.command_line:*create\\ full*) OR (process.command_line:*\\/c\\ copy\\ * AND process.command_line:*\\\\windows\\\\ntds\\\\ntds.dit*) OR (process.command_line:*activate\\ instance\\ ntds* AND process.command_line:*create\\ full*) OR (process.command_line:*powershell* AND process.command_line:*ntds.dit*) OR ((process.executable:(*\\\\NTDSDump.exe OR *\\\\NTDSDumpEx.exe)) OR (process.command_line:*ntds.dit* AND process.command_line:*system.hiv*) OR process.command_line:*NTDSgrab.ps1*)) OR (((process.parent.executable:(*\\\\apache* OR *\\\\tomcat* OR *\\\\AppData\\\\* OR *\\\\Temp\\\\* OR *\\\\Public\\\\* OR *\\\\PerfLogs\\\\*)) OR (process.executable:(*\\\\apache* OR *\\\\tomcat* OR *\\\\AppData\\\\* OR *\\\\Temp\\\\* OR *\\\\Public\\\\* OR *\\\\PerfLogs\\\\*))) AND process.command_line:*ntds.dit*)",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.credential-access",
+    "attack.t1003.003"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Florian Roth (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

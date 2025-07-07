@@ -1,0 +1,61 @@
+{
+  "rule_id": "ad720b90-25ad-43ff-9b5e-5c841facc8e5",
+  "risk_score": 47,
+  "description": "Detects addition of users to the local administrator group via \"Net\" or \"Add-LocalGroupMember\".",
+  "name": "User Added to Local Administrators Group",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "(process.command_line:(*\\ administrators\\ * OR *\\ administrateur*)) AND ((process.command_line:*localgroup\\ * AND process.command_line:*\\ \\/add*) OR (process.command_line:*Add\\-LocalGroupMember\\ * AND process.command_line:*\\ \\-Group\\ *))",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.persistence",
+    "attack.t1098"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Florian Roth (Nextron Systems), Nasreddine Bencherchali (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Administrative activity"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

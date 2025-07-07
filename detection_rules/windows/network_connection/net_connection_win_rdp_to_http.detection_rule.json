@@ -1,0 +1,64 @@
+{
+  "rule_id": "b1e5da3b-ca8e-4adf-915c-9921f3d85481",
+  "risk_score": 73,
+  "description": "Detects svchost hosting RDP termsvcs communicating to target systems on TCP port 80 or 443",
+  "name": "RDP to HTTP or HTTPS Target Ports",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "(destination.port:(80 OR 443)) AND process.executable:*\\\\svchost.exe AND network.direction:true AND source.port:3389",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Network connection detected (rule: NetworkConnect)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.command-and-control",
+    "attack.t1572",
+    "attack.lateral-movement",
+    "attack.t1021.001",
+    "car.2013-07-002"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Florian Roth (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

@@ -1,0 +1,61 @@
+{
+  "rule_id": "07f8bdc2-c9b3-472a-9817-5a670b872f53",
+  "risk_score": 73,
+  "description": "Detects usage of cmdkey to look for cached credentials on the system",
+  "name": "Potential Reconnaissance For Cached Credentials Via Cmdkey.EXE",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "process.command_line:(*\\ \\-l* OR *\\ \\/l* OR *\\ –l* OR *\\ —l* OR *\\ ―l*) AND (process.executable:*\\\\cmdkey.exe OR process.pe.original_file_name:cmdkey.exe)",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.credential-access",
+    "attack.t1003.005"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "jmallette, Florian Roth (Nextron Systems), Nasreddine Bencherchali (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Legitimate administrative tasks"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

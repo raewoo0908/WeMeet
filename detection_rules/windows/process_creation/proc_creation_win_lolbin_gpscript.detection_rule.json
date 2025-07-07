@@ -1,0 +1,61 @@
+{
+  "rule_id": "1e59c230-6670-45bf-83b0-98903780607e",
+  "risk_score": 47,
+  "description": "Detects the execution of the LOLBIN gpscript, which executes logon or startup scripts configured in Group Policy",
+  "name": "Gpscript Execution",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "((process.command_line:(*\\ \\/logon* OR *\\ \\/startup*)) AND (process.executable:*\\\\gpscript.exe OR process.pe.original_file_name:GPSCRIPT.EXE)) AND (NOT process.parent.command_line:C\\:\\\\windows\\\\system32\\\\svchost.exe\\ \\-k\\ netsvcs\\ \\-p\\ \\-s\\ gpsvc)",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.defense-evasion",
+    "attack.t1218"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "frack113"
+  ],
+  "false_positives": [
+    "Legitimate uses of logon scripts distributed via group policy"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

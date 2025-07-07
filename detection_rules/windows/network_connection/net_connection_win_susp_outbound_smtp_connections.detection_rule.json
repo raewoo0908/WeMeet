@@ -1,0 +1,61 @@
+{
+  "rule_id": "9976fa64-2804-423c-8a5b-646ade840773",
+  "risk_score": 47,
+  "description": "Adversaries may steal data by exfiltrating it over an un-encrypted network protocol other than that of the existing command and control channel.\nThe data may also be sent to an alternate network location from the main command and control server.\n",
+  "name": "Suspicious Outbound SMTP Connections",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "((destination.port:(25 OR 587 OR 465 OR 2525)) AND network.direction:true) AND (NOT ((process.executable:(*\\\\thunderbird.exe OR *\\\\outlook.exe)) OR process.executable:C\\:\\\\Program\\ Files\\\\Microsoft\\\\Exchange\\ Server\\\\* OR (process.executable:*\\\\HxTsr.exe AND process.executable:C\\:\\\\Program\\ Files\\\\WindowsApps\\\\microsoft.windowscommunicationsapps_*)))",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Network connection detected (rule: NetworkConnect)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.exfiltration",
+    "attack.t1048.003"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "frack113"
+  ],
+  "false_positives": [
+    "Other SMTP tools"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

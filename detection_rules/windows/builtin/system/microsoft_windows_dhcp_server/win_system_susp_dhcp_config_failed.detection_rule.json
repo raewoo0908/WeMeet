@@ -1,0 +1,50 @@
+{
+  "rule_id": "75edd3fd-7146-48e5-9848-3013d7f0282c",
+  "risk_score": 73,
+  "description": "This rule detects a DHCP server error in which a specified Callout DLL (in registry) could not be loaded",
+  "name": "DHCP Server Error Failed Loading the CallOut DLL",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "winlog.channel:System AND ((event.code:(1031 OR 1032 OR 1034)) AND winlog.provider_name:Microsoft\\-Windows\\-DHCP\\-Server)",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.defense-evasion",
+    "attack.t1574.001"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Dimitrios Slamaris, @atc_project (fix)"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

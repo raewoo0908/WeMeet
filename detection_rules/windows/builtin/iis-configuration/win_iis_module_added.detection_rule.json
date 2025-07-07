@@ -1,0 +1,52 @@
+{
+  "rule_id": "dd857d3e-0c6e-457b-9b48-e82ae7f86bd7",
+  "risk_score": 47,
+  "description": "Detects the addition of a new module to an IIS server.",
+  "name": "New Module Module Added To IIS Server",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "(winlog.event_data.Configuration:*\\/system.webServer\\/modules\\/add* AND event.code:29) AND (NOT ((winlog.event_data.NewValue:(AnonymousAuthenticationModule OR CustomErrorModule OR DefaultDocumentModule OR DirectoryListingModule OR FileCacheModule OR HttpCacheModule OR HttpLoggingModule OR ProtocolSupportModule OR RequestFilteringModule OR StaticCompressionModule OR StaticFileModule OR TokenCacheModule OR UriCacheModule)) OR winlog.event_data.NewValue:\"\"))",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.defense-evasion",
+    "attack.persistence",
+    "attack.t1562.002",
+    "attack.t1505.004"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "frack113"
+  ],
+  "false_positives": [
+    "Legitimate administrator activity"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

@@ -1,0 +1,51 @@
+{
+  "rule_id": "2c4523d5-d481-4ed0-8ec3-7fbf0cb41a75",
+  "risk_score": 73,
+  "description": "Detects a driver load from a temporary directory",
+  "name": "Driver Load From A Temporary Directory",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "file.path:*\\\\Temp\\\\*",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.persistence",
+    "attack.privilege-escalation",
+    "attack.t1543.003"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Florian Roth (Nextron Systems)"
+  ],
+  "false_positives": [
+    "There is a relevant set of false positives depending on applications in the environment"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

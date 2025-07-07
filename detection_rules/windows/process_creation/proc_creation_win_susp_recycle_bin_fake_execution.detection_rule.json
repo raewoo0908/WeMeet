@@ -1,0 +1,61 @@
+{
+  "rule_id": "5ce0f04e-3efc-42af-839d-5b3a543b76c0",
+  "risk_score": 73,
+  "description": "Detects process execution from a fake recycle bin folder, often used to avoid security solution.",
+  "name": "Suspicious Process Execution From Fake Recycle.Bin Folder",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "process.executable:(*RECYCLERS.BIN\\\\* OR *RECYCLER.BIN\\\\*)",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.persistence",
+    "attack.defense-evasion"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "X__Junior (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Unlikely"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

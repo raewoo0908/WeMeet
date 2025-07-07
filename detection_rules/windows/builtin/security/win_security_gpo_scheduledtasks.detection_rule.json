@@ -1,0 +1,51 @@
+{
+  "rule_id": "a8f29a7b-b137-4446-80a0-b804272f3da2",
+  "risk_score": 73,
+  "description": "Detect lateral movement using GPO scheduled task, usually used to deploy ransomware at scale",
+  "name": "Persistence and Execution at Scale via GPO Scheduled Task",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "winlog.channel:Security AND (((winlog.event_data.AttributeLDAPDisplayName:(gPCMachineExtensionNames OR gPCUserExtensionNames)) AND (winlog.event_data.AttributeValue:(*CAB54552\\-DEEA\\-4691\\-817E\\-ED4A4D1AFC72* OR *AADCED64\\-746C\\-4633\\-A97C\\-D61349046527*)) AND event.code:5136) OR ((winlog.event_data.AccessList:(*WriteData* OR *%%4417*)) AND event.code:5145 AND winlog.event_data.RelativeTargetName:*ScheduledTasks.xml AND winlog.event_data.ShareName:*\\\\SYSVOL))",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.persistence",
+    "attack.lateral-movement",
+    "attack.t1053.005"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Samir Bousseaden"
+  ],
+  "false_positives": [
+    "If the source IP is not localhost then it's super suspicious, better to monitor both local and remote changes to GPO scheduled tasks."
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

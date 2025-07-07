@@ -1,0 +1,50 @@
+{
+  "rule_id": "09658312-bc27-4a3b-91c5-e49ab9046d1b",
+  "risk_score": 47,
+  "description": "Detects known WMI recon method to look for unquoted service paths, often used by pentest inside of powershell scripts attackers enum scripts",
+  "name": "WMIC Unquoted Services Path Lookup - PowerShell",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "(powershell.file.script_block_text:(*Get\\-WmiObject\\ * OR *gwmi\\ *)) AND (powershell.file.script_block_text:*\\ Win32_Service\\ * AND powershell.file.script_block_text:*Name* AND powershell.file.script_block_text:*DisplayName* AND powershell.file.script_block_text:*PathName* AND powershell.file.script_block_text:*StartMode*)",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.execution",
+    "attack.t1047"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Nasreddine Bencherchali (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

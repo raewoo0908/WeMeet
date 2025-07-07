@@ -1,0 +1,61 @@
+{
+  "rule_id": "8b93a509-1cb8-42e1-97aa-ee24224cdc15",
+  "risk_score": 73,
+  "description": "Detects the dump of highly sensitive files such as \"NTDS.DIT\" and \"SECURITY\" hive.\nAttackers can leverage the \"wbadmin\" utility in order to dump sensitive files that might contain credential or sensitive information.\n",
+  "name": "Sensitive File Dump Via Wbadmin.EXE",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "(process.command_line:(*start* OR *backup*)) AND (process.executable:*\\\\wbadmin.exe OR process.pe.original_file_name:WBADMIN.EXE) AND (process.command_line:(*\\\\config\\\\SAM* OR *\\\\config\\\\SECURITY* OR *\\\\config\\\\SYSTEM* OR *\\\\Windows\\\\NTDS\\\\NTDS.dit*))",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.credential-access",
+    "attack.t1003.003"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Nasreddine Bencherchali (Nextron Systems), frack113"
+  ],
+  "false_positives": [
+    "Legitimate backup operation by authorized administrators. Matches must be investigated and allowed on a case by case basis."
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

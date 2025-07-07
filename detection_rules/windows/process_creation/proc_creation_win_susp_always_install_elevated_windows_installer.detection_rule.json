@@ -1,0 +1,63 @@
+{
+  "rule_id": "cd951fdc-4b2f-47f5-ba99-a33bf61e3770",
+  "risk_score": 47,
+  "description": "Detects Windows Installer service (msiexec.exe) trying to install MSI packages with SYSTEM privilege",
+  "name": "Always Install Elevated Windows Installer",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "(((process.executable:*\\\\Windows\\\\Installer\\\\* AND process.executable:*msi*) AND process.executable:*tmp) OR (process.executable:*\\\\msiexec.exe AND (winlog.event_data.IntegrityLevel:(System OR S\\-1\\-16\\-16384)))) AND (user.name:(*AUTHORI* OR *AUTORI*)) AND (NOT ((process.parent.executable:(C\\:\\\\Program\\ Files\\\\Avast\\ Software\\\\* OR C\\:\\\\Program\\ Files\\ \\(x86\\)\\\\Avast\\ Software\\\\*)) OR process.parent.executable:C\\:\\\\ProgramData\\\\Avira\\\\* OR (process.parent.executable:(C\\:\\\\Program\\ Files\\\\Google\\\\Update\\\\* OR C\\:\\\\Program\\ Files\\ \\(x86\\)\\\\Google\\\\Update\\\\*)) OR process.parent.executable:C\\:\\\\Windows\\\\System32\\\\services.exe OR (process.command_line:*\\\\system32\\\\msiexec.exe\\ \\/V OR process.parent.command_line:*\\\\system32\\\\msiexec.exe\\ \\/V) OR process.parent.executable:C\\:\\\\ProgramData\\\\Sophos\\\\*))",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.privilege-escalation",
+    "attack.t1548.002"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Teymur Kheirkhabarov (idea), Mangatas Tondang (rule), oscd.community"
+  ],
+  "false_positives": [
+    "System administrator usage",
+    "Anti virus products",
+    "WindowsApps located in \"C:\\Program Files\\WindowsApps\\\""
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

@@ -1,0 +1,61 @@
+{
+  "rule_id": "3b6ab547-8ec2-4991-b9d2-2b06702a48d7",
+  "risk_score": 47,
+  "description": "Detects a Powershell process that contains download commands in its command line string",
+  "name": "PowerShell Download Pattern",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "((process.command_line:(*string\\(* OR *file\\(*)) AND (process.command_line:*new\\-object* AND process.command_line:*net.webclient\\).* AND process.command_line:*download*)) AND ((process.executable:(*\\\\powershell.exe OR *\\\\pwsh.exe)) OR (process.pe.original_file_name:(PowerShell.EXE OR pwsh.dll)))",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.execution",
+    "attack.t1059.001"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Florian Roth (Nextron Systems), oscd.community, Jonhnathan Ribeiro"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

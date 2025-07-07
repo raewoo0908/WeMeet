@@ -1,0 +1,51 @@
+{
+  "rule_id": "67add051-9ee7-4ad3-93ba-42935615ae8d",
+  "risk_score": 73,
+  "description": "Detects driver load of the Process Hacker tool",
+  "name": "PUA - Process Hacker Driver Load",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "file.path:*\\\\kprocesshacker.sys OR (winlog.event_data.Hashes:(*IMPHASH\\=821D74031D3F625BCBD0DF08B70F1E77* OR *IMPHASH\\=F86759BB4DE4320918615DC06E998A39* OR *IMPHASH\\=0A64EEB85419257D0CE32BD5D55C3A18* OR *IMPHASH\\=6E7B34DFC017700B1517B230DF6FF0D0*))",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.privilege-escalation",
+    "cve.2021-21551",
+    "attack.t1543"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Florian Roth (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Legitimate use of process hacker or system informer by developers or system administrators"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

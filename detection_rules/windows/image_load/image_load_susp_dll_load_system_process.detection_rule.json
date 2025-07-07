@@ -1,0 +1,50 @@
+{
+  "rule_id": "9e9a9002-56c4-40fd-9eff-e4b09bfa5f6c",
+  "risk_score": 47,
+  "description": "Detects when a system process (i.e. located in system32, syswow64, etc.) loads a DLL from a suspicious location or a location with permissive permissions such as \"C:\\Users\\Public\"",
+  "name": "DLL Load By System Process From Suspicious Locations",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "(file.path:(C\\:\\\\Users\\\\Public\\\\* OR C\\:\\\\PerfLogs\\\\*)) AND process.executable:C\\:\\\\Windows\\\\*",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.defense-evasion",
+    "attack.t1070"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Nasreddine Bencherchali (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

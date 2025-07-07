@@ -1,0 +1,50 @@
+{
+  "rule_id": "32d56ea1-417f-44ff-822b-882873f5f43b",
+  "risk_score": 73,
+  "description": "Detects execution of Impacket's psexec.py.",
+  "name": "Impacket PsExec Execution",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "winlog.channel:Security AND (event.code:5145 AND (winlog.event_data.RelativeTargetName:(*RemCom_stdin* OR *RemCom_stdout* OR *RemCom_stderr*)) AND winlog.event_data.ShareName:\\\\\\\\\\*\\\\IPC$)",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.lateral-movement",
+    "attack.t1021.002"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Bhabesh Raj"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

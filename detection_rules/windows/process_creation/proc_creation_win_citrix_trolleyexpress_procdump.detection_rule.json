@@ -1,0 +1,63 @@
+{
+  "rule_id": "4c0aaedc-154c-4427-ada0-d80ef9c9deb6",
+  "risk_score": 73,
+  "description": "Detects a possible process memory dump that uses the white-listed Citrix TrolleyExpress.exe filename as a way to dump the lsass process memory",
+  "name": "Process Access via TrolleyExpress Exclusion",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "(process.command_line:(*\\\\TrolleyExpress\\ 7* OR *\\\\TrolleyExpress\\ 8* OR *\\\\TrolleyExpress\\ 9* OR *\\\\TrolleyExpress.exe\\ 7* OR *\\\\TrolleyExpress.exe\\ 8* OR *\\\\TrolleyExpress.exe\\ 9* OR *\\\\TrolleyExpress.exe\\ \\-ma\\ *)) OR (process.executable:*\\\\TrolleyExpress.exe AND (NOT ((NOT _exists_:process.pe.original_file_name) OR process.pe.original_file_name:*CtxInstall*)))",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.defense-evasion",
+    "attack.t1218.011",
+    "attack.credential-access",
+    "attack.t1003.001"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Florian Roth (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

@@ -1,0 +1,50 @@
+{
+  "rule_id": "ab6bffca-beff-4baa-af11-6733f296d57a",
+  "risk_score": 47,
+  "description": "Detects read access to a domain user from a non-machine account",
+  "name": "Potential AD User Enumeration From Non-Machine Account",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "winlog.channel:Security AND (((winlog.event_data.AccessMask:(*1? OR *3? OR *4? OR *7? OR *9? OR *B? OR *D? OR *F?)) AND event.code:4662 AND winlog.event_data.ObjectType:*bf967aba\\-0de6\\-11d0\\-a285\\-00aa003049e2*) AND (NOT (user.name:(*$ OR MSOL_*))))",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.discovery",
+    "attack.t1087.002"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Maxime Thiebaut (@0xThiebaut)"
+  ],
+  "false_positives": [
+    "Administrators configuring new users."
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

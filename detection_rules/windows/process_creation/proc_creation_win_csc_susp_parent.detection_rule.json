@@ -1,0 +1,65 @@
+{
+  "rule_id": "b730a276-6b63-41b8-bcf8-55930c8fc6ee",
+  "risk_score": 73,
+  "description": "Detects a potentially suspicious parent of \"csc.exe\", which could be a sign of payload delivery.",
+  "name": "Csc.EXE Execution Form Potentially Suspicious Parent",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "(process.executable:*\\\\csc.exe OR process.pe.original_file_name:csc.exe) AND ((process.parent.executable:(*\\\\cscript.exe OR *\\\\excel.exe OR *\\\\mshta.exe OR *\\\\onenote.exe OR *\\\\outlook.exe OR *\\\\powerpnt.exe OR *\\\\winword.exe OR *\\\\wscript.exe)) OR ((process.parent.command_line:(*\\-Encoded\\ * OR *FromBase64String*)) AND (process.parent.executable:(*\\\\powershell.exe OR *\\\\pwsh.exe))) OR (process.parent.command_line:/([Pp]rogram[Dd]ata|%([Ll]ocal)?[Aa]pp[Dd]ata%|\\\\[Aa]pp[Dd]ata\\\\([Ll]ocal([Ll]ow)?|[Rr]oaming))\\\\[^\\\\]{1,256}$/ OR (process.parent.command_line:(*\\:\\\\PerfLogs\\\\* OR *\\:\\\\Users\\\\Public\\\\* OR *\\:\\\\Windows\\\\Temp\\\\* OR *\\\\Temporary\\ Internet*)) OR (process.parent.command_line:*\\:\\\\Users\\\\* AND process.parent.command_line:*\\\\Favorites\\\\*) OR (process.parent.command_line:*\\:\\\\Users\\\\* AND process.parent.command_line:*\\\\Favourites\\\\*) OR (process.parent.command_line:*\\:\\\\Users\\\\* AND process.parent.command_line:*\\\\Contacts\\\\*) OR (process.parent.command_line:*\\:\\\\Users\\\\* AND process.parent.command_line:*\\\\Pictures\\\\*))) AND (NOT ((process.parent.executable:(C\\:\\\\Program\\ Files\\ \\(x86\\)\\\\* OR C\\:\\\\Program\\ Files\\\\*)) OR process.parent.executable:C\\:\\\\Windows\\\\System32\\\\sdiagnhost.exe OR process.parent.executable:C\\:\\\\Windows\\\\System32\\\\inetsrv\\\\w3wp.exe)) AND (NOT ((process.parent.command_line:(*JwB7ACIAZgBhAGkAbABlAGQAIgA6AHQAcgB1AGUALAAiAG0AcwBnACIAOgAiAEEAbgBzAGkAYgBsAGUAIAByAGUAcQB1AGkAcgBlAHMAIABQAG8AdwBlAHIAUwBoAGUAbABsACAAdgAzAC4AMAAgAG8AcgAgAG4AZQB3AGUAcgAiAH0AJw* OR *cAewAiAGYAYQBpAGwAZQBkACIAOgB0AHIAdQBlACwAIgBtAHMAZwAiADoAIgBBAG4AcwBpAGIAbABlACAAcgBlAHEAdQBpAHIAZQBzACAAUABvAHcAZQByAFMAaABlAGwAbAAgAHYAMwAuADAAIABvAHIAIABuAGUAdwBlAHIAIgB9ACcA* OR *nAHsAIgBmAGEAaQBsAGUAZAAiADoAdAByAHUAZQAsACIAbQBzAGcAIgA6ACIAQQBuAHMAaQBiAGwAZQAgAHIAZQBxAHUAaQByAGUAcwAgAFAAbwB3AGUAcgBTAGgAZQBsAGwAIAB2ADMALgAwACAAbwByACAAbgBlAHcAZQByACIAfQAnA*)) OR process.parent.executable:C\\:\\\\ProgramData\\\\chocolatey\\\\choco.exe OR process.parent.command_line:*\\\\ProgramData\\\\Microsoft\\\\Windows\\ Defender\\ Advanced\\ Threat\\ Protection*))",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.execution",
+    "attack.t1059.005",
+    "attack.t1059.007",
+    "attack.defense-evasion",
+    "attack.t1218.005",
+    "attack.t1027.004"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Florian Roth (Nextron Systems), Nasreddine Bencherchali (Nextron Systems), X__Junior (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

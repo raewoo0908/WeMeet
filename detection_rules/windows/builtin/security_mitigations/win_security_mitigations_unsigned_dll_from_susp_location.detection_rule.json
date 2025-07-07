@@ -1,0 +1,50 @@
+{
+  "rule_id": "8289bf8c-4aca-4f5a-9db3-dc3d7afe5c10",
+  "risk_score": 73,
+  "description": "Detects Code Integrity (CI) engine blocking processes from loading unsigned DLLs residing in suspicious locations",
+  "name": "Unsigned Binary Loaded From Suspicious Location",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "(winlog.channel:(Microsoft\\-Windows\\-Security\\-Mitigations\\/Kernel\\ Mode OR Microsoft\\-Windows\\-Security\\-Mitigations\\/User\\ Mode)) AND ((event.code:(11 OR 12)) AND (winlog.event_data.ImageName:(*\\\\Users\\\\Public\\\\* OR *\\\\PerfLogs\\\\* OR *\\\\Desktop\\\\* OR *\\\\Downloads\\\\* OR *\\\\AppData\\\\Local\\\\Temp\\\\* OR *C\\:\\\\Windows\\\\TEMP\\\\*)))",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.defense-evasion",
+    "attack.t1574.001"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Nasreddine Bencherchali (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

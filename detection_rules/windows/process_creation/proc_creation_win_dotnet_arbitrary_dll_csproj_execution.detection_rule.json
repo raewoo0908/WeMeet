@@ -1,0 +1,61 @@
+{
+  "rule_id": "d80d5c81-04ba-45b4-84e4-92eba40e0ad3",
+  "risk_score": 47,
+  "description": "Detects execution of arbitrary DLLs or unsigned code via a \".csproj\" files via Dotnet.EXE.",
+  "name": "Arbitrary DLL or Csproj Code Execution Via Dotnet.EXE",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "(process.command_line:(*.csproj OR *.csproj\\\" OR *.dll OR *.dll\\\" OR *.csproj' OR *.dll')) AND (process.executable:*\\\\dotnet.exe OR process.pe.original_file_name:.NET\\ Host)",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.defense-evasion",
+    "attack.t1218"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Beyu Denis, oscd.community"
+  ],
+  "false_positives": [
+    "Legitimate administrator usage"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

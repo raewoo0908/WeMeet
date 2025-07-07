@@ -1,0 +1,49 @@
+{
+  "rule_id": "15b7abbb-8b40-4d01-9ee2-b51994b1d474",
+  "risk_score": 47,
+  "description": "Detects usage of the powerShell Set-Mailbox Cmdlet to set-up an SMTP forwarding rule.",
+  "name": "Suspicious PowerShell Mailbox SMTP Forward Rule",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "powershell.file.script_block_text:*Set\\-Mailbox\\ * AND powershell.file.script_block_text:*\\ \\-DeliverToMailboxAndForward\\ * AND powershell.file.script_block_text:*\\ \\-ForwardingSmtpAddress\\ *",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.exfiltration"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Nasreddine Bencherchali (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Legitimate usage of the cmdlet to forward emails"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

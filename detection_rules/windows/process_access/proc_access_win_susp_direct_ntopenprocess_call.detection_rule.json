@@ -1,0 +1,50 @@
+{
+  "rule_id": "3f3f3506-1895-401b-9cc3-e86b16e630d0",
+  "risk_score": 47,
+  "description": "Detects potential calls to NtOpenProcess directly from NTDLL.",
+  "name": "Potential Direct Syscall of NtOpenProcess",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "winlog.event_data.CallTrace:UNKNOWN* AND (NOT (((process.executable:(*\\:\\\\Program\\ Files\\ \\(x86\\)\\\\* OR *\\:\\\\Program\\ Files\\\\* OR *\\:\\\\Windows\\\\System32\\\\* OR *\\:\\\\Windows\\\\SysWOW64\\\\* OR *\\:\\\\Windows\\\\WinSxS\\\\*)) AND (winlog.event_data.TargetImage:(*\\:\\\\Program\\ Files\\ \\(x86\\)\\\\* OR *\\:\\\\Program\\ Files\\\\* OR *\\:\\\\Windows\\\\System32\\\\* OR *\\:\\\\Windows\\\\SysWOW64\\\\* OR *\\:\\\\Windows\\\\WinSxS\\\\*))) OR winlog.provider_name:Microsoft\\-Windows\\-Kernel\\-Audit\\-API\\-Calls OR (process.executable:*vcredist_x64.exe AND winlog.event_data.TargetImage:*vcredist_x64.exe))) AND (NOT ((process.executable:*\\:\\\\Program\\ Files\\\\Adobe\\\\Acrobat\\ DC\\\\Acrobat\\\\* AND process.executable:*\\\\AcroCEF.exe AND winlog.event_data.TargetImage:*\\:\\\\Program\\ Files\\\\Adobe\\\\Acrobat\\ DC\\\\Acrobat\\\\* AND winlog.event_data.TargetImage:*\\\\AcroCEF.exe) OR (process.executable:*AmazonSSMAgentSetup.exe AND winlog.event_data.TargetImage:*AmazonSSMAgentSetup.exe) OR (process.executable:*\\:\\\\Windows\\\\Explorer.EXE AND winlog.event_data.TargetImage:*\\:\\\\Program\\ Files\\\\Cylance\\\\Desktop\\\\CylanceUI.exe) OR (winlog.event_data.TargetImage:*\\\\AppData\\\\Local\\\\Discord\\\\* AND winlog.event_data.TargetImage:*\\\\Discord.exe) OR winlog.event_data.TargetImage:*\\\\Evernote\\\\Evernote.exe OR (process.executable:*\\\\AppData\\\\Local\\\\Microsoft\\\\Teams\\\\current\\\\Teams.exe AND winlog.event_data.TargetImage:*\\\\AppData\\\\Local\\\\Microsoft\\\\Teams\\\\current\\\\Teams.exe) OR (process.executable:*setup64.exe AND winlog.event_data.TargetImage:*\\:\\\\Windows\\\\system32\\\\systeminfo.exe) OR (process.executable:*\\\\AppData\\\\Local\\\\Programs\\\\Microsoft\\ VS\\ Code\\\\Code.exe AND winlog.event_data.TargetImage:*\\\\AppData\\\\Local\\\\Programs\\\\Microsoft\\ VS\\ Code\\\\Code.exe) OR (winlog.event_data.GrantedAccess:0x1000 AND process.executable:*\\\\AppData\\\\Local\\\\yammerdesktop\\\\app\\-* AND process.executable:*\\\\Yammer.exe AND winlog.event_data.TargetImage:*\\\\AppData\\\\Local\\\\yammerdesktop\\\\app\\-* AND winlog.event_data.TargetImage:*\\\\Yammer.exe)))",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.execution",
+    "attack.t1106"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Christian Burkard (Nextron Systems), Tim Shelton (FP)"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

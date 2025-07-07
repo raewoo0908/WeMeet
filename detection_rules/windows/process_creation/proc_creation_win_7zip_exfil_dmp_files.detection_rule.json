@@ -1,0 +1,62 @@
+{
+  "rule_id": "ec570e53-4c76-45a9-804d-dc3f355ff7a7",
+  "risk_score": 47,
+  "description": "Detects execution of 7z in order to compress a file with a \".dmp\"/\".dump\" extension, which could be a step in a process of dump file exfiltration.",
+  "name": "7Zip Compressing Dump Files",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "(process.command_line:(*.dmp* OR *.dump* OR *.hdmp*)) AND (process.pe.description:*7\\-Zip* OR (process.executable:(*\\\\7z.exe OR *\\\\7zr.exe OR *\\\\7za.exe)) OR (process.pe.original_file_name:(7z.exe OR 7za.exe)))",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.collection",
+    "attack.t1560.001"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Nasreddine Bencherchali (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Legitimate use of 7z with a command line in which \".dmp\" or \".dump\" appears accidentally",
+    "Legitimate use of 7z to compress WER \".dmp\" files for troubleshooting"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

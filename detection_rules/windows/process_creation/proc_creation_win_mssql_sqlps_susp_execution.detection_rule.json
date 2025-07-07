@@ -1,0 +1,63 @@
+{
+  "rule_id": "0152550d-3a26-4efd-9f0e-54a0b28ae2f3",
+  "risk_score": 47,
+  "description": "This rule detects execution of a PowerShell code through the sqlps.exe utility, which is included in the standard set of utilities supplied with the MSSQL Server.\nScript blocks are not logged in this case, so this utility helps to bypass protection mechanisms based on the analysis of these logs.\n",
+  "name": "Detection of PowerShell Execution via Sqlps.exe",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "process.parent.executable:*\\\\sqlps.exe OR ((process.executable:*\\\\sqlps.exe OR process.pe.original_file_name:sqlps.exe) AND (NOT process.parent.executable:*\\\\sqlagent.exe))",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.execution",
+    "attack.t1059.001",
+    "attack.defense-evasion",
+    "attack.t1127"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Agro (@agro_sev) oscd.community"
+  ],
+  "false_positives": [
+    "Direct PS command execution through SQLPS.exe is uncommon, childprocess sqlps.exe spawned by sqlagent.exe is a legitimate action."
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

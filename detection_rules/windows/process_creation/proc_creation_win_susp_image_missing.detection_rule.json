@@ -1,0 +1,60 @@
+{
+  "rule_id": "71158e3f-df67-472b-930e-7d287acaa3e1",
+  "risk_score": 73,
+  "description": "Checks whether the image specified in a process creation event is not a full, absolute path (caused by process ghosting or other unorthodox methods to start a process)",
+  "name": "Execution Of Non-Existing File",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "(NOT process.executable:*\\\\*) AND (NOT (((process.executable:(System OR Registry OR MemCompression OR vmmem)) OR (process.command_line:(Registry OR MemCompression OR vmmem))) OR (process.executable:(\\- OR \"\")) OR (NOT _exists_:process.executable)))",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.defense-evasion"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Max Altgelt (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

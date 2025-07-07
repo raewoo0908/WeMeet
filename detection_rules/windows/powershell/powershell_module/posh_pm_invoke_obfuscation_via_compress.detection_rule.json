@@ -1,0 +1,52 @@
+{
+  "rule_id": "7034cbbb-cc55-4dc2-8dad-36c0b942e8f1",
+  "risk_score": 47,
+  "description": "Detects Obfuscated Powershell via COMPRESS OBFUSCATION",
+  "name": "Invoke-Obfuscation COMPRESS OBFUSCATION - PowerShell Module",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "(Payload:(*system.io.compression.deflatestream* OR *system.io.streamreader*)) AND (Payload:*new\\-object* AND Payload:*text.encoding\\]\\:\\:ascii*) AND Payload:*readtoend",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.defense-evasion",
+    "attack.t1027",
+    "attack.execution",
+    "attack.t1059.001"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Timur Zinniatullin, oscd.community"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

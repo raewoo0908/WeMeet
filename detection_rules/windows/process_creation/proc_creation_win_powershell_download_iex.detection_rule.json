@@ -1,0 +1,61 @@
+{
+  "rule_id": "85b0b087-eddf-4a2b-b033-d771fa2b9775",
+  "risk_score": 73,
+  "description": "Detects PowerShell download and execution cradles.",
+  "name": "PowerShell Download and Execution Cradles",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "(process.command_line:(*.DownloadString\\(* OR *.DownloadFile\\(* OR *Invoke\\-WebRequest\\ * OR *iwr\\ *)) AND (process.command_line:(*;iex\\ $* OR *\\|\\ IEX* OR *\\|IEX\\ * OR *I`E`X* OR *I`EX* OR *IE`X* OR *iex\\ * OR *IEX\\ \\(* OR *IEX\\(* OR *Invoke\\-Expression*))",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.execution",
+    "attack.t1059"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Florian Roth (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Some PowerShell installers were seen using similar combinations. Apply filters accordingly"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

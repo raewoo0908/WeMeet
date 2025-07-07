@@ -1,0 +1,52 @@
+{
+  "rule_id": "92b0b372-a939-44ed-a11b-5136cf680e27",
+  "risk_score": 73,
+  "description": "Attempts to detect system changes made by Blue Mockingbird",
+  "name": "Blue Mockingbird - Registry",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "registry.path:*\\\\CurrentControlSet\\\\Services\\\\wercplsupport\\\\Parameters\\\\ServiceDll",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.execution",
+    "attack.persistence",
+    "attack.t1112",
+    "attack.t1047"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Trent Liffick (@tliffick)"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

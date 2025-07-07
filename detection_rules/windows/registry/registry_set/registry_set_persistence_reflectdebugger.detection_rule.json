@@ -1,0 +1,50 @@
+{
+  "rule_id": "0cf2e1c6-8d10-4273-8059-738778f981ad",
+  "risk_score": 73,
+  "description": "Detects potential WerFault \"ReflectDebugger\" registry value abuse for persistence.",
+  "name": "Potential WerFault ReflectDebugger Registry Value Abuse",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "winlog.event_data.EventType:SetValue AND registry.path:*\\\\Microsoft\\\\Windows\\\\Windows\\ Error\\ Reporting\\\\Hangs\\\\ReflectDebugger",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.defense-evasion",
+    "attack.t1036.003"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "X__Junior"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

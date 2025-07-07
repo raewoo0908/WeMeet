@@ -1,0 +1,64 @@
+{
+  "rule_id": "95022b85-ff2a-49fa-939a-d7b8f56eeb9b",
+  "risk_score": 73,
+  "description": "Detects actions caused by the RedMimicry Winnti playbook a automated breach emulations utility",
+  "name": "HackTool - RedMimicry Winnti Playbook Execution",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "(process.command_line:(*gthread\\-3.6.dll* OR *\\\\Windows\\\\Temp\\\\tmp.bat* OR *sigcmm\\-2.4.dll*)) AND (process.executable:(*\\\\rundll32.exe OR *\\\\cmd.exe))",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.execution",
+    "attack.defense-evasion",
+    "attack.t1106",
+    "attack.t1059.003",
+    "attack.t1218.011"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Alexander Rausch"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

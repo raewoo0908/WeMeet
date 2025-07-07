@@ -1,0 +1,61 @@
+{
+  "rule_id": "213d6a77-3d55-4ce8-ba74-fcfef741974e",
+  "risk_score": 47,
+  "description": "Adversaries may search for private key certificate files on compromised systems for insecurely stored credential",
+  "name": "Private Keys Reconnaissance Via CommandLine Tools",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "(process.command_line:(*.key* OR *.pgp* OR *.gpg* OR *.ppk* OR *.p12* OR *.pem* OR *.pfx* OR *.cer* OR *.p7b* OR *.asc*)) AND ((process.command_line:*dir\\ * AND (process.executable:*\\\\cmd.exe OR process.pe.original_file_name:Cmd.Exe)) OR (process.command_line:*Get\\-ChildItem\\ * AND ((process.executable:(*\\\\powershell.exe OR *\\\\pwsh.exe)) OR (process.pe.original_file_name:(PowerShell.EXE OR pwsh.dll)))) OR (process.executable:*\\\\findstr.exe OR process.pe.original_file_name:FINDSTR.EXE))",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.credential-access",
+    "attack.t1552.004"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "frack113, Nasreddine Bencherchali (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

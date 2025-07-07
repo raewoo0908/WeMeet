@@ -1,0 +1,50 @@
+{
+  "rule_id": "31d68132-4038-47c7-8f8e-635a39a7c174",
+  "risk_score": 47,
+  "description": "Detects potential Active Directory enumeration via LDAP",
+  "name": "Potential Active Directory Reconnaissance/Enumeration Via LDAP",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "((event.code:30 AND (winlog.event_data.SearchFilter:(*\\(groupType\\:1.2.840.113556.1.4.803\\:\\=2147483648\\)* OR *\\(groupType\\:1.2.840.113556.1.4.803\\:\\=2147483656\\)* OR *\\(groupType\\:1.2.840.113556.1.4.803\\:\\=2147483652\\)* OR *\\(groupType\\:1.2.840.113556.1.4.803\\:\\=2147483650\\)* OR *\\(sAMAccountType\\=805306369\\)* OR *\\(sAMAccountType\\=805306368\\)* OR *\\(sAMAccountType\\=536870913\\)* OR *\\(sAMAccountType\\=536870912\\)* OR *\\(sAMAccountType\\=268435457\\)* OR *\\(sAMAccountType\\=268435456\\)* OR *\\(objectCategory\\=groupPolicyContainer\\)* OR *\\(objectCategory\\=organizationalUnit\\)* OR *\\(objectCategory\\=Computer\\)* OR *\\(objectCategory\\=nTDSDSA\\)* OR *\\(objectCategory\\=server\\)* OR *\\(objectCategory\\=domain\\)* OR *\\(objectCategory\\=person\\)* OR *\\(objectCategory\\=group\\)* OR *\\(objectCategory\\=user\\)* OR *\\(objectClass\\=trustedDomain\\)* OR *\\(objectClass\\=computer\\)* OR *\\(objectClass\\=server\\)* OR *\\(objectClass\\=group\\)* OR *\\(objectClass\\=user\\)* OR *\\(primaryGroupID\\=521\\)* OR *\\(primaryGroupID\\=516\\)* OR *\\(primaryGroupID\\=515\\)* OR *\\(primaryGroupID\\=512\\)* OR *Domain\\ Admins* OR *objectGUID\\=\\** OR *\\(schemaIDGUID\\=\\*\\)* OR *admincount\\=1*))) AND (NOT (event.code:30 AND (winlog.event_data.SearchFilter:(*\\(domainSid\\=*\\)* OR *\\(objectSid\\=*\\)*))))) OR (event.code:30 AND (winlog.event_data.SearchFilter:(*\\(userAccountControl\\:1.2.840.113556.1.4.803\\:\\=4194304\\)* OR *\\(userAccountControl\\:1.2.840.113556.1.4.803\\:\\=2097152\\)* OR *\\!\\(userAccountControl\\:1.2.840.113556.1.4.803\\:\\=1048574\\)* OR *\\(userAccountControl\\:1.2.840.113556.1.4.803\\:\\=524288\\)* OR *\\(userAccountControl\\:1.2.840.113556.1.4.803\\:\\=65536\\)* OR *\\(userAccountControl\\:1.2.840.113556.1.4.803\\:\\=8192\\)* OR *\\(userAccountControl\\:1.2.840.113556.1.4.803\\:\\=544\\)* OR *\\!\\(UserAccountControl\\:1.2.840.113556.1.4.803\\:\\=2\\)* OR *msDS\\-AllowedToActOnBehalfOfOtherIdentity* OR *msDS\\-AllowedToDelegateTo* OR *msDS\\-GroupManagedServiceAccount* OR *\\(accountExpires\\=9223372036854775807\\)* OR *\\(accountExpires\\=0\\)* OR *\\(adminCount\\=1\\)* OR *ms\\-MCS\\-AdmPwd*))) OR ((winlog.event_data.DistinguishedName:(*CN\\=Domain\\ Admins* OR *CN\\=Enterprise\\ Admins* OR *CN\\=Group\\ Policy\\ Creator\\ Owners*)) AND event.code:30 AND winlog.event_data.SearchFilter:\\(objectclass\\=\\*\\))",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.discovery",
+    "attack.t1069.002",
+    "attack.t1087.002",
+    "attack.t1482"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Adeem Mawani"
+  ],
+  "false_positives": [],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

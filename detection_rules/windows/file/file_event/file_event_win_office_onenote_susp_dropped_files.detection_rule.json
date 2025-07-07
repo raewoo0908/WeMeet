@@ -1,0 +1,61 @@
+{
+  "rule_id": "fcc6d700-68d9-4241-9a1a-06874d621b06",
+  "risk_score": 73,
+  "description": "Detects suspicious files created via the OneNote application. This could indicate a potential malicious \".one\"/\".onepkg\" file was executed as seen being used in malware activity in the wild",
+  "name": "Suspicious File Created Via OneNote Application",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "(process.executable:(*\\\\onenote.exe OR *\\\\onenotem.exe OR *\\\\onenoteim.exe)) AND file.path:*\\\\AppData\\\\Local\\\\Temp\\\\OneNote\\\\* AND (file.path:(*.bat OR *.chm OR *.cmd OR *.dll OR *.exe OR *.hta OR *.htm OR *.html OR *.js OR *.lnk OR *.ps1 OR *.vbe OR *.vbs OR *.wsf))",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "File Create (rule: FileCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.defense-evasion"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Nasreddine Bencherchali (Nextron Systems)"
+  ],
+  "false_positives": [
+    "False positives should be very low with the extensions list cited. Especially if you don't heavily utilize OneNote.",
+    "Occasional FPs might occur if OneNote is used internally to share different embedded documents"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

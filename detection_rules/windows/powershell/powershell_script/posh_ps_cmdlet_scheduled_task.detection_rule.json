@@ -1,0 +1,50 @@
+{
+  "rule_id": "363eccc0-279a-4ccf-a3ab-24c2e63b11fb",
+  "risk_score": 47,
+  "description": "Adversaries may abuse the Windows Task Scheduler to perform task scheduling for initial or recurring execution of malicious code",
+  "name": "Powershell Create Scheduled Task",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "(powershell.file.script_block_text:*Invoke\\-CimMethod* AND powershell.file.script_block_text:*\\-ClassName* AND powershell.file.script_block_text:*PS_ScheduledTask* AND powershell.file.script_block_text:*\\-NameSpace* AND powershell.file.script_block_text:*Root\\\\Microsoft\\\\Windows\\\\TaskScheduler*) OR (powershell.file.script_block_text:(*New\\-ScheduledTaskAction* OR *New\\-ScheduledTaskTrigger* OR *New\\-ScheduledTaskPrincipal* OR *New\\-ScheduledTaskSettingsSet* OR *New\\-ScheduledTask* OR *Register\\-ScheduledTask*))",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.persistence",
+    "attack.t1053.005"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "frack113"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

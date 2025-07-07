@@ -1,0 +1,52 @@
+{
+  "rule_id": "c265cf08-3f99-46c1-8d59-328247057d57",
+  "risk_score": 47,
+  "description": "Detects the addition of a new member to the local administrator group, which could be legitimate activity or a sign of privilege escalation activity",
+  "name": "User Added to Local Administrator Group",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "winlog.channel:Security AND ((event.code:4732 AND (winlog.event_data.TargetUserName:Administr* OR winlog.event_data.TargetSid:S\\-1\\-5\\-32\\-544)) AND (NOT user.name:*$))",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.privilege-escalation",
+    "attack.t1078",
+    "attack.persistence",
+    "attack.t1098"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Florian Roth (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Legitimate administrative activity"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

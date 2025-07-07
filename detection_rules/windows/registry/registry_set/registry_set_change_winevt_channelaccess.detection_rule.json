@@ -1,0 +1,50 @@
+{
+  "rule_id": "7d9263bd-dc47-4a58-bc92-5474abab390c",
+  "risk_score": 73,
+  "description": "Detects tampering with the \"ChannelAccess\" registry key in order to change access to Windows event channel.",
+  "name": "Change Winevt Channel Access Permission Via Registry",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "((winlog.event_data.Details:(*\\(A;;0x1;;;LA\\)* OR *\\(A;;0x1;;;SY\\)* OR *\\(A;;0x5;;;BA\\)*)) AND registry.path:*\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\WINEVT\\\\Channels\\\\* AND registry.path:*\\\\ChannelAccess) AND (NOT ((process.executable:*\\\\TiWorker.exe AND process.executable:C\\:\\\\Windows\\\\WinSxS\\\\*) OR process.executable:C\\:\\\\Windows\\\\servicing\\\\TrustedInstaller.exe))",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.defense-evasion",
+    "attack.t1562.002"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "frack113"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

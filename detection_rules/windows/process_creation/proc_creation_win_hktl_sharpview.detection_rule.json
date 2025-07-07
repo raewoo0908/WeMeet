@@ -1,0 +1,65 @@
+{
+  "rule_id": "b2317cfa-4a47-4ead-b3ff-297438c0bc2d",
+  "risk_score": 73,
+  "description": "Adversaries may look for details about the network configuration and settings of systems they access or through information discovery of remote systems",
+  "name": "HackTool - SharpView Execution",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "process.pe.original_file_name:SharpView.exe OR process.executable:*\\\\SharpView.exe OR (process.command_line:(*Add\\-RemoteConnection* OR *Convert\\-ADName* OR *ConvertFrom\\-SID* OR *ConvertFrom\\-UACValue* OR *Convert\\-SidToName* OR *Export\\-PowerViewCSV* OR *Find\\-DomainObjectPropertyOutlier* OR *Find\\-DomainProcess* OR *Find\\-DomainShare* OR *Find\\-DomainUserEvent* OR *Find\\-DomainUserLocation* OR *Find\\-ForeignGroup* OR *Find\\-ForeignUser* OR *Find\\-GPOComputerAdmin* OR *Find\\-GPOLocation* OR *Find\\-Interesting* OR *Find\\-LocalAdminAccess* OR *Find\\-ManagedSecurityGroups* OR *Get\\-CachedRDPConnection* OR *Get\\-DFSshare* OR *Get\\-DomainComputer* OR *Get\\-DomainController* OR *Get\\-DomainDFSShare* OR *Get\\-DomainDNSRecord* OR *Get\\-DomainFileServer* OR *Get\\-DomainForeign* OR *Get\\-DomainGPO* OR *Get\\-DomainGroup* OR *Get\\-DomainGUIDMap* OR *Get\\-DomainManagedSecurityGroup* OR *Get\\-DomainObject* OR *Get\\-DomainOU* OR *Get\\-DomainPolicy* OR *Get\\-DomainSID* OR *Get\\-DomainSite* OR *Get\\-DomainSPNTicket* OR *Get\\-DomainSubnet* OR *Get\\-DomainTrust* OR *Get\\-DomainUserEvent* OR *Get\\-ForestDomain* OR *Get\\-ForestGlobalCatalog* OR *Get\\-ForestTrust* OR *Get\\-GptTmpl* OR *Get\\-GroupsXML* OR *Get\\-LastLoggedOn* OR *Get\\-LoggedOnLocal* OR *Get\\-NetComputer* OR *Get\\-NetDomain* OR *Get\\-NetFileServer* OR *Get\\-NetForest* OR *Get\\-NetGPO* OR *Get\\-NetGroupMember* OR *Get\\-NetLocalGroup* OR *Get\\-NetLoggedon* OR *Get\\-NetOU* OR *Get\\-NetProcess* OR *Get\\-NetRDPSession* OR *Get\\-NetSession* OR *Get\\-NetShare* OR *Get\\-NetSite* OR *Get\\-NetSubnet* OR *Get\\-NetUser* OR *Get\\-PathAcl* OR *Get\\-PrincipalContext* OR *Get\\-RegistryMountedDrive* OR *Get\\-RegLoggedOn* OR *Get\\-WMIRegCachedRDPConnection* OR *Get\\-WMIRegLastLoggedOn* OR *Get\\-WMIRegMountedDrive* OR *Get\\-WMIRegProxy* OR *Invoke\\-ACLScanner* OR *Invoke\\-CheckLocalAdminAccess* OR *Invoke\\-Kerberoast* OR *Invoke\\-MapDomainTrust* OR *Invoke\\-RevertToSelf* OR *Invoke\\-Sharefinder* OR *Invoke\\-UserImpersonation* OR *Remove\\-DomainObjectAcl* OR *Remove\\-RemoteConnection* OR *Request\\-SPNTicket* OR *Set\\-DomainObject* OR *Test\\-AdminAccess*))",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.discovery",
+    "attack.t1049",
+    "attack.t1069.002",
+    "attack.t1482",
+    "attack.t1135",
+    "attack.t1033"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "frack113"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

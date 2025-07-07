@@ -1,0 +1,61 @@
+{
+  "rule_id": "3dfd06d2-eaf4-4532-9555-68aca59f57c4",
+  "risk_score": 73,
+  "description": "Detects a potentially suspicious execution from an uncommon folder.",
+  "name": "Process Execution From A Potentially Suspicious Folder",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "(process.executable:(*\\:\\\\Perflogs\\\\* OR *\\:\\\\Users\\\\All\\ Users\\\\* OR *\\:\\\\Users\\\\Default\\\\* OR *\\:\\\\Users\\\\NetworkService\\\\* OR *\\:\\\\Windows\\\\addins\\\\* OR *\\:\\\\Windows\\\\debug\\\\* OR *\\:\\\\Windows\\\\Fonts\\\\* OR *\\:\\\\Windows\\\\Help\\\\* OR *\\:\\\\Windows\\\\IME\\\\* OR *\\:\\\\Windows\\\\Media\\\\* OR *\\:\\\\Windows\\\\repair\\\\* OR *\\:\\\\Windows\\\\security\\\\* OR *\\:\\\\Windows\\\\System32\\\\Tasks\\\\* OR *\\:\\\\Windows\\\\Tasks\\\\* OR *$Recycle.bin* OR *\\\\config\\\\systemprofile\\\\* OR *\\\\Intel\\\\Logs\\\\* OR *\\\\RSA\\\\MachineKeys\\\\*)) AND (NOT ((process.executable:*\\\\CitrixReceiverUpdater.exe AND process.executable:C\\:\\\\Windows\\\\SysWOW64\\\\config\\\\systemprofile\\\\Citrix\\\\UpdaterBinaries\\\\*) OR process.executable:C\\:\\\\Users\\\\Public\\\\IBM\\\\ClientSolutions\\\\Start_Programs\\\\*))",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.defense-evasion",
+    "attack.t1036"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Florian Roth (Nextron Systems), Tim Shelton"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

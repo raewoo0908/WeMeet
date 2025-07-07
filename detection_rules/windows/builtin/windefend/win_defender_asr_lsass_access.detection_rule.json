@@ -1,0 +1,51 @@
+{
+  "rule_id": "a0a278fe-2c0e-4de2-ac3c-c68b08a9ba98",
+  "risk_score": 73,
+  "description": "Detects Access to LSASS Process",
+  "name": "LSASS Access Detected via Attack Surface Reduction",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "winlog.channel:Microsoft\\-Windows\\-Windows\\ Defender\\/Operational AND ((event.code:1121 AND winlog.event_data.Path:*\\\\lsass.exe) AND (NOT ((process.executable:(C\\:\\\\Windows\\\\System32\\\\DriverStore\\\\* OR C\\:\\\\WINDOWS\\\\Installer\\\\* OR C\\:\\\\Program\\ Files\\\\* OR C\\:\\\\Program\\ Files\\ \\(x86\\)\\\\*)) OR (process.executable:(C\\:\\\\Windows\\\\System32\\\\atiesrxx.exe OR C\\:\\\\Windows\\\\System32\\\\CompatTelRunner.exe OR C\\:\\\\Windows\\\\System32\\\\msiexec.exe OR C\\:\\\\Windows\\\\System32\\\\nvwmi64.exe OR C\\:\\\\Windows\\\\System32\\\\svchost.exe OR C\\:\\\\Windows\\\\System32\\\\Taskmgr.exe OR C\\:\\\\Windows\\\\System32\\\\wbem\\\\WmiPrvSE.exe OR C\\:\\\\Windows\\\\SysWOW64\\\\msiexec.exe)) OR ((process.executable:(*\\\\thor64.exe OR *\\\\thor.exe)) AND process.executable:C\\:\\\\Windows\\\\Temp\\\\asgard2\\-agent\\\\*))))",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.credential-access",
+    "attack.t1003.001"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Markus Neis"
+  ],
+  "false_positives": [
+    "Google Chrome GoogleUpdate.exe",
+    "Some Taskmgr.exe related activity"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

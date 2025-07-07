@@ -1,0 +1,61 @@
+{
+  "rule_id": "42333b2c-b425-441c-b70e-99404a17170f",
+  "risk_score": 99,
+  "description": "Detects process activity patterns as seen being used by Sliver C2 framework implants",
+  "name": "HackTool - Sliver C2 Implant Activity Pattern",
+  "severity": "critical",
+  "type": "query",
+  "language": "lucene",
+  "query": "process.command_line:*\\-NoExit\\ \\-Command\\ \\[Console\\]\\:\\:OutputEncoding\\=\\[Text.UTF8Encoding\\]\\:\\:UTF8*",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.execution",
+    "attack.t1059"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Nasreddine Bencherchali (Nextron Systems), Florian Roth (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Unlikely"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

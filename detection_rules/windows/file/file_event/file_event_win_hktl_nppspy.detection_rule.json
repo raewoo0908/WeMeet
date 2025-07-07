@@ -1,0 +1,60 @@
+{
+  "rule_id": "cad1fe90-2406-44dc-bd03-59d0b58fe722",
+  "risk_score": 73,
+  "description": "Detects the use of NPPSpy hacktool that stores cleartext passwords of users that logged in to a local file",
+  "name": "HackTool - NPPSpy Hacktool Usage",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "file.path:(*\\\\NPPSpy.txt OR *\\\\NPPSpy.dll)",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "File Create (rule: FileCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.credential-access"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Florian Roth (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

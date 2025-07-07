@@ -1,0 +1,67 @@
+{
+  "rule_id": "304afd73-55a5-4bb9-8c21-0b1fc84ea9e4",
+  "risk_score": 73,
+  "description": "Detects creation of the PSEXEC key file. Which is created anytime a PsExec command is executed. It gets written to the file system and will be recorded in the USN Journal on the target system",
+  "name": "PSEXEC Remote Execution File Artefact",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "file.path:*.key AND file.path:C\\:\\\\Windows\\\\PSEXEC\\-*",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "File Create (rule: FileCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.lateral-movement",
+    "attack.privilege-escalation",
+    "attack.execution",
+    "attack.persistence",
+    "attack.t1136.002",
+    "attack.t1543.003",
+    "attack.t1570",
+    "attack.s0029"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Nasreddine Bencherchali (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Unlikely"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

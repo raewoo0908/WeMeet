@@ -1,0 +1,60 @@
+{
+  "rule_id": "ba42babc-0666-4393-a4f7-ceaf5a69191e",
+  "risk_score": 47,
+  "description": "Detects potentially uncommon child processes of SndVol.exe (the Windows volume mixer)",
+  "name": "Uncommon Child Processes Of SndVol.exe",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "process.parent.executable:*\\\\SndVol.exe AND (NOT (process.command_line:*\\ shell32.dll,Control_RunDLL\\ * AND process.executable:*\\\\rundll32.exe))",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.execution"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "X__Junior (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

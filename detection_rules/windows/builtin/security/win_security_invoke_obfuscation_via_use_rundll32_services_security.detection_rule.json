@@ -1,0 +1,52 @@
+{
+  "rule_id": "cd0f7229-d16f-42de-8fe3-fba365fbcb3a",
+  "risk_score": 73,
+  "description": "Detects Obfuscated Powershell via use Rundll32 in Scripts",
+  "name": "Invoke-Obfuscation Via Use Rundll32 - Security",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "winlog.channel:Security AND (event.code:4697 AND (winlog.event_data.ServiceFileName:(*value* OR *invoke* OR *comspec* OR *iex*)) AND (winlog.event_data.ServiceFileName:*\\&\\&* AND winlog.event_data.ServiceFileName:*rundll32* AND winlog.event_data.ServiceFileName:*shell32.dll* AND winlog.event_data.ServiceFileName:*shellexec_rundll*))",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.defense-evasion",
+    "attack.t1027",
+    "attack.execution",
+    "attack.t1059.001"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Nikita Nazarov, oscd.community"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

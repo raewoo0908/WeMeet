@@ -1,0 +1,50 @@
+{
+  "rule_id": "e4d22291-f3d5-4b78-9a0c-a1fbaf32a6a4",
+  "risk_score": 73,
+  "description": "Detects the registration of a new ODBC driver where the driver is located in a potentially suspicious location",
+  "name": "Potentially Suspicious ODBC Driver Registered",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "(winlog.event_data.Details:(*\\:\\\\PerfLogs\\\\* OR *\\:\\\\ProgramData\\\\* OR *\\:\\\\Temp\\\\* OR *\\:\\\\Users\\\\Public\\\\* OR *\\:\\\\Windows\\\\Registration\\\\CRMLog* OR *\\:\\\\Windows\\\\System32\\\\com\\\\dmp\\\\* OR *\\:\\\\Windows\\\\System32\\\\FxsTmp\\\\* OR *\\:\\\\Windows\\\\System32\\\\Microsoft\\\\Crypto\\\\RSA\\\\MachineKeys\\\\* OR *\\:\\\\Windows\\\\System32\\\\spool\\\\drivers\\\\color\\\\* OR *\\:\\\\Windows\\\\System32\\\\spool\\\\PRINTERS\\\\* OR *\\:\\\\Windows\\\\System32\\\\spool\\\\SERVERS\\\\* OR *\\:\\\\Windows\\\\System32\\\\Tasks_Migrated\\\\* OR *\\:\\\\Windows\\\\System32\\\\Tasks\\\\Microsoft\\\\Windows\\\\SyncCenter\\\\* OR *\\:\\\\Windows\\\\SysWOW64\\\\com\\\\dmp\\\\* OR *\\:\\\\Windows\\\\SysWOW64\\\\FxsTmp\\\\* OR *\\:\\\\Windows\\\\SysWOW64\\\\Tasks\\\\Microsoft\\\\Windows\\\\PLA\\\\System\\\\* OR *\\:\\\\Windows\\\\SysWOW64\\\\Tasks\\\\Microsoft\\\\Windows\\\\SyncCenter\\\\* OR *\\:\\\\Windows\\\\Tasks\\\\* OR *\\:\\\\Windows\\\\Temp\\\\* OR *\\:\\\\Windows\\\\Tracing\\\\* OR *\\\\AppData\\\\Local\\\\Temp\\\\* OR *\\\\AppData\\\\Roaming\\\\*)) AND registry.path:*\\\\SOFTWARE\\\\ODBC\\\\ODBCINST.INI\\\\* AND (registry.path:(*\\\\Driver OR *\\\\Setup))",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.persistence",
+    "attack.t1003"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Nasreddine Bencherchali (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Unlikely"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

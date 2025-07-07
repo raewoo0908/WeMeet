@@ -1,0 +1,49 @@
+{
+  "rule_id": "5cdeaf3d-1489-477c-95ab-c318559fc051",
+  "risk_score": 73,
+  "description": "Detects an appx package added the pipeline of the \"to be processed\" packages which is located in suspicious locations",
+  "name": "Suspicious AppX Package Locations",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "winlog.channel:Microsoft\\-Windows\\-AppXDeploymentServer\\/Operational AND (event.code:854 AND (winlog.event_data.Path:(*C\\:\\\\Users\\\\Public\\\\* OR *\\/users\\/public\\/* OR *C\\:\\\\PerfLogs\\\\* OR *C\\:\\/perflogs\\/* OR *\\\\Desktop\\\\* OR *\\/desktop\\/* OR *\\\\Downloads\\\\* OR *\\/Downloads\\/* OR *C\\:\\\\Windows\\\\Temp\\\\* OR *C\\:\\/Windows\\/Temp\\/* OR *\\\\AppdData\\\\Local\\\\Temp\\\\* OR *\\/AppdData\\/Local\\/Temp\\/*)))",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.defense-evasion"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Nasreddine Bencherchali (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

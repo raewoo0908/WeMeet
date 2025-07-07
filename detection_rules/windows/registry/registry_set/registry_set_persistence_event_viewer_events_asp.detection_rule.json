@@ -1,0 +1,51 @@
+{
+  "rule_id": "a1e11042-a74a-46e6-b07c-c4ce8ecc239b",
+  "risk_score": 47,
+  "description": "Detects potential registry persistence technique using the Event Viewer \"Events.asp\" technique",
+  "name": "Potential Persistence Via Event Viewer Events.asp",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "(registry.path:(*\\\\Microsoft\\\\Windows\\ NT\\\\CurrentVersion\\\\Event\\ Viewer\\\\MicrosoftRedirectionProgram* OR *\\\\Microsoft\\\\Windows\\ NT\\\\CurrentVersion\\\\Event\\ Viewer\\\\MicrosoftRedirectionURL*)) AND (NOT (winlog.event_data.Details:\\(Empty\\) OR (winlog.event_data.Details:%%SystemRoot%%\\\\PCHealth\\\\HelpCtr\\\\Binaries\\\\HelpCtr.exe AND process.executable:*C\\:\\\\WINDOWS\\\\system32\\\\svchost.exe AND registry.path:*\\\\Microsoft\\\\Windows\\ NT\\\\CurrentVersion\\\\Event\\ Viewer\\\\MicrosoftRedirectionProgram) OR (winlog.event_data.Details:\\-url\\ hcp\\:\\/\\/services\\/centers\\/support?topic\\=%%s AND process.executable:*C\\:\\\\WINDOWS\\\\system32\\\\svchost.exe AND registry.path:*\\\\Microsoft\\\\Windows\\ NT\\\\CurrentVersion\\\\Event\\ Viewer\\\\MicrosoftRedirectionProgramCommandLineParameters) OR winlog.event_data.Details:http\\:\\/\\/go.microsoft.com\\/fwlink\\/events.asp))",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.persistence",
+    "attack.defense-evasion",
+    "attack.t1112"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Nasreddine Bencherchali (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

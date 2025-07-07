@@ -1,0 +1,50 @@
+{
+  "rule_id": "974515da-6cc5-4c95-ae65-f97f9150ec7f",
+  "risk_score": 47,
+  "description": "Adversaries may disable or modify system firewalls in order to bypass controls limiting network usage",
+  "name": "Disable Microsoft Defender Firewall via Registry",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "winlog.event_data.Details:DWORD\\ \\(0x00000000\\) AND registry.path:*\\\\Services\\\\SharedAccess\\\\Parameters\\\\FirewallPolicy\\\\* AND registry.path:*\\\\EnableFirewall",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.defense-evasion",
+    "attack.t1562.004"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "frack113"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

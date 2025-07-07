@@ -1,0 +1,51 @@
+{
+  "rule_id": "9d3436ef-9476-4c43-acca-90ce06bdf33a",
+  "risk_score": 73,
+  "description": "Detects the installation of a Callout DLL via CalloutDlls and CalloutEnabled parameter in Registry, which can be used to execute code in context of the DHCP server (restart required)",
+  "name": "DHCP Callout DLL Installation",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "registry.path:(*\\\\Services\\\\DHCPServer\\\\Parameters\\\\CalloutDlls OR *\\\\Services\\\\DHCPServer\\\\Parameters\\\\CalloutEnabled)",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.defense-evasion",
+    "attack.t1574.001",
+    "attack.t1112"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Dimitrios Slamaris"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

@@ -1,0 +1,61 @@
+{
+  "rule_id": "75bf09fa-1dd7-4d18-9af9-dd9e492562eb",
+  "risk_score": 47,
+  "description": "Detects the creation of an \"Active Directory Schema Cache File\" (.sch) file by an uncommon tool.",
+  "name": "ADSI-Cache File Creation By Uncommon Tool",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "(file.path:*\\\\Local\\\\Microsoft\\\\Windows\\\\SchCache\\\\* AND file.path:*.sch) AND (NOT (((process.executable:(*\\:\\\\Program\\ Files\\\\Cylance\\\\Desktop\\\\CylanceSvc.exe OR *\\:\\\\Windows\\\\CCM\\\\CcmExec.exe OR *\\:\\\\windows\\\\system32\\\\dllhost.exe OR *\\:\\\\Windows\\\\system32\\\\dsac.exe OR *\\:\\\\Windows\\\\system32\\\\efsui.exe OR *\\:\\\\windows\\\\system32\\\\mmc.exe OR *\\:\\\\windows\\\\system32\\\\svchost.exe OR *\\:\\\\Windows\\\\System32\\\\wbem\\\\WmiPrvSE.exe OR *\\:\\\\windows\\\\system32\\\\WindowsPowerShell\\\\v1.0\\\\powershell.exe)) OR (process.executable:(*\\:\\\\Windows\\\\ccmsetup\\\\autoupgrade\\\\ccmsetup* OR *\\:\\\\Program\\ Files\\\\SentinelOne\\\\Sentinel\\ Agent*))) OR ((process.executable:*\\:\\\\Program\\ Files\\\\* AND process.executable:*\\\\Microsoft\\ Office*) AND process.executable:*\\\\OUTLOOK.EXE))) AND (NOT (process.executable:(*\\:\\\\Program\\ Files\\\\Citrix\\\\Receiver\\ StoreFront\\\\Services\\\\DefaultDomainServices\\\\Citrix.DeliveryServices.DomainServices.ServiceHost.exe OR *\\\\LANDesk\\\\LDCLient\\\\ldapwhoami.exe)))",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "File Create (rule: FileCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.t1001.003",
+    "attack.command-and-control"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "xknow @xknow_infosec, Tim Shelton"
+  ],
+  "false_positives": [
+    "Other legimate tools, which do ADSI (LDAP) operations, e.g. any remoting activity by MMC, Powershell, Windows etc."
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

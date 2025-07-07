@@ -1,0 +1,68 @@
+{
+  "rule_id": "56c217c3-2de2-479b-990f-5c109ba8458f",
+  "risk_score": 73,
+  "description": "Detects the creation of a schtask via PowerSploit or Empire Default Configuration.",
+  "name": "HackTool - Default PowerSploit/Empire Scheduled Task Creation",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "(process.command_line:(*\\/SC\\ ONLOGON* OR *\\/SC\\ DAILY\\ \\/ST* OR *\\/SC\\ ONIDLE* OR *\\/SC\\ HOURLY*)) AND (process.command_line:*\\/Create* AND process.command_line:*powershell.exe\\ \\-NonI* AND process.command_line:*\\/TN\\ Updater\\ \\/TR*) AND process.executable:*\\\\schtasks.exe AND (process.parent.executable:(*\\\\powershell.exe OR *\\\\pwsh.exe))",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.execution",
+    "attack.persistence",
+    "attack.privilege-escalation",
+    "attack.s0111",
+    "attack.g0022",
+    "attack.g0060",
+    "car.2013-08-001",
+    "attack.t1053.005",
+    "attack.t1059.001"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Markus Neis, @Karneades"
+  ],
+  "false_positives": [
+    "Unlikely"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

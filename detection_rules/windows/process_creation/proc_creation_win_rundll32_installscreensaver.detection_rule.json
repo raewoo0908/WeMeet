@@ -1,0 +1,61 @@
+{
+  "rule_id": "15bd98ea-55f4-4d37-b09a-e7caa0fa2221",
+  "risk_score": 47,
+  "description": "An attacker may execute an application as a SCR File using rundll32.exe desk.cpl,InstallScreenSaver",
+  "name": "Rundll32 InstallScreenSaver Execution",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "process.command_line:*InstallScreenSaver* AND (process.executable:*\\\\rundll32.exe OR process.pe.original_file_name:RUNDLL32.EXE)",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.t1218.011",
+    "attack.defense-evasion"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Christopher Peacock @securepeacock, SCYTHE @scythe_io, TactiKoolSec"
+  ],
+  "false_positives": [
+    "Legitimate installation of a new screensaver"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

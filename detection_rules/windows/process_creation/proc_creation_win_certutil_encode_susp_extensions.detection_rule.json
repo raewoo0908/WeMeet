@@ -1,0 +1,61 @@
+{
+  "rule_id": "ea0cdc3e-2239-4f26-a947-4e8f8224e464",
+  "risk_score": 73,
+  "description": "Detects the execution of certutil with the \"encode\" flag to encode a file to base64 where the extensions of the file is suspicious",
+  "name": "Suspicious File Encoded To Base64 Via Certutil.EXE",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "process.command_line:(*\\-encode* OR *\\/encode* OR *–encode* OR *—encode* OR *―encode*) AND (process.command_line:(*.acl* OR *.bat* OR *.doc* OR *.gif* OR *.jpeg* OR *.jpg* OR *.mp3* OR *.pdf* OR *.png* OR *.ppt* OR *.tmp* OR *.xls* OR *.xml*)) AND (process.executable:*\\\\certutil.exe OR process.pe.original_file_name:CertUtil.exe)",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.defense-evasion",
+    "attack.t1027"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Nasreddine Bencherchali (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

@@ -1,0 +1,50 @@
+{
+  "rule_id": "9c5037d1-c568-49b3-88c7-9846a5bdc2be",
+  "risk_score": 73,
+  "description": "Detects the suspicious RUN keys created by software located in Download or temporary Outlook/Internet Explorer directories",
+  "name": "Suspicious Run Key from Download",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "(process.executable:(*\\\\AppData\\\\Local\\\\Packages\\\\Microsoft.Outlook_* OR *\\\\AppData\\\\Local\\\\Microsoft\\\\Olk\\\\Attachments\\\\* OR *\\\\Downloads\\\\* OR *\\\\Temporary\\ Internet\\ Files\\\\Content.Outlook\\\\* OR *\\\\Local\\ Settings\\\\Temporary\\ Internet\\ Files\\\\*)) AND (registry.path:(*\\\\Software\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Run* OR *\\\\Software\\\\WOW6432Node\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Run* OR *\\\\Software\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Policies\\\\Explorer\\\\Run*))",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.persistence",
+    "attack.t1547.001"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Florian Roth (Nextron Systems), Swachchhanda Shrawan Poude (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Software installers downloaded and used by users"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

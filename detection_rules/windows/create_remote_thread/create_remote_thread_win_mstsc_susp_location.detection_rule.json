@@ -1,0 +1,49 @@
+{
+  "rule_id": "c0aac16a-b1e7-4330-bab0-3c27bb4987c7",
+  "risk_score": 73,
+  "description": "Detects remote thread creation in the \"mstsc.exe\" process by a process located in a potentially suspicious location.\nThis technique is often used by attackers in order to hook some APIs used by DLLs loaded by \"mstsc.exe\" during RDP authentications in order to steal credentials.\n",
+  "name": "Remote Thread Creation In Mstsc.Exe From Suspicious Location",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "(process.executable:(*\\:\\\\Temp\\\\* OR *\\:\\\\Users\\\\Public\\\\* OR *\\:\\\\Windows\\\\PerfLogs\\\\* OR *\\:\\\\Windows\\\\Tasks\\\\* OR *\\:\\\\Windows\\\\Temp\\\\* OR *\\\\AppData\\\\Local\\\\Temp\\\\*)) AND winlog.event_data.TargetImage:*\\\\mstsc.exe",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.credential-access"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Nasreddine Bencherchali (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

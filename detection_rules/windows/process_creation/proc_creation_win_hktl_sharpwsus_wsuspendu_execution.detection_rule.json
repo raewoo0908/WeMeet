@@ -1,0 +1,62 @@
+{
+  "rule_id": "b0ce780f-10bd-496d-9067-066d23dc3aa5",
+  "risk_score": 73,
+  "description": "Detects the execution of SharpWSUS or WSUSpendu, utilities that allow for lateral movement through WSUS.\nWindows Server Update Services (WSUS) is a critical component of Windows systems and is frequently configured in a way that allows an attacker to circumvent internal networking limitations.\n",
+  "name": "HackTool - SharpWSUS/WSUSpendu Execution",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "(process.command_line:*\\ \\-Inject\\ * AND (process.command_line:(*\\ \\-PayloadArgs\\ * OR *\\ \\-PayloadFile\\ *))) OR ((process.command_line:(*\\ approve\\ * OR *\\ create\\ * OR *\\ check\\ * OR *\\ delete\\ *)) AND (process.command_line:(*\\ \\/payload\\:* OR *\\ \\/payload\\=* OR *\\ \\/updateid\\:* OR *\\ \\/updateid\\=*)))",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.execution",
+    "attack.lateral-movement",
+    "attack.t1210"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "@Kostastsale, Nasreddine Bencherchali (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

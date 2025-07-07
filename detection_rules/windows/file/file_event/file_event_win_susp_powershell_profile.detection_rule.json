@@ -1,0 +1,62 @@
+{
+  "rule_id": "b5b78988-486d-4a80-b991-930eff3ff8bf",
+  "risk_score": 47,
+  "description": "Detects the creation or modification of a powershell profile which could indicate suspicious activity as the profile can be used as a mean of persistence",
+  "name": "PowerShell Profile Modification",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "file.path:(*\\\\Microsoft.PowerShell_profile.ps1 OR *\\\\PowerShell\\\\profile.ps1 OR *\\\\Program\\ Files\\\\PowerShell\\\\7\\-preview\\\\profile.ps1 OR *\\\\Program\\ Files\\\\PowerShell\\\\7\\\\profile.ps1 OR *\\\\Windows\\\\System32\\\\WindowsPowerShell\\\\v1.0\\\\profile.ps1 OR *\\\\WindowsPowerShell\\\\profile.ps1)",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "File Create (rule: FileCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.persistence",
+    "attack.privilege-escalation",
+    "attack.t1546.013"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "HieuTT35, Nasreddine Bencherchali (Nextron Systems)"
+  ],
+  "false_positives": [
+    "System administrator creating Powershell profile manually"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

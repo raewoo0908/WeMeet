@@ -1,0 +1,61 @@
+{
+  "rule_id": "0fc35fc3-efe6-4898-8a37-0b233339524f",
+  "risk_score": 47,
+  "description": "Adversaries may establish persistence by executing malicious content triggered by user inactivity.\nScreensavers are programs that execute after a configurable time of user inactivity and consist of Portable Executable (PE) files with a .scr file extension\n",
+  "name": "Suspicious ScreenSave Change by Reg.exe",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "((process.command_line:(*HKEY_CURRENT_USER\\\\Control\\ Panel\\\\Desktop* OR *HKCU\\\\Control\\ Panel\\\\Desktop*)) AND process.executable:*\\\\reg.exe) AND ((process.command_line:*\\/v\\ ScreenSaveActive* AND process.command_line:*\\/t\\ REG_SZ* AND process.command_line:*\\/d\\ 1* AND process.command_line:*\\/f*) OR (process.command_line:*\\/v\\ ScreenSaveTimeout* AND process.command_line:*\\/t\\ REG_SZ* AND process.command_line:*\\/d\\ * AND process.command_line:*\\/f*) OR (process.command_line:*\\/v\\ ScreenSaverIsSecure* AND process.command_line:*\\/t\\ REG_SZ* AND process.command_line:*\\/d\\ 0* AND process.command_line:*\\/f*) OR (process.command_line:*\\/v\\ SCRNSAVE.EXE* AND process.command_line:*\\/t\\ REG_SZ* AND process.command_line:*\\/d\\ * AND process.command_line:*.scr* AND process.command_line:*\\/f*))",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.privilege-escalation",
+    "attack.t1546.002"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "frack113"
+  ],
+  "false_positives": [
+    "GPO"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

@@ -1,0 +1,50 @@
+{
+  "rule_id": "eca81e8d-09e1-4d04-8614-c91f44fd0519",
+  "risk_score": 47,
+  "description": "Detects the addition of a new \"Allow\" firewall rule by the WMI process (WmiPrvSE.EXE).\nThis can occur if an attacker leverages PowerShell cmdlets such as \"New-NetFirewallRule\", or directly uses WMI CIM classes such as \"MSFT_NetFirewallRule\".\n",
+  "name": "New Firewall Rule Added In Windows Firewall Exception List Via WmiPrvSE.EXE",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "winlog.channel:Microsoft\\-Windows\\-Windows\\ Firewall\\ With\\ Advanced\\ Security\\/Firewall AND (winlog.event_data.Action:3 AND (event.code:(2004 OR 2071 OR 2097)) AND winlog.event_data.ModifyingApplication:*\\:\\\\Windows\\\\System32\\\\wbem\\\\WmiPrvSE.exe)",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.defense-evasion",
+    "attack.t1562.004"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "frack113, Nasreddine Bencherchali (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Administrator scripts or activity."
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

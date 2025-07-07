@@ -1,0 +1,50 @@
+{
+  "rule_id": "84c174ab-d3ef-481f-9c86-a50d0b8e3edb",
+  "risk_score": 73,
+  "description": "Detects a Get-Process command on lsass process, which is in almost all cases a sign of malicious activity",
+  "name": "PowerShell Get-Process LSASS in ScriptBlock",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "powershell.file.script_block_text:*Get\\-Process\\ lsass*",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.credential-access",
+    "attack.t1003.001"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Florian Roth (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Legitimate certificate exports invoked by administrators or users (depends on processes in the environment - filter if unusable)"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

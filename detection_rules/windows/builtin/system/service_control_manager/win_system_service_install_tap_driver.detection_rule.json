@@ -1,0 +1,50 @@
+{
+  "rule_id": "8e4cf0e5-aa5d-4dc3-beff-dc26917744a9",
+  "risk_score": 47,
+  "description": "Well-known TAP software installation. Possible preparation for data exfiltration using tunnelling techniques",
+  "name": "Tap Driver Installation",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "winlog.channel:System AND (event.code:7045 AND winlog.event_data.ImagePath:*tap0901* AND winlog.provider_name:Service\\ Control\\ Manager)",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.exfiltration",
+    "attack.t1048"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Daniil Yugoslavskiy, Ian Davis, oscd.community"
+  ],
+  "false_positives": [
+    "Legitimate OpenVPN TAP installation"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

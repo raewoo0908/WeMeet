@@ -1,0 +1,66 @@
+{
+  "rule_id": "811e0002-b13b-4a15-9d00-a613fce66e42",
+  "risk_score": 47,
+  "description": "Detects the execution of Process Hacker based on binary metadata information (Image, Hash, Imphash, etc).\nProcess Hacker is a tool to view and manipulate processes, kernel options and other low level options.\nThreat actors abused older vulnerable versions to manipulate system processes.\n",
+  "name": "PUA - Process Hacker Execution",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "process.executable:*\\\\ProcessHacker_* OR process.executable:*\\\\ProcessHacker.exe OR (process.pe.original_file_name:(ProcessHacker.exe OR Process\\ Hacker)) OR process.pe.description:Process\\ Hacker OR process.pe.product:Process\\ Hacker OR (winlog.event_data.Hashes:(*MD5\\=68F9B52895F4D34E74112F3129B3B00D* OR *MD5\\=B365AF317AE730A67C936F21432B9C71* OR *SHA1\\=A0BDFAC3CE1880B32FF9B696458327CE352E3B1D* OR *SHA1\\=C5E2018BF7C0F314FED4FD7FE7E69FA2E648359E* OR *SHA256\\=D4A0FE56316A2C45B9BA9AC1005363309A3EDC7ACF9E4DF64D326A0FF273E80F* OR *SHA256\\=BD2C2CF0631D881ED382817AFCCE2B093F4E412FFB170A719E2762F250ABFEA4* OR *IMPHASH\\=3695333C60DEDECDCAFF1590409AA462* OR *IMPHASH\\=04DE0AD9C37EB7BD52043D2ECAC958DF*))",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.defense-evasion",
+    "attack.discovery",
+    "attack.persistence",
+    "attack.privilege-escalation",
+    "attack.t1622",
+    "attack.t1564",
+    "attack.t1543"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Florian Roth (Nextron Systems)"
+  ],
+  "false_positives": [
+    "While sometimes 'Process Hacker is used by legitimate administrators, the execution of Process Hacker must be investigated and allowed on a case by case basis"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

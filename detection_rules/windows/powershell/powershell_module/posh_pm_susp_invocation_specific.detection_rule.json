@@ -1,0 +1,50 @@
+{
+  "rule_id": "8ff28fdd-e2fa-4dfa-aeda-ef3d61c62090",
+  "risk_score": 73,
+  "description": "Detects suspicious PowerShell invocation command parameters",
+  "name": "Suspicious PowerShell Invocations - Specific - PowerShell Module",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "((ContextInfo:*\\-nop* AND ContextInfo:*\\ \\-w\\ * AND ContextInfo:*hidden* AND ContextInfo:*\\ \\-c\\ * AND ContextInfo:*\\[Convert\\]\\:\\:FromBase64String*) OR (ContextInfo:*\\ \\-w\\ * AND ContextInfo:*hidden* AND ContextInfo:*\\-ep* AND ContextInfo:*bypass* AND ContextInfo:*\\-Enc*) OR (ContextInfo:*\\ \\-w\\ * AND ContextInfo:*hidden* AND ContextInfo:*\\-noni* AND ContextInfo:*\\-nop* AND ContextInfo:*\\ \\-c\\ * AND ContextInfo:*iex* AND ContextInfo:*New\\-Object*) OR (ContextInfo:*iex* AND ContextInfo:*New\\-Object* AND ContextInfo:*Net.WebClient* AND ContextInfo:*.Download*) OR ((ContextInfo:(*\\\\software\\\\microsoft\\\\windows\\\\currentversion\\\\run* OR *\\\\software\\\\wow6432node\\\\microsoft\\\\windows\\\\currentversion\\\\run* OR *\\\\software\\\\microsoft\\\\windows\\\\currentversion\\\\policies\\\\explorer\\\\run*)) AND (ContextInfo:*powershell* AND ContextInfo:*reg* AND ContextInfo:*add*)) OR (ContextInfo:*bypass* AND ContextInfo:*\\-noprofile* AND ContextInfo:*\\-windowstyle* AND ContextInfo:*hidden* AND ContextInfo:*new\\-object* AND ContextInfo:*system.net.webclient* AND ContextInfo:*.download*)) AND (NOT (ContextInfo:(*\\(New\\-Object\\ System.Net.WebClient\\).DownloadString\\('https\\:\\/\\/community.chocolatey.org\\/install.ps1* OR *Write\\-ChocolateyWarning*)))",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.execution",
+    "attack.t1059.001"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Florian Roth (Nextron Systems), Jonhnathan Ribeiro"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

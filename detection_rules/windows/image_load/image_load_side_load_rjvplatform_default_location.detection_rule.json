@@ -1,0 +1,51 @@
+{
+  "rule_id": "259dda31-b7a3-444f-b7d8-17f96e8a7d0d",
+  "risk_score": 47,
+  "description": "Detects loading of \"RjvPlatform.dll\" by the \"SystemResetPlatform.exe\" binary which can be abused as a method of DLL side loading since the \"$SysReset\" directory isn't created by default.",
+  "name": "Potential RjvPlatform.DLL Sideloading From Default Location",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "process.executable:C\\:\\\\Windows\\\\System32\\\\SystemResetPlatform\\\\SystemResetPlatform.exe AND file.path:C\\:\\\\$SysReset\\\\Framework\\\\Stack\\\\RjvPlatform.dll",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.defense-evasion",
+    "attack.privilege-escalation",
+    "attack.t1574.001"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "X__Junior (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

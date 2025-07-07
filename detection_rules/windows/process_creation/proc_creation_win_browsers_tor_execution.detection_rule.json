@@ -1,0 +1,61 @@
+{
+  "rule_id": "62f7c9bf-9135-49b2-8aeb-1e54a6ecc13c",
+  "risk_score": 73,
+  "description": "Detects the use of Tor or Tor-Browser to connect to onion routing networks",
+  "name": "Tor Client/Browser Execution",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "process.executable:(*\\\\tor.exe OR *\\\\Tor\\ Browser\\\\Browser\\\\firefox.exe)",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.command-and-control",
+    "attack.t1090.003"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "frack113"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

@@ -1,0 +1,50 @@
+{
+  "rule_id": "fc028194-969d-4122-8abe-0470d5b8f12f",
+  "risk_score": 47,
+  "description": "Adversaries may acquire credentials from web browsers by reading files specific to the target browser.\nWeb browsers commonly save credentials such as website usernames and passwords so that they do not need to be entered manually in the future.\nWeb browsers typically store the credentials in an encrypted format within a credential store.\n",
+  "name": "Access to Browser Login Data",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "(powershell.file.script_block_text:*Copy\\-Item* AND powershell.file.script_block_text:*\\-Destination*) AND (powershell.file.script_block_text:(*\\\\Opera\\ Software\\\\Opera\\ Stable\\\\Login\\ Data* OR *\\\\Mozilla\\\\Firefox\\\\Profiles* OR *\\\\Microsoft\\\\Edge\\\\User\\ Data\\\\Default* OR *\\\\Google\\\\Chrome\\\\User\\ Data\\\\Default\\\\Login\\ Data* OR *\\\\Google\\\\Chrome\\\\User\\ Data\\\\Default\\\\Login\\ Data\\ For\\ Account*))",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.credential-access",
+    "attack.t1555.003"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "frack113"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

@@ -1,0 +1,61 @@
+{
+  "rule_id": "ff23ffbc-3378-435e-992f-0624dcf93ab4",
+  "risk_score": 99,
+  "description": "Detects the execution of the PurpleSharp adversary simulation tool",
+  "name": "HackTool - PurpleSharp Execution",
+  "severity": "critical",
+  "type": "query",
+  "language": "lucene",
+  "query": "(process.command_line:(*xyz123456.exe* OR *PurpleSharp*)) OR (process.executable:*\\\\purplesharp* OR process.pe.original_file_name:PurpleSharp.exe)",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.t1587",
+    "attack.resource-development"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Florian Roth (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Unlikely"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

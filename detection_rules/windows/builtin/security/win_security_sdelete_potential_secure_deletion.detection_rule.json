@@ -1,0 +1,56 @@
+{
+  "rule_id": "39a80702-d7ca-4a83-b776-525b1f86a36d",
+  "risk_score": 47,
+  "description": "Detects files that have extensions commonly seen while SDelete is used to wipe files.",
+  "name": "Potential Secure Deletion with SDelete",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "winlog.channel:Security AND ((event.code:(4656 OR 4663 OR 4658)) AND (winlog.event_data.ObjectName:(*.AAA OR *.ZZZ)))",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.impact",
+    "attack.defense-evasion",
+    "attack.t1070.004",
+    "attack.t1027.005",
+    "attack.t1485",
+    "attack.t1553.002",
+    "attack.s0195"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Thomas Patzke"
+  ],
+  "false_positives": [
+    "Legitimate usage of SDelete",
+    "Files that are interacted with that have these extensions legitimately"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

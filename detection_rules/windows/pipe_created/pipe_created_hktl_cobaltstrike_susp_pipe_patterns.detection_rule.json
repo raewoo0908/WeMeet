@@ -1,0 +1,53 @@
+{
+  "rule_id": "85adeb13-4fc9-4e68-8a4a-c7cb2c336eb7",
+  "risk_score": 73,
+  "description": "Detects the creation of a named pipe with a pattern found in CobaltStrike malleable C2 profiles",
+  "name": "CobaltStrike Named Pipe Patterns",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "((file.name:*\\-0, AND file.name:\\\\Winsock2\\\\CatalogChangeListener\\-*) OR ((file.name:(\\\\DserNamePipe* OR \\\\f4c3* OR \\\\f53f* OR \\\\fullduplex_* OR \\\\mojo.5688.8052.183894939787088877* OR \\\\mojo.5688.8052.35780273329370473* OR \\\\MsFteWds* OR \\\\msrpc_* OR \\\\mypipe\\-f* OR \\\\mypipe\\-h* OR \\\\ntsvcs* OR \\\\PGMessagePipe* OR \\\\rpc_* OR \\\\scerpc* OR \\\\SearchTextHarvester* OR \\\\spoolss* OR \\\\win_svc* OR \\\\win\\\\msrpc_* OR \\\\windows.update.manager* OR \\\\wkssvc*)) OR (file.name:(\\\\demoagent_11 OR \\\\demoagent_22)))) AND (NOT (file.name:(\\\\wkssvc OR \\\\spoolss OR \\\\scerpc OR \\\\ntsvcs OR \\\\SearchTextHarvester OR \\\\PGMessagePipe OR \\\\MsFteWds))) AND (NOT ((process.executable:(*\\:\\\\Program\\ Files\\\\Websense\\\\* OR *\\:\\\\Program\\ Files\\ \\(x86\\)\\\\Websense\\\\*)) AND (file.name:(\\\\DserNamePipeR* OR \\\\DserNamePipeW*))))",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.defense-evasion",
+    "attack.privilege-escalation",
+    "attack.t1055",
+    "stp.1k"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Florian Roth (Nextron Systems), Christian Burkard (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Chrome instances using the exact same pipe name \"mojo.xxx\"",
+    "Websense Endpoint using the pipe name \"DserNamePipe(R|W)\\d{1,5}\""
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

@@ -1,0 +1,61 @@
+{
+  "rule_id": "41f407b5-3096-44ea-a74f-96d04fbc41be",
+  "risk_score": 47,
+  "description": "Detects the execution of an AnyDesk binary with a version prior to 8.0.8.\nPrior to version 8.0.8, the Anydesk application used a signing certificate that got compromised by threat actors.\nUse this rule to detect instances of older versions of Anydesk using the compromised certificate\nThis is recommended in order to avoid attackers leveraging the certificate and signing their binaries to bypass detections.\n",
+  "name": "Remote Access Tool - AnyDesk Execution With Known Revoked Signing Certificate",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "((process.executable:*\\\\AnyDesk.exe OR process.pe.description:AnyDesk OR process.pe.product:AnyDesk OR process.pe.company:AnyDesk\\ Software\\ GmbH) AND (process.pe.file_version:(7.0.* OR 7.1.* OR 8.0.1* OR 8.0.2* OR 8.0.3* OR 8.0.4* OR 8.0.5* OR 8.0.6* OR 8.0.7*))) AND (NOT (process.command_line:(*\\ \\-\\-remove* OR *\\ \\-\\-uninstall*)))",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.execution",
+    "attack.initial-access"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Sai Prashanth Pulisetti, Nasreddine Bencherchali (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Unlikely"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

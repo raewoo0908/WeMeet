@@ -1,0 +1,50 @@
+{
+  "rule_id": "1c480e10-7ee1-46d4-8ed2-85f9789e3ce4",
+  "risk_score": 47,
+  "description": "Detects the first occurrence of a modification to Group Policy Object Attributes to add privileges to user accounts or use them to add users as local admins.\n",
+  "name": "Group Policy Abuse for Privilege Addition",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "winlog.channel:Security AND (winlog.event_data.AttributeLDAPDisplayName:gPCMachineExtensionNames AND (winlog.event_data.AttributeValue:(*827D319E\\-6EAC\\-11D2\\-A4EA\\-00C04F79F83A* OR *803E14A0\\-B4FB\\-11D0\\-A0D0\\-00A0C90F574B*)) AND event.code:5136)",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.privilege-escalation",
+    "attack.t1484.001"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Elastic, Josh Nickels, Marius Rothenbücher"
+  ],
+  "false_positives": [
+    "Users allowed to perform these modifications (user found in field SubjectUserName)"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

@@ -1,0 +1,61 @@
+{
+  "rule_id": "88d6e60c-759d-4ac1-a447-c0f1466c2d21",
+  "risk_score": 47,
+  "description": "Detects a Chromium based browser process with the 'load-extension' flag to start a instance with a custom extension",
+  "name": "Chromium Browser Instance Executed With Custom Extension",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "process.command_line:*\\-\\-load\\-extension\\=* AND (process.executable:(*\\\\brave.exe OR *\\\\chrome.exe OR *\\\\msedge.exe OR *\\\\opera.exe OR *\\\\vivaldi.exe))",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.persistence",
+    "attack.t1176"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Aedan Russell, frack113, X__Junior (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Usage of Chrome Extensions in testing tools such as BurpSuite will trigger this alert"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

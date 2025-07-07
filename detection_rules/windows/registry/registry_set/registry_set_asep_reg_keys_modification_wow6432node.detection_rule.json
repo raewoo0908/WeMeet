@@ -1,0 +1,51 @@
+{
+  "rule_id": "b29aed60-ebd1-442b-9cb5-16a1d0324adb",
+  "risk_score": 47,
+  "description": "Detects modification of autostart extensibility point (ASEP) in registry.",
+  "name": "Wow6432Node CurrentVersion Autorun Keys Modification",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "(registry.path:*\\\\SOFTWARE\\\\Wow6432Node\\\\Microsoft\\\\Windows\\\\CurrentVersion* AND (registry.path:(*\\\\ShellServiceObjectDelayLoad* OR *\\\\Run\\\\* OR *\\\\RunOnce\\\\* OR *\\\\RunOnceEx\\\\* OR *\\\\RunServices\\\\* OR *\\\\RunServicesOnce\\\\* OR *\\\\Explorer\\\\ShellServiceObjects* OR *\\\\Explorer\\\\ShellIconOverlayIdentifiers* OR *\\\\Explorer\\\\ShellExecuteHooks* OR *\\\\Explorer\\\\SharedTaskScheduler* OR *\\\\Explorer\\\\Browser\\ Helper\\ Objects*))) AND (NOT ((winlog.event_data.Details:*.exe\\\"\\ \\/burn.runonce AND winlog.event_data.Details:\\\"C\\:\\\\ProgramData\\\\Package\\ Cache\\\\* AND process.executable:*\\\\windowsdesktop\\-runtime\\-* AND (registry.path:(*\\\\WOW6432Node\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\RunOnce\\\\\\{e2d1ae32\\-dd1d\\-4ad7\\-a298\\-10e42e7840fc\\} OR *\\\\WOW6432Node\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\RunOnce\\\\\\{7037b699\\-7382\\-448c\\-89a7\\-4765961d2537\\}))) OR (winlog.event_data.Details:*\\-A251\\-47B7\\-93E1\\-CDD82E34AF8B\\} OR winlog.event_data.Details:grpconv\\ \\-o OR (winlog.event_data.Details:*C\\:\\\\Program\\ Files* AND winlog.event_data.Details:*\\\\Dropbox\\\\Client\\\\Dropbox.exe* AND winlog.event_data.Details:*\\ \\/systemstartup*)) OR (process.executable:*C\\:\\\\Program\\ Files\\ \\(x86\\)\\\\Microsoft\\\\EdgeUpdate\\\\Install\\\\\\{* AND process.executable:*\\\\setup.exe*) OR winlog.event_data.Details:\\(Empty\\) OR registry.path:*\\\\Explorer\\\\Browser\\ Helper\\ Objects\\\\\\{92EF2EAD\\-A7CE\\-4424\\-B0DB\\-499CF856608E\\}\\\\NoExplorer OR winlog.event_data.Details:\\\"C\\:\\\\ProgramData\\\\Package\\ Cache\\\\\\{d21a4f20\\-968a\\-4b0c\\-bf04\\-a38da5f06e41\\}\\\\windowsdesktop\\-runtime\\-* OR (process.executable:C\\:\\\\WINDOWS\\\\system32\\\\msiexec.exe AND registry.path:*\\\\SOFTWARE\\\\Wow6432Node\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Run\\\\*) OR (process.executable:C\\:\\\\Program\\ Files\\\\Common\\ Files\\\\Microsoft\\ Shared\\\\ClickToRun\\\\OfficeClickToRun.exe AND registry.path:*\\\\Office\\\\ClickToRun\\\\REGISTRY\\\\MACHINE\\\\Software\\\\Wow6432Node\\\\*) OR ((process.executable:(C\\:\\\\Program\\ Files\\\\Microsoft\\ Office\\\\root\\\\integration\\\\integrator.exe OR C\\:\\\\Program\\ Files\\ \\(x86\\)\\\\Microsoft\\ Office\\\\root\\\\integration\\\\integrator.exe)) AND registry.path:*\\\\Explorer\\\\Browser\\ Helper\\ Objects\\\\\\{31D09BA0\\-12F5\\-4CCE\\-BE8A\\-2923E76605DA\\}\\\\*) OR (process.executable:*\\\\OfficeClickToRun.exe AND (process.executable:(C\\:\\\\Program\\ Files\\\\Common\\ Files\\\\Microsoft\\ Shared\\\\ClickToRun\\\\* OR C\\:\\\\Program\\ Files\\\\Common\\ Files\\\\Microsoft\\ Shared\\\\ClickToRun\\\\Updates\\\\*))) OR (process.executable:C\\:\\\\Windows\\\\Installer\\\\MSI* AND registry.path:*\\\\Explorer\\\\Browser\\ Helper\\ Objects*) OR (winlog.event_data.Details:*\\ \\/burn.runonce AND (process.executable:(*\\\\winsdksetup.exe* OR *\\\\windowsdesktop\\-runtime\\-* OR *\\\\AspNetCoreSharedFrameworkBundle\\-*)) AND (process.executable:(C\\:\\\\ProgramData\\\\Package\\ Cache* OR C\\:\\\\Windows\\\\Temp\\\\*))) OR (winlog.event_data.Details:*\\}\\\\VC_redist.x64.exe\\\"\\ \\/burn.runonce AND process.executable:*\\\\VC_redist.x64.exe)))",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.persistence",
+    "attack.t1547.001"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Victor Sergeev, Daniil Yugoslavskiy, Gleb Sukhodolskiy, Timur Zinniatullin, oscd.community, Tim Shelton, frack113 (split)"
+  ],
+  "false_positives": [
+    "Legitimate software automatically (mostly, during installation) sets up autorun keys for legitimate reason",
+    "Legitimate administrator sets up autorun keys for legitimate reason"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

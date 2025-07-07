@@ -1,0 +1,52 @@
+{
+  "rule_id": "26481afe-db26-4228-b264-25a29fe6efc7",
+  "risk_score": 47,
+  "description": "Detects uncommon service installation commands by looking at suspicious or uncommon image path values containing references to encoded powershell commands, temporary paths, etc.\n",
+  "name": "Uncommon Service Installation Image Path",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "winlog.channel:System AND ((event.code:7045 AND winlog.provider_name:Service\\ Control\\ Manager) AND ((winlog.event_data.ImagePath:(*\\\\\\\\.\\\\pipe* OR *\\\\Users\\\\Public\\\\* OR *\\\\Windows\\\\Temp\\\\*)) OR (winlog.event_data.ImagePath:*\\ \\-e* AND (winlog.event_data.ImagePath:(*\\ aQBlAHgA* OR *\\ aWV4I* OR *\\ IAB* OR *\\ JAB* OR *\\ PAA* OR *\\ SQBFAFgA* OR *\\ SUVYI*)))) AND (NOT winlog.event_data.ImagePath:C\\:\\\\ProgramData\\\\Microsoft\\\\Windows\\ Defender\\\\Definition\\ Updates\\\\*) AND (NOT winlog.event_data.ImagePath:C\\:\\\\WINDOWS\\\\TEMP\\\\thor10\\-remote\\\\thor64.exe*))",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.persistence",
+    "attack.privilege-escalation",
+    "car.2013-09-005",
+    "attack.t1543.003"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Florian Roth (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

@@ -1,0 +1,61 @@
+{
+  "rule_id": "c1d867fe-8d95-4487-aab4-e53f2d339f90",
+  "risk_score": 73,
+  "description": "Detects the use of a renamed SysInternals Sdelete, which is something an administrator shouldn't do (the renaming)",
+  "name": "Renamed Sysinternals Sdelete Execution",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "process.pe.original_file_name:sdelete.exe AND (NOT (process.executable:(*\\\\sdelete.exe OR *\\\\sdelete64.exe)))",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.impact",
+    "attack.t1485"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Florian Roth (Nextron Systems)"
+  ],
+  "false_positives": [
+    "System administrator usage"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

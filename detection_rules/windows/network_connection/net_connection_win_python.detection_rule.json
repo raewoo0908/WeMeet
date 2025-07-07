@@ -1,0 +1,61 @@
+{
+  "rule_id": "bef0bc5a-b9ae-425d-85c6-7b2d705980c6",
+  "risk_score": 47,
+  "description": "Detects a Python process initiating a network connection. While this often relates to package installation, it can also indicate a potential malicious script communicating with a C&C server.",
+  "name": "Python Initiated Connection",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "((process.executable:*\\\\python* AND process.executable:*.exe*) AND network.direction:true) AND (NOT ((destination.ip:127.0.0.1 AND source.ip:127.0.0.1) OR (winlog.event_data.CommandLine:*pip.exe* AND winlog.event_data.CommandLine:*install*))) AND (NOT (((winlog.event_data.CommandLine:*\\:\\\\ProgramData\\\\Anaconda3\\\\Scripts\\\\conda\\-script.py* AND winlog.event_data.CommandLine:*update*) AND process.parent.executable:C\\:\\\\ProgramData\\\\Anaconda3\\\\Scripts\\\\conda.exe) OR (winlog.event_data.CommandLine:*C\\:\\\\ProgramData\\\\Anaconda3\\\\Scripts\\\\jupyter\\-notebook\\-script.py* AND process.parent.executable:C\\:\\\\ProgramData\\\\Anaconda3\\\\python.exe)))",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Network connection detected (rule: NetworkConnect)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.discovery",
+    "attack.t1046"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "frack113"
+  ],
+  "false_positives": [
+    "Legitimate python scripts using the socket library or similar will trigger this. Apply additional filters and perform an initial baseline before deploying."
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

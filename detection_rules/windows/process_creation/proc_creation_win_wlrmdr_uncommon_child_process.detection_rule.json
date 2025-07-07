@@ -1,0 +1,61 @@
+{
+  "rule_id": "9cfc00b6-bfb7-49ce-9781-ef78503154bb",
+  "risk_score": 47,
+  "description": "Detects the execution of \"Wlrmdr.exe\" with the \"-u\" command line flag which allows anything passed to it to be an argument of the ShellExecute API, which would allow an attacker to execute arbitrary binaries.\nThis detection also focuses on any uncommon child processes spawned from \"Wlrmdr.exe\" as a supplement for those that posses \"ParentImage\" telemetry.\n",
+  "name": "Wlrmdr.EXE Uncommon Argument Or Child Process",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "process.parent.executable:*\\\\wlrmdr.exe OR (((process.command_line:(*\\-s\\ * OR *\\/s\\ * OR *–s\\ * OR *—s\\ * OR *―s\\ *) AND process.command_line:(*\\-f\\ * OR *\\/f\\ * OR *–f\\ * OR *—f\\ * OR *―f\\ *) AND process.command_line:(*\\-t\\ * OR *\\/t\\ * OR *–t\\ * OR *—t\\ * OR *―t\\ *) AND process.command_line:(*\\-m\\ * OR *\\/m\\ * OR *–m\\ * OR *—m\\ * OR *―m\\ *) AND process.command_line:(*\\-a\\ * OR *\\/a\\ * OR *–a\\ * OR *—a\\ * OR *―a\\ *) AND process.command_line:(*\\-u\\ * OR *\\/u\\ * OR *–u\\ * OR *—u\\ * OR *―u\\ *)) AND (process.executable:*\\\\wlrmdr.exe OR process.pe.original_file_name:WLRMNDR.EXE)) AND (NOT ((process.parent.executable:(\"\" OR \\-)) OR (NOT _exists_:process.parent.executable) OR process.parent.executable:C\\:\\\\Windows\\\\System32\\\\winlogon.exe)))",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.defense-evasion",
+    "attack.t1218"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "frack113, manasmbellani"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

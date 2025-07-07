@@ -1,0 +1,61 @@
+{
+  "rule_id": "67bc0e75-c0a9-4cfc-8754-84a505b63c04",
+  "risk_score": 47,
+  "description": "Detects potentially suspicious child processes of a ClickOnce deployment application",
+  "name": "Potentially Suspicious Child Process Of ClickOnce Application",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "(process.executable:(*\\\\calc.exe OR *\\\\cmd.exe OR *\\\\cscript.exe OR *\\\\explorer.exe OR *\\\\mshta.exe OR *\\\\net.exe OR *\\\\net1.exe OR *\\\\nltest.exe OR *\\\\notepad.exe OR *\\\\powershell.exe OR *\\\\pwsh.exe OR *\\\\reg.exe OR *\\\\regsvr32.exe OR *\\\\rundll32.exe OR *\\\\schtasks.exe OR *\\\\werfault.exe OR *\\\\wscript.exe)) AND process.parent.executable:*\\\\AppData\\\\Local\\\\Apps\\\\2.0\\\\*",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.execution",
+    "attack.defense-evasion"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Nasreddine Bencherchali (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

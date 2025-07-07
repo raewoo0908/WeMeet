@@ -1,0 +1,61 @@
+{
+  "rule_id": "c31364f7-8be6-4b77-8483-dd2b5a7b69a3",
+  "risk_score": 47,
+  "description": "Detects powershell scripts that import modules from suspicious directories",
+  "name": "Import PowerShell Modules From Suspicious Directories - ProcCreation",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "process.command_line:(*Import\\-Module\\ \\\"$Env\\:Temp\\\\* OR *Import\\-Module\\ '$Env\\:Temp\\\\* OR *Import\\-Module\\ $Env\\:Temp\\\\* OR *Import\\-Module\\ \\\"$Env\\:Appdata\\\\* OR *Import\\-Module\\ '$Env\\:Appdata\\\\* OR *Import\\-Module\\ $Env\\:Appdata\\\\* OR *Import\\-Module\\ C\\:\\\\Users\\\\Public\\\\* OR *ipmo\\ \\\"$Env\\:Temp\\\\* OR *ipmo\\ '$Env\\:Temp\\\\* OR *ipmo\\ $Env\\:Temp\\\\* OR *ipmo\\ \\\"$Env\\:Appdata\\\\* OR *ipmo\\ '$Env\\:Appdata\\\\* OR *ipmo\\ $Env\\:Appdata\\\\* OR *ipmo\\ C\\:\\\\Users\\\\Public\\\\*)",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.execution",
+    "attack.t1059.001"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Nasreddine Bencherchali (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

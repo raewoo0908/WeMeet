@@ -1,0 +1,61 @@
+{
+  "rule_id": "13e6fe51-d478-4c7e-b0f2-6da9b400a829",
+  "risk_score": 73,
+  "description": "Detects the execution of certutil with certain flags that allow the utility to download files from direct IPs.",
+  "name": "Suspicious File Downloaded From Direct IP Via Certutil.EXE",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "((process.command_line:(*urlcache\\ * OR *verifyctl\\ *)) AND (process.command_line:(*\\:\\/\\/1* OR *\\:\\/\\/2* OR *\\:\\/\\/3* OR *\\:\\/\\/4* OR *\\:\\/\\/5* OR *\\:\\/\\/6* OR *\\:\\/\\/7* OR *\\:\\/\\/8* OR *\\:\\/\\/9*)) AND (process.executable:*\\\\certutil.exe OR process.pe.original_file_name:CertUtil.exe)) AND (NOT process.command_line:*\\:\\/\\/7\\-*)",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.defense-evasion",
+    "attack.t1027"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Nasreddine Bencherchali (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

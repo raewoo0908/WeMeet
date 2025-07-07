@@ -1,0 +1,62 @@
+{
+  "rule_id": "45239e6a-b035-4aaf-b339-8ad379fcb67e",
+  "risk_score": 47,
+  "description": "Detects the usage of the \"Squirrel.exe\" binary to execute arbitrary processes. This binary is part of multiple Electron based software installations (Slack, Teams, Discord, etc.)\n",
+  "name": "Process Proxy Execution Via Squirrel.EXE",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "((process.command_line:(*\\-\\-processStart* OR *\\-\\-processStartAndWait* OR *\\-\\-createShortcut*)) AND (process.executable:(*\\\\squirrel.exe OR *\\\\update.exe))) AND (NOT ((process.command_line:*\\:\\\\Users\\\\* AND process.command_line:*\\\\AppData\\\\Local\\\\Discord\\\\Update.exe* AND process.command_line:*\\ \\-\\-processStart* AND process.command_line:*Discord.exe*) OR ((process.command_line:(*\\-\\-createShortcut* OR *\\-\\-processStartAndWait*)) AND (process.command_line:*\\:\\\\Users\\\\* AND process.command_line:*\\\\AppData\\\\Local\\\\GitHubDesktop\\\\Update.exe* AND process.command_line:*GitHubDesktop.exe*)) OR ((process.command_line:(*\\-\\-processStart* OR *\\-\\-createShortcut*)) AND (process.command_line:*\\:\\\\Users\\\\* AND process.command_line:*\\\\AppData\\\\Local\\\\Microsoft\\\\Teams\\\\Update.exe* AND process.command_line:*Teams.exe*)) OR ((process.command_line:(*\\-\\-processStart* OR *\\-\\-createShortcut*)) AND (process.command_line:*\\:\\\\Users\\\\* AND process.command_line:*\\\\AppData\\\\Local\\\\yammerdesktop\\\\Update.exe* AND process.command_line:*Yammer.exe*))))",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.defense-evasion",
+    "attack.execution",
+    "attack.t1218"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Nasreddine Bencherchali (Nextron Systems), Karneades / Markus Neis, Jonhnathan Ribeiro, oscd.community"
+  ],
+  "false_positives": [
+    "Expected FP with some Electron based applications such as (1Clipboard, Beaker Browser, Caret, Discord, GitHub Desktop, etc.)"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

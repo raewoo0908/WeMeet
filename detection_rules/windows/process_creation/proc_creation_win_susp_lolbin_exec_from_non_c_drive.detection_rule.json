@@ -1,0 +1,60 @@
+{
+  "rule_id": "d4ca7c59-e9e4-42d8-bf57-91a776efcb87",
+  "risk_score": 47,
+  "description": "Detects LOLBINs executing from an abnormal or uncommon drive such as a mounted ISO.",
+  "name": "LOLBIN Execution From Abnormal Drive",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "((process.executable:(*\\\\calc.exe OR *\\\\certutil.exe OR *\\\\cmstp.exe OR *\\\\cscript.exe OR *\\\\installutil.exe OR *\\\\mshta.exe OR *\\\\regsvr32.exe OR *\\\\rundll32.exe OR *\\\\wscript.exe)) OR (process.pe.original_file_name:(CALC.EXE OR CertUtil.exe OR CMSTP.EXE OR cscript.exe OR installutil.exe OR MSHTA.EXE OR REGSVR32.EXE OR RUNDLL32.EXE OR wscript.exe))) AND (NOT (process.working_directory:*C\\:\\\\* OR process.working_directory:\"\" OR (NOT _exists_:process.working_directory)))",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.defense-evasion"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Christopher Peacock '@securepeacock', SCYTHE '@scythe_io', Angelo Violetti - SEC Consult '@angelo_violetti', Aaron Herman"
+  ],
+  "false_positives": [
+    "Rare false positives could occur on servers with multiple drives."
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

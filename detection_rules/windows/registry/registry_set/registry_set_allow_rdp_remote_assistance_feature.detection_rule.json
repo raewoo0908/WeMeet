@@ -1,0 +1,50 @@
+{
+  "rule_id": "37b437cf-3fc5-4c8e-9c94-1d7c9aff842b",
+  "risk_score": 47,
+  "description": "Detect enable rdp feature to allow specific user to rdp connect on the targeted machine",
+  "name": "Allow RDP Remote Assistance Feature",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "winlog.event_data.Details:DWORD\\ \\(0x00000001\\) AND registry.path:*System\\\\CurrentControlSet\\\\Control\\\\Terminal\\ Server\\\\fAllowToGetHelp",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.defense-evasion",
+    "attack.t1112"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "frack113"
+  ],
+  "false_positives": [
+    "Legitimate use of the feature (alerts should be investigated either way)"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

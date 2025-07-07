@@ -1,0 +1,51 @@
+{
+  "rule_id": "5ef9853e-4d0e-4a70-846f-a9ca37d876da",
+  "risk_score": 47,
+  "description": "Detects process access requests to the LSASS process with specific call trace calls and access masks.\nThis behaviour is expressed by many credential dumping tools such as Mimikatz, NanoDump, Invoke-Mimikatz, Procdump and even the Taskmgr dumping feature.\n",
+  "name": "Potential Credential Dumping Activity Via LSASS",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "((winlog.event_data.CallTrace:(*dbgcore.dll* OR *dbghelp.dll* OR *kernel32.dll* OR *kernelbase.dll* OR *ntdll.dll*)) AND (winlog.event_data.GrantedAccess:(*0x1038* OR *0x1438* OR *0x143a* OR *0x1fffff*)) AND winlog.event_data.TargetImage:*\\\\lsass.exe) AND (NOT (winlog.event_data.SourceUser:(*AUTHORI* OR *AUTORI*))) AND (NOT (process.executable:*\\:\\\\Windows\\\\Sysmon64.exe OR ((winlog.event_data.CallTrace:*\\:\\\\Windows\\\\Temp\\\\asgard2\\-agent\\\\* AND winlog.event_data.CallTrace:*\\\\thor\\\\thor64.exe\\+* AND winlog.event_data.CallTrace:*\\|UNKNOWN\\(*) AND winlog.event_data.GrantedAccess:0x103800)))",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.credential-access",
+    "attack.t1003.001",
+    "attack.s0002"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Samir Bousseaden, Michael Haag"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

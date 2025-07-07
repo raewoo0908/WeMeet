@@ -1,0 +1,65 @@
+{
+  "rule_id": "8fbf3271-1ef6-4e94-8210-03c2317947f6",
+  "risk_score": 73,
+  "description": "Files with well-known filenames (parts of credential dump software or files produced by them) creation",
+  "name": "Cred Dump Tools Dropped Files",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "(file.path:(*\\\\fgdump\\-log* OR *\\\\kirbi* OR *\\\\pwdump* OR *\\\\pwhashes* OR *\\\\wce_ccache* OR *\\\\wce_krbtkts*)) OR (file.path:(*\\\\cachedump.exe OR *\\\\cachedump64.exe OR *\\\\DumpExt.dll OR *\\\\DumpSvc.exe OR *\\\\Dumpy.exe OR *\\\\fgexec.exe OR *\\\\lsremora.dll OR *\\\\lsremora64.dll OR *\\\\NTDS.out OR *\\\\procdump64.exe OR *\\\\pstgdump.exe OR *\\\\pwdump.exe OR *\\\\SAM.out OR *\\\\SECURITY.out OR *\\\\servpw.exe OR *\\\\servpw64.exe OR *\\\\SYSTEM.out OR *\\\\test.pwd OR *\\\\wceaux.dll))",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "File Create (rule: FileCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.credential-access",
+    "attack.t1003.001",
+    "attack.t1003.002",
+    "attack.t1003.003",
+    "attack.t1003.004",
+    "attack.t1003.005"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Teymur Kheirkhabarov, oscd.community"
+  ],
+  "false_positives": [
+    "Legitimate Administrator using tool for password recovery"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

@@ -1,0 +1,50 @@
+{
+  "rule_id": "999bff6d-dc15-44c9-9f5c-e1051bfc86e1",
+  "risk_score": 47,
+  "description": "Detects a powershell download cradle using nslookup. This cradle uses nslookup to extract payloads from DNS records.",
+  "name": "Nslookup PowerShell Download Cradle",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "(Data:(*\\-q\\=txt\\ http* OR *\\-querytype\\=txt\\ http* OR *\\-type\\=txt\\ http*)) AND (Data:*powershell* AND Data:*nslookup* AND Data:*\\[1\\]*)",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.execution",
+    "attack.t1059.001"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Sai Prashanth Pulisetti @pulisettis, Aishwarya Singam"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

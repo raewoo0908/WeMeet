@@ -1,0 +1,50 @@
+{
+  "rule_id": "424273ea-7cf8-43a6-b712-375f925e481f",
+  "risk_score": 47,
+  "description": "Detects the execution of Scheduled Tasks where the Program being run is located in a suspicious location or it's an unusale program to be run from a Scheduled Task",
+  "name": "Scheduled Task Executed From A Suspicious Location",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "winlog.channel:Microsoft\\-Windows\\-TaskScheduler\\/Operational AND (event.code:129 AND (winlog.event_data.Path:(*C\\:\\\\Windows\\\\Temp\\\\* OR *\\\\AppData\\\\Local\\\\Temp\\\\* OR *\\\\Desktop\\\\* OR *\\\\Downloads\\\\* OR *\\\\Users\\\\Public\\\\* OR *C\\:\\\\Temp\\\\*)))",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.persistence",
+    "attack.t1053.005"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Nasreddine Bencherchali (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

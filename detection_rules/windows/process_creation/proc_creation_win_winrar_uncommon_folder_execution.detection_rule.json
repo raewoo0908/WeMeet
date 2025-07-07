@@ -1,0 +1,61 @@
+{
+  "rule_id": "4ede543c-e098-43d9-a28f-dd784a13132f",
+  "risk_score": 47,
+  "description": "Detects a suspicious winrar execution in a folder which is not the default installation folder",
+  "name": "Winrar Execution in Non-Standard Folder",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "((process.executable:(*\\\\rar.exe OR *\\\\winrar.exe)) OR process.pe.description:Command\\ line\\ RAR) AND (NOT ((process.executable:(*\\:\\\\Program\\ Files\\ \\(x86\\)\\\\WinRAR\\\\* OR *\\:\\\\Program\\ Files\\\\WinRAR\\\\*)) OR process.executable:*\\\\UnRAR.exe)) AND (NOT process.executable:*\\:\\\\Windows\\\\Temp\\\\*)",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.collection",
+    "attack.t1560.001"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Florian Roth (Nextron Systems), Tigzy"
+  ],
+  "false_positives": [
+    "Legitimate use of WinRAR in a folder of a software that bundles WinRAR"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

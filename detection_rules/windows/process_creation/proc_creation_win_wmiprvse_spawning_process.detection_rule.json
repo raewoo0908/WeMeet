@@ -1,0 +1,61 @@
+{
+  "rule_id": "d21374ff-f574-44a7-9998-4a8c8bf33d7d",
+  "risk_score": 47,
+  "description": "Detects WmiPrvSE spawning a process",
+  "name": "WmiPrvSE Spawned A Process",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "process.parent.executable:*\\\\WmiPrvSe.exe AND (NOT ((winlog.event_data.LogonId:(0x3e7 OR null)) OR (NOT _exists_:winlog.event_data.LogonId) OR (user.name:(*AUTHORI* OR *AUTORI*)) OR process.executable:*\\\\WerFault.exe OR process.executable:*\\\\WmiPrvSE.exe))",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.execution",
+    "attack.t1047"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Roberto Rodriguez @Cyb3rWard0g"
+  ],
+  "false_positives": [
+    "False positives are expected (e.g. in environments where WinRM is used legitimately)"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

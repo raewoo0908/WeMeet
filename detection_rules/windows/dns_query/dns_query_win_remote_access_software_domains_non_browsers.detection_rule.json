@@ -1,0 +1,50 @@
+{
+  "rule_id": "4d07b1f4-cb00-4470-b9f8-b0191d48ff52",
+  "risk_score": 47,
+  "description": "An adversary may use legitimate desktop support and remote access software, such as Team Viewer, Go2Assist, LogMein, AmmyyAdmin, etc, to establish an interactive command and control channel to target systems within networks.\nThese services are commonly used as legitimate technical support software, and may be allowed by application control within a target environment.\nRemote access tools like VNC, Ammyy, and Teamviewer are used frequently when compared with other legitimate software commonly used by adversaries. (Citation: Symantec Living off the Land)\n",
+  "name": "DNS Query To Remote Access Software Domain From Non-Browser App",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "((dns.question.name:(*agent.jumpcloud.com OR *agentreporting.atera.com OR *ammyy.com OR *api.parsec.app OR *api.playanext.com OR *api.splashtop.com OR *app.atera.com OR *assist.zoho.com OR *authentication.logmeininc.com OR *beyondtrustcloud.com OR *cdn.kaseya.net OR *client.teamviewer.com OR *comserver.corporate.beanywhere.com OR *control.connectwise.com OR *downloads.zohocdn.com OR *dwservice.net OR *express.gotoassist.com OR *getgo.com OR *getscreen.me OR *integratedchat.teamviewer.com OR *join.zoho.com OR *kickstart.jumpcloud.com OR *license.bomgar.com OR *logmein\\-gateway.com OR *logmein.com OR *logmeincdn.http.internapcdn.net OR *n\\-able.com OR *net.anydesk.com OR *netsupportsoftware.com OR *parsecusercontent.com OR *pubsub.atera.com OR *relay.kaseya.net OR *relay.screenconnect.com OR *relay.splashtop.com OR *remoteassistance.support.services.microsoft.com OR *remotedesktop\\-pa.googleapis.com OR *remoteutilities.com OR *secure.logmeinrescue.com OR *services.vnc.com OR *static.remotepc.com OR *swi\\-rc.com OR *swi\\-tc.com OR *tailscale.com OR *telemetry.servers.qetqo.com OR *tmate.io OR *twingate.com OR *zohoassist.com)) OR (dns.question.name:*.rustdesk.com AND dns.question.name:rs\\-*)) AND (NOT ((process.executable:*\\\\avant.exe AND (process.executable:(C\\:\\\\Program\\ Files\\ \\(x86\\)\\\\Avant\\ Browser\\\\* OR C\\:\\\\Program\\ Files\\\\Avant\\ Browser\\\\*))) OR (process.executable:*\\\\brave.exe AND process.executable:C\\:\\\\Program\\ Files\\\\BraveSoftware\\\\*) OR (process.executable:(C\\:\\\\Program\\ Files\\\\Google\\\\Chrome\\\\Application\\\\chrome.exe OR C\\:\\\\Program\\ Files\\ \\(x86\\)\\\\Google\\\\Chrome\\\\Application\\\\chrome.exe)) OR (process.executable:(*\\\\MsMpEng.exe OR *\\\\MsSense.exe)) OR (process.executable:C\\:\\\\Program\\ Files\\ \\(x86\\)\\\\Microsoft\\\\EdgeWebView\\\\Application\\\\* OR process.executable:*\\\\WindowsApps\\\\MicrosoftEdge.exe OR (process.executable:(C\\:\\\\Program\\ Files\\ \\(x86\\)\\\\Microsoft\\\\Edge\\\\Application\\\\msedge.exe OR C\\:\\\\Program\\ Files\\\\Microsoft\\\\Edge\\\\Application\\\\msedge.exe))) OR ((process.executable:(*\\\\msedge.exe OR *\\\\msedgewebview2.exe)) AND (process.executable:(C\\:\\\\Program\\ Files\\ \\(x86\\)\\\\Microsoft\\\\EdgeCore\\\\* OR C\\:\\\\Program\\ Files\\\\Microsoft\\\\EdgeCore\\\\*))) OR (process.executable:*\\\\falkon.exe AND (process.executable:(C\\:\\\\Program\\ Files\\\\Falkon\\\\* OR C\\:\\\\Program\\ Files\\ \\(x86\\)\\\\Falkon\\\\*))) OR (process.executable:(C\\:\\\\Program\\ Files\\\\Mozilla\\ Firefox\\\\firefox.exe OR C\\:\\\\Program\\ Files\\ \\(x86\\)\\\\Mozilla\\ Firefox\\\\firefox.exe)) OR (process.executable:*\\\\AppData\\\\Local\\\\Flock\\\\* AND process.executable:*\\\\Flock.exe) OR (process.executable:(C\\:\\\\Program\\ Files\\ \\(x86\\)\\\\Internet\\ Explorer\\\\iexplore.exe OR C\\:\\\\Program\\ Files\\\\Internet\\ Explorer\\\\iexplore.exe)) OR (process.executable:*\\\\AppData\\\\Local\\\\Maxthon\\\\* AND process.executable:*\\\\maxthon.exe) OR (process.executable:*\\\\AppData\\\\Local\\\\Programs\\\\midori\\-ng\\\\* AND process.executable:*\\\\Midori\\ Next\\ Generation.exe) OR (process.executable:*\\\\AppData\\\\Local\\\\Programs\\\\Opera\\\\* AND process.executable:*\\\\opera.exe) OR (process.executable:*\\\\AppData\\\\Local\\\\Phoebe\\\\* AND process.executable:*\\\\Phoebe.exe) OR process.executable:*\\\\safari.exe OR (process.executable:*\\\\seamonkey.exe AND (process.executable:(C\\:\\\\Program\\ Files\\\\SeaMonkey\\\\* OR C\\:\\\\Program\\ Files\\ \\(x86\\)\\\\SeaMonkey\\\\*))) OR (process.executable:*\\\\slimbrowser.exe AND (process.executable:(C\\:\\\\Program\\ Files\\\\SlimBrowser\\\\* OR C\\:\\\\Program\\ Files\\ \\(x86\\)\\\\SlimBrowser\\\\*))) OR process.executable:*\\\\Tor\\ Browser\\\\* OR (process.executable:*\\\\AppData\\\\Local\\\\Vivaldi\\\\* AND process.executable:*\\\\vivaldi.exe) OR (process.executable:*\\\\whale.exe AND (process.executable:(C\\:\\\\Program\\ Files\\\\Naver\\\\Naver\\ Whale\\\\* OR C\\:\\\\Program\\ Files\\ \\(x86\\)\\\\Naver\\\\Naver\\ Whale\\\\*))) OR (process.executable:*\\\\Waterfox.exe AND (process.executable:(C\\:\\\\Program\\ Files\\\\Waterfox\\\\* OR C\\:\\\\Program\\ Files\\ \\(x86\\)\\\\Waterfox\\\\*)))))",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.command-and-control",
+    "attack.t1219"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "frack113, Connor Martin"
+  ],
+  "false_positives": [
+    "Likely with other browser software. Apply additional filters for any other browsers you might use."
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

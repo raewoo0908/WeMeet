@@ -1,0 +1,50 @@
+{
+  "rule_id": "1321dc4e-a1fe-481d-a016-52c45f0c8b4f",
+  "risk_score": 47,
+  "description": "Detects the Setting of Windows Defender Exclusions",
+  "name": "Windows Defender Exclusions Added",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "winlog.channel:Microsoft\\-Windows\\-Windows\\ Defender\\/Operational AND (event.code:5007 AND winlog.event_data.NewValue:*\\\\Microsoft\\\\Windows\\ Defender\\\\Exclusions*)",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.defense-evasion",
+    "attack.t1562.001"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Christian Burkard (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Administrator actions"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

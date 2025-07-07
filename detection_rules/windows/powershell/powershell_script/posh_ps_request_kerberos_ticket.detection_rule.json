@@ -1,0 +1,50 @@
+{
+  "rule_id": "a861d835-af37-4930-bcd6-5b178bfb54df",
+  "risk_score": 73,
+  "description": "utilize native PowerShell Identity modules to query the domain to extract the Service Principal Names for a single computer.\nThis behavior is typically used during a kerberos or silver ticket attack.\nA successful execution will output the SPNs for the endpoint in question.\n",
+  "name": "Request A Single Ticket via PowerShell",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "powershell.file.script_block_text:*System.IdentityModel.Tokens.KerberosRequestorSecurityToken*",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.credential-access",
+    "attack.t1558.003"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "frack113"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

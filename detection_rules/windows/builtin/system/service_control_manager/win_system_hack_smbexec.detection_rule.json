@@ -1,0 +1,52 @@
+{
+  "rule_id": "52a85084-6989-40c3-8f32-091e12e13f09",
+  "risk_score": 73,
+  "description": "Detects the use of smbexec.py tool by detecting a specific service installation",
+  "name": "smbexec.py Service Installation",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "winlog.channel:System AND ((event.code:7045 AND winlog.provider_name:Service\\ Control\\ Manager) AND ((winlog.event_data.ImagePath:(*.bat\\ \\&\\ del\\ * OR *__output\\ 2\\^\\>\\^\\&1\\ \\>*)) OR winlog.event_data.ServiceName:BTOBTO))",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.lateral-movement",
+    "attack.execution",
+    "attack.t1021.002",
+    "attack.t1569.002"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Omer Faruk Celik"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

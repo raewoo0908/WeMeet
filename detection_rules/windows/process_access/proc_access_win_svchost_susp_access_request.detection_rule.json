@@ -1,0 +1,50 @@
+{
+  "rule_id": "166e9c50-8cd9-44af-815d-d1f0c0e90dde",
+  "risk_score": 73,
+  "description": "Detects suspicious access to the \"svchost\" process such as that used by Invoke-Phantom to kill the thread of the Windows event logging service.",
+  "name": "Suspicious Svchost Process Access",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "(winlog.event_data.CallTrace:*UNKNOWN* AND winlog.event_data.GrantedAccess:0x1F3FFF AND winlog.event_data.TargetImage:*\\:\\\\Windows\\\\System32\\\\svchost.exe) AND (NOT ((winlog.event_data.CallTrace:(*Microsoft.Build.ni.dll* OR *System.ni.dll*)) AND process.executable:*\\:\\\\Program\\ Files\\\\Microsoft\\ Visual\\ Studio\\\\* AND process.executable:*\\\\MSBuild\\\\Current\\\\Bin\\\\MSBuild.exe))",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.defense-evasion",
+    "attack.t1562.002"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Tim Burrell"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

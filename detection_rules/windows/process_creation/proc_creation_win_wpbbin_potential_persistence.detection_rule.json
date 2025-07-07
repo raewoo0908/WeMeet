@@ -1,0 +1,62 @@
+{
+  "rule_id": "4abc0ec4-db5a-412f-9632-26659cddf145",
+  "risk_score": 73,
+  "description": "Detects execution of the binary \"wpbbin\" which is used as part of the UEFI based persistence method described in the reference section",
+  "name": "UEFI Persistence Via Wpbbin - ProcessCreation",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "process.executable:C\\:\\\\Windows\\\\System32\\\\wpbbin.exe",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.persistence",
+    "attack.defense-evasion",
+    "attack.t1542.001"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Nasreddine Bencherchali (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Legitimate usage of the file by hardware manufacturer such as lenovo (Thanks @0gtweet for the tip)"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

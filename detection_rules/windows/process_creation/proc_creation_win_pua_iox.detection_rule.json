@@ -1,0 +1,61 @@
+{
+  "rule_id": "d7654f02-e04b-4934-9838-65c46f187ebc",
+  "risk_score": 73,
+  "description": "Detects the use of IOX - a tool for port forwarding and intranet proxy purposes",
+  "name": "PUA- IOX Tunneling Tool Execution",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "process.executable:*\\\\iox.exe OR (process.command_line:(*.exe\\ fwd\\ \\-l\\ * OR *.exe\\ fwd\\ \\-r\\ * OR *.exe\\ proxy\\ \\-l\\ * OR *.exe\\ proxy\\ \\-r\\ *)) OR (winlog.event_data.Hashes:(*MD5\\=9DB2D314DD3F704A02051EF5EA210993* OR *SHA1\\=039130337E28A6623ECF9A0A3DA7D92C5964D8DD* OR *SHA256\\=C6CF82919B809967D9D90EA73772A8AA1C1EB3BC59252D977500F64F1A0D6731*))",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.command-and-control",
+    "attack.t1090"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Florian Roth (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Legitimate use"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

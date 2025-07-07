@@ -1,0 +1,64 @@
+{
+  "rule_id": "6e30c82f-a9f8-4aab-b79c-7c12bce6f248",
+  "risk_score": 47,
+  "description": "Detects usage of bitsadmin downloading a file to uncommon target folder",
+  "name": "File Download Via Bitsadmin To An Uncommon Target Folder",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "(process.command_line:(*\\ \\/transfer\\ * OR *\\ \\/create\\ * OR *\\ \\/addfile\\ *)) AND (process.command_line:(*%AppData%* OR *%temp%* OR *%tmp%* OR *\\\\AppData\\\\Local\\\\* OR *C\\:\\\\Windows\\\\Temp\\\\*)) AND (process.executable:*\\\\bitsadmin.exe OR process.pe.original_file_name:bitsadmin.exe)",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.defense-evasion",
+    "attack.persistence",
+    "attack.t1197",
+    "attack.s0190",
+    "attack.t1036.003"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Florian Roth (Nextron Systems), Nasreddine Bencherchali (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

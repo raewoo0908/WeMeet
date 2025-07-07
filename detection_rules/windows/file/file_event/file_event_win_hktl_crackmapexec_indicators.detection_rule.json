@@ -1,0 +1,61 @@
+{
+  "rule_id": "736ffa74-5f6f-44ca-94ef-1c0df4f51d2a",
+  "risk_score": 73,
+  "description": "Detects file creation events with filename patterns used by CrackMapExec.",
+  "name": "HackTool - CrackMapExec File Indicators",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "file.path:C\\:\\\\Windows\\\\Temp\\\\* AND ((file.path:/\\\\[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}\\.txt$/ OR file.path:/\\\\[a-zA-Z]{8}\\.tmp$/) OR (file.path:(*\\\\temp.ps1 OR *\\\\msol.ps1)))",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "File Create (rule: FileCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.credential-access",
+    "attack.t1003.001"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Nasreddine Bencherchali (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

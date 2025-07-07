@@ -1,0 +1,50 @@
+{
+  "rule_id": "4916a35e-bfc4-47d0-8e25-a003d7067061",
+  "risk_score": 73,
+  "description": "Detects changes in Sysmon driver altitude value.\nIf the Sysmon driver is configured to load at an altitude of another registered service, it will fail to load at boot.\n",
+  "name": "Sysmon Driver Altitude Change",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "registry.path:*\\\\Services\\\\* AND registry.path:*\\\\Instances\\\\Sysmon\\ Instance\\\\Altitude",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.defense-evasion",
+    "attack.t1562.001"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "B.Talebi"
+  ],
+  "false_positives": [
+    "Legitimate driver altitude change to hide sysmon"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

@@ -1,0 +1,61 @@
+{
+  "rule_id": "9fc51a3c-81b3-4fa7-b35f-7c02cf10fd2d",
+  "risk_score": 47,
+  "description": "Detects the use of various web request commands with commandline tools and Windows PowerShell cmdlets (including aliases) via CommandLine",
+  "name": "Usage Of Web Request Commands And Cmdlets",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "process.command_line:(*\\[System.Net.WebRequest\\]\\:\\:create* OR *curl\\ * OR *Invoke\\-RestMethod* OR *Invoke\\-WebRequest* OR *iwr\\ * OR *Net.WebClient* OR *Resume\\-BitsTransfer* OR *Start\\-BitsTransfer* OR *wget\\ * OR *WinHttp.WinHttpRequest*)",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.execution",
+    "attack.t1059.001"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "James Pemberton / @4A616D6573, Endgame, JHasenbusch, oscd.community, Austin Songer @austinsonger"
+  ],
+  "false_positives": [
+    "Use of Get-Command and Get-Help modules to reference Invoke-WebRequest and Start-BitsTransfer."
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

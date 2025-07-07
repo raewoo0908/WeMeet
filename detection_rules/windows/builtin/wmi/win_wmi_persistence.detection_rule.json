@@ -1,0 +1,51 @@
+{
+  "rule_id": "0b7889b4-5577-4521-a60a-3376ee7f9f7b",
+  "risk_score": 47,
+  "description": "Detects suspicious WMI event filter and command line event consumer based on WMI and Security Logs.",
+  "name": "WMI Persistence",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "winlog.channel:Microsoft\\-Windows\\-WMI\\-Activity\\/Operational AND (((event.code:5861 AND (*ActiveScriptEventConsumer* OR *CommandLineEventConsumer* OR *CommandLineTemplate*)) OR event.code:5859) AND (NOT (winlog.event_data.PossibleCause:Permanent AND winlog.event_data.Provider:SCM\\ Event\\ Provider AND winlog.event_data.Query:select\\ *\\ from\\ MSFT_SCMEventLogEvent AND user.name:S\\-1\\-5\\-32\\-544)))",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.persistence",
+    "attack.privilege-escalation",
+    "attack.t1546.003"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Florian Roth (Nextron Systems), Gleb Sukhodolskiy, Timur Zinniatullin oscd.community"
+  ],
+  "false_positives": [
+    "Unknown (data set is too small; further testing needed)"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

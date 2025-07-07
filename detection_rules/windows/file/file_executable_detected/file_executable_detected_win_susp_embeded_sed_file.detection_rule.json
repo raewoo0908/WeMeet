@@ -1,0 +1,50 @@
+{
+  "rule_id": "ab90dab8-c7da-4010-9193-563528cfa347",
+  "risk_score": 47,
+  "description": "Detects the creation of a binary file with the \".sed\" extension. The \".sed\" extension stand for Self Extraction Directive files.\nThese files are used by the \"iexpress.exe\" utility in order to create self extracting packages.\nAttackers were seen abusing this utility and creating PE files with embedded \".sed\" entries.\nUsually \".sed\" files are simple ini files and not PE binaries.\n",
+  "name": "Potentially Suspicious Self Extraction Directive File Created",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "file.path:*.sed",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.defense-evasion",
+    "attack.t1218"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Joseliyo Sanchez, @Joseliyo_Jstnk"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

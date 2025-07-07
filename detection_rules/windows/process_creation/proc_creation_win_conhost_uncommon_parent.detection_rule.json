@@ -1,0 +1,61 @@
+{
+  "rule_id": "cbb9e3d1-2386-4e59-912e-62f1484f7a89",
+  "risk_score": 47,
+  "description": "Detects when the Console Window Host (conhost.exe) process is spawned by an uncommon parent process, which could be indicative of potential code injection activity.",
+  "name": "Conhost Spawned By Uncommon Parent Process",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "(process.executable:*\\\\conhost.exe AND (process.parent.executable:(*\\\\explorer.exe OR *\\\\lsass.exe OR *\\\\regsvr32.exe OR *\\\\rundll32.exe OR *\\\\services.exe OR *\\\\smss.exe OR *\\\\spoolsv.exe OR *\\\\svchost.exe OR *\\\\userinit.exe OR *\\\\wininit.exe OR *\\\\winlogon.exe))) AND (NOT (process.parent.command_line:(*\\-k\\ apphost\\ \\-s\\ AppHostSvc* OR *\\-k\\ imgsvc* OR *\\-k\\ localService\\ \\-p\\ \\-s\\ RemoteRegistry* OR *\\-k\\ LocalSystemNetworkRestricted\\ \\-p\\ \\-s\\ NgcSvc* OR *\\-k\\ NetSvcs\\ \\-p\\ \\-s\\ NcaSvc* OR *\\-k\\ netsvcs\\ \\-p\\ \\-s\\ NetSetupSvc* OR *\\-k\\ netsvcs\\ \\-p\\ \\-s\\ wlidsvc* OR *\\-k\\ NetworkService\\ \\-p\\ \\-s\\ DoSvc* OR *\\-k\\ wsappx\\ \\-p\\ \\-s\\ AppXSvc* OR *\\-k\\ wsappx\\ \\-p\\ \\-s\\ ClipSVC* OR *\\-k\\ wusvcs\\ \\-p\\ \\-s\\ WaaSMedicSvc*))) AND (NOT (process.parent.command_line:(*C\\:\\\\Program\\ Files\\ \\(x86\\)\\\\Dropbox\\\\Client\\\\* OR *C\\:\\\\Program\\ Files\\\\Dropbox\\\\Client\\\\*)))",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.execution",
+    "attack.t1059"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Tim Rauch, Elastic (idea)"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

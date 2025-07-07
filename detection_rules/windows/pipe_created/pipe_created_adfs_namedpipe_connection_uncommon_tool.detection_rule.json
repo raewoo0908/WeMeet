@@ -1,0 +1,50 @@
+{
+  "rule_id": "1ea13e8c-03ea-409b-877d-ce5c3d2c1cb3",
+  "risk_score": 47,
+  "description": "Detects suspicious local connections via a named pipe to the AD FS configuration database (Windows Internal Database).\nUsed to access information such as the AD FS configuration settings which contains sensitive information used to sign SAML tokens.\n",
+  "name": "ADFS Database Named Pipe Connection By Uncommon Tool",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "file.name:\\\\MICROSOFT##WID\\\\tsql\\\\query AND (NOT (process.executable:(*\\:\\\\Windows\\\\System32\\\\mmc.exe OR *\\:\\\\Windows\\\\system32\\\\svchost.exe OR *\\:\\\\Windows\\\\System32\\\\wsmprovhost.exe OR *\\:\\\\Windows\\\\SysWOW64\\\\mmc.exe OR *\\:\\\\Windows\\\\SysWOW64\\\\wsmprovhost.exe OR *\\:\\\\Windows\\\\WID\\\\Binn\\\\sqlwriter.exe OR *\\\\AzureADConnect.exe OR *\\\\Microsoft.Identity.Health.Adfs.PshSurrogate.exe OR *\\\\Microsoft.IdentityServer.ServiceHost.exe OR *\\\\Microsoft.Tri.Sensor.exe OR *\\\\sqlservr.exe OR *\\\\tssdis.exe)))",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.collection",
+    "attack.t1005"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Roberto Rodriguez @Cyb3rWard0g"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

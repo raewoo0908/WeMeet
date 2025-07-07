@@ -1,0 +1,61 @@
+{
+  "rule_id": "992a6cae-db6a-43c8-9cec-76d7195c96fc",
+  "risk_score": 73,
+  "description": "Detects a script interpreter wscript/cscript opening a network connection to a non-local network. Adversaries may use script to download malicious payloads.",
+  "name": "Outbound Network Connection Initiated By Script Interpreter",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "((process.executable:(*\\\\wscript.exe OR *\\\\cscript.exe)) AND network.direction:true) AND (NOT ((destination.ip:127.0.0.0\\/8 OR destination.ip:10.0.0.0\\/8 OR destination.ip:172.16.0.0\\/12 OR destination.ip:192.168.0.0\\/16 OR destination.ip:169.254.0.0\\/16 OR destination.ip:\\:\\:1\\/128 OR destination.ip:fe80\\:\\:\\/10 OR destination.ip:fc00\\:\\:\\/7) OR destination.ip:20.0.0.0\\/11))",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Network connection detected (rule: NetworkConnect)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.command-and-control",
+    "attack.t1105"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "frack113, Florian Roth (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Legitimate scripts"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

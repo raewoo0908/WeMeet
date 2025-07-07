@@ -1,0 +1,50 @@
+{
+  "rule_id": "902cedee-0398-4e3a-8183-6f3a89773a96",
+  "risk_score": 47,
+  "description": "Adversaries may abuse container files such as disk image (.iso, .vhd) file formats to deliver malicious payloads that may not be tagged with MOTW.",
+  "name": "Suspicious Invoke-Item From Mount-DiskImage",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "powershell.file.script_block_text:*Mount\\-DiskImage\\ * AND powershell.file.script_block_text:*\\-ImagePath\\ * AND powershell.file.script_block_text:*Get\\-Volume* AND powershell.file.script_block_text:*.DriveLetter* AND powershell.file.script_block_text:*invoke\\-item\\ * AND powershell.file.script_block_text:*\\)\\:\\\\*",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.defense-evasion",
+    "attack.t1553.005"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "frack113"
+  ],
+  "false_positives": [
+    "Legitimate PowerShell scripts"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

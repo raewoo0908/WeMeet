@@ -1,0 +1,50 @@
+{
+  "rule_id": "b98a10af-1e1e-44a7-bab2-4cc026917648",
+  "risk_score": 47,
+  "description": "Detects PDQDeploy service installation on the target system.\nWhen a package is deployed via PDQDeploy it installs a remote service on the target machine with the name \"PDQDeployRunner-X\" where \"X\" is an integer starting from 1\n",
+  "name": "New PDQDeploy Service - Client Side",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "winlog.channel:System AND ((event.code:7045 AND winlog.provider_name:Service\\ Control\\ Manager) AND (winlog.event_data.ImagePath:*PDQDeployRunner\\-* OR winlog.event_data.ServiceName:PDQDeployRunner\\-*))",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.privilege-escalation",
+    "attack.t1543.003"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Nasreddine Bencherchali (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Legitimate use of the tool"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

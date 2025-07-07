@@ -1,0 +1,61 @@
+{
+  "rule_id": "5b768e71-86f2-4879-b448-81061cbae951",
+  "risk_score": 73,
+  "description": "Detects suspicious manipulations of default accounts such as 'administrator' and 'guest'. For example 'enable' or 'disable' accounts or change the password...etc",
+  "name": "Suspicious Manipulation Of Default Accounts Via Net.EXE",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "(((process.executable:(*\\\\net.exe OR *\\\\net1.exe)) OR (process.pe.original_file_name:(net.exe OR net1.exe))) AND process.command_line:*\\ user\\ * AND (process.command_line:(*\\ Järjestelmänvalvoja\\ * OR *\\ Rendszergazda\\ * OR *\\ Администратор\\ * OR *\\ Administrateur\\ * OR *\\ Administrador\\ * OR *\\ Administratör\\ * OR *\\ Administrator\\ * OR *\\ guest\\ * OR *\\ DefaultAccount\\ * OR *\\ \\\"Järjestelmänvalvoja\\\"\\ * OR *\\ \\\"Rendszergazda\\\"\\ * OR *\\ \\\"Администратор\\\"\\ * OR *\\ \\\"Administrateur\\\"\\ * OR *\\ \\\"Administrador\\\"\\ * OR *\\ \\\"Administratör\\\"\\ * OR *\\ \\\"Administrator\\\"\\ * OR *\\ \\\"guest\\\"\\ * OR *\\ \\\"DefaultAccount\\\"\\ * OR *\\ 'Järjestelmänvalvoja'\\ * OR *\\ 'Rendszergazda'\\ * OR *\\ 'Администратор'\\ * OR *\\ 'Administrateur'\\ * OR *\\ 'Administrador'\\ * OR *\\ 'Administratör'\\ * OR *\\ 'Administrator'\\ * OR *\\ 'guest'\\ * OR *\\ 'DefaultAccount'\\ *))) AND (NOT (process.command_line:*guest* AND process.command_line:*\\/active\\ no*))",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.collection",
+    "attack.t1560.001"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Nasreddine Bencherchali (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Some false positives could occur with the admin or guest account. It depends on the scripts being used by the admins in your env. If you experience a lot of FP you could reduce the level to medium"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

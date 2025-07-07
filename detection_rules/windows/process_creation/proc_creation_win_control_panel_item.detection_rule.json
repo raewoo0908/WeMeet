@@ -1,0 +1,64 @@
+{
+  "rule_id": "0ba863e6-def5-4e50-9cea-4dd8c7dc46a4",
+  "risk_score": 73,
+  "description": "Detects the malicious use of a control panel item",
+  "name": "Control Panel Items",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "((process.command_line:*add* AND process.command_line:*CurrentVersion\\\\Control\\ Panel\\\\CPLs*) AND (process.executable:*\\\\reg.exe OR process.pe.original_file_name:reg.exe)) OR (process.command_line:*.cpl AND (NOT ((process.command_line:*regsvr32\\ * AND process.command_line:*\\ \\/s\\ * AND process.command_line:*igfxCPL.cpl*) OR (process.command_line:(*\\\\System32\\\\* OR *%System%* OR *\\|C\\:\\\\Windows\\\\system32\\|*)))))",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.execution",
+    "attack.defense-evasion",
+    "attack.t1218.002",
+    "attack.persistence",
+    "attack.t1546"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Kyaw Min Thein, Furkan Caliskan (@caliskanfurkan_)"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

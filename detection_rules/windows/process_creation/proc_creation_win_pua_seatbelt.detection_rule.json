@@ -1,0 +1,63 @@
+{
+  "rule_id": "38646daa-e78f-4ace-9de0-55547b2d30da",
+  "risk_score": 73,
+  "description": "Detects the execution of the PUA/Recon tool Seatbelt via PE information of command line parameters",
+  "name": "PUA - Seatbelt Execution",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "(process.executable:*\\\\Seatbelt.exe OR process.pe.original_file_name:Seatbelt.exe OR process.pe.description:Seatbelt OR (process.command_line:(*\\ DpapiMasterKeys* OR *\\ InterestingProcesses* OR *\\ InterestingFiles* OR *\\ CertificateThumbprints* OR *\\ ChromiumBookmarks* OR *\\ ChromiumHistory* OR *\\ ChromiumPresence* OR *\\ CloudCredentials* OR *\\ CredEnum* OR *\\ CredGuard* OR *\\ FirefoxHistory* OR *\\ ProcessCreationEvents*))) OR ((process.command_line:(*\\ \\-group\\=misc* OR *\\ \\-group\\=remote* OR *\\ \\-group\\=chromium* OR *\\ \\-group\\=slack* OR *\\ \\-group\\=system* OR *\\ \\-group\\=user* OR *\\ \\-group\\=all*)) AND process.command_line:*\\ \\-outputfile\\=*)",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.discovery",
+    "attack.t1526",
+    "attack.t1087",
+    "attack.t1083"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Nasreddine Bencherchali (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Unlikely"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

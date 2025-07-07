@@ -1,0 +1,50 @@
+{
+  "rule_id": "ea5c131b-380d-49f9-aeb3-920694da4d4b",
+  "risk_score": 73,
+  "description": "Detects loading and execution of an unsigned thor scanner binary.",
+  "name": "Suspicious Unsigned Thor Scanner Execution",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "((file.path:(*\\\\thor.exe OR *\\\\thor64.exe)) AND (process.executable:(*\\\\thor.exe OR *\\\\thor64.exe))) AND (NOT (winlog.event_data.Signature:Nextron\\ Systems\\ GmbH AND file.code_signature.status:valid AND file.code_signature.signed:true))",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.defense-evasion",
+    "attack.t1574.001"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Nasreddine Bencherchali (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Other legitimate binaries named \"thor.exe\" that aren't published by Nextron Systems"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

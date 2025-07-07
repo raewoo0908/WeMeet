@@ -1,0 +1,61 @@
+{
+  "rule_id": "590a5f4c-6c8c-4f10-8307-89afe9453a9d",
+  "risk_score": 73,
+  "description": "Detection of child processes spawned with SYSTEM privileges by parents with LOCAL SERVICE or NETWORK SERVICE accounts",
+  "name": "Suspicious Child Process Created as System",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "((winlog.event_data.IntegrityLevel:(System OR S\\-1\\-16\\-16384)) AND (winlog.event_data.ParentUser:(*AUTHORI* OR *AUTORI*)) AND (winlog.event_data.ParentUser:(*\\\\NETWORK\\ SERVICE OR *\\\\LOCAL\\ SERVICE)) AND (user.name:(*AUTHORI* OR *AUTORI*)) AND (user.name:(*\\\\SYSTEM OR *\\\\Système OR *\\\\СИСТЕМА))) AND (NOT (process.command_line:*DavSetCookie* AND process.executable:*\\\\rundll32.exe))",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.privilege-escalation",
+    "attack.t1134.002"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Teymur Kheirkhabarov, Roberto Rodriguez (@Cyb3rWard0g), Open Threat Research (OTR)"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

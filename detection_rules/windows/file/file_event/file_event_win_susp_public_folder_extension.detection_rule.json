@@ -1,0 +1,61 @@
+{
+  "rule_id": "b447f7de-1e53-4cbf-bfb4-f1f6d0b04e4e",
+  "risk_score": 73,
+  "description": "Detects the creation of a file with a suspicious extension in the public folder, which could indicate potential malicious activity.",
+  "name": "Suspicious Binaries and Scripts in Public Folder",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "file.path:*\\:\\\\Users\\\\Public\\\\* AND (file.path:(*.bat OR *.dll OR *.exe OR *.hta OR *.js OR *.ps1 OR *.vbe OR *.vbs))",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "File Create (rule: FileCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.execution",
+    "attack.t1204"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "The DFIR Report"
+  ],
+  "false_positives": [
+    "Administrators deploying legitimate binaries to public folders."
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

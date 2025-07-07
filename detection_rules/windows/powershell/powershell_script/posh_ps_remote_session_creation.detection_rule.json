@@ -1,0 +1,50 @@
+{
+  "rule_id": "a0edd39f-a0c6-4c17-8141-261f958e8d8f",
+  "risk_score": 47,
+  "description": "Adversaries may abuse PowerShell commands and scripts for execution.\nPowerShell is a powerful interactive command-line interface and scripting environment included in the Windows operating system\n",
+  "name": "PowerShell Remote Session Creation",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "powershell.file.script_block_text:*New\\-PSSession* AND powershell.file.script_block_text:*\\-ComputerName\\ *",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.execution",
+    "attack.t1059.001"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "frack113"
+  ],
+  "false_positives": [
+    "Legitimate administrative script"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

@@ -1,0 +1,61 @@
+{
+  "rule_id": "99c8be4f-3087-4f9f-9c24-8c7e257b442e",
+  "risk_score": 47,
+  "description": "Detects the execution of \"Setup16.EXE\" and old installation utility with a custom \".lst\" file.\nThese \".lst\" file can contain references to external program that \"Setup16.EXE\" will execute.\nAttackers and adversaries might leverage this as a living of the land utility.\n",
+  "name": "Setup16.EXE Execution With Custom .Lst File",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "(process.parent.command_line:*\\ \\-m\\ * AND process.parent.executable:C\\:\\\\Windows\\\\SysWOW64\\\\setup16.exe) AND (NOT process.executable:C\\:\\\\\\~MSSETUP.T\\\\*)",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.defense-evasion",
+    "attack.t1574.005"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "frack113"
+  ],
+  "false_positives": [
+    "On modern Windows system, the \"Setup16\" utility is practically never used, hence false positive should be very rare."
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

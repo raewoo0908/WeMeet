@@ -1,0 +1,61 @@
+{
+  "rule_id": "f35c5d71-b489-4e22-a115-f003df287317",
+  "risk_score": 73,
+  "description": "Detects potential process patterns related to Cobalt Strike beacon activity",
+  "name": "Potential CobaltStrike Process Patterns",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "(process.command_line:*conhost.exe\\ 0xffffffff\\ \\-ForceV1 AND (process.parent.command_line:*cmd.exe\\ \\/C\\ echo* AND process.parent.command_line:*\\ \\>\\ \\\\\\\\.\\\\pipe*)) OR (process.command_line:*conhost.exe\\ 0xffffffff\\ \\-ForceV1 AND process.parent.command_line:*\\/C\\ whoami) OR (process.command_line:*cmd.exe\\ \\/C\\ whoami AND process.parent.executable:C\\:\\\\Temp\\\\*) OR ((process.command_line:*cmd.exe\\ \\/c\\ echo* AND process.command_line:*\\>\\ \\\\\\\\.\\\\pipe*) AND (process.parent.executable:(*\\\\runonce.exe OR *\\\\dllhost.exe)))",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.execution",
+    "attack.t1059"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Florian Roth (Nextron Systems), Nasreddine Bencherchali (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

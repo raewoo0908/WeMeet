@@ -1,0 +1,54 @@
+{
+  "rule_id": "5a105d34-05fc-401e-8553-272b45c1522d",
+  "risk_score": 99,
+  "description": "Detects known malicious service installs that appear in cases in which a Cobalt Strike beacon elevates privileges or lateral movement",
+  "name": "CobaltStrike Service Installations - System",
+  "severity": "critical",
+  "type": "query",
+  "language": "lucene",
+  "query": "winlog.channel:System AND ((event.code:7045 AND winlog.provider_name:Service\\ Control\\ Manager) AND ((winlog.event_data.ImagePath:*ADMIN$* AND winlog.event_data.ImagePath:*.exe*) OR (winlog.event_data.ImagePath:*%COMSPEC%* AND winlog.event_data.ImagePath:*start* AND winlog.event_data.ImagePath:*powershell*) OR winlog.event_data.ImagePath:*powershell\\ \\-nop\\ \\-w\\ hidden\\ \\-encodedcommand* OR winlog.event_data.ImagePath:(*SUVYIChOZXctT2JqZWN0IE5ldC5XZWJjbGllbnQpLkRvd25sb2FkU3RyaW5nKCdodHRwOi8vMTI3LjAuMC4xO* OR *lFWCAoTmV3LU9iamVjdCBOZXQuV2ViY2xpZW50KS5Eb3dubG9hZFN0cmluZygnaHR0cDovLzEyNy4wLjAuMT* OR *JRVggKE5ldy1PYmplY3QgTmV0LldlYmNsaWVudCkuRG93bmxvYWRTdHJpbmcoJ2h0dHA6Ly8xMjcuMC4wLjE6*)))",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.execution",
+    "attack.privilege-escalation",
+    "attack.lateral-movement",
+    "attack.t1021.002",
+    "attack.t1543.003",
+    "attack.t1569.002"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Florian Roth (Nextron Systems), Wojciech Lesicki"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

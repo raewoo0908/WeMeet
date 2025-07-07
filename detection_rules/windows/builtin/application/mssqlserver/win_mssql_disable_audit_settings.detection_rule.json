@@ -1,0 +1,49 @@
+{
+  "rule_id": "350dfb37-3706-4cdc-9e2e-5e24bc3a46df",
+  "risk_score": 73,
+  "description": "Detects when an attacker calls the \"ALTER SERVER AUDIT\" or \"DROP SERVER AUDIT\" transaction in order to delete or disable audit logs on the server",
+  "name": "MSSQL Disable Audit Settings",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "winlog.channel:Application AND ((winlog.event_data.Data:(*statement\\:ALTER\\ SERVER\\ AUDIT* OR *statement\\:DROP\\ SERVER\\ AUDIT*)) AND event.code:33205 AND winlog.provider_name:*MSSQL*)",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.defense-evasion"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Nasreddine Bencherchali (Nextron Systems)"
+  ],
+  "false_positives": [
+    "This event should only fire when an administrator is modifying the audit policy. Which should be a rare occurrence once it's set up"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

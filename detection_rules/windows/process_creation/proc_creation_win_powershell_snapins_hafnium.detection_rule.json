@@ -1,0 +1,63 @@
+{
+  "rule_id": "25676e10-2121-446e-80a4-71ff8506af47",
+  "risk_score": 73,
+  "description": "Detects adding and using Exchange PowerShell snap-ins to export mailbox data. As seen used by HAFNIUM and APT27",
+  "name": "Exchange PowerShell Snap-Ins Usage",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "(process.command_line:*Add\\-PSSnapin* AND ((process.executable:(*\\\\powershell.exe OR *\\\\pwsh.exe)) OR (process.pe.original_file_name:(PowerShell.EXE OR pwsh.dll))) AND (process.command_line:(*Microsoft.Exchange.Powershell.Snapin* OR *Microsoft.Exchange.Management.PowerShell.SnapIn*))) AND (NOT (process.command_line:*$exserver\\=Get\\-ExchangeServer\\ \\(\\[Environment\\]\\:\\:MachineName\\)\\ \\-ErrorVariable\\ exerr\\ 2\\>\\ $null* AND process.parent.executable:C\\:\\\\Windows\\\\System32\\\\msiexec.exe))",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.execution",
+    "attack.t1059.001",
+    "attack.collection",
+    "attack.t1114"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "FPT.EagleEye, Nasreddine Bencherchali (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

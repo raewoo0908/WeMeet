@@ -1,0 +1,61 @@
+{
+  "rule_id": "e0b06658-7d1d-4cd3-bf15-03467507ff7c",
+  "risk_score": 73,
+  "description": "Detects the creation of Usage Log files by the CLR (clr.dll). These files are named after the executing process once the assembly is finished executing for the first time in the (user) session context.",
+  "name": "Suspicious DotNET CLR Usage Log Artifact",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "(file.path:(*\\\\UsageLogs\\\\cmstp.exe.log OR *\\\\UsageLogs\\\\cscript.exe.log OR *\\\\UsageLogs\\\\mshta.exe.log OR *\\\\UsageLogs\\\\msxsl.exe.log OR *\\\\UsageLogs\\\\regsvr32.exe.log OR *\\\\UsageLogs\\\\rundll32.exe.log OR *\\\\UsageLogs\\\\svchost.exe.log OR *\\\\UsageLogs\\\\wscript.exe.log OR *\\\\UsageLogs\\\\wmic.exe.log)) AND (NOT ((winlog.event_data.CommandLine:*Temp* AND winlog.event_data.CommandLine:*zzzzInvokeManagedCustomActionOutOfProc*) AND process.executable:*\\\\rundll32.exe AND process.parent.command_line:*\\ \\-Embedding* AND process.parent.executable:*\\\\MsiExec.exe))",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "File Create (rule: FileCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.defense-evasion",
+    "attack.t1218"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "frack113, omkar72, oscd.community, Wojciech Lesicki"
+  ],
+  "false_positives": [
+    "Rundll32.exe with zzzzInvokeManagedCustomActionOutOfProc in command line and msiexec.exe as parent process - https://twitter.com/SBousseaden/status/1388064061087260675"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

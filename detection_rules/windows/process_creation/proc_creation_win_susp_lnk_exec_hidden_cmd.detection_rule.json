@@ -1,0 +1,62 @@
+{
+  "rule_id": "dd8756e7-a3a0-4768-b47e-8f545d1a751c",
+  "risk_score": 73,
+  "description": "Detects exploitation of LNK file command-line length discrepancy, where attackers hide malicious commands beyond the 260-character UI limit while the actual command-line argument field supports 4096 characters using whitespace padding (e.g., 0x20, 0x09-0x0D).\nAdversaries insert non-printable whitespace characters (e.g., Line Feed \\x0A, Carriage Return \\x0D) to pad the visible section of the LNK file, pushing malicious commands past the UI-visible boundary.\nThe hidden payload, executed at runtime but invisible in Windows Explorer properties, enables stealthy execution and evasion—commonly used for social engineering attacks.\nThis rule flags suspicious use of such padding observed in real-world attacks.\n",
+  "name": "Suspicious LNK Command-Line Padding with Whitespace Characters",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "((process.command_line:(*\\ \\ \\ \\ \\ \\ \\ \\ \\ \\ \\ \\ \\ \\ \\ \\ \\ * OR *\\\\u0009* OR *\\\\u000A* OR *\\\\u0011* OR *\\\\u0012* OR *\\\\u0013* OR *\\\\u000B* OR *\\\\u000C* OR *\\\\u000D*)) OR process.command_line:/\\n\\n\\n\\n\\n\\n/) AND (process.parent.executable:*\\\\explorer.exe OR process.parent.command_line:*.lnk*)",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.initial-access",
+    "attack.execution",
+    "attack.t1204.002"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Swachchhanda Shrawan Poudel (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

@@ -1,0 +1,51 @@
+{
+  "rule_id": "baecf8fb-edbf-429f-9ade-31fc3f22b970",
+  "risk_score": 47,
+  "description": "Detects modification of autostart extensibility point (ASEP) in registry.",
+  "name": "Office Autorun Keys Modification",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "(registry.path:(*\\\\Software\\\\Wow6432Node\\\\Microsoft\\\\Office* OR *\\\\Software\\\\Microsoft\\\\Office*)) AND (registry.path:(*\\\\Word\\\\Addins* OR *\\\\PowerPoint\\\\Addins* OR *\\\\Outlook\\\\Addins* OR *\\\\Onenote\\\\Addins* OR *\\\\Excel\\\\Addins* OR *\\\\Access\\\\Addins* OR *test\\\\Special\\\\Perf*)) AND (NOT ((process.executable:C\\:\\\\Program\\ Files\\\\AVG\\\\Antivirus\\\\RegSvr.exe AND registry.path:*\\\\Microsoft\\\\Office\\\\Outlook\\\\Addins\\\\Antivirus.AsOutExt\\\\*) OR winlog.event_data.Details:\\(Empty\\) OR ((process.executable:(C\\:\\\\Program\\ Files\\\\Microsoft\\ Office\\\\* OR C\\:\\\\Program\\ Files\\ \\(x86\\)\\\\Microsoft\\ Office\\\\* OR C\\:\\\\Windows\\\\System32\\\\msiexec.exe* OR C\\:\\\\Windows\\\\System32\\\\regsvr32.exe*)) AND (registry.path:(*\\\\Excel\\\\Addins\\\\AdHocReportingExcelClientLib.AdHocReportingExcelClientAddIn.1\\\\* OR *\\\\Excel\\\\Addins\\\\ExcelPlugInShell.PowerMapConnect\\\\* OR *\\\\Excel\\\\Addins\\\\NativeShim\\\\* OR *\\\\Excel\\\\Addins\\\\NativeShim.InquireConnector.1\\\\* OR *\\\\Excel\\\\Addins\\\\PowerPivotExcelClientAddIn.NativeEntry.1\\\\* OR *\\\\Outlook\\\\AddIns\\\\AccessAddin.DC\\\\* OR *\\\\Outlook\\\\AddIns\\\\ColleagueImport.ColleagueImportAddin\\\\* OR *\\\\Outlook\\\\AddIns\\\\EvernoteCC.EvernoteContactConnector\\\\* OR *\\\\Outlook\\\\AddIns\\\\EvernoteOLRD.Connect\\\\* OR *\\\\Outlook\\\\Addins\\\\Microsoft.VbaAddinForOutlook.1\\\\* OR *\\\\Outlook\\\\Addins\\\\OcOffice.OcForms\\\\* OR *\\\\Outlook\\\\Addins\\\\OneNote.OutlookAddin* OR *\\\\Outlook\\\\Addins\\\\OscAddin.Connect\\\\* OR *\\\\Outlook\\\\Addins\\\\OutlookChangeNotifier.Connect\\\\* OR *\\\\Outlook\\\\Addins\\\\UCAddin.LyncAddin.1* OR *\\\\Outlook\\\\Addins\\\\UCAddin.UCAddin.1* OR *\\\\Outlook\\\\Addins\\\\UmOutlookAddin.FormRegionAddin\\\\*))) OR (process.executable:*\\\\OfficeClickToRun.exe AND (process.executable:(C\\:\\\\Program\\ Files\\\\Common\\ Files\\\\Microsoft\\ Shared\\\\ClickToRun\\\\* OR C\\:\\\\Program\\ Files\\\\Common\\ Files\\\\Microsoft\\ Shared\\\\ClickToRun\\\\Updates\\\\*)))))",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.persistence",
+    "attack.t1547.001"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Victor Sergeev, Daniil Yugoslavskiy, Gleb Sukhodolskiy, Timur Zinniatullin, oscd.community, Tim Shelton, frack113 (split)"
+  ],
+  "false_positives": [
+    "Legitimate software automatically (mostly, during installation) sets up autorun keys for legitimate reason",
+    "Legitimate administrator sets up autorun keys for legitimate reason"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

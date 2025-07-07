@@ -1,0 +1,62 @@
+{
+  "rule_id": "62b20d44-1546-4e61-afce-8e175eb9473c",
+  "risk_score": 47,
+  "description": "Detects the use of the PowerShell \"Set-Service\" cmdlet to change the startup type of a service to \"disabled\" or \"manual\"",
+  "name": "Service StartupType Change Via PowerShell Set-Service",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "((process.command_line:(*Disabled* OR *Manual*)) AND (process.command_line:*Set\\-Service* AND process.command_line:*\\-StartupType*)) AND (process.executable:*\\\\powershell.exe OR process.pe.original_file_name:PowerShell.EXE)",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.execution",
+    "attack.defense-evasion",
+    "attack.t1562.001"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Nasreddine Bencherchali (Nextron Systems)"
+  ],
+  "false_positives": [
+    "False positives may occur with troubleshooting scripts"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

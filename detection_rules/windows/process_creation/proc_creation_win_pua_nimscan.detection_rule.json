@@ -1,0 +1,61 @@
+{
+  "rule_id": "4fd6b1c7-19b8-4488-97f6-00f0924991a3",
+  "risk_score": 47,
+  "description": "Detects usage of NimScan, a portscanner utility.\nIn early 2025, adversaries were observed using this utility to scan for open ports on remote hosts in a compromised environment.\nThis rule identifies the execution of NimScan based on the process image name and specific hash values associated with different versions of the tool.\n",
+  "name": "PUA - NimScan Execution",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "process.executable:*\\\\NimScan.exe OR (winlog.event_data.Hashes:(*IMPHASH\\=41BB1C7571B3A724EB83A1D2B96DBB8C* OR *IMPHASH\\=B1B6ADACB172795480179EFD18A29549* OR *IMPHASH\\=0D1F896DC7642AD8384F9042F30279C2*))",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.discovery",
+    "attack.t1046"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Swachchhanda Shrawan Poudel (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Legitimate administrator activity"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

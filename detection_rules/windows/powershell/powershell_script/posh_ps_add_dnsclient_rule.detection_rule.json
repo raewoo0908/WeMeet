@@ -1,0 +1,50 @@
+{
+  "rule_id": "4368354e-1797-463c-bc39-a309effbe8d7",
+  "risk_score": 73,
+  "description": "Detects powershell scripts that adds a Name Resolution Policy Table (NRPT) rule for the specified namespace.\nThis will bypass the default DNS server and uses a specified server for answering the query.\n",
+  "name": "Powershell Add Name Resolution Policy Table Rule",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "powershell.file.script_block_text:*Add\\-DnsClientNrptRule* AND powershell.file.script_block_text:*\\-Namesp* AND powershell.file.script_block_text:*\\-NameSe*",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.impact",
+    "attack.t1565"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Borna Talebi"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

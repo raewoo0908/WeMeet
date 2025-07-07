@@ -1,0 +1,50 @@
+{
+  "rule_id": "846c7a87-8e14-4569-9d49-ecfd4276a01c",
+  "risk_score": 73,
+  "description": "Detects execution and usage of the DSInternals PowerShell module. Which can be used to perform what might be considered as suspicious activity such as dumping DPAPI backup keys or manipulating NTDS.DIT files.\nThe DSInternals PowerShell Module exposes several internal features of Active Directory and Azure Active Directory. These include FIDO2 and NGC key auditing, offline ntds.dit file manipulation, password auditing, DC recovery from IFM backups and password hash calculation.\n",
+  "name": "DSInternals Suspicious PowerShell Cmdlets - ScriptBlock",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "powershell.file.script_block_text:(*Add\\-ADDBSidHistory* OR *Add\\-ADNgcKey* OR *Add\\-ADReplNgcKey* OR *ConvertFrom\\-ADManagedPasswordBlob* OR *ConvertFrom\\-GPPrefPassword* OR *ConvertFrom\\-ManagedPasswordBlob* OR *ConvertFrom\\-UnattendXmlPassword* OR *ConvertFrom\\-UnicodePassword* OR *ConvertTo\\-AADHash* OR *ConvertTo\\-GPPrefPassword* OR *ConvertTo\\-KerberosKey* OR *ConvertTo\\-LMHash* OR *ConvertTo\\-MsoPasswordHash* OR *ConvertTo\\-NTHash* OR *ConvertTo\\-OrgIdHash* OR *ConvertTo\\-UnicodePassword* OR *Disable\\-ADDBAccount* OR *Enable\\-ADDBAccount* OR *Get\\-ADDBAccount* OR *Get\\-ADDBBackupKey* OR *Get\\-ADDBDomainController* OR *Get\\-ADDBGroupManagedServiceAccount* OR *Get\\-ADDBKdsRootKey* OR *Get\\-ADDBSchemaAttribute* OR *Get\\-ADDBServiceAccount* OR *Get\\-ADDefaultPasswordPolicy* OR *Get\\-ADKeyCredential* OR *Get\\-ADPasswordPolicy* OR *Get\\-ADReplAccount* OR *Get\\-ADReplBackupKey* OR *Get\\-ADReplicationAccount* OR *Get\\-ADSIAccount* OR *Get\\-AzureADUserEx* OR *Get\\-BootKey* OR *Get\\-KeyCredential* OR *Get\\-LsaBackupKey* OR *Get\\-LsaPolicy* OR *Get\\-SamPasswordPolicy* OR *Get\\-SysKey* OR *Get\\-SystemKey* OR *New\\-ADDBRestoreFromMediaScript* OR *New\\-ADKeyCredential* OR *New\\-ADNgcKey* OR *New\\-NTHashSet* OR *Remove\\-ADDBObject* OR *Save\\-DPAPIBlob* OR *Set\\-ADAccountPasswordHash* OR *Set\\-ADDBAccountPassword* OR *Set\\-ADDBBootKey* OR *Set\\-ADDBDomainController* OR *Set\\-ADDBPrimaryGroup* OR *Set\\-ADDBSysKey* OR *Set\\-AzureADUserEx* OR *Set\\-LsaPolicy* OR *Set\\-SamAccountPasswordHash* OR *Set\\-WinUserPasswordHash* OR *Test\\-ADDBPasswordQuality* OR *Test\\-ADPasswordQuality* OR *Test\\-ADReplPasswordQuality* OR *Test\\-PasswordQuality* OR *Unlock\\-ADDBAccount* OR *Write\\-ADNgcKey* OR *Write\\-ADReplNgcKey*)",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.execution",
+    "attack.t1059.001"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Nasreddine Bencherchali (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Legitimate usage of DSInternals for administration or audit purpose."
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

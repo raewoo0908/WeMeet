@@ -1,0 +1,60 @@
+{
+  "rule_id": "f9578658-9e71-4711-b634-3f9b50cd3c06",
+  "risk_score": 73,
+  "description": "Detects the usage of emojis in the command line, this could be a sign of potential defense evasion activity.",
+  "name": "Potential Defense Evasion Activity Via Emoji Usage In CommandLine - 3",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "process.command_line:(*🦆* OR *🦅* OR *🦉* OR *🦇* OR *🐺* OR *🐗* OR *🐴* OR *🦄* OR *🐝* OR *🪱* OR *🐛* OR *🦋* OR *🐌* OR *🐞* OR *🐜* OR *🪰* OR *🪲* OR *🪳* OR *🦟* OR *🦗* OR *🕷* OR *🕸* OR *🦂* OR *🐢* OR *🐍* OR *🦎* OR *🦖* OR *🦕* OR *🐙* OR *🦑* OR *🦐* OR *🦞* OR *🦀* OR *🪸* OR *🐡* OR *🐠* OR *🐟* OR *🐬* OR *🐳* OR *🐋* OR *🦈* OR *🐊* OR *🐅* OR *🐆* OR *🦓* OR *🦍* OR *🦧* OR *🦣* OR *🐘* OR *🦛* OR *🦏* OR *🐪* OR *🐫* OR *🦒* OR *🦘* OR *🦬* OR *🐃* OR *🐂* OR *🐄* OR *🐎* OR *🐖* OR *🐏* OR *🐑* OR *🦙* OR *🐐* OR *🦌* OR *🐕* OR *🐩* OR *🦮* OR *🐕‍🦺* OR *🐈* OR *🐈‍⬛* OR *🪶* OR *🐓* OR *🦃* OR *🦤* OR *🦚* OR *🦜* OR *🦢* OR *🦩* OR *🕊* OR *🐇* OR *🦝* OR *🦨* OR *🦡* OR *🦫* OR *🦦* OR *🦥* OR *🐁* OR *🐀* OR *🐿* OR *🦔* OR *🐾* OR *🐉* OR *🐲* OR *🌵* OR *🎄* OR *🌲* OR *🌳* OR *🌴* OR *🪹* OR *🪺* OR *🪵* OR *🌱* OR *🌿* OR *☘️* OR *🍀* OR *🎍* OR *🪴* OR *🎋* OR *🍃* OR *🍂* OR *🍁* OR *🍄* OR *🐚* OR *🪨* OR *🌾* OR *💐* OR *🌷* OR *🪷* OR *🌹* OR *🥀* OR *🌺* OR *🌸* OR *🌼* OR *🌻* OR *🌞* OR *🌝* OR *🌛* OR *🌜* OR *🌚* OR *🌕* OR *🌖* OR *🌗* OR *🌘* OR *🌑* OR *🌒* OR *🌓* OR *🌔* OR *🌙* OR *🌎* OR *🌍* OR *🌏* OR *🪐* OR *💫* OR *⭐️* OR *🌟* OR *✨* OR *⚡️* OR *☄️* OR *💥* OR *🔥* OR *🌪* OR *🌈* OR *☀️* OR *🌤* OR *⛅️* OR *🌥* OR *☁️* OR *🌦* OR *🌧* OR *⛈* OR *🌩* OR *🌨* OR *❄️* OR *☃️* OR *⛄️* OR *🌬* OR *💨* OR *💧* OR *💦* OR *🫧* OR *☔️* OR *☂️* OR *🌊* OR *🌫🍏* OR *🍎* OR *🍐* OR *🍊* OR *🍋* OR *🍌* OR *🍉* OR *🍇* OR *🍓* OR *🫐* OR *🍈* OR *🍒* OR *🍑* OR *🥭* OR *🍍* OR *🥥* OR *🥝* OR *🍅* OR *🍆* OR *🥑* OR *🥦* OR *🥬* OR *🥒* OR *🌶* OR *🫑* OR *🌽* OR *🥕* OR *🫒* OR *🧄* OR *🧅* OR *🥔* OR *🍠* OR *🫘* OR *🥐* OR *🥯* OR *🍞* OR *🥖* OR *🥨* OR *🧀* OR *🥚* OR *🍳* OR *🧈* OR *🥞* OR *🧇* OR *🥓* OR *🥩* OR *🍗* OR *🍖* OR *🦴* OR *🌭* OR *🍔* OR *🍟* OR *🍕* OR *🫓* OR *🥪* OR *🥙* OR *🧆* OR *🌮* OR *🌯* OR *🫔* OR *🥗* OR *🥘* OR *🫕* OR *🥫* OR *🍝* OR *🍜* OR *🍲* OR *🍛* OR *🍣* OR *🍱* OR *🥟* OR *🦪* OR *🍤* OR *🍙* OR *🍚* OR *🍘* OR *🍥* OR *🥠* OR *🥮* OR *🍢* OR *🍡* OR *🍧* OR *🍨* OR *🍦* OR *🥧* OR *🧁* OR *🍰* OR *🎂* OR *🍮* OR *🍭* OR *🍬* OR *🍫* OR *🍿* OR *🍩* OR *🍪* OR *🌰* OR *🥜* OR *🍯* OR *🥛* OR *🍼* OR *🫖* OR *☕️* OR *🍵* OR *🧃* OR *🥤* OR *🧋* OR *🫙* OR *🍶* OR *🍺* OR *🍻* OR *🥂* OR *🍷* OR *🫗* OR *🥃* OR *🍸* OR *🍹* OR *🧉* OR *🍾* OR *🧊* OR *🥄* OR *🍴* OR *🍽* OR *🥣* OR *🥡* OR *🥢* OR *🧂* OR *⚽️* OR *🏀* OR *🏈* OR *⚾️* OR *🥎* OR *🎾* OR *🏐* OR *🏉* OR *🥏* OR *🎱* OR *🪀* OR *🏓* OR *🏸* OR *🏒* OR *🏑* OR *🥍* OR *🏏* OR *🪃* OR *🥅* OR *⛳️* OR *🪁* OR *🏹* OR *🎣* OR *🤿* OR *🥊* OR *🥋* OR *🎽* OR *🛹* OR *🛼* OR *🛷* OR *⛸* OR *🥌* OR *🎿* OR *⛷* OR *🏂* OR *🪂* OR *🏋️‍♀️* OR *🏋️* OR *🏋️‍♂️* OR *🤼‍♀️* OR *🤼* OR *🤼‍♂️* OR *🤸‍♀️* OR *🤸* OR *🤸‍♂️* OR *⛹️‍♀️* OR *⛹️* OR *⛹️‍♂️* OR *🤺* OR *🤾‍♀️* OR *🤾* OR *🤾‍♂️* OR *🏌️‍♀️* OR *🏌️* OR *🏌️‍♂️* OR *🏇* OR *🧘‍♀️* OR *🧘* OR *🧘‍♂️* OR *🏄‍♀️* OR *🏄* OR *🏄‍♂️* OR *🏊‍♀️* OR *🏊* OR *🏊‍♂️* OR *🤽‍♀️* OR *🤽* OR *🤽‍♂️* OR *🚣‍♀️* OR *🚣* OR *🚣‍♂️* OR *🧗‍♀️* OR *🧗* OR *🧗‍♂️* OR *🚵‍♀️* OR *🚵* OR *🚵‍♂️* OR *🚴‍♀️* OR *🚴* OR *🚴‍♂️* OR *🏆* OR *🥇* OR *🥈* OR *🥉* OR *🏅* OR *🎖* OR *🏵* OR *🎗* OR *🎫* OR *🎟* OR *🎪* OR *🤹* OR *🤹‍♂️* OR *🤹‍♀️* OR *🎭* OR *🩰* OR *🎨* OR *🎬* OR *🎤* OR *🎧* OR *🎼* OR *🎹* OR *🥁* OR *🪘* OR *🎷* OR *🎺* OR *🪗* OR *🎸* OR *🪕* OR *🎻* OR *🎲* OR *♟* OR *🎯* OR *🎳* OR *🎮* OR *🎰* OR *🧩* OR *🚗* OR *🚕* OR *🚙* OR *🚌* OR *🚎* OR *🏎* OR *🚓* OR *🚑* OR *🚒* OR *🚐* OR *🛻* OR *🚚* OR *🚛* OR *🚜* OR *🦯* OR *🦽* OR *🦼* OR *🛴* OR *🚲* OR *🛵* OR *🏍* OR *🛺* OR *🚨* OR *🚔* OR *🚍* OR *🚘* OR *🚖* OR *🛞* OR *🚡* OR *🚠* OR *🚟* OR *🚃* OR *🚋* OR *🚞* OR *🚝* OR *🚄* OR *🚅* OR *🚈* OR *🚂* OR *🚆* OR *🚇* OR *🚊* OR *🚉* OR *✈️* OR *🛫* OR *🛬* OR *🛩* OR *💺* OR *🛰* OR *🚀* OR *🛸* OR *🚁* OR *🛶* OR *⛵️* OR *🚤* OR *🛥* OR *🛳* OR *⛴* OR *🚢* OR *⚓️* OR *🛟* OR *🪝* OR *⛽️* OR *🚧* OR *🚦* OR *🚥* OR *🚏* OR *🗺* OR *🗿* OR *🗽* OR *🗼* OR *🏰* OR *🏯* OR *🏟* OR *🎡* OR *🎢* OR *🛝* OR *🎠* OR *⛲️* OR *⛱* OR *🏖* OR *🏝* OR *🏜* OR *🌋* OR *⛰* OR *🏔* OR *🗻* OR *🏕* OR *⛺️* OR *🛖* OR *🏠* OR *🏡* OR *🏘* OR *🏚* OR *🏗* OR *🏭* OR *🏢* OR *🏬* OR *🏣* OR *🏤* OR *🏥* OR *🏦* OR *🏨* OR *🏪* OR *🏫* OR *🏩* OR *💒* OR *🏛* OR *⛪️* OR *🕌* OR *🕍* OR *🛕* OR *🕋* OR *⛩* OR *🛤* OR *🛣* OR *🗾* OR *🎑* OR *🏞* OR *🌅* OR *🌄* OR *🌠* OR *🎇* OR *🎆* OR *🌇* OR *🌆* OR *🏙* OR *🌃* OR *🌌* OR *🌉* OR *🌁* OR *⌚️* OR *📱* OR *📲* OR *💻* OR *⌨️* OR *🖥* OR *🖨* OR *🖱* OR *🖲* OR *🕹* OR *🗜* OR *💽* OR *💾* OR *💿* OR *📀* OR *📼* OR *📷* OR *📸* OR *📹* OR *🎥* OR *📽* OR *🎞* OR *📞* OR *☎️* OR *📟* OR *📠* OR *📺* OR *📻* OR *🎙* OR *🎚* OR *🎛* OR *🧭* OR *⏱* OR *⏲* OR *⏰* OR *🕰* OR *⌛️* OR *⏳* OR *📡* OR *🔋* OR *🪫* OR *🔌* OR *💡* OR *🔦* OR *🕯* OR *🪔* OR *🧯* OR *🛢* OR *💸* OR *💵* OR *💴* OR *💶* OR *💷* OR *🪙* OR *💰* OR *💳* OR *💎* OR *⚖️* OR *🪜* OR *🧰* OR *🪛* OR *🔧* OR *🔨* OR *⚒* OR *🛠* OR *⛏* OR *🪚* OR *🔩* OR *⚙️* OR *🪤* OR *🧱* OR *⛓* OR *🧲* OR *🔫* OR *💣* OR *🧨* OR *🪓* OR *🔪* OR *🗡* OR *⚔️* OR *🛡* OR *🚬* OR *⚰️* OR *🪦* OR *⚱️* OR *🏺* OR *🔮* OR *📿* OR *🧿* OR *🪬* OR *💈* OR *⚗️* OR *🔭* OR *🔬* OR *🕳* OR *🩹* OR *🩺* OR *🩻* OR *🩼* OR *💊* OR *💉* OR *🩸* OR *🧬* OR *🦠* OR *🧫* OR *🧪* OR *🌡* OR *🧹* OR *🪠* OR *🧺* OR *🧻* OR *🚽* OR *🚰* OR *🚿* OR *🛁* OR *🛀* OR *🧼* OR *🪥* OR *🪒* OR *🧽* OR *🪣* OR *🧴* OR *🛎* OR *🔑* OR *🗝* OR *🚪* OR *🪑* OR *🛋* OR *🛏* OR *🛌* OR *🧸* OR *🪆* OR *🖼* OR *🪞* OR *🪟* OR *🛍* OR *🛒* OR *🎁* OR *🎈* OR *🎏* OR *🎀* OR *🪄* OR *🪅* OR *🎊* OR *🎉* OR *🪩* OR *🎎* OR *🏮* OR *🎐* OR *🧧* OR *✉️* OR *📩* OR *📨* OR *📧* OR *💌* OR *📥* OR *📤* OR *📦* OR *🏷* OR *🪧* OR *📪* OR *📫* OR *📬* OR *📭* OR *📮* OR *📯* OR *📜* OR *📃* OR *📄* OR *📑* OR *🧾* OR *📊* OR *📈* OR *📉* OR *🗒* OR *🗓* OR *📆* OR *📅* OR *🗑* OR *🪪* OR *📇* OR *🗃* OR *🗳* OR *🗄* OR *📋* OR *📁* OR *📂* OR *🗂* OR *🗞* OR *📰* OR *📓* OR *📔* OR *📒* OR *📕* OR *📗* OR *📘* OR *📙* OR *📚* OR *📖* OR *🔖* OR *🧷* OR *🔗* OR *📎* OR *🖇* OR *📐* OR *📏* OR *🧮* OR *📌* OR *📍* OR *✂️* OR *🖊* OR *🖋* OR *✒️* OR *🖌* OR *🖍* OR *📝* OR *✏️* OR *🔍* OR *🔎* OR *🔏* OR *🔐* OR *🔒* OR *🔓❤️* OR *🧡* OR *💛* OR *💚* OR *💙* OR *💜* OR *🖤* OR *🤍* OR *🤎* OR *❤️‍🔥* OR *❤️‍🩹* OR *💔* OR *❣️* OR *💕* OR *💞* OR *💓* OR *💗* OR *💖* OR *💘* OR *💝* OR *💟* OR *☮️* OR *✝️* OR *☪️* OR *🕉* OR *☸️* OR *✡️* OR *🔯* OR *🕎* OR *☯️* OR *☦️* OR *🛐* OR *⛎* OR *♈️* OR *♉️* OR *♊️* OR *♋️* OR *♌️* OR *♍️* OR *♎️* OR *♏️* OR *♐️* OR *♑️* OR *♒️* OR *♓️* OR *🆔* OR *⚛️* OR *🉑* OR *☢️* OR *☣️* OR *📴* OR *📳* OR *🈶* OR *🈚️* OR *🈸* OR *🈺* OR *🈷️* OR *✴️* OR *🆚* OR *💮* OR *🉐* OR *㊙️* OR *㊗️* OR *🈴* OR *🈵* OR *🈹* OR *🈲* OR *🅰️* OR *🅱️* OR *🆎* OR *🆑* OR *🅾️* OR *🆘* OR *❌* OR *⭕️* OR *🛑* OR *⛔️* OR *📛* OR *🚫* OR *💯* OR *💢* OR *♨️* OR *🚷* OR *🚯* OR *🚳* OR *🚱* OR *🔞* OR *📵* OR *🚭* OR *❗️* OR *❕* OR *❓* OR *❔* OR *‼️* OR *⁉️* OR *🔅* OR *🔆* OR *〽️* OR *⚠️* OR *🚸* OR *🔱* OR *⚜️* OR *🔰* OR *♻️* OR *✅* OR *🈯️* OR *💹* OR *❇️* OR *✳️* OR *❎* OR *🌐* OR *💠* OR *Ⓜ️* OR *🌀* OR *💤* OR *🏧* OR *🚾* OR *♿️* OR *🅿️* OR *🛗* OR *🈳* OR *🈂️* OR *🛂* OR *🛃* OR *🛄* OR *🛅* OR *🚹* OR *🚺* OR *🚼* OR *⚧* OR *🚻* OR *🚮* OR *🎦* OR *📶* OR *🈁* OR *🔣* OR *ℹ️* OR *🔤* OR *🔡* OR *🔠* OR *🆖* OR *🆗* OR *🆙* OR *🆒* OR *🆕* OR *🆓* OR *0️⃣* OR *1️⃣* OR *2️⃣* OR *3️⃣* OR *4️⃣* OR *5️⃣* OR *6️⃣* OR *7️⃣* OR *8️⃣* OR *9️⃣* OR *🔟* OR *🔢* OR *#️⃣* OR *️⃣* OR *⏏️* OR *▶️* OR *⏸* OR *⏯* OR *⏹* OR *⏺* OR *⏭* OR *⏮* OR *⏩* OR *⏪* OR *⏫* OR *⏬* OR *◀️* OR *🔼* OR *🔽* OR *➡️* OR *⬅️* OR *⬆️* OR *⬇️* OR *↗️* OR *↘️* OR *↙️* OR *↖️* OR *↕️* OR *↔️* OR *↪️* OR *↩️* OR *⤴️* OR *⤵️* OR *🔀* OR *🔁* OR *🔂* OR *🔄* OR *🔃* OR *🎵* OR *🎶* OR *➕* OR *➖* OR *➗* OR *✖️* OR *🟰* OR *♾* OR *💲* OR *💱* OR *™️* OR *©️* OR *®️* OR *〰️* OR *➰* OR *➿* OR *🔚* OR *🔙* OR *🔛* OR *🔝* OR *🔜* OR *✔️* OR *☑️* OR *🔘* OR *🔴* OR *🟠* OR *🟡* OR *🟢* OR *🔵* OR *🟣* OR *⚫️* OR *⚪️* OR *🟤* OR *🔺* OR *🔻*)",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.defense-evasion"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "@Kostastsale, TheDFIRReport"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

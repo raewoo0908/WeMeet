@@ -1,0 +1,61 @@
+{
+  "rule_id": "8468111a-ef07-4654-903b-b863a80bbc95",
+  "risk_score": 47,
+  "description": "Detects creation of \".vhd\"/\".vhdx\" files by browser processes.\nMalware can use mountable Virtual Hard Disk \".vhd\" files to encapsulate payloads and evade security controls.\n",
+  "name": "VHD Image Download Via Browser",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "(process.executable:(*\\\\brave.exe OR *\\\\chrome.exe OR *\\\\firefox.exe OR *\\\\iexplore.exe OR *\\\\maxthon.exe OR *\\\\MicrosoftEdge.exe OR *\\\\msedge.exe OR *\\\\msedgewebview2.exe OR *\\\\opera.exe OR *\\\\safari.exe OR *\\\\seamonkey.exe OR *\\\\vivaldi.exe OR *\\\\whale.exe)) AND file.path:*.vhd*",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "File Create (rule: FileCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.resource-development",
+    "attack.t1587.001"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "frack113, Christopher Peacock '@securepeacock', SCYTHE '@scythe_io'"
+  ],
+  "false_positives": [
+    "Legitimate downloads of \".vhd\" files would also trigger this"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

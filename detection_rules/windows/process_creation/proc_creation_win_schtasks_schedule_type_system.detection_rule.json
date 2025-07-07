@@ -1,0 +1,61 @@
+{
+  "rule_id": "7a02e22e-b885-4404-b38b-1ddc7e65258a",
+  "risk_score": 47,
+  "description": "Detects scheduled task creations or modification to be run with high privileges on a suspicious schedule type",
+  "name": "Suspicious Schtasks Schedule Type With High Privileges",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "(process.executable:*\\\\schtasks.exe OR process.pe.original_file_name:schtasks.exe) AND (process.command_line:(*NT\\ AUT* OR *\\ SYSTEM* OR *HIGHEST*)) AND (process.command_line:(*\\ ONLOGON\\ * OR *\\ ONSTART\\ * OR *\\ ONCE\\ * OR *\\ ONIDLE\\ *))",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.execution",
+    "attack.t1053.005"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Nasreddine Bencherchali (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Some installers were seen using this method of creation unfortunately. Filter them in your environment"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

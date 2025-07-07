@@ -1,0 +1,62 @@
+{
+  "rule_id": "bdeeabc9-ff2a-4a51-be59-bb253aac7891",
+  "risk_score": 73,
+  "description": "Detects usage of wsudo (Windows Sudo Utility). Which is a tool that let the user execute programs with different permissions (System, Trusted Installer, Administrator...etc)",
+  "name": "PUA - Wsudo Suspicious Execution",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "(process.command_line:(*\\-u\\ System* OR *\\-uSystem* OR *\\-u\\ TrustedInstaller* OR *\\-uTrustedInstaller* OR *\\ \\-\\-ti\\ *)) OR (process.executable:*\\\\wsudo.exe OR process.pe.original_file_name:wsudo.exe OR process.pe.description:Windows\\ sudo\\ utility OR process.parent.executable:*\\\\wsudo\\-bridge.exe)",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.execution",
+    "attack.privilege-escalation",
+    "attack.t1059"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Nasreddine Bencherchali (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

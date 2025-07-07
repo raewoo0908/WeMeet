@@ -1,0 +1,51 @@
+{
+  "rule_id": "a2edbce1-95c8-4291-8676-0d45146862b3",
+  "risk_score": 47,
+  "description": "Detects potential DLL sideloading of \"SolidPDFCreator.dll\"",
+  "name": "Potential SolidPDFCreator.DLL Sideloading",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "file.path:*\\\\SolidPDFCreator.dll AND (NOT ((file.path:(C\\:\\\\Program\\ Files\\ \\(x86\\)\\\\SolidDocuments\\\\SolidPDFCreator\\\\* OR C\\:\\\\Program\\ Files\\\\SolidDocuments\\\\SolidPDFCreator\\\\*)) AND process.executable:*\\\\SolidPDFCreator.exe))",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.defense-evasion",
+    "attack.privilege-escalation",
+    "attack.t1574.001"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "X__Junior (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

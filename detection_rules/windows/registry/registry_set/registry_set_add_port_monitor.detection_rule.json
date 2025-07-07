@@ -1,0 +1,50 @@
+{
+  "rule_id": "944e8941-f6f6-4ee8-ac05-1c224e923c0e",
+  "risk_score": 47,
+  "description": "Adversaries may use port monitors to run an attacker supplied DLL during system boot for persistence or privilege escalation.\nA port monitor can be set through the AddMonitor API call to set a DLL to be loaded at startup.\n",
+  "name": "Add Port Monitor Persistence in Registry",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "(winlog.event_data.Details:*.dll AND registry.path:*\\\\Control\\\\Print\\\\Monitors\\\\*) AND (NOT ((winlog.event_data.Details:cpwmon64_v40.dll AND process.executable:C\\:\\\\Windows\\\\System32\\\\spoolsv.exe AND registry.path:*\\\\Control\\\\Print\\\\Monitors\\\\CutePDF\\ Writer\\ Monitor\\ v4.0\\\\Driver* AND (user.name:(*AUTHORI* OR *AUTORI*))) OR registry.path:*\\\\Control\\\\Print\\\\Monitors\\\\MONVNC\\\\Driver* OR (registry.path:*Control\\\\Print\\\\Environments\\\\* AND registry.path:*\\\\Drivers\\\\* AND registry.path:*\\\\VNC\\ Printer*)))",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.persistence",
+    "attack.t1547.010"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "frack113"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

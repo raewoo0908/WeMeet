@@ -1,0 +1,52 @@
+{
+  "rule_id": "a5b40a90-baf5-4bf7-a6f7-373494881d22",
+  "risk_score": 47,
+  "description": "Detects changes to of the IIS server configuration in order to disable/remove the ETW logging/processing option.",
+  "name": "ETW Logging/Processing Option Disabled On IIS Server",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "(winlog.event_data.Configuration:*@logTargetW3C AND event.code:29 AND winlog.event_data.OldValue:*ETW*) AND (NOT winlog.event_data.NewValue:*ETW*)",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.defense-evasion",
+    "attack.persistence",
+    "attack.t1562.002",
+    "attack.t1505.004"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "frack113, Nasreddine Bencherchali"
+  ],
+  "false_positives": [
+    "Legitimate administrator activity"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

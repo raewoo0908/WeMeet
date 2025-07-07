@@ -1,0 +1,63 @@
+{
+  "rule_id": "dcdbc940-0bff-46b2-95f3-2d73f848e33b",
+  "risk_score": 73,
+  "description": "Detects suspicious print spool service (spoolsv.exe) child processes.",
+  "name": "Suspicious Spool Service Child Process",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "((winlog.event_data.IntegrityLevel:(System OR S\\-1\\-16\\-16384)) AND process.parent.executable:*\\\\spoolsv.exe) AND ((process.executable:(*\\\\gpupdate.exe OR *\\\\whoami.exe OR *\\\\nltest.exe OR *\\\\taskkill.exe OR *\\\\wmic.exe OR *\\\\taskmgr.exe OR *\\\\sc.exe OR *\\\\findstr.exe OR *\\\\curl.exe OR *\\\\wget.exe OR *\\\\certutil.exe OR *\\\\bitsadmin.exe OR *\\\\accesschk.exe OR *\\\\wevtutil.exe OR *\\\\bcdedit.exe OR *\\\\fsutil.exe OR *\\\\cipher.exe OR *\\\\schtasks.exe OR *\\\\write.exe OR *\\\\wuauclt.exe OR *\\\\systeminfo.exe OR *\\\\reg.exe OR *\\\\query.exe)) OR ((process.executable:(*\\\\net.exe OR *\\\\net1.exe)) AND (NOT process.command_line:*start*)) OR (process.executable:*\\\\cmd.exe AND (NOT (process.command_line:(*.spl* OR *route\\ add* OR *program\\ files*)))) OR (process.executable:*\\\\netsh.exe AND (NOT (process.command_line:(*add\\ portopening* OR *rule\\ name*)))) OR ((process.executable:(*\\\\powershell.exe OR *\\\\pwsh.exe)) AND (NOT process.command_line:*.spl*)) OR (process.command_line:*rundll32.exe AND (process.executable:*\\\\rundll32.exe OR process.pe.original_file_name:RUNDLL32.EXE)))",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.execution",
+    "attack.t1203",
+    "attack.privilege-escalation",
+    "attack.t1068"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Justin C. (@endisphotic), @dreadphones (detection), Thomas Patzke (Sigma rule)"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

@@ -1,0 +1,66 @@
+{
+  "rule_id": "587254ee-a24b-4335-b3cd-065c0f1f4baa",
+  "risk_score": 47,
+  "description": "Detects execution of \"findstr\" with specific flags and a remote share path. This specific set of CLI flags would allow \"findstr\" to download the content of the file located on the remote share as described in the LOLBAS entry.\n",
+  "name": "Remote File Download Via Findstr.EXE",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "(process.command_line:*findstr* OR process.executable:*findstr.exe OR process.pe.original_file_name:FINDSTR.EXE) AND (process.command_line:(*\\ \\-v\\ * OR *\\ \\/v\\ * OR *\\ –v\\ * OR *\\ —v\\ * OR *\\ ―v\\ *) AND process.command_line:(*\\ \\-l\\ * OR *\\ \\/l\\ * OR *\\ –l\\ * OR *\\ —l\\ * OR *\\ ―l\\ *) AND process.command_line:*\\\\\\\\*)",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.defense-evasion",
+    "attack.credential-access",
+    "attack.command-and-control",
+    "attack.t1218",
+    "attack.t1564.004",
+    "attack.t1552.001",
+    "attack.t1105"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Furkan CALISKAN, @caliskanfurkan_, @oscd_initiative, Nasreddine Bencherchali (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

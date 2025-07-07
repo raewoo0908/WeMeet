@@ -1,0 +1,62 @@
+{
+  "rule_id": "5b40a734-99b6-4b98-a1d0-1cea51a08ab2",
+  "risk_score": 73,
+  "description": "Detects the creation of files that indicator an interactive use of PowerShell in the SYSTEM user context",
+  "name": "Suspicious Interactive PowerShell as SYSTEM",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "file.path:(C\\:\\\\Windows\\\\System32\\\\config\\\\systemprofile\\\\AppData\\\\Roaming\\\\Microsoft\\\\Windows\\\\PowerShell\\\\PSReadLine\\\\ConsoleHost_history.txt OR C\\:\\\\Windows\\\\System32\\\\config\\\\systemprofile\\\\AppData\\\\Local\\\\Microsoft\\\\Windows\\\\PowerShell\\\\StartupProfileData\\-Interactive)",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "File Create (rule: FileCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.execution",
+    "attack.t1059.001"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Florian Roth (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Administrative activity",
+    "PowerShell scripts running as SYSTEM user"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

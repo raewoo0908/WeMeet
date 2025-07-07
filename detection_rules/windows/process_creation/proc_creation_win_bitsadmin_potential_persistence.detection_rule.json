@@ -1,0 +1,61 @@
+{
+  "rule_id": "b9cbbc17-d00d-4e3d-a827-b06d03d2380d",
+  "risk_score": 47,
+  "description": "BITS will allow you to schedule a command to execute after a successful download to notify you that the job is finished.\nWhen the job runs on the system the command specified in the BITS job will be executed.\nThis can be abused by actors to create a backdoor within the system and for persistence.\nIt will be chained in a BITS job to schedule the download of malware/additional binaries and execute the program after being downloaded.\n",
+  "name": "Monitoring For Persistence Via BITS",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "(process.executable:*\\\\bitsadmin.exe OR process.pe.original_file_name:bitsadmin.exe) AND ((process.command_line:*\\/SetNotifyCmdLine* AND (process.command_line:(*%COMSPEC%* OR *cmd.exe* OR *regsvr32.exe*))) OR (process.command_line:*\\/Addfile* AND (process.command_line:(*http\\:* OR *https\\:* OR *ftp\\:* OR *ftps\\:*))))",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.defense-evasion",
+    "attack.t1197"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Sreeman"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

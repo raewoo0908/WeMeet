@@ -1,0 +1,53 @@
+{
+  "rule_id": "961d0ba2-3eea-4303-a930-2cf78bbfcc5e",
+  "risk_score": 99,
+  "description": "Detects well-known credential dumping tools execution via specific named pipe creation",
+  "name": "HackTool - Credential Dumping Tools Named Pipe Created",
+  "severity": "critical",
+  "type": "query",
+  "language": "lucene",
+  "query": "file.name:(*\\\\cachedump* OR *\\\\lsadump* OR *\\\\wceservicepipe*)",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.credential-access",
+    "attack.t1003.001",
+    "attack.t1003.002",
+    "attack.t1003.004",
+    "attack.t1003.005"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Teymur Kheirkhabarov, oscd.community"
+  ],
+  "false_positives": [
+    "Legitimate Administrator using tool for password recovery"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

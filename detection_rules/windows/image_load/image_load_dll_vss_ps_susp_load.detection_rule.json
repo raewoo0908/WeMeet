@@ -1,0 +1,51 @@
+{
+  "rule_id": "333cdbe8-27bb-4246-bf82-b41a0dca4b70",
+  "risk_score": 73,
+  "description": "Detects the image load of vss_ps.dll by uncommon executables",
+  "name": "Suspicious Volume Shadow Copy VSS_PS.dll Load",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "file.path:*\\\\vss_ps.dll AND (NOT ((NOT _exists_:process.executable) OR ((process.executable:(*\\\\clussvc.exe OR *\\\\dismhost.exe OR *\\\\dllhost.exe OR *\\\\inetsrv\\\\appcmd.exe OR *\\\\inetsrv\\\\iissetup.exe OR *\\\\msiexec.exe OR *\\\\rundll32.exe OR *\\\\searchindexer.exe OR *\\\\srtasks.exe OR *\\\\svchost.exe OR *\\\\System32\\\\SystemPropertiesAdvanced.exe OR *\\\\taskhostw.exe OR *\\\\thor.exe OR *\\\\thor64.exe OR *\\\\tiworker.exe OR *\\\\vssvc.exe OR *\\\\WmiPrvSE.exe OR *\\\\wsmprovhost.exe)) AND process.executable:C\\:\\\\Windows\\\\*) OR (process.executable:(C\\:\\\\Program\\ Files\\\\* OR C\\:\\\\Program\\ Files\\ \\(x86\\)\\\\*)) OR (winlog.event_data.CommandLine:*\\\\dismhost.exe\\ \\{* AND winlog.event_data.CommandLine:C\\:\\\\$WinREAgent\\\\Scratch\\\\*)))",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.defense-evasion",
+    "attack.impact",
+    "attack.t1490"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Markus Neis, @markus_neis"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

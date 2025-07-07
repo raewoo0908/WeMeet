@@ -1,0 +1,63 @@
+{
+  "rule_id": "1a1ed54a-2ba4-4221-94d5-01dee560d71e",
+  "risk_score": 73,
+  "description": "Detects uses of a renamed legitimate createdump.exe LOLOBIN utility to dump process memory",
+  "name": "Renamed CreateDump Utility Execution",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "(((process.command_line:*\\ \\-u\\ * AND process.command_line:*\\ \\-f\\ * AND process.command_line:*.dmp*) OR (process.command_line:*\\ \\-\\-full\\ * AND process.command_line:*\\ \\-\\-name\\ * AND process.command_line:*.dmp*)) OR process.pe.original_file_name:FX_VER_INTERNALNAME_STR) AND (NOT process.executable:*\\\\createdump.exe)",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.defense-evasion",
+    "attack.t1036",
+    "attack.t1003.001",
+    "attack.credential-access"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Florian Roth (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Command lines that use the same flags"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

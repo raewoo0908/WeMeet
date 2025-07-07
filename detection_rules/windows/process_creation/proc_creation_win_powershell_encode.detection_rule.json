@@ -1,0 +1,61 @@
+{
+  "rule_id": "fb843269-508c-4b76-8b8d-88679db22ce7",
+  "risk_score": 47,
+  "description": "Commandline to launch powershell with a base64 payload",
+  "name": "Suspicious Execution of Powershell with Base64",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "((process.command_line:(*\\ \\-e\\ * OR *\\ \\-en\\ * OR *\\ \\-enc\\ * OR *\\ \\-enco* OR *\\ \\-ec\\ *)) AND (process.executable:(*\\\\powershell.exe OR *\\\\pwsh.exe))) AND (NOT ((process.parent.executable:(*C\\:\\\\Packages\\\\Plugins\\\\Microsoft.GuestConfiguration.ConfigurationforWindows\\\\* OR *\\\\gc_worker.exe*)) OR process.command_line:*\\ \\-Encoding\\ *))",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.execution",
+    "attack.t1059.001"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "frack113"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

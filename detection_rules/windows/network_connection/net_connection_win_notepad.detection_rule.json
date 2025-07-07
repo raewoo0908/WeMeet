@@ -1,0 +1,63 @@
+{
+  "rule_id": "e81528db-fc02-45e8-8e98-4e84aba1f10b",
+  "risk_score": 73,
+  "description": "Detects a network connection that is initiated by the \"notepad.exe\" process.\nThis might be a sign of process injection from a beacon process or something similar.\nNotepad rarely initiates a network communication except when printing documents for example.\n",
+  "name": "Network Connection Initiated Via Notepad.EXE",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "process.executable:*\\\\notepad.exe AND (NOT destination.port:9100)",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Network connection detected (rule: NetworkConnect)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.command-and-control",
+    "attack.execution",
+    "attack.defense-evasion",
+    "attack.t1055"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "EagleEye Team"
+  ],
+  "false_positives": [
+    "Printing documents via notepad might cause communication with the printer via port 9100 or similar."
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

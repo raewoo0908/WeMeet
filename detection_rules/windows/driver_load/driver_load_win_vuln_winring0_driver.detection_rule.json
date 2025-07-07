@@ -1,0 +1,50 @@
+{
+  "rule_id": "1a42dfa6-6cb2-4df9-9b48-295be477e835",
+  "risk_score": 73,
+  "description": "Detects the load of a signed WinRing0 driver often used by threat actors, crypto miners (XMRIG) or malware for privilege escalation",
+  "name": "Vulnerable WinRing0 Driver Load",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "winlog.event_data.Hashes:*IMPHASH\\=D41FA95D4642DC981F10DE36F4DC8CD7* OR (file.path:(*\\\\WinRing0x64.sys OR *\\\\WinRing0.sys OR *\\\\WinRing0.dll OR *\\\\WinRing0x64.dll OR *\\\\winring00x64.sys))",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.privilege-escalation",
+    "attack.t1543.003"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Florian Roth (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

@@ -1,0 +1,50 @@
+{
+  "rule_id": "9c8acf1a-cbf9-4db6-b63c-74baabe03e59",
+  "risk_score": 47,
+  "description": "Detects common NTLM brute force device names",
+  "name": "NTLM Brute Force",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "winlog.channel:Microsoft\\-Windows\\-NTLM\\/Operational AND (event.code:8004 AND (source.domain:(Rdesktop OR Remmina OR Freerdp OR Windows7 OR Windows8 OR Windows2012 OR Windows2016 OR Windows2019)))",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.credential-access",
+    "attack.t1110"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Jerry Shockley '@jsh0x'"
+  ],
+  "false_positives": [
+    "Systems with names equal to the spoofed ones used by the brute force tools"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

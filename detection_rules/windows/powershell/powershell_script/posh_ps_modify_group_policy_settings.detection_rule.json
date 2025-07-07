@@ -1,0 +1,51 @@
+{
+  "rule_id": "b7216a7d-687e-4c8d-82b1-3080b2ad961f",
+  "risk_score": 47,
+  "description": "Detect malicious GPO modifications can be used to implement many other malicious behaviors.",
+  "name": "Modify Group Policy Settings - ScriptBlockLogging",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "(powershell.file.script_block_text:(*GroupPolicyRefreshTimeDC* OR *GroupPolicyRefreshTimeOffsetDC* OR *GroupPolicyRefreshTime* OR *GroupPolicyRefreshTimeOffset* OR *EnableSmartScreen* OR *ShellSmartScreenLevel*)) AND powershell.file.script_block_text:*\\\\SOFTWARE\\\\Policies\\\\Microsoft\\\\Windows\\\\System*",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.defense-evasion",
+    "attack.privilege-escalation",
+    "attack.t1484.001"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "frack113"
+  ],
+  "false_positives": [
+    "Legitimate use"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

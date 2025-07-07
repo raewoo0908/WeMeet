@@ -1,0 +1,62 @@
+{
+  "rule_id": "38879043-7e1e-47a9-8d46-6bec88e201df",
+  "risk_score": 47,
+  "description": "Detects the modification of an existing service in order to execute an arbitrary payload when the service is started or killed as a potential method for persistence.",
+  "name": "Potential Persistence Attempt Via Existing Service Tampering",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "((process.command_line:*sc\\ * AND process.command_line:*config\\ * AND process.command_line:*binpath\\=*) OR (process.command_line:*sc\\ * AND process.command_line:*failure* AND process.command_line:*command\\=*)) OR ((process.command_line:(*.sh* OR *.exe* OR *.dll* OR *.bin$* OR *.bat* OR *.cmd* OR *.js* OR *.msh$* OR *.reg$* OR *.scr* OR *.ps* OR *.vb* OR *.jar* OR *.pl*)) AND ((process.command_line:*reg\\ * AND process.command_line:*add\\ * AND process.command_line:*FailureCommand*) OR (process.command_line:*reg\\ * AND process.command_line:*add\\ * AND process.command_line:*ImagePath*)))",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.persistence",
+    "attack.t1543.003",
+    "attack.t1574.011"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Sreeman"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

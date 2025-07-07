@@ -1,0 +1,60 @@
+{
+  "rule_id": "225274c4-8dd1-40db-9e09-71dff4f6fb3c",
+  "risk_score": 73,
+  "description": "Detects the usage of emojis in the command line, this could be a sign of potential defense evasion activity.",
+  "name": "Potential Defense Evasion Activity Via Emoji Usage In CommandLine - 4",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "process.command_line:(*🔸* OR *🔹* OR *🔶* OR *🔷* OR *🔳* OR *🔲* OR *▪️* OR *▫️* OR *◾️* OR *◽️* OR *◼️* OR *◻️* OR *🟥* OR *🟧* OR *🟨* OR *🟩* OR *🟦* OR *🟪* OR *⬛️* OR *⬜️* OR *🟫* OR *🔈* OR *🔇* OR *🔉* OR *🔊* OR *🔔* OR *🔕* OR *📣* OR *📢* OR *👁‍🗨* OR *💬* OR *💭* OR *🗯* OR *♠️* OR *♣️* OR *♥️* OR *♦️* OR *🃏* OR *🎴* OR *🀄️* OR *🕐* OR *🕑* OR *🕒* OR *🕓* OR *🕔* OR *🕕* OR *🕖* OR *🕗* OR *🕘* OR *🕙* OR *🕚* OR *🕛* OR *🕜* OR *🕝* OR *🕞* OR *🕟* OR *🕠* OR *🕡* OR *🕢* OR *🕣* OR *🕤* OR *🕥* OR *🕦* OR *🕧✢* OR *✣* OR *✤* OR *✥* OR *✦* OR *✧* OR *★* OR *☆* OR *✯* OR *✡︎* OR *✩* OR *✪* OR *✫* OR *✬* OR *✭* OR *✮* OR *✶* OR *✷* OR *✵* OR *✸* OR *✹* OR *→* OR *⇒* OR *⟹* OR *⇨* OR *⇾* OR *➾* OR *⇢* OR *☛* OR *☞* OR *➔* OR *➜* OR *➙* OR *➛* OR *➝* OR *➞* OR *♠︎* OR *♣︎* OR *♥︎* OR *♦︎* OR *♤* OR *♧* OR *♡* OR *♢* OR *♚* OR *♛* OR *♜* OR *♝* OR *♞* OR *♟* OR *♔* OR *♕* OR *♖* OR *♗* OR *♘* OR *♙* OR *⚀* OR *⚁* OR *⚂* OR *⚃* OR *⚄* OR *⚅* OR *🂠* OR *⚈* OR *⚉* OR *⚆* OR *⚇* OR *𓀀* OR *𓀁* OR *𓀂* OR *𓀃* OR *𓀄* OR *𓀅* OR *𓀆* OR *𓀇* OR *𓀈* OR *𓀉* OR *𓀊* OR *𓀋* OR *𓀌* OR *𓀍* OR *𓀎* OR *𓀏* OR *𓀐* OR *𓀑* OR *𓀒* OR *𓀓* OR *𓀔* OR *𓀕* OR *𓀖* OR *𓀗* OR *𓀘* OR *𓀙* OR *𓀚* OR *𓀛* OR *𓀜* OR *𓀝🏳️* OR *🏴* OR *🏁* OR *🚩* OR *🏳️‍🌈* OR *🏳️‍⚧️* OR *🏴‍☠️* OR *🇦🇫* OR *🇦🇽* OR *🇦🇱* OR *🇩🇿* OR *🇦🇸* OR *🇦🇩* OR *🇦🇴* OR *🇦🇮* OR *🇦🇶* OR *🇦🇬* OR *🇦🇷* OR *🇦🇲* OR *🇦🇼* OR *🇦🇺* OR *🇦🇹* OR *🇦🇿* OR *🇧🇸* OR *🇧🇭* OR *🇧🇩* OR *🇧🇧* OR *🇧🇾* OR *🇧🇪* OR *🇧🇿* OR *🇧🇯* OR *🇧🇲* OR *🇧🇹* OR *🇧🇴* OR *🇧🇦* OR *🇧🇼* OR *🇧🇷* OR *🇮🇴* OR *🇻🇬* OR *🇧🇳* OR *🇧🇬* OR *🇧🇫* OR *🇧🇮* OR *🇰🇭* OR *🇨🇲* OR *🇨🇦* OR *🇮🇨* OR *🇨🇻* OR *🇧🇶* OR *🇰🇾* OR *🇨🇫* OR *🇹🇩* OR *🇨🇱* OR *🇨🇳* OR *🇨🇽* OR *🇨🇨* OR *🇨🇴* OR *🇰🇲* OR *🇨🇬* OR *🇨🇩* OR *🇨🇰* OR *🇨🇷* OR *🇨🇮* OR *🇭🇷* OR *🇨🇺* OR *🇨🇼* OR *🇨🇾* OR *🇨🇿* OR *🇩🇰* OR *🇩🇯* OR *🇩🇲* OR *🇩🇴* OR *🇪🇨* OR *🇪🇬* OR *🇸🇻* OR *🇬🇶* OR *🇪🇷* OR *🇪🇪* OR *🇪🇹* OR *🇪🇺* OR *🇫🇰* OR *🇫🇴* OR *🇫🇯* OR *🇫🇮* OR *🇫🇷* OR *🇬🇫* OR *🇵🇫* OR *🇹🇫* OR *🇬🇦* OR *🇬🇲* OR *🇬🇪* OR *🇩🇪* OR *🇬🇭* OR *🇬🇮* OR *🇬🇷* OR *🇬🇱* OR *🇬🇩* OR *🇬🇵* OR *🇬🇺* OR *🇬🇹* OR *🇬🇬* OR *🇬🇳* OR *🇬🇼* OR *🇬🇾* OR *🇭🇹* OR *🇭🇳* OR *🇭🇰* OR *🇭🇺* OR *🇮🇸* OR *🇮🇳* OR *🇮🇩* OR *🇮🇷* OR *🇮🇶* OR *🇮🇪* OR *🇮🇲* OR *🇮🇱* OR *🇮🇹* OR *🇯🇲* OR *🇯🇵* OR *🎌* OR *🇯🇪* OR *🇯🇴* OR *🇰🇿* OR *🇰🇪* OR *🇰🇮* OR *🇽🇰* OR *🇰🇼* OR *🇰🇬* OR *🇱🇦* OR *🇱🇻* OR *🇱🇧* OR *🇱🇸* OR *🇱🇷* OR *🇱🇾* OR *🇱🇮* OR *🇱🇹* OR *🇱🇺* OR *🇲🇴* OR *🇲🇰* OR *🇲🇬* OR *🇲🇼* OR *🇲🇾* OR *🇲🇻* OR *🇲🇱* OR *🇲🇹* OR *🇲🇭* OR *🇲🇶* OR *🇲🇷* OR *🇲🇺* OR *🇾🇹* OR *🇲🇽* OR *🇫🇲* OR *🇲🇩* OR *🇲🇨* OR *🇲🇳* OR *🇲🇪* OR *🇲🇸* OR *🇲🇦* OR *🇲🇿* OR *🇲🇲* OR *🇳🇦* OR *🇳🇷* OR *🇳🇵* OR *🇳🇱* OR *🇳🇨* OR *🇳🇿* OR *🇳🇮* OR *🇳🇪* OR *🇳🇬* OR *🇳🇺* OR *🇳🇫* OR *🇰🇵* OR *🇲🇵* OR *🇳🇴* OR *🇴🇲* OR *🇵🇰* OR *🇵🇼* OR *🇵🇸* OR *🇵🇦* OR *🇵🇬* OR *🇵🇾* OR *🇵🇪* OR *🇵🇭* OR *🇵🇳* OR *🇵🇱* OR *🇵🇹* OR *🇵🇷* OR *🇶🇦* OR *🇷🇪* OR *🇷🇴* OR *🇷🇺* OR *🇷🇼* OR *🇼🇸* OR *🇸🇲* OR *🇸🇦* OR *🇸🇳* OR *🇷🇸* OR *🇸🇨* OR *🇸🇱* OR *🇸🇬* OR *🇸🇽* OR *🇸🇰* OR *🇸🇮* OR *🇬🇸* OR *🇸🇧* OR *🇸🇴* OR *🇿🇦* OR *🇰🇷* OR *🇸🇸* OR *🇪🇸* OR *🇱🇰* OR *🇧🇱* OR *🇸🇭* OR *🇰🇳* OR *🇱🇨* OR *🇵🇲* OR *🇻🇨* OR *🇸🇩* OR *🇸🇷* OR *🇸🇿* OR *🇸🇪* OR *🇨🇭* OR *🇸🇾* OR *🇹🇼* OR *🇹🇯* OR *🇹🇿* OR *🇹🇭* OR *🇹🇱* OR *🇹🇬* OR *🇹🇰* OR *🇹🇴* OR *🇹🇹* OR *🇹🇳* OR *🇹🇷* OR *🇹🇲* OR *🇹🇨* OR *🇹🇻* OR *🇻🇮* OR *🇺🇬* OR *🇺🇦* OR *🇦🇪* OR *🇬🇧* OR *🏴󠁧󠁢󠁥󠁮󠁧󠁿* OR *🏴󠁧󠁢󠁳󠁣󠁴󠁿* OR *🏴󠁧󠁢󠁷󠁬󠁳󠁿* OR *🇺🇳* OR *🇺🇸* OR *🇺🇾* OR *🇺🇿* OR *🇻🇺* OR *🇻🇦* OR *🇻🇪* OR *🇻🇳* OR *🇼🇫* OR *🇪🇭* OR *🇾🇪* OR *🇿🇲* OR *🇿🇼🫠* OR *🫢* OR *🫣* OR *🫡* OR *🫥* OR *🫤* OR *🥹* OR *🫱* OR *🫱🏻* OR *🫱🏼* OR *🫱🏽* OR *🫱🏾* OR *🫱🏿* OR *🫲* OR *🫲🏻* OR *🫲🏼* OR *🫲🏽* OR *🫲🏾* OR *🫲🏿* OR *🫳* OR *🫳🏻* OR *🫳🏼* OR *🫳🏽* OR *🫳🏾* OR *🫳🏿* OR *🫴* OR *🫴🏻* OR *🫴🏼* OR *🫴🏽* OR *🫴🏾* OR *🫴🏿* OR *🫰* OR *🫰🏻* OR *🫰🏼* OR *🫰🏽* OR *🫰🏾* OR *🫰🏿* OR *🫵* OR *🫵🏻* OR *🫵🏼* OR *🫵🏽* OR *🫵🏾* OR *🫵🏿* OR *🫶* OR *🫶🏻* OR *🫶🏼* OR *🫶🏽* OR *🫶🏾* OR *🫶🏿* OR *🤝🏻* OR *🤝🏼* OR *🤝🏽* OR *🤝🏾* OR *🤝🏿* OR *🫱🏻‍🫲🏼* OR *🫱🏻‍🫲🏽* OR *🫱🏻‍🫲🏾* OR *🫱🏻‍🫲🏿* OR *🫱🏼‍🫲🏻* OR *🫱🏼‍🫲🏽* OR *🫱🏼‍🫲🏾* OR *🫱🏼‍🫲🏿* OR *🫱🏽‍🫲🏻* OR *🫱🏽‍🫲🏼* OR *🫱🏽‍🫲🏾* OR *🫱🏽‍🫲🏿* OR *🫱🏾‍🫲🏻* OR *🫱🏾‍🫲🏼* OR *🫱🏾‍🫲🏽* OR *🫱🏾‍🫲🏿* OR *🫱🏿‍🫲🏻* OR *🫱🏿‍🫲🏼* OR *🫱🏿‍🫲🏽* OR *🫱🏿‍🫲🏾* OR *🫦* OR *🫅* OR *🫅🏻* OR *🫅🏼* OR *🫅🏽* OR *🫅🏾* OR *🫅🏿* OR *🫃* OR *🫃🏻* OR *🫃🏼* OR *🫃🏽* OR *🫃🏾* OR *🫃🏿* OR *🫄* OR *🫄🏻* OR *🫄🏼* OR *🫄🏽* OR *🫄🏾* OR *🫄🏿* OR *🧌* OR *🪸* OR *🪷* OR *🪹* OR *🪺* OR *🫘* OR *🫗* OR *🫙* OR *🛝* OR *🛞* OR *🛟* OR *🪬* OR *🪩* OR *🪫* OR *🩼* OR *🩻* OR *🫧* OR *🪪* OR *🟰* OR *😮‍💨* OR *😵‍💫* OR *😶‍🌫️* OR *❤️‍🔥* OR *❤️‍🩹* OR *🧔‍♀️* OR *🧔🏻‍♀️* OR *🧔🏼‍♀️* OR *🧔🏽‍♀️* OR *🧔🏾‍♀️* OR *🧔🏿‍♀️* OR *🧔‍♂️* OR *🧔🏻‍♂️* OR *🧔🏼‍♂️* OR *🧔🏽‍♂️* OR *🧔🏾‍♂️* OR *🧔🏿‍♂️* OR *💑🏻* OR *💑🏼* OR *💑🏽* OR *💑🏾* OR *💑🏿* OR *💏🏻* OR *💏🏼* OR *💏🏽* OR *💏🏾* OR *💏🏿* OR *👨🏻‍❤️‍👨🏻* OR *👨🏻‍❤️‍👨🏼* OR *👨🏻‍❤️‍👨🏽* OR *👨🏻‍❤️‍👨🏾* OR *👨🏻‍❤️‍👨🏿* OR *👨🏼‍❤️‍👨🏻* OR *👨🏼‍❤️‍👨🏼* OR *👨🏼‍❤️‍👨🏽* OR *👨🏼‍❤️‍👨🏾* OR *👨🏼‍❤️‍👨🏿* OR *👨🏽‍❤️‍👨🏻* OR *👨🏽‍❤️‍👨🏼* OR *👨🏽‍❤️‍👨🏽* OR *👨🏽‍❤️‍👨🏾* OR *👨🏽‍❤️‍👨🏿* OR *👨🏾‍❤️‍👨🏻* OR *👨🏾‍❤️‍👨🏼* OR *👨🏾‍❤️‍👨🏽* OR *👨🏾‍❤️‍👨🏾* OR *👨🏾‍❤️‍👨🏿* OR *👨🏿‍❤️‍👨🏻* OR *👨🏿‍❤️‍👨🏼* OR *👨🏿‍❤️‍👨🏽* OR *👨🏿‍❤️‍👨🏾* OR *👨🏿‍❤️‍👨🏿* OR *👩🏻‍❤️‍👨🏻* OR *👩🏻‍❤️‍👨🏼* OR *👩🏻‍❤️‍👨🏽* OR *👩🏻‍❤️‍👨🏾* OR *👩🏻‍❤️‍👨🏿* OR *👩🏻‍❤️‍👩🏻* OR *👩🏻‍❤️‍👩🏼* OR *👩🏻‍❤️‍👩🏽* OR *👩🏻‍❤️‍👩🏾* OR *👩🏻‍❤️‍👩🏿* OR *👩🏼‍❤️‍👨🏻* OR *👩🏼‍❤️‍👨🏼* OR *👩🏼‍❤️‍👨🏽* OR *👩🏼‍❤️‍👨🏾* OR *👩🏼‍❤️‍👨🏿* OR *👩🏼‍❤️‍👩🏻* OR *👩🏼‍❤️‍👩🏼* OR *👩🏼‍❤️‍👩🏽* OR *👩🏼‍❤️‍👩🏾* OR *👩🏼‍❤️‍👩🏿* OR *👩🏽‍❤️‍👨🏻* OR *👩🏽‍❤️‍👨🏼* OR *👩🏽‍❤️‍👨🏽* OR *👩🏽‍❤️‍👨🏾* OR *👩🏽‍❤️‍👨🏿* OR *👩🏽‍❤️‍👩🏻* OR *👩🏽‍❤️‍👩🏼* OR *👩🏽‍❤️‍👩🏽* OR *👩🏽‍❤️‍👩🏾* OR *👩🏽‍❤️‍👩🏿* OR *👩🏾‍❤️‍👨🏻* OR *👩🏾‍❤️‍👨🏼* OR *👩🏾‍❤️‍👨🏽* OR *👩🏾‍❤️‍👨🏾* OR *👩🏾‍❤️‍👨🏿* OR *👩🏾‍❤️‍👩🏻* OR *👩🏾‍❤️‍👩🏼* OR *👩🏾‍❤️‍👩🏽* OR *👩🏾‍❤️‍👩🏾* OR *👩🏾‍❤️‍👩🏿* OR *👩🏿‍❤️‍👨🏻* OR *👩🏿‍❤️‍👨🏼* OR *👩🏿‍❤️‍👨🏽* OR *👩🏿‍❤️‍👨🏾* OR *👩🏿‍❤️‍👨🏿* OR *👩🏿‍❤️‍👩🏻* OR *👩🏿‍❤️‍👩🏼* OR *👩🏿‍❤️‍👩🏽* OR *👩🏿‍❤️‍👩🏾* OR *👩🏿‍❤️‍👩🏿* OR *🧑🏻‍❤️‍🧑🏼* OR *🧑🏻‍❤️‍🧑🏽* OR *🧑🏻‍❤️‍🧑🏾* OR *🧑🏻‍❤️‍🧑🏿* OR *🧑🏼‍❤️‍🧑🏻* OR *🧑🏼‍❤️‍🧑🏽* OR *🧑🏼‍❤️‍🧑🏾* OR *🧑🏼‍❤️‍🧑🏿* OR *🧑🏽‍❤️‍🧑🏻* OR *🧑🏽‍❤️‍🧑🏼* OR *🧑🏽‍❤️‍🧑🏾* OR *🧑🏽‍❤️‍🧑🏿* OR *🧑🏾‍❤️‍🧑🏻* OR *🧑🏾‍❤️‍🧑🏼* OR *🧑🏾‍❤️‍🧑🏽* OR *🧑🏾‍❤️‍🧑🏿* OR *🧑🏿‍❤️‍🧑🏻* OR *🧑🏿‍❤️‍🧑🏼* OR *🧑🏿‍❤️‍🧑🏽* OR *🧑🏿‍❤️‍🧑🏾* OR *👨🏻‍❤️‍💋‍👨🏻* OR *👨🏻‍❤️‍💋‍👨🏼* OR *👨🏻‍❤️‍💋‍👨🏽* OR *👨🏻‍❤️‍💋‍👨🏾* OR *👨🏻‍❤️‍💋‍👨🏿* OR *👨🏼‍❤️‍💋‍👨🏻* OR *👨🏼‍❤️‍💋‍👨🏼* OR *👨🏼‍❤️‍💋‍👨🏽* OR *👨🏼‍❤️‍💋‍👨🏾* OR *👨🏼‍❤️‍💋‍👨🏿* OR *👨🏽‍❤️‍💋‍👨🏻* OR *👨🏽‍❤️‍💋‍👨🏼* OR *👨🏽‍❤️‍💋‍👨🏽* OR *👨🏽‍❤️‍💋‍👨🏾* OR *👨🏽‍❤️‍💋‍👨🏿* OR *👨🏾‍❤️‍💋‍👨🏻* OR *👨🏾‍❤️‍💋‍👨🏼* OR *👨🏾‍❤️‍💋‍👨🏽* OR *👨🏾‍❤️‍💋‍👨🏾* OR *👨🏾‍❤️‍💋‍👨🏿* OR *👨🏿‍❤️‍💋‍👨🏻* OR *👨🏿‍❤️‍💋‍👨🏼* OR *👨🏿‍❤️‍💋‍👨🏽* OR *👨🏿‍❤️‍💋‍👨🏾* OR *👨🏿‍❤️‍💋‍👨🏿* OR *👩🏻‍❤️‍💋‍👨🏻* OR *👩🏻‍❤️‍💋‍👨🏼* OR *👩🏻‍❤️‍💋‍👨🏽* OR *👩🏻‍❤️‍💋‍👨🏾* OR *👩🏻‍❤️‍💋‍👨🏿* OR *👩🏻‍❤️‍💋‍👩🏻* OR *👩🏻‍❤️‍💋‍👩🏼* OR *👩🏻‍❤️‍💋‍👩🏽* OR *👩🏻‍❤️‍💋‍👩🏾* OR *👩🏻‍❤️‍💋‍👩🏿* OR *👩🏼‍❤️‍💋‍👨🏻* OR *👩🏼‍❤️‍💋‍👨🏼* OR *👩🏼‍❤️‍💋‍👨🏽* OR *👩🏼‍❤️‍💋‍👨🏾* OR *👩🏼‍❤️‍💋‍👨🏿* OR *👩🏼‍❤️‍💋‍👩🏻* OR *👩🏼‍❤️‍💋‍👩🏼* OR *👩🏼‍❤️‍💋‍👩🏽* OR *👩🏼‍❤️‍💋‍👩🏾* OR *👩🏼‍❤️‍💋‍👩🏿* OR *👩🏽‍❤️‍💋‍👨🏻* OR *👩🏽‍❤️‍💋‍👨🏼* OR *👩🏽‍❤️‍💋‍👨🏽* OR *👩🏽‍❤️‍💋‍👨🏾* OR *👩🏽‍❤️‍💋‍👨🏿* OR *👩🏽‍❤️‍💋‍👩🏻* OR *👩🏽‍❤️‍💋‍👩🏼* OR *👩🏽‍❤️‍💋‍👩🏽* OR *👩🏽‍❤️‍💋‍👩🏾* OR *👩🏽‍❤️‍💋‍👩🏿* OR *👩🏾‍❤️‍💋‍👨🏻* OR *👩🏾‍❤️‍💋‍👨🏼* OR *👩🏾‍❤️‍💋‍👨🏽* OR *👩🏾‍❤️‍💋‍👨🏾* OR *👩🏾‍❤️‍💋‍👨🏿* OR *👩🏾‍❤️‍💋‍👩🏻* OR *👩🏾‍❤️‍💋‍👩🏼* OR *👩🏾‍❤️‍💋‍👩🏽* OR *👩🏾‍❤️‍💋‍👩🏾* OR *👩🏾‍❤️‍💋‍👩🏿* OR *👩🏿‍❤️‍💋‍👨🏻* OR *👩🏿‍❤️‍💋‍👨🏼* OR *👩🏿‍❤️‍💋‍👨🏽* OR *👩🏿‍❤️‍💋‍👨🏾* OR *👩🏿‍❤️‍💋‍👨🏿* OR *👩🏿‍❤️‍💋‍👩🏻* OR *👩🏿‍❤️‍💋‍👩🏼* OR *👩🏿‍❤️‍💋‍👩🏽* OR *👩🏿‍❤️‍💋‍👩🏾* OR *👩🏿‍❤️‍💋‍👩🏿* OR *🧑🏻‍❤️‍💋‍🧑🏼* OR *🧑🏻‍❤️‍💋‍🧑🏽* OR *🧑🏻‍❤️‍💋‍🧑🏾* OR *🧑🏻‍❤️‍💋‍🧑🏿* OR *🧑🏼‍❤️‍💋‍🧑🏻* OR *🧑🏼‍❤️‍💋‍🧑🏽* OR *🧑🏼‍❤️‍💋‍🧑🏾* OR *🧑🏼‍❤️‍💋‍🧑🏿* OR *🧑🏽‍❤️‍💋‍🧑🏻* OR *🧑🏽‍❤️‍💋‍🧑🏼* OR *🧑🏽‍❤️‍💋‍🧑🏾* OR *🧑🏽‍❤️‍💋‍🧑🏿* OR *🧑🏾‍❤️‍💋‍🧑🏻* OR *🧑🏾‍❤️‍💋‍🧑🏼* OR *🧑🏾‍❤️‍💋‍🧑🏽* OR *🧑🏾‍❤️‍💋‍🧑🏿* OR *🧑🏿‍❤️‍💋‍🧑🏻* OR *🧑🏿‍❤️‍💋‍🧑🏼* OR *🧑🏿‍❤️‍💋‍🧑🏽* OR *🧑🏿‍❤️‍💋‍🧑🏾*)",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.defense-evasion"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "@Kostastsale, TheDFIRReport"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

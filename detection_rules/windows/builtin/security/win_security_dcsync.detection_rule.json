@@ -1,0 +1,52 @@
+{
+  "rule_id": "611eab06-a145-4dfa-a295-3ccc5c20f59a",
+  "risk_score": 73,
+  "description": "Detects Mimikatz DC sync security events",
+  "name": "Mimikatz DC Sync",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "winlog.channel:Security AND ((winlog.event_data.AccessMask:0x100 AND event.code:4662 AND (winlog.event_data.Properties:(*Replicating\\ Directory\\ Changes\\ All* OR *1131f6ad\\-9c07\\-11d1\\-f79f\\-00c04fc2dcd2* OR *1131f6aa\\-9c07\\-11d1\\-f79f\\-00c04fc2dcd2* OR *9923a32a\\-3607\\-11d2\\-b9be\\-0000f87a36b2* OR *89e95b76\\-444d\\-4c62\\-991a\\-0facbeda640c*))) AND (NOT (user.domain:Window\\ Manager OR (user.name:(NT\\ AUT* OR MSOL_*)) OR user.name:*$)))",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.credential-access",
+    "attack.s0002",
+    "attack.t1003.006"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Benjamin Delpy, Florian Roth (Nextron Systems), Scott Dermott, Sorina Ionescu"
+  ],
+  "false_positives": [
+    "Valid DC Sync that is not covered by the filters; please report",
+    "Local Domain Admin account used for Azure AD Connect"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

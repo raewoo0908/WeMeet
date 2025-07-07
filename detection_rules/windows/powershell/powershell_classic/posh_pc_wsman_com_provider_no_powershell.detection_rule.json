@@ -1,0 +1,52 @@
+{
+  "rule_id": "df9a0e0e-fedb-4d6c-8668-d765dfc92aa7",
+  "risk_score": 47,
+  "description": "Detects suspicious use of the WSMAN provider without PowerShell.exe as the host application.",
+  "name": "Suspicious Non PowerShell WSMAN COM Provider",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "winlog.channel:Windows\\ PowerShell AND (winlog.event_data.Data:*ProviderName\\=WSMan* AND (NOT (winlog.event_data.Data:/HostId=[a-zA-Z0-9-]{36}\\s+EngineVersion=/ OR (winlog.event_data.Data:(*HostApplication\\=powershell* OR *HostApplication\\=C\\:\\\\Windows\\\\System32\\\\WindowsPowerShell\\\\v1.0\\\\powershell* OR *HostApplication\\=C\\:\\\\Windows\\\\SysWOW64\\\\WindowsPowerShell\\\\v1.0\\\\powershell* OR *HostApplication\\=C\\:\\/Windows\\/System32\\/WindowsPowerShell\\/v1.0\\/powershell* OR *HostApplication\\=C\\:\\/Windows\\/SysWOW64\\/WindowsPowerShell\\/v1.0\\/powershell*)))))",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.execution",
+    "attack.t1059.001",
+    "attack.lateral-movement",
+    "attack.t1021.003"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Roberto Rodriguez (Cyb3rWard0g), OTR (Open Threat Research)"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

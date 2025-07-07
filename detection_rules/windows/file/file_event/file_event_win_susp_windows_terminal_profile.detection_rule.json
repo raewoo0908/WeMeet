@@ -1,0 +1,61 @@
+{
+  "rule_id": "9b64de98-9db3-4033-bd7a-f51430105f00",
+  "risk_score": 47,
+  "description": "Detects the creation or modification of the Windows Terminal Profile settings file \"settings.json\" by an uncommon process.",
+  "name": "Windows Terminal Profile Settings Modification By Uncommon Process",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "(process.executable:(*\\\\cmd.exe OR *\\\\cscript.exe OR *\\\\mshta.exe OR *\\\\powershell.exe OR *\\\\pwsh.exe OR *\\\\wscript.exe)) AND file.path:*\\\\AppData\\\\Local\\\\Packages\\\\Microsoft.WindowsTerminal_8wekyb3d8bbwe\\\\LocalState\\\\settings.json",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "File Create (rule: FileCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.persistence",
+    "attack.t1547.015"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "frack113, Nasreddine Bencherchali (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Some false positives may occur with admin scripts that set WT settings."
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

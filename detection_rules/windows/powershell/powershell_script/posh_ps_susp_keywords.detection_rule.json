@@ -1,0 +1,50 @@
+{
+  "rule_id": "1f49f2ab-26bc-48b3-96cc-dcffbc93eadf",
+  "risk_score": 47,
+  "description": "Detects potentially suspicious keywords that could indicate the use of a PowerShell exploitation framework",
+  "name": "Potential Suspicious PowerShell Keywords",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "powershell.file.script_block_text:(*System.Reflection.Assembly.Load\\($* OR *\\[System.Reflection.Assembly\\]\\:\\:Load\\($* OR *\\[Reflection.Assembly\\]\\:\\:Load\\($* OR *System.Reflection.AssemblyName* OR *Reflection.Emit.AssemblyBuilderAccess* OR *Reflection.Emit.CustomAttributeBuilder* OR *Runtime.InteropServices.UnmanagedType* OR *Runtime.InteropServices.DllImportAttribute* OR *SuspendThread* OR *rundll32*)",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.execution",
+    "attack.t1059.001"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Florian Roth (Nextron Systems), Perez Diego (@darkquassar), Tuan Le (NCSGroup)"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

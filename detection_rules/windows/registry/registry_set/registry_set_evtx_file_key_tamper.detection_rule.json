@@ -1,0 +1,50 @@
+{
+  "rule_id": "0cb8d736-995d-4ce7-a31e-1e8d452a1459",
+  "risk_score": 73,
+  "description": "Detects tampering with EventLog service \"file\" key. In order to change the default location of an Evtx file. This technique is used to tamper with log collection and alerting",
+  "name": "Potential EventLog File Location Tampering",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "(registry.path:*\\\\SYSTEM\\\\CurrentControlSet\\\\Services\\\\EventLog\\\\* AND registry.path:*\\\\File) AND (NOT winlog.event_data.Details:*\\\\System32\\\\Winevt\\\\Logs\\\\*)",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.defense-evasion",
+    "attack.t1562.002"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "D3F7A5105"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

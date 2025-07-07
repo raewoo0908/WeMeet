@@ -1,0 +1,60 @@
+{
+  "rule_id": "434c08ba-8406-4d15-8b24-782cb071a691",
+  "risk_score": 73,
+  "description": "Detects PowerShell commands that decrypt an \".LNK\" \"file to drop the next stage of the malware.",
+  "name": "PowerShell Execution With Potential Decryption Capabilities",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "(process.command_line:(*Get\\-ChildItem\\ * OR *dir\\ * OR *gci\\ * OR *ls\\ *)) AND (process.command_line:(*Get\\-Content\\ * OR *gc\\ * OR *cat\\ * OR *type\\ * OR *ReadAllBytes*)) AND ((process.command_line:*\\ \\^\\|\\ * AND process.command_line:*\\*.lnk* AND process.command_line:*\\-Recurse* AND process.command_line:*\\-Skip\\ *) OR (process.command_line:*\\ \\-ExpandProperty\\ * AND process.command_line:*\\*.lnk* AND process.command_line:*WriteAllBytes* AND process.command_line:*\\ .length\\ *)) AND ((process.executable:(*\\\\powershell.exe OR *\\\\pwsh.exe)) AND (process.pe.original_file_name:(PowerShell.EXE OR pwsh.dll)))",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.execution"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "X__Junior (Nextron Systems), Nasreddine Bencherchali (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Unlikely"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

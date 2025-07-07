@@ -1,0 +1,62 @@
+{
+  "rule_id": "39ed3c80-e6a1-431b-9df3-911ac53d08a7",
+  "risk_score": 73,
+  "description": "Detects the pattern of UAC Bypass using NTFS reparse point and wusa.exe DLL hijacking (UACMe 36)",
+  "name": "UAC Bypass Using NTFS Reparse Point - Process",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "(process.command_line:*\\\\AppData\\\\Local\\\\Temp\\\\update.msu AND process.command_line:\\\"C\\:\\\\Windows\\\\system32\\\\wusa.exe\\\"\\ \\ \\/quiet\\ C\\:\\\\Users\\\\* AND (winlog.event_data.IntegrityLevel:(High OR System OR S\\-1\\-16\\-16384 OR S\\-1\\-16\\-12288))) OR ((process.command_line:*C\\:\\\\Users\\\\* AND process.command_line:*\\\\AppData\\\\Local\\\\Temp\\\\* AND process.command_line:*\\\\dismhost.exe\\ \\{*) AND process.executable:*\\\\DismHost.exe AND (winlog.event_data.IntegrityLevel:(High OR System)) AND process.parent.command_line:\\\"C\\:\\\\Windows\\\\system32\\\\dism.exe\\\"\\ \\/online\\ \\/quiet\\ \\/norestart\\ \\/add\\-package\\ \\/packagepath\\:\\\"C\\:\\\\Windows\\\\system32\\\\pe386\\\"\\ \\/ignorecheck)",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.defense-evasion",
+    "attack.privilege-escalation",
+    "attack.t1548.002"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Christian Burkard (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

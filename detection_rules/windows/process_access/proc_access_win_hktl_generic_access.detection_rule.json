@@ -1,0 +1,51 @@
+{
+  "rule_id": "d0d2f720-d14f-448d-8242-51ff396a334e",
+  "risk_score": 73,
+  "description": "Detects process access requests from hacktool processes based on their default image name",
+  "name": "HackTool - Generic Process Access",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "(process.executable:(*\\\\Akagi.exe OR *\\\\Akagi64.exe OR *\\\\atexec_windows.exe OR *\\\\Certify.exe OR *\\\\Certipy.exe OR *\\\\CoercedPotato.exe OR *\\\\crackmapexec.exe OR *\\\\CreateMiniDump.exe OR *\\\\dcomexec_windows.exe OR *\\\\dpapi_windows.exe OR *\\\\findDelegation_windows.exe OR *\\\\GetADUsers_windows.exe OR *\\\\GetNPUsers_windows.exe OR *\\\\getPac_windows.exe OR *\\\\getST_windows.exe OR *\\\\getTGT_windows.exe OR *\\\\GetUserSPNs_windows.exe OR *\\\\gmer.exe OR *\\\\hashcat.exe OR *\\\\htran.exe OR *\\\\ifmap_windows.exe OR *\\\\impersonate.exe OR *\\\\Inveigh.exe OR *\\\\LocalPotato.exe OR *\\\\mimikatz_windows.exe OR *\\\\mimikatz.exe OR *\\\\netview_windows.exe OR *\\\\nmapAnswerMachine_windows.exe OR *\\\\opdump_windows.exe OR *\\\\PasswordDump.exe OR *\\\\Potato.exe OR *\\\\PowerTool.exe OR *\\\\PowerTool64.exe OR *\\\\psexec_windows.exe OR *\\\\PurpleSharp.exe OR *\\\\pypykatz.exe OR *\\\\QuarksPwDump.exe OR *\\\\rdp_check_windows.exe OR *\\\\Rubeus.exe OR *\\\\SafetyKatz.exe OR *\\\\sambaPipe_windows.exe OR *\\\\SelectMyParent.exe OR *\\\\SharpChisel.exe OR *\\\\SharPersist.exe OR *\\\\SharpEvtMute.exe OR *\\\\SharpImpersonation.exe OR *\\\\SharpLDAPmonitor.exe OR *\\\\SharpLdapWhoami.exe OR *\\\\SharpUp.exe OR *\\\\SharpView.exe OR *\\\\smbclient_windows.exe OR *\\\\smbserver_windows.exe OR *\\\\sniff_windows.exe OR *\\\\sniffer_windows.exe OR *\\\\split_windows.exe OR *\\\\SpoolSample.exe OR *\\\\Stracciatella.exe OR *\\\\SysmonEOP.exe OR *\\\\temp\\\\rot.exe OR *\\\\ticketer_windows.exe OR *\\\\TruffleSnout.exe OR *\\\\winPEASany_ofs.exe OR *\\\\winPEASany.exe OR *\\\\winPEASx64_ofs.exe OR *\\\\winPEASx64.exe OR *\\\\winPEASx86_ofs.exe OR *\\\\winPEASx86.exe OR *\\\\xordump.exe)) OR (process.executable:(*\\\\goldenPac* OR *\\\\just_dce_* OR *\\\\karmaSMB* OR *\\\\kintercept* OR *\\\\LocalPotato* OR *\\\\ntlmrelayx* OR *\\\\rpcdump* OR *\\\\samrdump* OR *\\\\secretsdump* OR *\\\\smbexec* OR *\\\\smbrelayx* OR *\\\\wmiexec* OR *\\\\wmipersist* OR *HotPotato* OR *Juicy\\ Potato* OR *JuicyPotato* OR *PetitPotam* OR *RottenPotato*))",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.credential-access",
+    "attack.t1003.001",
+    "attack.s0002"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Nasreddine Bencherchali (Nextron Systems), Swachchhanda Shrawan Poudel"
+  ],
+  "false_positives": [
+    "Unlikely"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

@@ -1,0 +1,61 @@
+{
+  "rule_id": "0531e43a-d77d-47c2-b89f-5fe50321c805",
+  "risk_score": 47,
+  "description": "Detects \"RegAsm.exe\" initiating a network connection to public IP adresses",
+  "name": "RegAsm.EXE Initiating Network Connection To Public IP",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "(process.executable:*\\\\regasm.exe AND network.direction:true) AND (NOT (destination.ip:127.0.0.0\\/8 OR destination.ip:10.0.0.0\\/8 OR destination.ip:172.16.0.0\\/12 OR destination.ip:192.168.0.0\\/16 OR destination.ip:169.254.0.0\\/16 OR destination.ip:\\:\\:1\\/128 OR destination.ip:fe80\\:\\:\\/10 OR destination.ip:fc00\\:\\:\\/7))",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Network connection detected (rule: NetworkConnect)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.defense-evasion",
+    "attack.t1218.009"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "frack113"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

@@ -1,0 +1,61 @@
+{
+  "rule_id": "8823e85d-31d8-473e-b7f4-92da070f0fc6",
+  "risk_score": 73,
+  "description": "Detects suspicious call to the \"ShellExec_RunDLL\" exported function of SHELL32.DLL through the ordinal number to launch other commands.\nAdversary might only use the ordinal number in order to bypass existing detection that alert on usage of ShellExec_RunDLL on CommandLine.\n",
+  "name": "Suspicious ShellExec_RunDLL Call Via Ordinal",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "(process.parent.command_line:*SHELL32.DLL* AND (process.parent.command_line:(*#568* OR *#570* OR *#572* OR *#576*))) AND ((process.executable:(*\\\\bash.exe OR *\\\\bitsadmin.exe OR *\\\\cmd.exe OR *\\\\cscript.exe OR *\\\\curl.exe OR *\\\\mshta.exe OR *\\\\msiexec.exe OR *\\\\msxsl.exe OR *\\\\odbcconf.exe OR *\\\\powershell.exe OR *\\\\pwsh.exe OR *\\\\regsvr32.exe OR *\\\\schtasks.exe OR *\\\\wmic.exe OR *\\\\wscript.exe)) OR ((process.parent.command_line:(*comspec* OR *iex* OR *Invoke\\-* OR *msiexec* OR *odbcconf* OR *regsvr32*)) OR (process.parent.command_line:(*\\\\Desktop\\\\* OR *\\\\ProgramData\\\\* OR *\\\\Temp\\\\* OR *\\\\Users\\\\Public\\\\*))))",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.defense-evasion",
+    "attack.t1218.011"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Swachchhanda Shrawan Poudel"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

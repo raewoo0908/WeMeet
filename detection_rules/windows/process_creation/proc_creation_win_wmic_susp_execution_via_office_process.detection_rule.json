@@ -1,0 +1,64 @@
+{
+  "rule_id": "e1693bc8-7168-4eab-8718-cdcaa68a1738",
+  "risk_score": 73,
+  "description": "Office application called wmic to proxye execution through a LOLBIN process. This is often used to break suspicious parent-child chain (Office app spawns LOLBin).",
+  "name": "Suspicious WMIC Execution Via Office Process",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "(process.parent.executable:(*\\\\WINWORD.EXE OR *\\\\EXCEL.EXE OR *\\\\POWERPNT.exe OR *\\\\MSPUB.exe OR *\\\\VISIO.exe OR *\\\\MSACCESS.EXE OR *\\\\EQNEDT32.EXE OR *\\\\ONENOTE.EXE OR *\\\\wordpad.exe OR *\\\\wordview.exe)) AND ((process.command_line:(*regsvr32* OR *rundll32* OR *msiexec* OR *mshta* OR *verclsid* OR *wscript* OR *cscript*)) AND (process.command_line:*process* AND process.command_line:*create* AND process.command_line:*call*)) AND (process.executable:*\\\\wbem\\\\WMIC.exe OR process.pe.original_file_name:wmic.exe)",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.t1204.002",
+    "attack.t1047",
+    "attack.t1218.010",
+    "attack.execution",
+    "attack.defense-evasion"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Vadim Khrykov, Cyb3rEng"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

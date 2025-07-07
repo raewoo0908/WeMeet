@@ -1,0 +1,61 @@
+{
+  "rule_id": "1c0e41cd-21bb-4433-9acc-4a2cd6367b9b",
+  "risk_score": 73,
+  "description": "Detects when an attacker tries to modify an already existing scheduled tasks to run from a suspicious location\nAttackers can create a simple looking task in order to avoid detection on creation as it's often the most focused on\nInstead they modify the task after creation to include their malicious payload\n",
+  "name": "Suspicious Modification Of Scheduled Tasks",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "((process.command_line:*\\ \\/Change\\ * AND process.command_line:*\\ \\/TN\\ *) AND process.executable:*\\\\schtasks.exe) AND (process.command_line:(*regsvr32* OR *rundll32* OR *cmd\\ \\/c\\ * OR *cmd\\ \\/k\\ * OR *cmd\\ \\/r\\ * OR *cmd.exe\\ \\/c\\ * OR *cmd.exe\\ \\/k\\ * OR *cmd.exe\\ \\/r\\ * OR *powershell* OR *mshta* OR *wscript* OR *cscript* OR *certutil* OR *bitsadmin* OR *bash.exe* OR *bash\\ * OR *scrcons* OR *wmic\\ * OR *wmic.exe* OR *forfiles* OR *scriptrunner* OR *hh.exe* OR *hh\\ *)) AND (process.command_line:(*\\\\AppData\\\\Local\\\\Temp* OR *\\\\AppData\\\\Roaming\\\\* OR *\\\\Users\\\\Public\\\\* OR *\\\\WINDOWS\\\\Temp\\\\* OR *\\\\Desktop\\\\* OR *\\\\Downloads\\\\* OR *\\\\Temporary\\ Internet* OR *C\\:\\\\ProgramData\\\\* OR *C\\:\\\\Perflogs\\\\* OR *%ProgramData%* OR *%appdata%* OR *%comspec%* OR *%localappdata%*))",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.execution",
+    "attack.t1053.005"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Nasreddine Bencherchali (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

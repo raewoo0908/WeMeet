@@ -1,0 +1,50 @@
+{
+  "rule_id": "40b6e656-4e11-4c0c-8772-c1cc6dae34ce",
+  "risk_score": 47,
+  "description": "Detects registry key established after masqueraded .scr file execution using Rundll32 through desk.cpl",
+  "name": "ScreenSaver Registry Key Set",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "process.executable:*\\\\rundll32.exe AND (winlog.event_data.Details:*.scr AND registry.path:*\\\\Control\\ Panel\\\\Desktop\\\\SCRNSAVE.EXE*) AND (NOT (winlog.event_data.Details:(*C\\:\\\\Windows\\\\System32\\\\* OR *C\\:\\\\Windows\\\\SysWOW64\\\\*)))",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.defense-evasion",
+    "attack.t1218.011"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Jose Luis Sanchez Martinez (@Joseliyo_Jstnk)"
+  ],
+  "false_positives": [
+    "Legitimate use of screen saver"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

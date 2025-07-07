@@ -1,0 +1,50 @@
+{
+  "rule_id": "8023f872-3f1d-4301-a384-801889917ab4",
+  "risk_score": 73,
+  "description": "Detects non-sysinternals tools setting the \"accepteula\" key which normally is set on sysinternals tool execution",
+  "name": "Usage of Renamed Sysinternals Tools - RegistrySet",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "((registry.path:(*\\\\PsExec* OR *\\\\ProcDump* OR *\\\\Handle* OR *\\\\LiveKd* OR *\\\\Process\\ Explorer* OR *\\\\PsLoglist* OR *\\\\PsPasswd* OR *\\\\Active\\ Directory\\ Explorer*)) AND registry.path:*\\\\EulaAccepted) AND (NOT (process.executable:(*\\\\PsExec.exe OR *\\\\PsExec64.exe OR *\\\\procdump.exe OR *\\\\procdump64.exe OR *\\\\handle.exe OR *\\\\handle64.exe OR *\\\\livekd.exe OR *\\\\livekd64.exe OR *\\\\procexp.exe OR *\\\\procexp64.exe OR *\\\\psloglist.exe OR *\\\\psloglist64.exe OR *\\\\pspasswd.exe OR *\\\\pspasswd64.exe OR *\\\\ADExplorer.exe OR *\\\\ADExplorer64.exe))) AND _exists_:process.executable",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.resource-development",
+    "attack.t1588.002"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Nasreddine Bencherchali (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Unlikely"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

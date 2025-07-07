@@ -1,0 +1,61 @@
+{
+  "rule_id": "7f5d1c9a-3e83-48df-95a7-2b98aae6c13c",
+  "risk_score": 47,
+  "description": "Detects child processes of \"provlaunch.exe\" which might indicate potential abuse to proxy execution.",
+  "name": "Potential Provlaunch.EXE Binary Proxy Execution Abuse",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "process.parent.executable:*\\\\provlaunch.exe AND (NOT ((process.executable:(*\\\\calc.exe OR *\\\\cmd.exe OR *\\\\cscript.exe OR *\\\\mshta.exe OR *\\\\notepad.exe OR *\\\\powershell.exe OR *\\\\pwsh.exe OR *\\\\regsvr32.exe OR *\\\\rundll32.exe OR *\\\\wscript.exe)) OR (process.executable:(*\\:\\\\PerfLogs\\\\* OR *\\:\\\\Temp\\\\* OR *\\:\\\\Users\\\\Public\\\\* OR *\\\\AppData\\\\Temp\\\\* OR *\\\\Windows\\\\System32\\\\Tasks\\\\* OR *\\\\Windows\\\\Tasks\\\\* OR *\\\\Windows\\\\Temp\\\\*))))",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.defense-evasion",
+    "attack.t1218"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Nasreddine Bencherchali (Nextron Systems), Swachchhanda Shrawan Poudel"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

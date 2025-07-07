@@ -1,0 +1,61 @@
+{
+  "rule_id": "4f2cd9b6-4a17-440f-bb2a-687abb65993a",
+  "risk_score": 47,
+  "description": "Detects execution of the Add-In deployment cache updating utility (AddInutil.exe) with uncommon Addinroot or Pipelineroot paths. An adversary may execute AddinUtil.exe with uncommon Addinroot/Pipelineroot paths that point to the adversaries Addins.Store payload.\n",
+  "name": "Uncommon AddinUtil.EXE CommandLine Execution",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "((process.command_line:(*\\-AddInRoot\\:* OR *\\-PipelineRoot\\:*)) AND (process.executable:*\\\\addinutil.exe OR process.pe.original_file_name:AddInUtil.exe)) AND (NOT (process.command_line:(*\\-AddInRoot\\:\\\"C\\:\\\\Program\\ Files\\ \\(x86\\)\\\\Common\\ Files\\\\Microsoft\\ Shared\\\\VSTA* OR *\\-AddInRoot\\:C\\:\\\\Program\\ Files\\ \\(x86\\)\\\\Common\\ Files\\\\Microsoft\\ Shared\\\\VSTA* OR *\\-PipelineRoot\\:\\\"C\\:\\\\Program\\ Files\\ \\(x86\\)\\\\Common\\ Files\\\\Microsoft\\ Shared\\\\VSTA* OR *\\-PipelineRoot\\:C\\:\\\\Program\\ Files\\ \\(x86\\)\\\\Common\\ Files\\\\Microsoft\\ Shared\\\\VSTA*)))",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.defense-evasion",
+    "attack.t1218"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Michael McKinley (@McKinleyMike), Tony Latteri (@TheLatteri)"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

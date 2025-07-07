@@ -1,0 +1,61 @@
+{
+  "rule_id": "bb09dd3e-2b78-4819-8e35-a7c1b874e449",
+  "risk_score": 99,
+  "description": "Detects the presence and execution of Inveigh via dropped artefacts",
+  "name": "HackTool - Inveigh Execution Artefacts",
+  "severity": "critical",
+  "type": "query",
+  "language": "lucene",
+  "query": "file.path:(*\\\\Inveigh\\-Log.txt OR *\\\\Inveigh\\-Cleartext.txt OR *\\\\Inveigh\\-NTLMv1Users.txt OR *\\\\Inveigh\\-NTLMv2Users.txt OR *\\\\Inveigh\\-NTLMv1.txt OR *\\\\Inveigh\\-NTLMv2.txt OR *\\\\Inveigh\\-FormInput.txt OR *\\\\Inveigh.dll OR *\\\\Inveigh.exe OR *\\\\Inveigh.ps1 OR *\\\\Inveigh\\-Relay.ps1)",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "File Create (rule: FileCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.command-and-control",
+    "attack.t1219"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Nasreddine Bencherchali (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Unlikely"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

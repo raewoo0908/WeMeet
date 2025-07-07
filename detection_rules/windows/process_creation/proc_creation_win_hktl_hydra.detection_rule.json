@@ -1,0 +1,62 @@
+{
+  "rule_id": "aaafa146-074c-11eb-adc1-0242ac120002",
+  "risk_score": 73,
+  "description": "Detects command line parameters used by Hydra password guessing hack tool",
+  "name": "HackTool - Hydra Password Bruteforce Execution",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "(process.command_line:(*\\^USER\\^* OR *\\^PASS\\^*)) AND (process.command_line:*\\-u\\ * AND process.command_line:*\\-p\\ *)",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.credential-access",
+    "attack.t1110",
+    "attack.t1110.001"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Vasiliy Burov"
+  ],
+  "false_positives": [
+    "Software that uses the caret encased keywords PASS and USER in its command line"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

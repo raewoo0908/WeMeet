@@ -1,0 +1,62 @@
+{
+  "rule_id": "b697e69c-746f-4a86-9f59-7bfff8eab881",
+  "risk_score": 73,
+  "description": "Detects the pattern of UAC Bypass using scheduled tasks and variable expansion of cleanmgr.exe (UACMe 34)",
+  "name": "UAC Bypass Using Disk Cleanup",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "process.command_line:*\\\"\\\\system32\\\\cleanmgr.exe\\ \\/autoclean\\ \\/d\\ C\\: AND (winlog.event_data.IntegrityLevel:(High OR System OR S\\-1\\-16\\-16384 OR S\\-1\\-16\\-12288)) AND process.parent.command_line:C\\:\\\\Windows\\\\system32\\\\svchost.exe\\ \\-k\\ netsvcs\\ \\-p\\ \\-s\\ Schedule",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.defense-evasion",
+    "attack.privilege-escalation",
+    "attack.t1548.002"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Christian Burkard (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

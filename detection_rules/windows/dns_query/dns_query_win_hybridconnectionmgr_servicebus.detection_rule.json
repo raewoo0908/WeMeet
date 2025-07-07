@@ -1,0 +1,50 @@
+{
+  "rule_id": "7bd3902d-8b8b-4dd4-838a-c6862d40150d",
+  "risk_score": 73,
+  "description": "Detects Azure Hybrid Connection Manager services querying the Azure service bus service",
+  "name": "DNS HybridConnectionManager Service Bus",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "process.executable:*HybridConnectionManager* AND dns.question.name:*servicebus.windows.net*",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.persistence",
+    "attack.t1554"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Roberto Rodriguez (Cyb3rWard0g), OTR (Open Threat Research)"
+  ],
+  "false_positives": [
+    "Legitimate use of Azure Hybrid Connection Manager and the Azure Service Bus service"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

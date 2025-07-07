@@ -1,0 +1,50 @@
+{
+  "rule_id": "90217a70-13fc-48e4-b3db-0d836c5824ac",
+  "risk_score": 73,
+  "description": "Detects any GAC DLL being loaded by an Office Product",
+  "name": "GAC DLL Loaded Via Office Applications",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "file.path:C\\:\\\\Windows\\\\Microsoft.NET\\\\assembly\\\\GAC_MSIL* AND (process.executable:(*\\\\excel.exe OR *\\\\mspub.exe OR *\\\\onenote.exe OR *\\\\onenoteim.exe OR *\\\\outlook.exe OR *\\\\powerpnt.exe OR *\\\\winword.exe))",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.execution",
+    "attack.t1204.002"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Antonlovesdnb"
+  ],
+  "false_positives": [
+    "Legitimate macro usage. Add the appropriate filter according to your environment"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

@@ -1,0 +1,61 @@
+{
+  "rule_id": "87e3c4e8-a6a8-4ad9-bb4f-46e7ff99a180",
+  "risk_score": 47,
+  "description": "Detects changing the PowerShell script execution policy to a potentially insecure level using the \"-ExecutionPolicy\" flag.",
+  "name": "Change PowerShell Policies to an Insecure Level",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "((process.pe.original_file_name:(PowerShell.EXE OR pwsh.dll)) OR (process.executable:(*\\\\powershell.exe OR *\\\\pwsh.exe))) AND (process.command_line:(*Bypass* OR *Unrestricted*)) AND (process.command_line:(*\\-executionpolicy\\ * OR *\\ \\-ep\\ * OR *\\ \\-exec\\ *))",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.execution",
+    "attack.t1059.001"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "frack113"
+  ],
+  "false_positives": [
+    "Administrator scripts"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

@@ -1,0 +1,50 @@
+{
+  "rule_id": "799a5f48-0ac1-4e0f-9152-71d137d48c2a",
+  "risk_score": 73,
+  "description": "Detects potential DLL sideloading of DLLs that are known to be abused from suspicious locations",
+  "name": "Abusable DLL Potential Sideloading From Suspicious Location",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "(file.path:(*\\\\coreclr.dll OR *\\\\facesdk.dll OR *\\\\HPCustPartUI.dll OR *\\\\libcef.dll OR *\\\\ZIPDLL.dll)) AND ((file.path:(*\\:\\\\Perflogs\\\\* OR *\\:\\\\Users\\\\Public\\\\* OR *\\\\Temporary\\ Internet* OR *\\\\Windows\\\\Temp\\\\*)) OR ((file.path:*\\:\\\\Users\\\\* AND file.path:*\\\\Favorites\\\\*) OR (file.path:*\\:\\\\Users\\\\* AND file.path:*\\\\Favourites\\\\*) OR (file.path:*\\:\\\\Users\\\\* AND file.path:*\\\\Contacts\\\\*) OR (file.path:*\\:\\\\Users\\\\* AND file.path:*\\\\Pictures\\\\*)))",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.execution",
+    "attack.t1059"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "X__Junior (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

@@ -1,0 +1,61 @@
+{
+  "rule_id": "af491bca-e752-4b44-9c86-df5680533dbc",
+  "risk_score": 73,
+  "description": "Detects execution of the \"finger.exe\" utility.\nFinger.EXE or \"TCPIP Finger Command\" is an old utility that is still present on modern Windows installation. It Displays information about users on a specified remote computer (typically a UNIX computer) that is running the finger service or daemon.\nDue to the old nature of this utility and the rareness of machines having the finger service. Any execution of \"finger.exe\" can be considered \"suspicious\" and worth investigating.\n",
+  "name": "Finger.EXE Execution",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "process.pe.original_file_name:finger.exe OR process.executable:*\\\\finger.exe",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.command-and-control",
+    "attack.t1105"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Florian Roth (Nextron Systems), omkar72, oscd.community"
+  ],
+  "false_positives": [
+    "Admin activity (unclear what they do nowadays with finger.exe)"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

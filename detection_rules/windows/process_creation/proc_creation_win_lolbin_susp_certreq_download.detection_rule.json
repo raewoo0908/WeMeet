@@ -1,0 +1,61 @@
+{
+  "rule_id": "4480827a-9799-4232-b2c4-ccc6c4e9e12b",
+  "risk_score": 73,
+  "description": "Detects a suspicious certreq execution taken from the LOLBAS examples, which can be abused to download (small) files",
+  "name": "Suspicious Certreq Command to Download",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "(process.command_line:*\\ \\-Post\\ * AND process.command_line:*\\ \\-config\\ * AND process.command_line:*\\ http* AND process.command_line:*\\ C\\:\\\\windows\\\\win.ini\\ *) AND (process.executable:*\\\\certreq.exe OR process.pe.original_file_name:CertReq.exe)",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.command-and-control",
+    "attack.t1105"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Christian Burkard (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Unlikely"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

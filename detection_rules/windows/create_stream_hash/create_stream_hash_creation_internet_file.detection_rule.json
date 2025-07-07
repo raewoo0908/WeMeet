@@ -1,0 +1,50 @@
+{
+  "rule_id": "573df571-a223-43bc-846e-3f98da481eca",
+  "risk_score": 47,
+  "description": "Detects the creation of a suspicious ADS (Alternate Data Stream) file by software other than browsers",
+  "name": "Creation Of a Suspicious ADS File Outside a Browser Download",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "(winlog.event_data.Contents:\\[ZoneTransfer\\]\\ \\ ZoneId\\=3* AND (file.path:(*.exe* OR *.scr* OR *.bat* OR *.cmd* OR *.docx* OR *.hta* OR *.jse* OR *.lnk* OR *.pptx* OR *.ps* OR *.reg* OR *.sct* OR *.vb* OR *.wsc* OR *.wsf* OR *.xlsx*)) AND file.path:*\\:Zone.Identifier) AND (NOT (process.executable:*\\\\brave.exe OR (process.executable:(C\\:\\\\Program\\ Files\\\\Google\\\\Chrome\\\\Application\\\\chrome.exe OR C\\:\\\\Program\\ Files\\ \\(x86\\)\\\\Google\\\\Chrome\\\\Application\\\\chrome.exe)) OR (process.executable:C\\:\\\\Program\\ Files\\ \\(x86\\)\\\\Microsoft\\\\EdgeWebView\\\\Application\\\\* OR process.executable:*\\\\WindowsApps\\\\MicrosoftEdge.exe OR (process.executable:(C\\:\\\\Program\\ Files\\ \\(x86\\)\\\\Microsoft\\\\Edge\\\\Application\\\\msedge.exe OR C\\:\\\\Program\\ Files\\\\Microsoft\\\\Edge\\\\Application\\\\msedge.exe))) OR ((process.executable:(*\\\\msedge.exe OR *\\\\msedgewebview2.exe)) AND (process.executable:(C\\:\\\\Program\\ Files\\ \\(x86\\)\\\\Microsoft\\\\EdgeCore\\\\* OR C\\:\\\\Program\\ Files\\\\Microsoft\\\\EdgeCore\\\\*))) OR (process.executable:(C\\:\\\\Program\\ Files\\\\Mozilla\\ Firefox\\\\firefox.exe OR C\\:\\\\Program\\ Files\\ \\(x86\\)\\\\Mozilla\\ Firefox\\\\firefox.exe)) OR (process.executable:(C\\:\\\\Program\\ Files\\ \\(x86\\)\\\\Internet\\ Explorer\\\\iexplore.exe OR C\\:\\\\Program\\ Files\\\\Internet\\ Explorer\\\\iexplore.exe)) OR process.executable:*\\\\maxthon.exe OR process.executable:*\\\\opera.exe OR process.executable:*\\\\safari.exe OR process.executable:*\\\\seamonkey.exe OR (process.executable:*\\\\SnippingTool\\\\SnippingTool.exe AND process.executable:C\\:\\\\Program\\ Files\\\\WindowsApps\\\\Microsoft.ScreenSketch_* AND (file.path:*\\\\AppData\\\\Local\\\\Packages\\\\Microsoft.ScreenSketch_* AND file.path:*\\\\TempState\\\\Screenshot\\ *) AND file.path:*.png\\:Zone.Identifier AND file.path:C\\:\\\\Users\\\\*) OR process.executable:*\\\\vivaldi.exe OR process.executable:*\\\\whale.exe))",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.defense-evasion"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "frack113"
+  ],
+  "false_positives": [
+    "Other legitimate browsers not currently included in the filter (please add them)",
+    "Legitimate downloads via scripting or command-line tools (Investigate to determine if it's legitimate)"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

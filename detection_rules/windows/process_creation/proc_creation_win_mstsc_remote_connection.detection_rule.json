@@ -1,0 +1,61 @@
+{
+  "rule_id": "954f0af7-62dd-418f-b3df-a84bc2c7a774",
+  "risk_score": 47,
+  "description": "Detects the usage of \"mstsc.exe\" with the \"/v\" flag to initiate a connection to a remote server.\nAdversaries may use valid accounts to log into a computer using the Remote Desktop Protocol (RDP). The adversary may then perform actions as the logged-on user.\n",
+  "name": "New Remote Desktop Connection Initiated Via Mstsc.EXE",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "(process.command_line:(*\\ \\-v\\:* OR *\\ \\/v\\:* OR *\\ –v\\:* OR *\\ —v\\:* OR *\\ ―v\\:*) AND (process.executable:*\\\\mstsc.exe OR process.pe.original_file_name:mstsc.exe)) AND (NOT (process.command_line:*C\\:\\\\ProgramData\\\\Microsoft\\\\WSL\\\\wslg.rdp* AND process.parent.executable:C\\:\\\\Windows\\\\System32\\\\lxss\\\\wslhost.exe))",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.lateral-movement",
+    "attack.t1021.001"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "frack113"
+  ],
+  "false_positives": [
+    "WSL (Windows Sub System For Linux)"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

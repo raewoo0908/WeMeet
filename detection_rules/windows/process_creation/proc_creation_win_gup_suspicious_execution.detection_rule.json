@@ -1,0 +1,61 @@
+{
+  "rule_id": "0a4f6091-223b-41f6-8743-f322ec84930b",
+  "risk_score": 73,
+  "description": "Detects execution of the Notepad++ updater in a suspicious directory, which is often used in DLL side-loading attacks",
+  "name": "Suspicious GUP Usage",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "process.executable:*\\\\GUP.exe AND (NOT ((process.executable:(*\\\\Program\\ Files\\\\Notepad\\+\\+\\\\updater\\\\GUP.exe OR *\\\\Program\\ Files\\ \\(x86\\)\\\\Notepad\\+\\+\\\\updater\\\\GUP.exe)) OR (process.executable:*\\\\Users\\\\* AND (process.executable:(*\\\\AppData\\\\Local\\\\Notepad\\+\\+\\\\updater\\\\GUP.exe OR *\\\\AppData\\\\Roaming\\\\Notepad\\+\\+\\\\updater\\\\GUP.exe)))))",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.defense-evasion",
+    "attack.t1574.001"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Florian Roth (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Execution of tools named GUP.exe and located in folders different than Notepad++\\updater"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

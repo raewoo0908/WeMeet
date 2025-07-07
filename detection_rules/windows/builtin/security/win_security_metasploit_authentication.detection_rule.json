@@ -1,0 +1,50 @@
+{
+  "rule_id": "72124974-a68b-4366-b990-d30e0b2a190d",
+  "risk_score": 73,
+  "description": "Alerts on Metasploit host's authentications on the domain.",
+  "name": "Metasploit SMB Authentication",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "winlog.channel:Security AND ((winlog.event_data.AuthenticationPackageName:NTLM AND (event.code:(4625 OR 4624)) AND winlog.event_data.LogonType:3 AND source.domain:/^[A-Za-z0-9]{16}$/) OR (event.code:4776 AND winlog.event_data.Workstation:/^[A-Za-z0-9]{16}$/))",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.lateral-movement",
+    "attack.t1021.002"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Chakib Gzenayi (@Chak092), Hosni Mribah"
+  ],
+  "false_positives": [
+    "Linux hostnames composed of 16 characters."
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

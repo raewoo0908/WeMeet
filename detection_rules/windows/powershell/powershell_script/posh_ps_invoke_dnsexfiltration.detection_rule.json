@@ -1,0 +1,50 @@
+{
+  "rule_id": "d59d7842-9a21-4bc6-ba98-64bfe0091355",
+  "risk_score": 73,
+  "description": "DNSExfiltrator allows for transferring (exfiltrate) a file over a DNS request covert channel",
+  "name": "Powershell DNSExfiltration",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "powershell.file.script_block_text:*Invoke\\-DNSExfiltrator* OR (powershell.file.script_block_text:*\\ \\-i\\ * AND powershell.file.script_block_text:*\\ \\-d\\ * AND powershell.file.script_block_text:*\\ \\-p\\ * AND powershell.file.script_block_text:*\\ \\-doh\\ * AND powershell.file.script_block_text:*\\ \\-t\\ *)",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.exfiltration",
+    "attack.t1048"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "frack113"
+  ],
+  "false_positives": [
+    "Legitimate script"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

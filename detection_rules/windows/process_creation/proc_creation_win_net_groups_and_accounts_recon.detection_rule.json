@@ -1,0 +1,63 @@
+{
+  "rule_id": "d95de845-b83c-4a9a-8a6a-4fc802ebf6c0",
+  "risk_score": 47,
+  "description": "Detects suspicious reconnaissance command line activity on Windows systems using Net.EXE\nCheck if the user that executed the commands is suspicious (e.g. service accounts, LOCAL_SYSTEM)\n",
+  "name": "Suspicious Group And Account Reconnaissance Activity Using Net.EXE",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "((process.executable:(*\\\\net.exe OR *\\\\net1.exe)) OR (process.pe.original_file_name:(net.exe OR net1.exe))) AND ((((process.command_line:(*domain\\ admins* OR *\\ administrator* OR *\\ administrateur* OR *enterprise\\ admins* OR *Exchange\\ Trusted\\ Subsystem* OR *Remote\\ Desktop\\ Users* OR *Utilisateurs\\ du\\ Bureau\\ à\\ distance* OR *Usuarios\\ de\\ escritorio\\ remoto* OR *\\ \\/do*)) AND (process.command_line:(*\\ group\\ * OR *\\ localgroup\\ *))) AND (NOT process.command_line:*\\ \\/add*)) OR (process.command_line:*\\ \\/do* AND process.command_line:*\\ accounts\\ *))",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.discovery",
+    "attack.t1087.001",
+    "attack.t1087.002"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Florian Roth (Nextron Systems), omkar72, @svch0st, Nasreddine Bencherchali (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Inventory tool runs",
+    "Administrative activity"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

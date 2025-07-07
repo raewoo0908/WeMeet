@@ -1,0 +1,49 @@
+{
+  "rule_id": "976dd1f2-a484-45ec-aa1d-0e87e882262b",
+  "risk_score": 73,
+  "description": "Detects when an attacker modifies the registry key \"HtmlHelp Author\" to achieve persistence",
+  "name": "Potential Persistence Via CHM Helper DLL",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "registry.path:(*\\\\Software\\\\Microsoft\\\\HtmlHelp\\ Author\\\\Location* OR *\\\\Software\\\\WOW6432Node\\\\Microsoft\\\\HtmlHelp\\ Author\\\\Location*)",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.persistence"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Nasreddine Bencherchali (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

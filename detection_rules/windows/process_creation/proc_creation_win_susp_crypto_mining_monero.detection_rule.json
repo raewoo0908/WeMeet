@@ -1,0 +1,62 @@
+{
+  "rule_id": "66c3b204-9f88-4d0a-a7f7-8a57d521ca55",
+  "risk_score": 73,
+  "description": "Detects command line parameters or strings often used by crypto miners",
+  "name": "Potential Crypto Mining Activity",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "(process.command_line:(*\\ \\-\\-cpu\\-priority\\=* OR *\\-\\-donate\\-level\\=0* OR *\\ \\-o\\ pool.* OR *\\ \\-\\-nicehash* OR *\\ \\-\\-algo\\=rx\\/0\\ * OR *stratum\\+tcp\\:\\/\\/* OR *stratum\\+udp\\:\\/\\/* OR *LS1kb25hdGUtbGV2ZWw9* OR *0tZG9uYXRlLWxldmVsP* OR *tLWRvbmF0ZS1sZXZlbD* OR *c3RyYXR1bSt0Y3A6Ly* OR *N0cmF0dW0rdGNwOi8v* OR *zdHJhdHVtK3RjcDovL* OR *c3RyYXR1bSt1ZHA6Ly* OR *N0cmF0dW0rdWRwOi8v* OR *zdHJhdHVtK3VkcDovL*)) AND (NOT (process.command_line:(*\\ pool.c\\ * OR *\\ pool.o\\ * OR *gcc\\ \\-*)))",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.impact",
+    "attack.t1496"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Florian Roth (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Legitimate use of crypto miners",
+    "Some build frameworks"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

@@ -1,0 +1,52 @@
+{
+  "rule_id": "85b88e05-dadc-430b-8a9e-53ff1cd30aae",
+  "risk_score": 47,
+  "description": "Detects registry value settings that would replace the user's desktop background.\nThis is a common technique used by malware to change the desktop background to a ransom note or other image.\n",
+  "name": "Potentially Suspicious Desktop Background Change Via Registry",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "(registry.path:(*Control\\ Panel\\\\Desktop* OR *CurrentVersion\\\\Policies\\\\ActiveDesktop* OR *CurrentVersion\\\\Policies\\\\System*)) AND ((winlog.event_data.Details:DWORD\\ \\(0x00000001\\) AND registry.path:*NoChangingWallpaper) OR registry.path:*\\\\Wallpaper OR (winlog.event_data.Details:2 AND registry.path:*\\\\WallpaperStyle)) AND (NOT process.executable:*\\\\svchost.exe)",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.defense-evasion",
+    "attack.impact",
+    "attack.t1112",
+    "attack.t1491.001"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Nasreddine Bencherchali (Nextron Systems), Stephen Lincoln @slincoln-aiq (AttackIQ)"
+  ],
+  "false_positives": [
+    "Administrative scripts that change the desktop background to a company logo or other image."
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

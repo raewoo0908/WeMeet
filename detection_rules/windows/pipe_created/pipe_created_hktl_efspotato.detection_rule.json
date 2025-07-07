@@ -1,0 +1,51 @@
+{
+  "rule_id": "637f689e-b4a5-4a86-be0e-0100a0a33ba2",
+  "risk_score": 73,
+  "description": "Detects the pattern of a pipe name as used by the hack tool EfsPotato",
+  "name": "HackTool - EfsPotato Named Pipe Creation",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "(file.name:(*\\\\pipe\\\\* OR *\\\\pipe\\\\srvsvc*)) AND (NOT (file.name:(*\\\\CtxShare* OR \\\\pipe\\\\*)))",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.defense-evasion",
+    "attack.privilege-escalation",
+    "attack.t1055"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Florian Roth (Nextron Systems)"
+  ],
+  "false_positives": [
+    "\\pipe\\LOCAL\\Monitorian"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

@@ -1,0 +1,50 @@
+{
+  "rule_id": "d00a9a72-2c09-4459-ad03-5e0a23351e36",
+  "risk_score": 73,
+  "description": "Detects the usage of particular AttributeLDAPDisplayNames, which are known for data exchange via LDAP by the tool LDAPFragger and are additionally not commonly used in companies.",
+  "name": "Suspicious LDAP-Attributes Used",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "winlog.channel:Security AND ((winlog.event_data.AttributeLDAPDisplayName:(primaryInternationalISDNNumber OR otherFacsimileTelephoneNumber OR primaryTelexNumber)) AND winlog.event_data.AttributeValue:* AND event.code:5136)",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.t1001.003",
+    "attack.command-and-control"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "xknow @xknow_infosec"
+  ],
+  "false_positives": [
+    "Companies, who may use these default LDAP-Attributes for personal information"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

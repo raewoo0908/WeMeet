@@ -1,0 +1,55 @@
+{
+  "rule_id": "24549159-ac1b-479c-8175-d42aea947cae",
+  "risk_score": 73,
+  "description": "This events that are generated when using the hacktool Ruler by Sensepost",
+  "name": "Hacktool Ruler",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "winlog.channel:Security AND ((event.code:4776 AND winlog.event_data.Workstation:RULER) OR ((event.code:(4624 OR 4625)) AND source.domain:RULER))",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.discovery",
+    "attack.execution",
+    "attack.collection",
+    "attack.t1087",
+    "attack.t1114",
+    "attack.t1059",
+    "attack.t1550.002"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Florian Roth (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Go utilities that use staaldraad awesome NTLM library"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

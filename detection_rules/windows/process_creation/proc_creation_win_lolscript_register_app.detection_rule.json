@@ -1,0 +1,61 @@
+{
+  "rule_id": "28c8f68b-098d-45af-8d43-8089f3e35403",
+  "risk_score": 47,
+  "description": "Detects potential abuse of the \"register_app.vbs\" script that is part of the Windows SDK. The script offers the capability to register new VSS/VDS Provider as a COM+ application. Attackers can use this to install malicious DLLs for persistence and execution.",
+  "name": "Potential Register_App.Vbs LOLScript Abuse",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "process.command_line:*.vbs\\ \\-register\\ * AND ((process.executable:(*\\\\cscript.exe OR *\\\\wscript.exe)) OR (process.pe.original_file_name:(cscript.exe OR wscript.exe)))",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.defense-evasion",
+    "attack.t1218"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Austin Songer @austinsonger"
+  ],
+  "false_positives": [
+    "Other VB scripts that leverage the same starting command line flags"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

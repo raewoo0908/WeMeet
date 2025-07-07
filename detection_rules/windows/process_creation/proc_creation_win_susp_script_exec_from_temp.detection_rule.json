@@ -1,0 +1,61 @@
+{
+  "rule_id": "a6a39bdb-935c-4f0a-ab77-35f4bbf44d33",
+  "risk_score": 73,
+  "description": "Detects a suspicious script executions from temporary folder",
+  "name": "Suspicious Script Execution From Temp Folder",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "((process.command_line:(*\\\\Windows\\\\Temp* OR *\\\\Temporary\\ Internet* OR *\\\\AppData\\\\Local\\\\Temp* OR *\\\\AppData\\\\Roaming\\\\Temp* OR *%TEMP%* OR *%TMP%* OR *%LocalAppData%\\\\Temp*)) AND (process.executable:(*\\\\powershell.exe OR *\\\\pwsh.exe OR *\\\\mshta.exe OR *\\\\wscript.exe OR *\\\\cscript.exe))) AND (NOT (process.command_line:(*\\ \\>* OR *Out\\-File* OR *ConvertTo\\-Json* OR *\\-WindowStyle\\ hidden\\ \\-Verb\\ runAs* OR *\\\\Windows\\\\system32\\\\config\\\\systemprofile\\\\AppData\\\\Local\\\\Temp\\\\Amazon\\\\EC2\\-Windows\\\\*)))",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.execution",
+    "attack.t1059"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Florian Roth (Nextron Systems), Max Altgelt (Nextron Systems), Tim Shelton"
+  ],
+  "false_positives": [
+    "Administrative scripts"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

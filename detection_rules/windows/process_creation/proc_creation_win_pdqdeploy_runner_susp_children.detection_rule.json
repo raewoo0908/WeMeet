@@ -1,0 +1,60 @@
+{
+  "rule_id": "12b8e9f5-96b2-41e1-9a42-8c6779a5c184",
+  "risk_score": 47,
+  "description": "Detects suspicious execution of \"PDQDeployRunner\" which is part of the PDQDeploy service stack that is responsible for executing commands and packages on a remote machines",
+  "name": "Potentially Suspicious Execution Of PDQDeployRunner",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "((process.executable:(*\\\\bash.exe OR *\\\\certutil.exe OR *\\\\cmd.exe OR *\\\\csc.exe OR *\\\\cscript.exe OR *\\\\dllhost.exe OR *\\\\mshta.exe OR *\\\\msiexec.exe OR *\\\\regsvr32.exe OR *\\\\rundll32.exe OR *\\\\scriptrunner.exe OR *\\\\wmic.exe OR *\\\\wscript.exe OR *\\\\wsl.exe)) OR (process.executable:(*\\:\\\\ProgramData\\\\* OR *\\:\\\\Users\\\\Public\\\\* OR *\\:\\\\Windows\\\\TEMP\\\\* OR *\\\\AppData\\\\Local\\\\Temp*)) OR (process.command_line:(*\\ \\-decode\\ * OR *\\ \\-enc\\ * OR *\\ \\-encodedcommand\\ * OR *\\ \\-w\\ hidden* OR *DownloadString* OR *FromBase64String* OR *http* OR *iex\\ * OR *Invoke\\-*))) AND process.parent.executable:*\\\\PDQDeployRunner\\-*",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.execution"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Nasreddine Bencherchali (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Legitimate use of the PDQDeploy tool to execute these commands"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

@@ -1,0 +1,50 @@
+{
+  "rule_id": "4c4af3cd-2115-479c-8193-6b8bfce9001c",
+  "risk_score": 47,
+  "description": "Detects Exfiltration Over Alternative Protocol - ICMP. Adversaries may steal data by exfiltrating it over an un-encrypted network protocol other than that of the existing command and control channel.",
+  "name": "PowerShell ICMP Exfiltration",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "powershell.file.script_block_text:*New\\-Object* AND powershell.file.script_block_text:*System.Net.NetworkInformation.Ping* AND powershell.file.script_block_text:*.Send\\(*",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.exfiltration",
+    "attack.t1048.003"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Bartlomiej Czyz @bczyz1, oscd.community"
+  ],
+  "false_positives": [
+    "Legitimate usage of System.Net.NetworkInformation.Ping class"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

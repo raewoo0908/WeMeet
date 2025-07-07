@@ -1,0 +1,61 @@
+{
+  "rule_id": "e32f92d1-523e-49c3-9374-bdb13b46a3ba",
+  "risk_score": 73,
+  "description": "Detects suspicious mshta process execution patterns",
+  "name": "Suspicious Mshta.EXE Execution Patterns",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "((process.executable:*\\\\mshta.exe OR process.pe.original_file_name:MSHTA.EXE) AND ((process.command_line:(*\\\\AppData\\\\Local\\\\* OR *C\\:\\\\ProgramData\\\\* OR *C\\:\\\\Users\\\\Public\\\\* OR *C\\:\\\\Windows\\\\Temp\\\\*)) AND (process.parent.executable:(*\\\\cmd.exe OR *\\\\cscript.exe OR *\\\\powershell.exe OR *\\\\pwsh.exe OR *\\\\regsvr32.exe OR *\\\\rundll32.exe OR *\\\\wscript.exe)))) OR ((process.executable:*\\\\mshta.exe OR process.pe.original_file_name:MSHTA.EXE) AND (NOT ((process.executable:(C\\:\\\\Windows\\\\System32\\\\* OR C\\:\\\\Windows\\\\SysWOW64\\\\*)) OR (process.command_line:(*.htm* OR *.hta*)) OR (process.command_line:(*mshta.exe OR *mshta)))))",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.execution",
+    "attack.t1106"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Florian Roth (Nextron Systems), Nasreddine Bencherchali (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

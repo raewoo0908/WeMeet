@@ -1,0 +1,50 @@
+{
+  "rule_id": "63647769-326d-4dde-a419-b925cc0caf42",
+  "risk_score": 47,
+  "description": "Enable Dynamic Data Exchange protocol (DDE) in all supported editions of Microsoft Word or Excel.",
+  "name": "Enable Microsoft Dynamic Data Exchange",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "(winlog.event_data.Details:DWORD\\ \\(0x00000000\\) AND (registry.path:(*\\\\Excel\\\\Security\\\\DisableDDEServerLaunch OR *\\\\Excel\\\\Security\\\\DisableDDEServerLookup))) OR ((winlog.event_data.Details:(DWORD\\ \\(0x00000001\\) OR DWORD\\ \\(0x00000002\\))) AND registry.path:*\\\\Word\\\\Security\\\\AllowDDE)",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.execution",
+    "attack.t1559.002"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "frack113"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

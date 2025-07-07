@@ -1,0 +1,50 @@
+{
+  "rule_id": "a2e5019d-a658-4c6a-92bf-7197b54e2cae",
+  "risk_score": 73,
+  "description": "Detects powershell script installed as a Service",
+  "name": "PowerShell Scripts Installed as Services",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "winlog.channel:System AND (event.code:7045 AND (winlog.event_data.ImagePath:(*powershell* OR *pwsh*)) AND winlog.provider_name:Service\\ Control\\ Manager)",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.execution",
+    "attack.t1569.002"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "oscd.community, Natalia Shornikova"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

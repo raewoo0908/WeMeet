@@ -1,0 +1,62 @@
+{
+  "rule_id": "af77cf95-c469-471c-b6a0-946c685c4798",
+  "risk_score": 73,
+  "description": "Detects the use of the Windows Update Client binary (wuauclt.exe) for proxy execution.",
+  "name": "Proxy Execution Via Wuauclt.EXE",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "((process.command_line:*UpdateDeploymentProvider* AND process.command_line:*RunHandlerComServer*) AND (process.executable:*\\\\wuauclt.exe OR process.pe.original_file_name:wuauclt.exe)) AND (NOT (process.command_line:*\\ \\/UpdateDeploymentProvider\\ UpdateDeploymentProvider.dll\\ * OR (process.command_line:(*\\:\\\\Windows\\\\UUS\\\\Packages\\\\Preview\\\\amd64\\\\updatedeploy.dll\\ \\/ClassId* OR *\\:\\\\Windows\\\\UUS\\\\amd64\\\\UpdateDeploy.dll\\ \\/ClassId*)) OR (process.command_line:*\\:\\\\Windows\\\\WinSxS\\\\* AND process.command_line:*\\\\UpdateDeploy.dll\\ \\/ClassId\\ *) OR process.command_line:*\\ wuaueng.dll\\ *))",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.defense-evasion",
+    "attack.t1218",
+    "attack.execution"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Roberto Rodriguez (Cyb3rWard0g), OTR (Open Threat Research), Florian Roth (Nextron Systems), Sreeman, FPT.EagleEye Team"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

@@ -1,0 +1,60 @@
+{
+  "rule_id": "9f8fc146-1d1a-4dbf-b8fd-dfae15e08541",
+  "risk_score": 47,
+  "description": "Detects execution of the SharpLDAPmonitor. Which can monitor the creation, deletion and changes to LDAP objects.",
+  "name": "HackTool - SharpLDAPmonitor Execution",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "(process.command_line:*\\/user\\:* AND process.command_line:*\\/pass\\:* AND process.command_line:*\\/dcip\\:*) OR (process.executable:*\\\\SharpLDAPmonitor.exe OR process.pe.original_file_name:SharpLDAPmonitor.exe)",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.discovery"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Nasreddine Bencherchali (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

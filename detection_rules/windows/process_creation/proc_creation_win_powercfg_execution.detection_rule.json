@@ -1,0 +1,60 @@
+{
+  "rule_id": "f8d6a15e-4bc8-4c27-8e5d-2b10f0b73e5b",
+  "risk_score": 47,
+  "description": "Detects suspicious execution of 'Powercfg.exe' to change lock screen timeout",
+  "name": "Suspicious Powercfg Execution To Change Lock Screen Timeout",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "(process.executable:*\\\\powercfg.exe OR process.pe.original_file_name:PowerCfg.exe) AND ((process.command_line:*\\/setacvalueindex\\ * AND process.command_line:*SCHEME_CURRENT* AND process.command_line:*SUB_VIDEO* AND process.command_line:*VIDEOCONLOCK*) OR (process.command_line:*\\-change\\ * AND process.command_line:*\\-standby\\-timeout\\-*))",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.defense-evasion"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "frack113"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

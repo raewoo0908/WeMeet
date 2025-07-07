@@ -1,0 +1,49 @@
+{
+  "rule_id": "ee77a5db-b0f3-4be2-bfd4-b58be1c6b15a",
+  "risk_score": 73,
+  "description": "Detects tampering with attachment manager settings policies attachments (See reference for more information)",
+  "name": "Potential Attachment Manager Settings Attachments Tamper",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "registry.path:*\\\\SOFTWARE\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Policies\\\\Attachments\\\\* AND ((winlog.event_data.Details:DWORD\\ \\(0x00000001\\) AND registry.path:*\\\\HideZoneInfoOnProperties) OR (winlog.event_data.Details:DWORD\\ \\(0x00000002\\) AND registry.path:*\\\\SaveZoneInformation) OR (winlog.event_data.Details:DWORD\\ \\(0x00000001\\) AND registry.path:*\\\\ScanWithAntiVirus))",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.defense-evasion"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Nasreddine Bencherchali (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Unlikely"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

@@ -1,0 +1,50 @@
+{
+  "rule_id": "790317c0-0a36-4a6a-a105-6e576bf99a14",
+  "risk_score": 73,
+  "description": "Detects potential COM object hijacking via modification of default system CLSID.",
+  "name": "COM Object Hijacking Via Modification Of Default System CLSID Default Value",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "((registry.path:(*\\\\\\{1f486a52\\-3cb1\\-48fd\\-8f50\\-b8dc300d9f9d\\}\\\\* OR *\\\\\\{2155fee3\\-2419\\-4373\\-b102\\-6843707eb41f\\}\\\\* OR *\\\\\\{4590f811\\-1d3a\\-11d0\\-891f\\-00aa004b2e24\\}\\\\* OR *\\\\\\{4de225bf\\-cf59\\-4cfc\\-85f7\\-68b90f185355\\}\\\\* OR *\\\\\\{ddc05a5a\\-351a\\-4e06\\-8eaf\\-54ec1bc2dcea\\}\\\\* OR *\\\\\\{F56F6FDD\\-AA9D\\-4618\\-A949\\-C1B91AF43B1A\\}\\\\* OR *\\\\\\{F82B4EF1\\-93A9\\-4DDE\\-8015\\-F7950A1A6E31\\}\\\\* OR *\\\\\\{7849596a\\-48ea\\-486e\\-8937\\-a2a3009f31a9\\}\\\\* OR *\\\\\\{0b91a74b\\-ad7c\\-4a9d\\-b563\\-29eef9167172\\}\\\\* OR *\\\\\\{603D3801\\-BD81\\-11d0\\-A3A5\\-00C04FD706EC\\}\\\\* OR *\\\\\\{30D49246\\-D217\\-465F\\-B00B\\-AC9DDD652EB7\\}\\\\*)) AND (registry.path:*\\\\CLSID\\\\* AND (registry.path:(*\\\\InprocServer32\\\\\\(Default\\) OR *\\\\LocalServer32\\\\\\(Default\\))))) AND ((winlog.event_data.Details:(*\\:\\\\Perflogs\\\\* OR *\\\\AppData\\\\Local\\\\* OR *\\\\Desktop\\\\* OR *\\\\Downloads\\\\* OR *\\\\Microsoft\\\\Windows\\\\Start\\ Menu\\\\Programs\\\\Startup\\\\* OR *\\\\System32\\\\spool\\\\drivers\\\\color\\\\* OR *\\\\Temporary\\ Internet* OR *\\\\Users\\\\Public\\\\* OR *\\\\Windows\\\\Temp\\\\* OR *%appdata%* OR *%temp%* OR *%tmp%*)) OR ((winlog.event_data.Details:*\\:\\\\Users\\\\* AND winlog.event_data.Details:*\\\\Favorites\\\\*) OR (winlog.event_data.Details:*\\:\\\\Users\\\\* AND winlog.event_data.Details:*\\\\Favourites\\\\*) OR (winlog.event_data.Details:*\\:\\\\Users\\\\* AND winlog.event_data.Details:*\\\\Contacts\\\\*) OR (winlog.event_data.Details:*\\:\\\\Users\\\\* AND winlog.event_data.Details:*\\\\Pictures\\\\*)))",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.persistence",
+    "attack.t1546.015"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Nasreddine Bencherchali (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Unlikely"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

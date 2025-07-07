@@ -1,0 +1,51 @@
+{
+  "rule_id": "a80f662f-022f-4429-9b8c-b1a41aaa6688",
+  "risk_score": 47,
+  "description": "Detects modification of autostart extensibility point (ASEP) in registry.",
+  "name": "Internet Explorer Autorun Keys Modification",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "(registry.path:(*\\\\Software\\\\Wow6432Node\\\\Microsoft\\\\Internet\\ Explorer* OR *\\\\Software\\\\Microsoft\\\\Internet\\ Explorer*)) AND (registry.path:(*\\\\Toolbar* OR *\\\\Extensions* OR *\\\\Explorer\\ Bars*)) AND (NOT (winlog.event_data.Details:\\(Empty\\) OR (registry.path:(*\\\\Extensions\\\\\\{2670000A\\-7350\\-4f3c\\-8081\\-5663EE0C6C49\\}* OR *\\\\Extensions\\\\\\{31D09BA0\\-12F5\\-4CCE\\-BE8A\\-2923E76605DA\\}* OR *\\\\Extensions\\\\\\{789FE86F\\-6FC4\\-46A1\\-9849\\-EDE0DB0C95CA\\}* OR *\\\\Extensions\\\\\\{A95fe080\\-8f5d\\-11d2\\-a20b\\-00aa003c157a\\}*)) OR (registry.path:(*\\\\Toolbar\\\\ShellBrowser\\\\ITBar7Layout OR *\\\\Toolbar\\\\ShowDiscussionButton OR *\\\\Toolbar\\\\Locked))))",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.persistence",
+    "attack.t1547.001"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Victor Sergeev, Daniil Yugoslavskiy, Gleb Sukhodolskiy, Timur Zinniatullin, oscd.community, Tim Shelton, frack113 (split)"
+  ],
+  "false_positives": [
+    "Legitimate software automatically (mostly, during installation) sets up autorun keys for legitimate reason",
+    "Legitimate administrator sets up autorun keys for legitimate reason"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

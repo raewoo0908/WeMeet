@@ -1,0 +1,70 @@
+{
+  "rule_id": "42a993dd-bb3e-48c8-b372-4d6684c4106c",
+  "risk_score": 73,
+  "description": "This rule detect common flag combinations used by CrackMapExec in order to detect its use even if the binary has been replaced.",
+  "name": "HackTool - CrackMapExec Execution",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "(process.executable:*\\\\crackmapexec.exe OR (process.command_line:*\\ \\-\\-local\\-auth* AND process.command_line:*\\ \\-u\\ * AND process.command_line:*\\ \\-x\\ *) OR (process.command_line:*\\ \\-\\-local\\-auth* AND process.command_line:*\\ \\-u\\ * AND process.command_line:*\\ \\-p\\ * AND process.command_line:*\\ \\-H\\ 'NTHASH'*) OR (process.command_line:*\\ mssql\\ * AND process.command_line:*\\ \\-u\\ * AND process.command_line:*\\ \\-p\\ * AND process.command_line:*\\ \\-M\\ * AND process.command_line:*\\ \\-d\\ *) OR (process.command_line:*\\ smb\\ * AND process.command_line:*\\ \\-u\\ * AND process.command_line:*\\ \\-H\\ * AND process.command_line:*\\ \\-M\\ * AND process.command_line:*\\ \\-o\\ *) OR (process.command_line:*\\ smb\\ * AND process.command_line:*\\ \\-u\\ * AND process.command_line:*\\ \\-p\\ * AND process.command_line:*\\ \\-\\-local\\-auth*) OR process.command_line:*\\ \\-M\\ pe_inject\\ *) OR ((process.command_line:*\\ \\-\\-local\\-auth* AND process.command_line:*\\ \\-u\\ * AND process.command_line:*\\ \\-p\\ *) AND (process.command_line:*\\ 10.* AND process.command_line:*\\ 192.168.* AND process.command_line:*\\/24\\ *))",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.execution",
+    "attack.persistence",
+    "attack.privilege-escalation",
+    "attack.credential-access",
+    "attack.discovery",
+    "attack.t1047",
+    "attack.t1053",
+    "attack.t1059.003",
+    "attack.t1059.001",
+    "attack.t1110",
+    "attack.t1201"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Florian Roth (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

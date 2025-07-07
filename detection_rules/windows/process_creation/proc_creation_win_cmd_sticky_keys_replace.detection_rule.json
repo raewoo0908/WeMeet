@@ -1,0 +1,61 @@
+{
+  "rule_id": "1070db9a-3e5d-412e-8e7b-7183b616e1b3",
+  "risk_score": 99,
+  "description": "By replacing the sticky keys executable with the local admins CMD executable, an attacker is able to access a privileged windows console session without authenticating to the system.\nWhen the sticky keys are \"activated\" the privilleged shell is launched.\n",
+  "name": "Persistence Via Sticky Key Backdoor",
+  "severity": "critical",
+  "type": "query",
+  "language": "lucene",
+  "query": "process.command_line:*copy\\ * AND process.command_line:*\\/y\\ * AND process.command_line:*C\\:\\\\windows\\\\system32\\\\cmd.exe\\ C\\:\\\\windows\\\\system32\\\\sethc.exe*",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.t1546.008",
+    "attack.privilege-escalation"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Sreeman"
+  ],
+  "false_positives": [
+    "Unlikely"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

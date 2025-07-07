@@ -1,0 +1,61 @@
+{
+  "rule_id": "48917adc-a28e-4f5d-b729-11e75da8941f",
+  "risk_score": 47,
+  "description": "Detects the usage of \"reg.exe\" to add Defender folder exclusions. Qbot has been seen using this technique to add exclusions for folders within AppData and ProgramData.",
+  "name": "Suspicious Windows Defender Folder Exclusion Added Via Reg.EXE",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "(process.command_line:(*SOFTWARE\\\\Microsoft\\\\Windows\\ Defender\\\\Exclusions\\\\Paths* OR *SOFTWARE\\\\Microsoft\\\\Microsoft\\ Antimalware\\\\Exclusions\\\\Paths*)) AND (process.command_line:*ADD\\ * AND process.command_line:*\\/t\\ * AND process.command_line:*REG_DWORD\\ * AND process.command_line:*\\/v\\ * AND process.command_line:*\\/d\\ * AND process.command_line:*0*) AND process.executable:*\\\\reg.exe",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.defense-evasion",
+    "attack.t1562.001"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "frack113"
+  ],
+  "false_positives": [
+    "Legitimate use"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

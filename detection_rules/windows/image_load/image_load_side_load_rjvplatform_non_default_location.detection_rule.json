@@ -1,0 +1,51 @@
+{
+  "rule_id": "0e0bc253-07ed-43f1-816d-e1b220fe8971",
+  "risk_score": 73,
+  "description": "Detects potential DLL sideloading of \"RjvPlatform.dll\" by \"SystemResetPlatform.exe\" located in a non-default location.",
+  "name": "Potential RjvPlatform.DLL Sideloading From Non-Default Location",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "(process.executable:\\\\SystemResetPlatform.exe AND file.path:*\\\\RjvPlatform.dll) AND (NOT process.executable:C\\:\\\\Windows\\\\System32\\\\SystemResetPlatform\\\\*)",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.defense-evasion",
+    "attack.privilege-escalation",
+    "attack.t1574.001"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "X__Junior (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Unlikely"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

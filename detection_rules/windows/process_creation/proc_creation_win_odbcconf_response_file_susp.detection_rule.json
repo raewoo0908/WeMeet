@@ -1,0 +1,61 @@
+{
+  "rule_id": "2d32dd6f-3196-4093-b9eb-1ad8ab088ca5",
+  "risk_score": 73,
+  "description": "Detects execution of \"odbcconf\" with the \"-f\" flag in order to load a response file with a non-\".rsp\" extension.",
+  "name": "Suspicious Response File Execution Via Odbcconf.EXE",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "(process.command_line:(*\\ \\-f\\ * OR *\\ \\/f\\ * OR *\\ –f\\ * OR *\\ —f\\ * OR *\\ ―f\\ *) AND (process.executable:*\\\\odbcconf.exe OR process.pe.original_file_name:odbcconf.exe)) AND (NOT (process.command_line:*.rsp* OR (process.command_line:*.exe\\ \\/E\\ \\/F\\ \\\"C\\:\\\\WINDOWS\\\\system32\\\\odbcconf.tmp\\\"* AND process.executable:C\\:\\\\Windows\\\\System32\\\\odbcconf.exe AND process.parent.executable:C\\:\\\\Windows\\\\System32\\\\runonce.exe)))",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.defense-evasion",
+    "attack.t1218.008"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Nasreddine Bencherchali (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Unlikely"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

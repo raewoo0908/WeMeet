@@ -1,0 +1,61 @@
+{
+  "rule_id": "1114e048-b69c-4f41-bc20-657245ae6e3f",
+  "risk_score": 47,
+  "description": "Detects usage of the Get-ADUser cmdlet to collect user information and output it to a file",
+  "name": "User Discovery And Export Via Get-ADUser Cmdlet",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "((process.command_line:(*\\ \\>\\ * OR *\\ \\|\\ Select\\ * OR *Out\\-File* OR *Set\\-Content* OR *Add\\-Content*)) AND (process.command_line:*Get\\-ADUser\\ * AND process.command_line:*\\ \\-Filter\\ \\**)) AND ((process.executable:(*\\\\powershell.exe OR *\\\\pwsh.exe)) OR (process.pe.original_file_name:(PowerShell.EXE OR pwsh.dll)))",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.discovery",
+    "attack.t1033"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Nasreddine Bencherchali (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Legitimate admin scripts may use the same technique, it's better to exclude specific computers or users who execute these commands or scripts often"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

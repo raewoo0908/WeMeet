@@ -1,0 +1,50 @@
+{
+  "rule_id": "8d31a8ce-46b5-4dd6-bdc3-680931f1db86",
+  "risk_score": 99,
+  "description": "focuses on trivial artifacts observed in variants of prevalent offensive ps1 payloads, including\nCobalt Strike Beacon, PoshC2, Powerview, Letmein, Empire, Powersploit, and other attack payloads\nthat often undergo minimal changes by attackers due to bad opsec.\n",
+  "name": "Bad Opsec Powershell Code Artifacts",
+  "severity": "critical",
+  "type": "query",
+  "language": "lucene",
+  "query": "Payload:(*$DoIt* OR *harmj0y* OR *mattifestation* OR *_RastaMouse* OR *tifkin_* OR *0xdeadbeef*)",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.execution",
+    "attack.t1059.001"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "ok @securonix invrep_de, oscd.community"
+  ],
+  "false_positives": [
+    "Moderate-to-low; Despite the shorter length/lower entropy for some of these, because of high specificity, fp appears to be fairly limited in many environments."
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

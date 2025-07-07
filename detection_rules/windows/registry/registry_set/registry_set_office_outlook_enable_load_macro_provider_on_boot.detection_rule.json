@@ -1,0 +1,53 @@
+{
+  "rule_id": "396ae3eb-4174-4b9b-880e-dc0364d78a19",
+  "risk_score": 73,
+  "description": "Detects the modification of Outlook setting \"LoadMacroProviderOnBoot\" which if enabled allows the automatic loading of any configured VBA project/module",
+  "name": "Potential Persistence Via Outlook LoadMacroProviderOnBoot Setting",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "winlog.event_data.Details:*0x00000001* AND registry.path:*\\\\Outlook\\\\LoadMacroProviderOnBoot",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.persistence",
+    "attack.command-and-control",
+    "attack.t1137",
+    "attack.t1008",
+    "attack.t1546"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Nasreddine Bencherchali (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

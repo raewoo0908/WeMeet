@@ -1,0 +1,50 @@
+{
+  "rule_id": "f3a98ce4-6164-4dd4-867c-4d83de7eca51",
+  "risk_score": 73,
+  "description": "Detects TOKEN OBFUSCATION technique from Invoke-Obfuscation",
+  "name": "Powershell Token Obfuscation - Powershell",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "(powershell.file.script_block_text:/\\w+`(\\w+|-|.)`[\\w+|\\s]/ OR powershell.file.script_block_text:/\"(\\{\\d\\}){2,}\"\\s*-f/ OR powershell.file.script_block_text:/(?i)\\$\\{`?e`?n`?v`?:`?p`?a`?t`?h`?\\}/) AND (NOT ((powershell.file.script_block_text:(*it\\ will\\ return\\ true\\ or\\ false\\ instead* OR *The\\ function\\ also\\ prevents\\ `Get\\-ItemProperty`\\ from\\ failing*)) OR powershell.file.script_block_text:*$\\{env\\:path\\}* OR (winlog.event_data.Path:*\\\\bin\\\\servicecontrol.ps1 AND winlog.event_data.Path:C\\:\\\\Program\\ Files\\\\Microsoft\\\\Exchange\\ Server\\\\* AND powershell.file.script_block_text:*`r`n*)))",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.defense-evasion",
+    "attack.t1027.009"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "frack113"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

@@ -1,0 +1,61 @@
+{
+  "rule_id": "e4ed6030-ffe5-4e6a-8a8a-ab3c1ab9d94e",
+  "risk_score": 73,
+  "description": "Disables HTTP logging on a Windows IIS web server as seen by Threat Group 3390 (Bronze Union)",
+  "name": "Disable Windows IIS HTTP Logging",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "(process.command_line:*set* AND process.command_line:*config* AND process.command_line:*section\\:httplogging* AND process.command_line:*dontLog\\:true*) AND (process.executable:*\\\\appcmd.exe OR process.pe.original_file_name:appcmd.exe)",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.defense-evasion",
+    "attack.t1562.002"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "frack113"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

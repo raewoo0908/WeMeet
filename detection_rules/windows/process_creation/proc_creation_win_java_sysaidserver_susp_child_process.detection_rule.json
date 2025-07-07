@@ -1,0 +1,61 @@
+{
+  "rule_id": "60bfeac3-0d35-4302-8efb-1dd16f715bc6",
+  "risk_score": 47,
+  "description": "Detects suspicious child processes of SysAidServer (as seen in MERCURY threat actor intrusions)",
+  "name": "Suspicious SysAidServer Child",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "process.parent.command_line:*SysAidServer* AND (process.parent.executable:(*\\\\java.exe OR *\\\\javaw.exe))",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.lateral-movement",
+    "attack.t1210"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Florian Roth (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

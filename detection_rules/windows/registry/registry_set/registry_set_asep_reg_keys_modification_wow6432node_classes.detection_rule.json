@@ -1,0 +1,51 @@
+{
+  "rule_id": "18f2065c-d36c-464a-a748-bcf909acb2e3",
+  "risk_score": 47,
+  "description": "Detects modification of autostart extensibility point (ASEP) in registry.",
+  "name": "Wow6432Node Classes Autorun Keys Modification",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "registry.path:*\\\\Software\\\\Wow6432Node\\\\Classes* AND (registry.path:(*\\\\Folder\\\\ShellEx\\\\ExtShellFolderViews* OR *\\\\Folder\\\\ShellEx\\\\DragDropHandlers* OR *\\\\Folder\\\\ShellEx\\\\ColumnHandlers* OR *\\\\Directory\\\\Shellex\\\\DragDropHandlers* OR *\\\\Directory\\\\Shellex\\\\CopyHookHandlers* OR *\\\\CLSID\\\\\\{AC757296\\-3522\\-4E11\\-9862\\-C17BE5A1767E\\}\\\\Instance* OR *\\\\CLSID\\\\\\{ABE3B9A4\\-257D\\-4B97\\-BD1A\\-294AF496222E\\}\\\\Instance* OR *\\\\CLSID\\\\\\{7ED96837\\-96F0\\-4812\\-B211\\-F13C24117ED3\\}\\\\Instance* OR *\\\\CLSID\\\\\\{083863F1\\-70DE\\-11d0\\-BD40\\-00A0C911CE86\\}\\\\Instance* OR *\\\\AllFileSystemObjects\\\\ShellEx\\\\DragDropHandlers* OR *\\\\ShellEx\\\\PropertySheetHandlers* OR *\\\\ShellEx\\\\ContextMenuHandlers*)) AND (NOT winlog.event_data.Details:\\(Empty\\))",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.persistence",
+    "attack.t1547.001"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Victor Sergeev, Daniil Yugoslavskiy, Gleb Sukhodolskiy, Timur Zinniatullin, oscd.community, Tim Shelton, frack113 (split)"
+  ],
+  "false_positives": [
+    "Legitimate software automatically (mostly, during installation) sets up autorun keys for legitimate reason",
+    "Legitimate administrator sets up autorun keys for legitimate reason"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

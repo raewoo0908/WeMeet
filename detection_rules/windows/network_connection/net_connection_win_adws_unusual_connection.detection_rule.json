@@ -1,0 +1,61 @@
+{
+  "rule_id": "b3ad3c0f-c949-47a1-a30e-b0491ccae876",
+  "risk_score": 47,
+  "description": "Detects uncommon network connections to the Active Directory Web Services (ADWS) from processes not typically associated with ADWS management.\n",
+  "name": "Uncommon Connection to Active Directory Web Services",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "(destination.port:9389 AND network.direction:true) AND (NOT (process.executable:C\\:\\\\Windows\\\\system32\\\\dsac.exe OR process.executable:C\\:\\\\Program\\ Files\\\\Microsoft\\ Monitoring\\ Agent\\\\ OR (process.executable:(C\\:\\\\Program\\ Files\\\\PowerShell\\\\7\\\\pwsh.exe* OR C\\:\\\\Program\\ Files\\\\PowerShell\\\\7\\-preview\\\\pwsh.ex* OR C\\:\\\\Windows\\\\System32\\\\WindowsPowerShell\\\\* OR C\\:\\\\Windows\\\\SysWOW64\\\\WindowsPowerShell\\\\*))))",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Network connection detected (rule: NetworkConnect)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.discovery",
+    "attack.t1087"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "@kostastsale"
+  ],
+  "false_positives": [
+    "ADWS is used by a number of legitimate applications that need to interact with Active Directory. These applications should be added to the allow-listing to avoid false positives."
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

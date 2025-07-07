@@ -1,0 +1,60 @@
+{
+  "rule_id": "0f16d9cf-0616-45c8-8fad-becc11b5a41c",
+  "risk_score": 47,
+  "description": "Detects execution of a renamed autohotkey.exe binary based on PE metadata fields",
+  "name": "Renamed AutoHotkey.EXE Execution",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "(process.pe.product:*AutoHotkey* OR process.pe.description:*AutoHotkey* OR (process.pe.original_file_name:(AutoHotkey.exe OR AutoHotkey.rc))) AND (NOT ((process.executable:(*\\\\AutoHotkey.exe OR *\\\\AutoHotkey32.exe OR *\\\\AutoHotkey32_UIA.exe OR *\\\\AutoHotkey64.exe OR *\\\\AutoHotkey64_UIA.exe OR *\\\\AutoHotkeyA32.exe OR *\\\\AutoHotkeyA32_UIA.exe OR *\\\\AutoHotkeyU32.exe OR *\\\\AutoHotkeyU32_UIA.exe OR *\\\\AutoHotkeyU64.exe OR *\\\\AutoHotkeyU64_UIA.exe)) OR process.executable:*\\\\AutoHotkey*))",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.defense-evasion"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Nasreddine Bencherchali"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

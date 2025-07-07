@@ -1,0 +1,61 @@
+{
+  "rule_id": "47e4bab7-c626-47dc-967b-255608c9a920",
+  "risk_score": 47,
+  "description": "Detects usage of findstr with the \"EVERYONE\" or \"BUILTIN\" keywords.\nThis was seen being used in combination with \"icacls\" and other utilities to spot misconfigured files or folders permissions.\n",
+  "name": "Permission Misconfiguration Reconnaissance Via Findstr.EXE",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "((process.command_line:(*\\\"Everyone\\\"* OR *'Everyone'* OR *\\\"BUILTIN\\\\\\\"* OR *'BUILTIN\\\\'*)) AND ((process.executable:(*\\\\find.exe OR *\\\\findstr.exe)) OR (process.pe.original_file_name:(FIND.EXE OR FINDSTR.EXE)))) OR (process.command_line:*icacls\\ * AND process.command_line:*findstr\\ * AND process.command_line:*Everyone*)",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.credential-access",
+    "attack.t1552.006"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Nasreddine Bencherchali (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

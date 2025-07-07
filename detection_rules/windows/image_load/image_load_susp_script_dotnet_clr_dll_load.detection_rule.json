@@ -1,0 +1,51 @@
+{
+  "rule_id": "4508a70e-97ef-4300-b62b-ff27992990ea",
+  "risk_score": 73,
+  "description": "Detects .NET CLR DLLs being loaded by scripting applications such as wscript or cscript. This could be an indication of potential suspicious execution.",
+  "name": "DotNet CLR DLL Loaded By Scripting Applications",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "(file.path:(*\\\\clr.dll OR *\\\\mscoree.dll OR *\\\\mscorlib.dll)) AND (process.executable:(*\\\\cmstp.exe OR *\\\\cscript.exe OR *\\\\mshta.exe OR *\\\\msxsl.exe OR *\\\\regsvr32.exe OR *\\\\wmic.exe OR *\\\\wscript.exe))",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.execution",
+    "attack.privilege-escalation",
+    "attack.t1055"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "omkar72, oscd.community"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

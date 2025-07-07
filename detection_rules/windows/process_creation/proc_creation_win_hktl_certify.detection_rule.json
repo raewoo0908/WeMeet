@@ -1,0 +1,62 @@
+{
+  "rule_id": "762f2482-ff21-4970-8939-0aa317a886bb",
+  "risk_score": 73,
+  "description": "Detects Certify a tool for Active Directory certificate abuse based on PE metadata characteristics and common command line arguments.",
+  "name": "HackTool - Certify Execution",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "(process.executable:*\\\\Certify.exe OR process.pe.original_file_name:Certify.exe OR process.pe.description:*Certify*) OR ((process.command_line:(*.exe\\ cas\\ * OR *.exe\\ find\\ * OR *.exe\\ pkiobjects\\ * OR *.exe\\ request\\ * OR *.exe\\ download\\ *)) AND (process.command_line:(*\\ \\/vulnerable* OR *\\ \\/template\\:* OR *\\ \\/altname\\:* OR *\\ \\/domain\\:* OR *\\ \\/path\\:* OR *\\ \\/ca\\:*)))",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.discovery",
+    "attack.credential-access",
+    "attack.t1649"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "pH-T (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

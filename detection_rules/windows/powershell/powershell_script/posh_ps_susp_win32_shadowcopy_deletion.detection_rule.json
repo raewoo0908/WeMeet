@@ -1,0 +1,50 @@
+{
+  "rule_id": "c1337eb8-921a-4b59-855b-4ba188ddcc42",
+  "risk_score": 73,
+  "description": "Detects deletion of Windows Volume Shadow Copies with PowerShell code and Get-WMIObject. This technique is used by numerous ransomware families such as Sodinokibi/REvil",
+  "name": "Deletion of Volume Shadow Copies via WMI with PowerShell - PS Script",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "(powershell.file.script_block_text:(*.Delete\\(\\)* OR *Remove\\-WmiObject* OR *rwmi* OR *Remove\\-CimInstance* OR *rcim*)) AND (powershell.file.script_block_text:(*Get\\-WmiObject* OR *gwmi* OR *Get\\-CimInstance* OR *gcim*)) AND powershell.file.script_block_text:*Win32_ShadowCopy*",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.impact",
+    "attack.t1490"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Tim Rauch, frack113"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

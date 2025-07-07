@@ -1,0 +1,64 @@
+{
+  "rule_id": "2ddef153-167b-4e89-86b6-757a9e65dcac",
+  "risk_score": 73,
+  "description": "Detects usage of bitsadmin downloading a file to a suspicious target folder",
+  "name": "File Download Via Bitsadmin To A Suspicious Target Folder",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "(process.command_line:(*\\ \\/transfer\\ * OR *\\ \\/create\\ * OR *\\ \\/addfile\\ *)) AND (process.command_line:(*\\:\\\\Perflogs* OR *\\:\\\\ProgramData\\\\* OR *\\:\\\\Temp\\\\* OR *\\:\\\\Users\\\\Public\\\\* OR *\\:\\\\Windows\\\\* OR *\\\\AppData\\\\Local\\\\Temp\\\\* OR *\\\\AppData\\\\Roaming\\\\* OR *\\\\Desktop\\\\* OR *%ProgramData%* OR *%public%*)) AND (process.executable:*\\\\bitsadmin.exe OR process.pe.original_file_name:bitsadmin.exe)",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.defense-evasion",
+    "attack.persistence",
+    "attack.t1197",
+    "attack.s0190",
+    "attack.t1036.003"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Florian Roth (Nextron Systems), Nasreddine Bencherchali (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

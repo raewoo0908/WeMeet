@@ -1,0 +1,67 @@
+{
+  "rule_id": "f376c8a7-a2d0-4ddc-aa0c-16c17236d962",
+  "risk_score": 73,
+  "description": "Detects command line parameters used by Bloodhound and Sharphound hack tools",
+  "name": "HackTool - Bloodhound/Sharphound Execution",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "(process.command_line:(*\\ \\-CollectionMethod\\ All\\ * OR *\\ \\-\\-CollectionMethods\\ Session\\ * OR *\\ \\-\\-Loop\\ \\-\\-Loopduration\\ * OR *\\ \\-\\-PortScanTimeout\\ * OR *.exe\\ \\-c\\ All\\ \\-d\\ * OR *Invoke\\-Bloodhound* OR *Get\\-BloodHoundData*)) OR (process.command_line:*\\ \\-JsonFolder\\ * AND process.command_line:*\\ \\-ZipFileName\\ *) OR (process.command_line:*\\ DCOnly\\ * AND process.command_line:*\\ \\-\\-NoSaveCache\\ *) OR (process.pe.product:*SharpHound* OR process.pe.description:*SharpHound* OR (process.pe.company:(*SpecterOps* OR *evil\\ corp*)) OR (process.executable:(*\\\\Bloodhound.exe* OR *\\\\SharpHound.exe*)))",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.discovery",
+    "attack.t1087.001",
+    "attack.t1087.002",
+    "attack.t1482",
+    "attack.t1069.001",
+    "attack.t1069.002",
+    "attack.execution",
+    "attack.t1059.001"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Florian Roth (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Other programs that use these command line option and accepts an 'All' parameter"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

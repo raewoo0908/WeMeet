@@ -1,0 +1,63 @@
+{
+  "rule_id": "c5c00f49-b3f9-45a6-997e-cfdecc6e1967",
+  "risk_score": 73,
+  "description": "Detects the creation of a schtask that executes a file from C:\\Users\\<USER>\\AppData\\Local",
+  "name": "Suspicious Schtasks Execution AppData Folder",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "((process.command_line:(*NT\\ AUT* OR *\\ SYSTEM\\ *)) AND (process.command_line:*\\/Create* AND process.command_line:*\\/RU* AND process.command_line:*\\/TR* AND process.command_line:*C\\:\\\\Users\\\\* AND process.command_line:*\\\\AppData\\\\Local\\\\*) AND process.executable:*\\\\schtasks.exe) AND (NOT (process.command_line:*\\/TN\\ TVInstallRestore* AND process.executable:*\\\\schtasks.exe AND (process.parent.executable:*\\\\AppData\\\\Local\\\\Temp\\\\* AND process.parent.executable:*TeamViewer_.exe*)))",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.execution",
+    "attack.persistence",
+    "attack.t1053.005",
+    "attack.t1059.001"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "pH-T (Nextron Systems), Nasreddine Bencherchali (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

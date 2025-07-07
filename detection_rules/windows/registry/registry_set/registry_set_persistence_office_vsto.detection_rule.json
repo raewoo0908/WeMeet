@@ -1,0 +1,50 @@
+{
+  "rule_id": "9d15044a-7cfe-4d23-8085-6ebc11df7685",
+  "risk_score": 47,
+  "description": "Detects persistence via Visual Studio Tools for Office (VSTO) add-ins in Office applications.",
+  "name": "Potential Persistence Via Visual Studio Tools for Office",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "(registry.path:(*\\\\Software\\\\Microsoft\\\\Office\\\\Outlook\\\\Addins\\\\* OR *\\\\Software\\\\Microsoft\\\\Office\\\\Word\\\\Addins\\\\* OR *\\\\Software\\\\Microsoft\\\\Office\\\\Excel\\\\Addins\\\\* OR *\\\\Software\\\\Microsoft\\\\Office\\\\Powerpoint\\\\Addins\\\\* OR *\\\\Software\\\\Microsoft\\\\VSTO\\\\Security\\\\Inclusion\\\\*)) AND (NOT ((process.executable:C\\:\\\\Program\\ Files\\\\AVG\\\\Antivirus\\\\RegSvr.exe AND registry.path:*\\\\Microsoft\\\\Office\\\\Outlook\\\\Addins\\\\Antivirus.AsOutExt\\\\*) OR (process.executable:(*\\\\msiexec.exe OR *\\\\regsvr32.exe)) OR (process.executable:(*\\\\excel.exe OR *\\\\integrator.exe OR *\\\\OfficeClickToRun.exe OR *\\\\winword.exe OR *\\\\visio.exe)) OR process.executable:*\\\\Teams.exe))",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.t1137.006",
+    "attack.persistence"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Bhabesh Raj"
+  ],
+  "false_positives": [
+    "Legitimate Addin Installation"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

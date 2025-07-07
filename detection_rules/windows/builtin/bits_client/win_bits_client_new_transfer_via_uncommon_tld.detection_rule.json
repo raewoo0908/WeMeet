@@ -1,0 +1,51 @@
+{
+  "rule_id": "6d44fb93-e7d2-475c-9d3d-54c9c1e33427",
+  "risk_score": 47,
+  "description": "Detects a suspicious download using the BITS client from a FQDN that is unusual. Adversaries may abuse BITS jobs to persistently execute or clean up after malicious payloads.",
+  "name": "BITS Transfer Job With Uncommon Or Suspicious Remote TLD",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "winlog.channel:Microsoft\\-Windows\\-Bits\\-Client\\/Operational AND (event.code:16403 AND (NOT (winlog.event_data.RemoteName:(*.azureedge.net\\/* OR *.com\\/* OR *.sfx.ms\\/* OR *download.mozilla.org\\/* OR *cdn.onenote.net\\/* OR *cdn.office.net\\/*))))",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.defense-evasion",
+    "attack.persistence",
+    "attack.t1197"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Florian Roth (Nextron Systems)"
+  ],
+  "false_positives": [
+    "This rule doesn't exclude other known TLDs such as \".org\" or \".net\". It's recommended to apply additional filters for software and scripts that leverage the BITS service"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

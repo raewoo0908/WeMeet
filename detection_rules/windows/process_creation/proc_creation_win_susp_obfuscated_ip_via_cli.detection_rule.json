@@ -1,0 +1,60 @@
+{
+  "rule_id": "56d19cb4-6414-4769-9644-1ed35ffbb148",
+  "risk_score": 47,
+  "description": "Detects usage of an encoded/obfuscated version of an IP address (hex, octal, etc.) via command line",
+  "name": "Obfuscated IP Via CLI",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "(process.executable:(*\\\\ping.exe OR *\\\\arp.exe)) AND ((process.command_line:(*\\ 0x* OR *\\/\\/0x* OR *.0x* OR *.00x*)) OR (process.command_line:*http\\:\\/\\/%* AND process.command_line:*%2e*) OR (process.command_line:/https?:\\/\\/[0-9]{1,3}\\.[0-9]{1,3}\\.0[0-9]{3,4}/ OR process.command_line:/https?:\\/\\/[0-9]{1,3}\\.0[0-9]{3,7}/ OR process.command_line:/https?:\\/\\/0[0-9]{3,11}/ OR process.command_line:/https?:\\/\\/(0[0-9]{1,11}\\.){3}0[0-9]{1,11}/ OR process.command_line:/https?:\\/\\/0[0-9]{1,11}/ OR process.command_line:/ [0-7]{7,13}/)) AND (NOT process.command_line:/https?:\\/\\/((25[0-5]|(2[0-4]|1\\d|[1-9])?\\d)(\\.|\\b)){4}/)",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.discovery"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Nasreddine Bencherchali (Nextron Systems), X__Junior (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

@@ -1,0 +1,62 @@
+{
+  "rule_id": "05c36dd6-79d6-4a9a-97da-3db20298ab2d",
+  "risk_score": 47,
+  "description": "Detects the execution of WMIC with the \"format\" flag to potentially load XSL files.\nAdversaries abuse this functionality to execute arbitrary files while potentially bypassing application whitelisting defenses.\nExtensible Stylesheet Language (XSL) files are commonly used to describe the processing and rendering of data within XML files.\n",
+  "name": "XSL Script Execution Via WMIC.EXE",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "(process.command_line:(*\\-format* OR *\\/format* OR *–format* OR *—format* OR *―format*) AND process.executable:*\\\\wmic.exe) AND (NOT (process.command_line:(*Format\\:List* OR *Format\\:htable* OR *Format\\:hform* OR *Format\\:table* OR *Format\\:mof* OR *Format\\:value* OR *Format\\:rawxml* OR *Format\\:xml* OR *Format\\:csv*)))",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.defense-evasion",
+    "attack.t1220"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Timur Zinniatullin, oscd.community, Swachchhanda Shrawan Poudel"
+  ],
+  "false_positives": [
+    "WMIC.exe FP depend on scripts and administrative methods used in the monitored environment.",
+    "Static format arguments - https://petri.com/command-line-wmi-part-3"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

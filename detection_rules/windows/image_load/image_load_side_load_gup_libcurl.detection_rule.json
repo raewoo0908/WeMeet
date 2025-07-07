@@ -1,0 +1,52 @@
+{
+  "rule_id": "e49b5745-1064-4ac1-9a2e-f687bc2dd37e",
+  "risk_score": 47,
+  "description": "Detects potential DLL sideloading of \"libcurl.dll\" by the \"gup.exe\" process from an uncommon location",
+  "name": "Potential DLL Sideloading Of Libcurl.DLL Via GUP.EXE",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "(file.path:*\\\\libcurl.dll AND process.executable:*\\\\gup.exe) AND (NOT process.executable:*\\\\Notepad\\+\\+\\\\updater\\\\GUP.exe)",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.defense-evasion",
+    "attack.persistence",
+    "attack.privilege-escalation",
+    "attack.t1574.001"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Nasreddine Bencherchali (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

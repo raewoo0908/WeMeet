@@ -1,0 +1,50 @@
+{
+  "rule_id": "34f90d3c-c297-49e9-b26d-911b05a4866c",
+  "risk_score": 47,
+  "description": "Adversaries may log user keystrokes to intercept credentials as the user types them.",
+  "name": "Powershell Keylogging",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "powershell.file.script_block_text:*Get\\-Keystrokes* OR (powershell.file.script_block_text:*Get\\-ProcAddress\\ user32.dll\\ GetAsyncKeyState* AND powershell.file.script_block_text:*Get\\-ProcAddress\\ user32.dll\\ GetForegroundWindow*)",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.collection",
+    "attack.t1056.001"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "frack113"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

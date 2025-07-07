@@ -1,0 +1,61 @@
+{
+  "rule_id": "ac1c92b4-ac81-405a-9978-4604d78cc47e",
+  "risk_score": 47,
+  "description": "Detects execution of \"VSDiagnostics.exe\" with the \"start\" command in order to launch and proxy arbitrary binaries.",
+  "name": "Potential Binary Proxy Execution Via VSDiagnostics.EXE",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "(process.command_line:(*\\ \\/launch\\:* OR *\\ \\-launch\\:*)) AND process.command_line:*start* AND (process.executable:*\\\\VSDiagnostics.exe OR process.pe.original_file_name:VSDiagnostics.exe)",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.defense-evasion",
+    "attack.t1218"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Nasreddine Bencherchali (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Legitimate usage for tracing and diagnostics purposes"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

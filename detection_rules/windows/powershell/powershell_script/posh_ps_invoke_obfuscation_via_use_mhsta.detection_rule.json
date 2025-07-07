@@ -1,0 +1,52 @@
+{
+  "rule_id": "e55a5195-4724-480e-a77e-3ebe64bd3759",
+  "risk_score": 73,
+  "description": "Detects Obfuscated Powershell via use MSHTA in Scripts",
+  "name": "Invoke-Obfuscation Via Use MSHTA - PowerShell",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "powershell.file.script_block_text:*set* AND powershell.file.script_block_text:*\\&\\&* AND powershell.file.script_block_text:*mshta* AND powershell.file.script_block_text:*vbscript\\:createobject* AND powershell.file.script_block_text:*.run* AND powershell.file.script_block_text:*\\(window.close\\)*",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.defense-evasion",
+    "attack.t1027",
+    "attack.execution",
+    "attack.t1059.001"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Nikita Nazarov, oscd.community"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

@@ -1,0 +1,52 @@
+{
+  "rule_id": "273a8dd8-3742-4302-bcc7-7df5a80fe425",
+  "risk_score": 73,
+  "description": "Detects potential DLL sideloading of an unsigned dbghelp.dll by the Sysinternals VMMap.",
+  "name": "VMMap Unsigned Dbghelp.DLL Potential Sideloading",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "(file.path:*C\\:\\\\Debuggers\\\\dbghelp.dll* AND (process.executable:(*\\\\vmmap.exe OR *\\\\vmmap64.exe))) AND (NOT file.code_signature.signed:true)",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.defense-evasion",
+    "attack.persistence",
+    "attack.privilege-escalation",
+    "attack.t1574.001"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Nasreddine Bencherchali (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

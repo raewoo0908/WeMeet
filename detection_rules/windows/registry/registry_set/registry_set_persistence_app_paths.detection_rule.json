@@ -1,0 +1,50 @@
+{
+  "rule_id": "707e097c-e20f-4f67-8807-1f72ff4500d6",
+  "risk_score": 73,
+  "description": "Detects changes to the \"Default\" property for keys located in the \\Software\\Microsoft\\Windows\\CurrentVersion\\App Paths\\ registry. Which might be used as a method of persistence\nThe entries found under App Paths are used primarily for the following purposes.\nFirst, to map an application's executable file name to that file's fully qualified path.\nSecond, to prepend information to the PATH environment variable on a per-application, per-process basis.\n",
+  "name": "Potential Persistence Via App Paths Default Property",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "(winlog.event_data.Details:(*\\\\Users\\\\Public* OR *\\\\AppData\\\\Local\\\\Temp\\\\* OR *\\\\Windows\\\\Temp\\\\* OR *\\\\Desktop\\\\* OR *\\\\Downloads\\\\* OR *%temp%* OR *%tmp%* OR *iex* OR *Invoke\\-* OR *rundll32* OR *regsvr32* OR *mshta* OR *cscript* OR *wscript* OR *.bat* OR *.hta* OR *.dll* OR *.ps1*)) AND registry.path:*\\\\SOFTWARE\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\App\\ Paths* AND (registry.path:(*\\(Default\\) OR *Path))",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.persistence",
+    "attack.t1546.012"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Nasreddine Bencherchali (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Legitimate applications registering their binary from on of the suspicious locations mentioned above (tune it)"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

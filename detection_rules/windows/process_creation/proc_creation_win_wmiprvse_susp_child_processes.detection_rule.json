@@ -1,0 +1,64 @@
+{
+  "rule_id": "8a582fe2-0882-4b89-a82a-da6b2dc32937",
+  "risk_score": 73,
+  "description": "Detects suspicious and uncommon child processes of WmiPrvSE",
+  "name": "Suspicious WmiPrvSE Child Process",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "process.parent.executable:*\\\\wbem\\\\WmiPrvSE.exe AND ((process.executable:(*\\\\certutil.exe OR *\\\\cscript.exe OR *\\\\mshta.exe OR *\\\\msiexec.exe OR *\\\\regsvr32.exe OR *\\\\rundll32.exe OR *\\\\verclsid.exe OR *\\\\wscript.exe)) OR ((process.command_line:(*cscript* OR *mshta* OR *powershell* OR *pwsh* OR *regsvr32* OR *rundll32* OR *wscript*)) AND process.executable:*\\\\cmd.exe)) AND (NOT ((process.command_line:*\\/i\\ * AND process.executable:*\\\\msiexec.exe) OR process.executable:*\\\\WerFault.exe OR process.executable:*\\\\WmiPrvSE.exe))",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.execution",
+    "attack.defense-evasion",
+    "attack.t1047",
+    "attack.t1204.002",
+    "attack.t1218.010"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Vadim Khrykov (ThreatIntel), Cyb3rEng, Florian Roth (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

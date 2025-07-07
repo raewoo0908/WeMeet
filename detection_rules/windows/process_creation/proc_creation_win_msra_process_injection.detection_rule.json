@@ -1,0 +1,61 @@
+{
+  "rule_id": "744a188b-0415-4792-896f-11ddb0588dbc",
+  "risk_score": 73,
+  "description": "Detects potential process injection via Microsoft Remote Asssistance (Msra.exe) by looking at suspicious child processes spawned from the aforementioned process. It has been a target used by many threat actors and used for discovery and persistence tactics",
+  "name": "Potential Process Injection Via Msra.EXE",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "(process.executable:(*\\\\arp.exe OR *\\\\cmd.exe OR *\\\\net.exe OR *\\\\netstat.exe OR *\\\\nslookup.exe OR *\\\\route.exe OR *\\\\schtasks.exe OR *\\\\whoami.exe)) AND process.parent.command_line:*msra.exe AND process.parent.executable:*\\\\msra.exe",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.defense-evasion",
+    "attack.t1055"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Alexander McDonald"
+  ],
+  "false_positives": [
+    "Legitimate use of Msra.exe"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

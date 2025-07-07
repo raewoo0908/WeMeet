@@ -1,0 +1,62 @@
+{
+  "rule_id": "1ac14d38-3dfc-4635-92c7-e3fd1c5f5bfc",
+  "risk_score": 47,
+  "description": "Detects execution of WinRAR in order to compress a file with a \".dmp\"/\".dump\" extension, which could be a step in a process of dump file exfiltration.",
+  "name": "Winrar Compressing Dump Files",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "(process.command_line:(*.dmp* OR *.dump* OR *.hdmp*)) AND ((process.executable:(*\\\\rar.exe OR *\\\\winrar.exe)) OR process.pe.description:Command\\ line\\ RAR)",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.collection",
+    "attack.t1560.001"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Florian Roth (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Legitimate use of WinRAR with a command line in which \".dmp\" or \".dump\" appears accidentally",
+    "Legitimate use of WinRAR to compress WER \".dmp\" files for troubleshooting"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

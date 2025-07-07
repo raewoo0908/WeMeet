@@ -1,0 +1,60 @@
+{
+  "rule_id": "3b5b0213-0460-4e3f-8937-3abf98ff7dcc",
+  "risk_score": 47,
+  "description": "Detects a suspicious call to the user32.dll function that locks the user workstation",
+  "name": "Suspicious Workstation Locking via Rundll32",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "process.command_line:*user32.dll,* AND (process.executable:*\\\\rundll32.exe OR process.pe.original_file_name:RUNDLL32.EXE) AND process.parent.executable:*\\\\cmd.exe AND process.command_line:*LockWorkStation*",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.defense-evasion"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "frack113"
+  ],
+  "false_positives": [
+    "Scripts or links on the user desktop used to lock the workstation instead of Windows+L or the menu option"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

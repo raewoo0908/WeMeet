@@ -1,0 +1,50 @@
+{
+  "rule_id": "91109523-17f0-4248-a800-f81d9e7c081d",
+  "risk_score": 47,
+  "description": "Detects the execution of an MSI file using PowerShell and the WMI Win32_Product class",
+  "name": "PowerShell WMI Win32_Product Install MSI",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "powershell.file.script_block_text:*Invoke\\-CimMethod\\ * AND powershell.file.script_block_text:*\\-ClassName\\ * AND powershell.file.script_block_text:*Win32_Product\\ * AND powershell.file.script_block_text:*\\-MethodName\\ * AND powershell.file.script_block_text:*.msi*",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.defense-evasion",
+    "attack.t1218.007"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "frack113"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

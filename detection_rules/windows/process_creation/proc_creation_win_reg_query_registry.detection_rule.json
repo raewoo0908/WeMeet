@@ -1,0 +1,62 @@
+{
+  "rule_id": "970007b7-ce32-49d0-a4a4-fbef016950bd",
+  "risk_score": 47,
+  "description": "Detects the usage of \"reg.exe\" in order to query reconnaissance information from the registry. Adversaries may interact with the Windows registry to gather information about credentials, the system, configuration, and installed software.",
+  "name": "Potential Configuration And Service Reconnaissance Via Reg.EXE",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "process.command_line:*query* AND (process.executable:*\\\\reg.exe OR process.pe.original_file_name:reg.exe) AND (process.command_line:(*currentVersion\\\\windows* OR *winlogon\\\\* OR *currentVersion\\\\shellServiceObjectDelayLoad* OR *currentVersion\\\\run* OR *currentVersion\\\\policies\\\\explorer\\\\run* OR *currentcontrolset\\\\services*))",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.discovery",
+    "attack.t1012",
+    "attack.t1007"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Timur Zinniatullin, oscd.community"
+  ],
+  "false_positives": [
+    "Discord"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

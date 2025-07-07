@@ -1,0 +1,62 @@
+{
+  "rule_id": "207b0396-3689-42d9-8399-4222658efc99",
+  "risk_score": 73,
+  "description": "Detects unknown program using commandline flags usually used by tools such as PsExec and PAExec to start programs with SYSTEM Privileges",
+  "name": "Potential Privilege Escalation To LOCAL SYSTEM",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "(process.command_line:(*\\ \\-s\\ cmd* OR *\\ \\/s\\ cmd* OR *\\ –s\\ cmd* OR *\\ —s\\ cmd* OR *\\ ―s\\ cmd*) OR process.command_line:(*\\ \\-s\\ \\-i\\ cmd* OR *\\ \\-s\\ \\/i\\ cmd* OR *\\ \\-s\\ –i\\ cmd* OR *\\ \\-s\\ —i\\ cmd* OR *\\ \\-s\\ ―i\\ cmd* OR *\\ \\/s\\ \\-i\\ cmd* OR *\\ \\/s\\ \\/i\\ cmd* OR *\\ \\/s\\ –i\\ cmd* OR *\\ \\/s\\ —i\\ cmd* OR *\\ \\/s\\ ―i\\ cmd* OR *\\ –s\\ \\-i\\ cmd* OR *\\ –s\\ \\/i\\ cmd* OR *\\ –s\\ –i\\ cmd* OR *\\ –s\\ —i\\ cmd* OR *\\ –s\\ ―i\\ cmd* OR *\\ —s\\ \\-i\\ cmd* OR *\\ —s\\ \\/i\\ cmd* OR *\\ —s\\ –i\\ cmd* OR *\\ —s\\ —i\\ cmd* OR *\\ —s\\ ―i\\ cmd* OR *\\ ―s\\ \\-i\\ cmd* OR *\\ ―s\\ \\/i\\ cmd* OR *\\ ―s\\ –i\\ cmd* OR *\\ ―s\\ —i\\ cmd* OR *\\ ―s\\ ―i\\ cmd*) OR process.command_line:(*\\ \\-i\\ \\-s\\ cmd* OR *\\ \\-i\\ \\/s\\ cmd* OR *\\ \\-i\\ –s\\ cmd* OR *\\ \\-i\\ —s\\ cmd* OR *\\ \\-i\\ ―s\\ cmd* OR *\\ \\/i\\ \\-s\\ cmd* OR *\\ \\/i\\ \\/s\\ cmd* OR *\\ \\/i\\ –s\\ cmd* OR *\\ \\/i\\ —s\\ cmd* OR *\\ \\/i\\ ―s\\ cmd* OR *\\ –i\\ \\-s\\ cmd* OR *\\ –i\\ \\/s\\ cmd* OR *\\ –i\\ –s\\ cmd* OR *\\ –i\\ —s\\ cmd* OR *\\ –i\\ ―s\\ cmd* OR *\\ —i\\ \\-s\\ cmd* OR *\\ —i\\ \\/s\\ cmd* OR *\\ —i\\ –s\\ cmd* OR *\\ —i\\ —s\\ cmd* OR *\\ —i\\ ―s\\ cmd* OR *\\ ―i\\ \\-s\\ cmd* OR *\\ ―i\\ \\/s\\ cmd* OR *\\ ―i\\ –s\\ cmd* OR *\\ ―i\\ —s\\ cmd* OR *\\ ―i\\ ―s\\ cmd*) OR process.command_line:(*\\ \\-s\\ pwsh* OR *\\ \\/s\\ pwsh* OR *\\ –s\\ pwsh* OR *\\ —s\\ pwsh* OR *\\ ―s\\ pwsh*) OR process.command_line:(*\\ \\-s\\ \\-i\\ pwsh* OR *\\ \\-s\\ \\/i\\ pwsh* OR *\\ \\-s\\ –i\\ pwsh* OR *\\ \\-s\\ —i\\ pwsh* OR *\\ \\-s\\ ―i\\ pwsh* OR *\\ \\/s\\ \\-i\\ pwsh* OR *\\ \\/s\\ \\/i\\ pwsh* OR *\\ \\/s\\ –i\\ pwsh* OR *\\ \\/s\\ —i\\ pwsh* OR *\\ \\/s\\ ―i\\ pwsh* OR *\\ –s\\ \\-i\\ pwsh* OR *\\ –s\\ \\/i\\ pwsh* OR *\\ –s\\ –i\\ pwsh* OR *\\ –s\\ —i\\ pwsh* OR *\\ –s\\ ―i\\ pwsh* OR *\\ —s\\ \\-i\\ pwsh* OR *\\ —s\\ \\/i\\ pwsh* OR *\\ —s\\ –i\\ pwsh* OR *\\ —s\\ —i\\ pwsh* OR *\\ —s\\ ―i\\ pwsh* OR *\\ ―s\\ \\-i\\ pwsh* OR *\\ ―s\\ \\/i\\ pwsh* OR *\\ ―s\\ –i\\ pwsh* OR *\\ ―s\\ —i\\ pwsh* OR *\\ ―s\\ ―i\\ pwsh*) OR process.command_line:(*\\ \\-i\\ \\-s\\ pwsh* OR *\\ \\-i\\ \\/s\\ pwsh* OR *\\ \\-i\\ –s\\ pwsh* OR *\\ \\-i\\ —s\\ pwsh* OR *\\ \\-i\\ ―s\\ pwsh* OR *\\ \\/i\\ \\-s\\ pwsh* OR *\\ \\/i\\ \\/s\\ pwsh* OR *\\ \\/i\\ –s\\ pwsh* OR *\\ \\/i\\ —s\\ pwsh* OR *\\ \\/i\\ ―s\\ pwsh* OR *\\ –i\\ \\-s\\ pwsh* OR *\\ –i\\ \\/s\\ pwsh* OR *\\ –i\\ –s\\ pwsh* OR *\\ –i\\ —s\\ pwsh* OR *\\ –i\\ ―s\\ pwsh* OR *\\ —i\\ \\-s\\ pwsh* OR *\\ —i\\ \\/s\\ pwsh* OR *\\ —i\\ –s\\ pwsh* OR *\\ —i\\ —s\\ pwsh* OR *\\ —i\\ ―s\\ pwsh* OR *\\ ―i\\ \\-s\\ pwsh* OR *\\ ―i\\ \\/s\\ pwsh* OR *\\ ―i\\ –s\\ pwsh* OR *\\ ―i\\ —s\\ pwsh* OR *\\ ―i\\ ―s\\ pwsh*) OR process.command_line:(*\\ \\-s\\ powershell* OR *\\ \\/s\\ powershell* OR *\\ –s\\ powershell* OR *\\ —s\\ powershell* OR *\\ ―s\\ powershell*) OR process.command_line:(*\\ \\-s\\ \\-i\\ powershell* OR *\\ \\-s\\ \\/i\\ powershell* OR *\\ \\-s\\ –i\\ powershell* OR *\\ \\-s\\ —i\\ powershell* OR *\\ \\-s\\ ―i\\ powershell* OR *\\ \\/s\\ \\-i\\ powershell* OR *\\ \\/s\\ \\/i\\ powershell* OR *\\ \\/s\\ –i\\ powershell* OR *\\ \\/s\\ —i\\ powershell* OR *\\ \\/s\\ ―i\\ powershell* OR *\\ –s\\ \\-i\\ powershell* OR *\\ –s\\ \\/i\\ powershell* OR *\\ –s\\ –i\\ powershell* OR *\\ –s\\ —i\\ powershell* OR *\\ –s\\ ―i\\ powershell* OR *\\ —s\\ \\-i\\ powershell* OR *\\ —s\\ \\/i\\ powershell* OR *\\ —s\\ –i\\ powershell* OR *\\ —s\\ —i\\ powershell* OR *\\ —s\\ ―i\\ powershell* OR *\\ ―s\\ \\-i\\ powershell* OR *\\ ―s\\ \\/i\\ powershell* OR *\\ ―s\\ –i\\ powershell* OR *\\ ―s\\ —i\\ powershell* OR *\\ ―s\\ ―i\\ powershell*) OR process.command_line:(*\\ \\-i\\ \\-s\\ powershell* OR *\\ \\-i\\ \\/s\\ powershell* OR *\\ \\-i\\ –s\\ powershell* OR *\\ \\-i\\ —s\\ powershell* OR *\\ \\-i\\ ―s\\ powershell* OR *\\ \\/i\\ \\-s\\ powershell* OR *\\ \\/i\\ \\/s\\ powershell* OR *\\ \\/i\\ –s\\ powershell* OR *\\ \\/i\\ —s\\ powershell* OR *\\ \\/i\\ ―s\\ powershell* OR *\\ –i\\ \\-s\\ powershell* OR *\\ –i\\ \\/s\\ powershell* OR *\\ –i\\ –s\\ powershell* OR *\\ –i\\ —s\\ powershell* OR *\\ –i\\ ―s\\ powershell* OR *\\ —i\\ \\-s\\ powershell* OR *\\ —i\\ \\/s\\ powershell* OR *\\ —i\\ –s\\ powershell* OR *\\ —i\\ —s\\ powershell* OR *\\ —i\\ ―s\\ powershell* OR *\\ ―i\\ \\-s\\ powershell* OR *\\ ―i\\ \\/s\\ powershell* OR *\\ ―i\\ –s\\ powershell* OR *\\ ―i\\ —s\\ powershell* OR *\\ ―i\\ ―s\\ powershell*)) AND (NOT (process.command_line:(*paexec* OR *PsExec* OR *accepteula*)))",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.resource-development",
+    "attack.t1587.001"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Florian Roth (Nextron Systems), Nasreddine Bencherchali (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Weird admins that rename their tools",
+    "Software companies that bundle PsExec/PAExec with their software and rename it, so that it is less embarrassing"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

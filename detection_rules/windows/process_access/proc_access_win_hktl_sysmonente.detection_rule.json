@@ -1,0 +1,50 @@
+{
+  "rule_id": "d29ada0f-af45-4f27-8f32-f7b77c3dbc4e",
+  "risk_score": 73,
+  "description": "Detects the use of SysmonEnte, a tool to attack the integrity of Sysmon",
+  "name": "HackTool - SysmonEnte Execution",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "((winlog.event_data.GrantedAccess:0x1400 AND (winlog.event_data.TargetImage:(*\\:\\\\Windows\\\\Sysmon.exe* OR *\\:\\\\Windows\\\\Sysmon64.exe*))) AND (NOT ((process.executable:(*\\:\\\\Program\\ Files\\ \\(x86\\)\\\\* OR *\\:\\\\Program\\ Files\\\\* OR *\\:\\\\Windows\\\\System32\\\\* OR *\\:\\\\Windows\\\\SysWOW64\\\\*)) OR (process.executable:*\\:\\\\ProgramData\\\\Microsoft\\\\Windows\\ Defender\\\\Platform\\\\* AND process.executable:*\\\\MsMpEng.exe)))) OR winlog.event_data.CallTrace:Ente",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.defense-evasion",
+    "attack.t1562.002"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Florian Roth (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

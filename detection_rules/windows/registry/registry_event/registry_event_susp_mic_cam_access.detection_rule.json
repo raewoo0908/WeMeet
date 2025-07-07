@@ -1,0 +1,51 @@
+{
+  "rule_id": "62120148-6b7a-42be-8b91-271c04e281a3",
+  "risk_score": 73,
+  "description": "Detects Processes accessing the camera and microphone from suspicious folder",
+  "name": "Suspicious Camera and Microphone Access",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "(registry.path:*\\\\Software\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\CapabilityAccessManager\\\\ConsentStore\\\\* AND registry.path:*\\\\NonPackaged*) AND (registry.path:(*microphone* OR *webcam*)) AND (registry.path:(*\\:#Windows#Temp#* OR *\\:#$Recycle.bin#* OR *\\:#Temp#* OR *\\:#Users#Public#* OR *\\:#Users#Default#* OR *\\:#Users#Desktop#*))",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.collection",
+    "attack.t1125",
+    "attack.t1123"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Den Iuzvyk"
+  ],
+  "false_positives": [
+    "Unlikely, there could be conferencing software running from a Temp folder accessing the devices"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

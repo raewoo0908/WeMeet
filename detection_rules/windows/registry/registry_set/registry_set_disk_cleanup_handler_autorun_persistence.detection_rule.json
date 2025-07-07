@@ -1,0 +1,49 @@
+{
+  "rule_id": "d4e2745c-f0c6-4bde-a3ab-b553b3f693cc",
+  "risk_score": 47,
+  "description": "Detects when an attacker modifies values of the Disk Cleanup Handler in the registry to achieve persistence via autorun.\nThe disk cleanup manager is part of the operating system.\nIt displays the dialog box […] The user has the option of enabling or disabling individual handlers by selecting or clearing their check box in the disk cleanup manager's UI.\nAlthough Windows comes with a number of disk cleanup handlers, they aren't designed to handle files produced by other applications.\nInstead, the disk cleanup manager is designed to be flexible and extensible by enabling any developer to implement and register their own disk cleanup handler.\nAny developer can extend the available disk cleanup services by implementing and registering a disk cleanup handler.\n",
+  "name": "Persistence Via Disk Cleanup Handler - Autorun",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "registry.path:*\\\\SOFTWARE\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Explorer\\\\VolumeCaches\\\\* AND ((winlog.event_data.Details:DWORD\\ \\(0x00000001\\) AND registry.path:*\\\\Autorun*) OR ((winlog.event_data.Details:(*cmd* OR *powershell* OR *rundll32* OR *mshta* OR *cscript* OR *wscript* OR *wsl* OR *\\\\Users\\\\Public\\\\* OR *\\\\Windows\\\\TEMP\\\\* OR *\\\\Microsoft\\\\Windows\\\\Start\\ Menu\\\\Programs\\\\Startup\\\\*)) AND (registry.path:(*\\\\CleanupString* OR *\\\\PreCleanupString*))))",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.persistence"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Nasreddine Bencherchali (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

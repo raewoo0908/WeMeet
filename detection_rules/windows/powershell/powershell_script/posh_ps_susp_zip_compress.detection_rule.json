@@ -1,0 +1,50 @@
+{
+  "rule_id": "b7a3c9a3-09ea-4934-8864-6a32cacd98d9",
+  "risk_score": 47,
+  "description": "Detects PowerShell scripts that make use of the \"Compress-Archive\" Cmdlet in order to compress folders and files where the output is stored in a potentially suspicious location that is used often by malware for exfiltration.\nAn adversary might compress data (e.g., sensitive documents) that is collected prior to exfiltration in order to make it portable and minimize the amount of data sent over the network.\n",
+  "name": "Zip A Folder With PowerShell For Staging In Temp - PowerShell Script",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "powershell.file.script_block_text:(*Compress\\-Archive\\ \\-Path*\\-DestinationPath\\ $env\\:TEMP* OR *Compress\\-Archive\\ \\-Path*\\-DestinationPath*\\\\AppData\\\\Local\\\\Temp\\\\* OR *Compress\\-Archive\\ \\-Path*\\-DestinationPath*\\:\\\\Windows\\\\Temp\\\\*)",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.collection",
+    "attack.t1074.001"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Nasreddine Bencherchali (Nextron Systems), frack113"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

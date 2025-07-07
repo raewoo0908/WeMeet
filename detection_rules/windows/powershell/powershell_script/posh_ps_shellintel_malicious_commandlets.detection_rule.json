@@ -1,0 +1,50 @@
+{
+  "rule_id": "402e1e1d-ad59-47b6-bf80-1ee44985b3a7",
+  "risk_score": 73,
+  "description": "Detects Commandlet names from ShellIntel exploitation scripts.",
+  "name": "Malicious ShellIntel PowerShell Commandlets",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "powershell.file.script_block_text:(*Invoke\\-SMBAutoBrute* OR *Invoke\\-GPOLinks* OR *Invoke\\-Potato*)",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.execution",
+    "attack.t1059.001"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Max Altgelt (Nextron Systems), Tobias Michalski (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

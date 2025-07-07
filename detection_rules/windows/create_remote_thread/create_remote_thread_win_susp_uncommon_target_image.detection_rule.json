@@ -1,0 +1,51 @@
+{
+  "rule_id": "a1a144b7-5c9b-4853-a559-2172be8d4a03",
+  "risk_score": 47,
+  "description": "Detects uncommon target processes for remote thread creation",
+  "name": "Remote Thread Creation In Uncommon Target Image",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "(winlog.event_data.TargetImage:(*\\\\calc.exe OR *\\\\calculator.exe OR *\\\\mspaint.exe OR *\\\\notepad.exe OR *\\\\ping.exe OR *\\\\sethc.exe OR *\\\\spoolsv.exe OR *\\\\wordpad.exe OR *\\\\write.exe)) AND (NOT process.executable:C\\:\\\\Windows\\\\System32\\\\csrss.exe) AND (NOT (winlog.event_data.StartFunction:EtwpNotificationThread OR process.executable:*unknown\\ process* OR (process.executable:C\\:\\\\Program\\ Files\\\\VMware\\\\VMware\\ Tools\\\\vmtoolsd.exe AND winlog.event_data.StartFunction:GetCommandLineW AND (winlog.event_data.TargetImage:(C\\:\\\\Windows\\\\System32\\\\notepad.exe OR C\\:\\\\Windows\\\\System32\\\\spoolsv.exe))) OR (process.executable:C\\:\\\\Program\\ Files\\\\Xerox\\\\XeroxPrintExperience\\\\CommonFiles\\\\XeroxPrintJobEventManagerService.exe AND winlog.event_data.StartFunction:LoadLibraryW AND winlog.event_data.TargetImage:C\\:\\\\Windows\\\\System32\\\\spoolsv.exe)))",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.defense-evasion",
+    "attack.privilege-escalation",
+    "attack.t1055.003"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Florian Roth (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

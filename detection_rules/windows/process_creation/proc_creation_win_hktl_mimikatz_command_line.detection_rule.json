@@ -1,0 +1,65 @@
+{
+  "rule_id": "a642964e-bead-4bed-8910-1bb4d63e3b4d",
+  "risk_score": 73,
+  "description": "Detection well-known mimikatz command line arguments",
+  "name": "HackTool - Mimikatz Execution",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "(process.command_line:(*\\:\\:aadcookie* OR *\\:\\:detours* OR *\\:\\:memssp* OR *\\:\\:mflt* OR *\\:\\:ncroutemon* OR *\\:\\:ngcsign* OR *\\:\\:printnightmare* OR *\\:\\:skeleton* OR *\\:\\:preshutdown* OR *\\:\\:mstsc* OR *\\:\\:multirdp*)) OR (process.command_line:(*rpc\\:\\:* OR *token\\:\\:* OR *crypto\\:\\:* OR *dpapi\\:\\:* OR *sekurlsa\\:\\:* OR *kerberos\\:\\:* OR *lsadump\\:\\:* OR *privilege\\:\\:* OR *process\\:\\:* OR *vault\\:\\:*)) OR (process.command_line:(*DumpCreds* OR *mimikatz*))",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.credential-access",
+    "attack.t1003.001",
+    "attack.t1003.002",
+    "attack.t1003.004",
+    "attack.t1003.005",
+    "attack.t1003.006"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Teymur Kheirkhabarov, oscd.community, David ANDRE (additional keywords), Tim Shelton"
+  ],
+  "false_positives": [
+    "Unlikely"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

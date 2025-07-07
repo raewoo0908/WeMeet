@@ -1,0 +1,52 @@
+{
+  "rule_id": "571498c8-908e-40b4-910b-d2369159a3da",
+  "risk_score": 73,
+  "description": "Detects the extraction of password protected ZIP archives. See the filename variable for more details on which file has been opened.",
+  "name": "Password Protected ZIP File Opened (Email Attachment)",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "winlog.channel:Security AND (event.code:5379 AND (winlog.event_data.TargetName:*Microsoft_Windows_Shell_ZipFolder\\:filename* AND winlog.event_data.TargetName:*\\\\Temporary\\ Internet\\ Files\\\\Content.Outlook*))",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.defense-evasion",
+    "attack.initial-access",
+    "attack.t1027",
+    "attack.t1566.001"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Florian Roth (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Legitimate used of encrypted ZIP files"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

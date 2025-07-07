@@ -1,0 +1,51 @@
+{
+  "rule_id": "749c9f5e-b353-4b90-a9c1-05243357ca4b",
+  "risk_score": 73,
+  "description": "Detects a suspicious local successful logon event where the Logon Package is Kerberos, the remote address is set to localhost, and the target user SID is the built-in local Administrator account.\nThis may indicate an attempt to leverage a Kerberos relay attack variant that can be used to elevate privilege locally from a domain joined limited user to local System privileges.\n",
+  "name": "Potential Privilege Escalation via Local Kerberos Relay over LDAP",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "winlog.channel:Security AND ((winlog.event_data.AuthenticationPackageName:Kerberos AND event.code:4624 AND source.ip:127.0.0.1 AND winlog.event_data.LogonType:3 AND winlog.event_data.TargetUserSid:*\\-500 AND winlog.event_data.TargetUserSid:S\\-1\\-5\\-21\\-*) AND (NOT source.port:0))",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.privilege-escalation",
+    "attack.credential-access",
+    "attack.t1548"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Elastic, @SBousseaden"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

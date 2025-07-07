@@ -1,0 +1,61 @@
+{
+  "rule_id": "f4264e47-f522-4c38-a420-04525d5b880f",
+  "risk_score": 73,
+  "description": "Detects the execution of a renamed AutoIt2.exe or AutoIt3.exe.\nAutoIt is a scripting language and automation tool for Windows systems. While primarily used for legitimate automation tasks, it can be misused in cyber attacks.\nAttackers can leverage AutoIt to create and distribute malware, including keyloggers, spyware, and botnets. A renamed AutoIt executable is particularly suspicious.\n",
+  "name": "Renamed AutoIt Execution",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "((process.command_line:(*\\ \\/AutoIt3ExecuteScript* OR *\\ \\/ErrorStdOut*)) OR (winlog.event_data.Hashes:(*IMPHASH\\=FDC554B3A8683918D731685855683DDF* OR *IMPHASH\\=CD30A61B60B3D60CECDB034C8C83C290* OR *IMPHASH\\=F8A00C72F2D667D2EDBB234D0C0AE000*)) OR (process.pe.original_file_name:(AutoIt3.exe OR AutoIt2.exe OR AutoIt.exe))) AND (NOT (process.executable:(*\\\\AutoIt.exe OR *\\\\AutoIt2.exe OR *\\\\AutoIt3_x64.exe OR *\\\\AutoIt3.exe)))",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.defense-evasion",
+    "attack.t1027"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Florian Roth (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

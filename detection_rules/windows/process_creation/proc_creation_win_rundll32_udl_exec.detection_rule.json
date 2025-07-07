@@ -1,0 +1,64 @@
+{
+  "rule_id": "0ea52357-cd59-4340-9981-c46c7e900428",
+  "risk_score": 47,
+  "description": "Detects the execution of rundll32.exe with the oledb32.dll library to open a UDL file.\nThreat actors can abuse this technique as a phishing vector to capture authentication credentials or other sensitive data.\n",
+  "name": "Potentially Suspicious Rundll32.EXE Execution of UDL File",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "((process.command_line:*oledb32.dll* AND process.command_line:*,OpenDSLFile\\ * AND process.command_line:*\\\\Users\\\\*\\\\Downloads\\\\*) AND process.command_line:*.udl) AND (process.executable:*\\\\rundll32.exe OR process.pe.original_file_name:RUNDLL32.EXE) AND process.parent.executable:*\\\\explorer.exe",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.defense-evasion",
+    "attack.execution",
+    "attack.command-and-control",
+    "attack.t1218.011",
+    "attack.t1071"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "@kostastsale"
+  ],
+  "false_positives": [
+    "UDL files serve as a convenient and flexible tool for managing and testing database connections in various development and administrative scenarios."
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

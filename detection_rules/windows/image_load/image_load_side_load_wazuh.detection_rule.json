@@ -1,0 +1,52 @@
+{
+  "rule_id": "db77ce78-7e28-4188-9337-cf30e2b3ba9f",
+  "risk_score": 47,
+  "description": "Detects potential DLL side loading of DLLs that are part of the Wazuh security platform",
+  "name": "Potential Wazuh Security Platform DLL Sideloading",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "(file.path:(*\\\\libwazuhshared.dll OR *\\\\libwinpthread\\-1.dll)) AND (NOT (file.path:(C\\:\\\\Program\\ Files\\\\* OR C\\:\\\\Program\\ Files\\ \\(x86\\)\\\\*))) AND (NOT ((file.path:(*\\\\AppData\\\\Local\\\\* OR *\\\\ProgramData\\\\*)) AND file.path:*\\\\mingw64\\\\bin\\\\libwinpthread\\-1.dll))",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.defense-evasion",
+    "attack.persistence",
+    "attack.privilege-escalation",
+    "attack.t1574.001"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "X__Junior (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Many legitimate applications leverage this DLL. (Visual Studio, JetBrains, Ruby, Anaconda, GithubDesktop, etc.)"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

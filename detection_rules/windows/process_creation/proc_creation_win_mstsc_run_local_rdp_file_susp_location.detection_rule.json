@@ -1,0 +1,61 @@
+{
+  "rule_id": "6e22722b-dfb1-4508-a911-49ac840b40f8",
+  "risk_score": 73,
+  "description": "Detects potential RDP connection via Mstsc using a local \".rdp\" file located in suspicious locations.",
+  "name": "Suspicious Mstsc.EXE Execution With Local RDP File",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "(process.command_line:(*.rdp OR *.rdp\\\")) AND (process.executable:*\\\\mstsc.exe OR process.pe.original_file_name:mstsc.exe) AND (process.command_line:(*\\:\\\\Users\\\\Public\\\\* OR *\\:\\\\Windows\\\\System32\\\\spool\\\\drivers\\\\color* OR *\\:\\\\Windows\\\\System32\\\\Tasks_Migrated\\ * OR *\\:\\\\Windows\\\\Tasks\\\\* OR *\\:\\\\Windows\\\\Temp\\\\* OR *\\:\\\\Windows\\\\Tracing\\\\* OR *\\\\AppData\\\\Local\\\\Temp\\\\* OR *\\\\Downloads\\\\*))",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.command-and-control",
+    "attack.t1219"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Nasreddine Bencherchali (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Likelihood is related to how often the paths are used in the environment"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

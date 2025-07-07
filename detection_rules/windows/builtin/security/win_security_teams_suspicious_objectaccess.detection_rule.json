@@ -1,0 +1,50 @@
+{
+  "rule_id": "25cde13e-8e20-4c29-b949-4e795b76f16f",
+  "risk_score": 73,
+  "description": "Detects an access to authentication tokens and accounts of Microsoft Teams desktop application.",
+  "name": "Suspicious Teams Application Related ObjectAcess Event",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "winlog.channel:Security AND ((event.code:4663 AND (winlog.event_data.ObjectName:(*\\\\Microsoft\\\\Teams\\\\Cookies* OR *\\\\Microsoft\\\\Teams\\\\Local\\ Storage\\\\leveldb*))) AND (NOT process.executable:*\\\\Microsoft\\\\Teams\\\\current\\\\Teams.exe*))",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.credential-access",
+    "attack.t1528"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "@SerkinValery"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

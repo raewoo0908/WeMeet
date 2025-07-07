@@ -1,0 +1,49 @@
+{
+  "rule_id": "e6f81941-b1cd-4766-87db-9fc156f658ee",
+  "risk_score": 73,
+  "description": "Detects the exploitation of a security bypass and elevation of privilege vulnerability with Authentication Negotiation by using weak RC4-HMAC negotiation",
+  "name": "KDC RC4-HMAC Downgrade CVE-2022-37966",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "winlog.channel:System AND (event.code:42 AND winlog.event_data.Level:2 AND winlog.provider_name:Kerberos\\-Key\\-Distribution\\-Center)",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.privilege-escalation"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Florian Roth (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

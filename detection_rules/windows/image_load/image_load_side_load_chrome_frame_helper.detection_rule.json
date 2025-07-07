@@ -1,0 +1,52 @@
+{
+  "rule_id": "72ca7c75-bf85-45cd-aca7-255d360e423c",
+  "risk_score": 47,
+  "description": "Detects potential DLL sideloading of \"chrome_frame_helper.dll\"",
+  "name": "Potential Chrome Frame Helper DLL Sideloading",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "file.path:*\\\\chrome_frame_helper.dll AND (NOT (file.path:(C\\:\\\\Program\\ Files\\\\Google\\\\Chrome\\\\Application\\\\* OR C\\:\\\\Program\\ Files\\ \\(x86\\)\\\\Google\\\\Chrome\\\\Application\\\\*))) AND (NOT file.path:*\\\\AppData\\\\local\\\\Google\\\\Chrome\\\\Application\\\\*)",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.defense-evasion",
+    "attack.persistence",
+    "attack.privilege-escalation",
+    "attack.t1574.001"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Nasreddine Bencherchali (Nextron Systems), Wietze Beukema (project and research)"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

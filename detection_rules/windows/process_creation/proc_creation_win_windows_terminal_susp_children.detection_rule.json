@@ -1,0 +1,61 @@
+{
+  "rule_id": "8de89e52-f6e1-4b5b-afd1-41ecfa300d48",
+  "risk_score": 47,
+  "description": "Detects suspicious children spawned via the Windows Terminal application which could be a sign of persistence via WindowsTerminal (see references section)",
+  "name": "Suspicious WindowsTerminal Child Processes",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "((process.parent.executable:(*\\\\WindowsTerminal.exe OR *\\\\wt.exe)) AND ((process.executable:(*\\\\rundll32.exe OR *\\\\regsvr32.exe OR *\\\\certutil.exe OR *\\\\cscript.exe OR *\\\\wscript.exe OR *\\\\csc.exe)) OR (process.executable:(*C\\:\\\\Users\\\\Public\\\\* OR *\\\\Downloads\\\\* OR *\\\\Desktop\\\\* OR *\\\\AppData\\\\Local\\\\Temp\\\\* OR *\\\\Windows\\\\TEMP\\\\*)) OR (process.command_line:(*\\ iex\\ * OR *\\ icm* OR *Invoke\\-* OR *Import\\-Module\\ * OR *ipmo\\ * OR *DownloadString\\(* OR *\\ \\/c\\ * OR *\\ \\/k\\ * OR *\\ \\/r\\ *)))) AND (NOT ((process.command_line:*Import\\-Module* AND process.command_line:*Microsoft.VisualStudio.DevShell.dll* AND process.command_line:*Enter\\-VsDevShell*) OR (process.command_line:*\\\\AppData\\\\Local\\\\Packages\\\\Microsoft.WindowsTerminal_* AND process.command_line:*\\\\LocalState\\\\settings.json*) OR (process.command_line:*C\\:\\\\Program\\ Files\\\\Microsoft\\ Visual\\ Studio\\\\* AND process.command_line:*\\\\Common7\\\\Tools\\\\VsDevCmd.bat*)))",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.execution",
+    "attack.persistence"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Nasreddine Bencherchali (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Other legitimate \"Windows Terminal\" profiles"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

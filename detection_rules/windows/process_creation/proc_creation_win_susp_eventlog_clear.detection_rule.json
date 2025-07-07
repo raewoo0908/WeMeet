@@ -1,0 +1,65 @@
+{
+  "rule_id": "cc36992a-4671-4f21-a91d-6c2b72a2edf5",
+  "risk_score": 73,
+  "description": "Detects the clearing or configuration tampering of EventLog using utilities such as \"wevtutil\", \"powershell\" and \"wmic\".\nThis technique were seen used by threat actors and ransomware strains in order to evade defenses.\n",
+  "name": "Suspicious Eventlog Clearing or Configuration Change Activity",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "((process.command_line:(*clear\\-log\\ * OR *\\ cl\\ * OR *set\\-log\\ * OR *\\ sl\\ * OR *lfn\\:*)) AND (process.executable:*\\\\wevtutil.exe OR process.pe.original_file_name:wevtutil.exe)) OR (((process.command_line:(*Clear\\-EventLog\\ * OR *Remove\\-EventLog\\ * OR *Limit\\-EventLog\\ * OR *Clear\\-WinEvent\\ *)) OR (process.command_line:*Eventing.Reader.EventLogSession* AND process.command_line:*ClearLog*) OR (process.command_line:*Diagnostics.EventLog* AND process.command_line:*Clear*)) AND (process.executable:(*\\\\powershell.exe OR *\\\\powershell_ise.exe OR *\\\\pwsh.exe))) OR ((process.command_line:*ClearEventLog* AND (process.executable:(*\\\\powershell.exe OR *\\\\powershell_ise.exe OR *\\\\pwsh.exe OR *\\\\wmic.exe))) AND (NOT (process.command_line:*\\ sl\\ * AND (process.parent.executable:(C\\:\\\\Windows\\\\SysWOW64\\\\msiexec.exe OR C\\:\\\\Windows\\\\System32\\\\msiexec.exe)))))",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.defense-evasion",
+    "attack.t1070.001",
+    "attack.t1562.002",
+    "car.2016-04-002"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Ecco, Daniil Yugoslavskiy, oscd.community, D3F7A5105, Swachchhanda Shrawan Poudel (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Admin activity",
+    "Scripts and administrative tools used in the monitored environment",
+    "Maintenance activity"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

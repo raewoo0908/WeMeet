@@ -1,0 +1,51 @@
+{
+  "rule_id": "6c0a7755-6d31-44fa-80e1-133e57752680",
+  "risk_score": 47,
+  "description": "Detects when the \"Windows Defender Threat Protection\" service is disabled.",
+  "name": "Windows Defender Threat Detection Service Disabled",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "winlog.channel:System AND (event.code:7036 AND winlog.provider_name:Service\\ Control\\ Manager AND (winlog.event_data.param1:(Windows\\ Defender\\ Antivirus\\ Service OR Service\\ antivirus\\ Microsoft\\ Defender)) AND (winlog.event_data.param2:(stopped OR arrêté)))",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.defense-evasion",
+    "attack.t1562.001"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Ján Trenčanský, frack113"
+  ],
+  "false_positives": [
+    "Administrator actions",
+    "Auto updates of Windows Defender causes restarts"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

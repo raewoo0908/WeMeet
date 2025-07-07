@@ -1,0 +1,50 @@
+{
+  "rule_id": "9a4ff3b8-6187-4fd2-8e8b-e0eae1129495",
+  "risk_score": 73,
+  "description": "Detects handle requests and access operations to specific registry keys to calculate the SysKey",
+  "name": "SysKey Registry Keys Access",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "winlog.channel:Security AND ((event.code:(4656 OR 4663)) AND (winlog.event_data.ObjectName:(*lsa\\\\JD OR *lsa\\\\GBG OR *lsa\\\\Skew1 OR *lsa\\\\Data)) AND winlog.event_data.ObjectType:key)",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.discovery",
+    "attack.t1012"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Roberto Rodriguez @Cyb3rWard0g"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

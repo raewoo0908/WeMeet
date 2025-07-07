@@ -1,0 +1,61 @@
+{
+  "rule_id": "059c5af9-5131-4d8d-92b2-de4ad6146712",
+  "risk_score": 73,
+  "description": "Detects the creation of the LiveKD driver by a process image other than \"livekd.exe\".",
+  "name": "LiveKD Driver Creation By Uncommon Process",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "file.path:C\\:\\\\Windows\\\\System32\\\\drivers\\\\LiveKdD.SYS AND (NOT (process.executable:(*\\\\livekd.exe OR *\\\\livek64.exe)))",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "File Create (rule: FileCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.defense-evasion",
+    "attack.privilege-escalation"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Nasreddine Bencherchali (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Administrators might rename LiveKD before its usage which could trigger this. Add additional names you use to the filter"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

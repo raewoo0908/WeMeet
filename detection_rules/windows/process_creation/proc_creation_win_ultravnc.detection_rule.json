@@ -1,0 +1,61 @@
+{
+  "rule_id": "145322e4-0fd3-486b-81ca-9addc75736d8",
+  "risk_score": 47,
+  "description": "An adversary may use legitimate desktop support and remote access software,to establish an interactive command and control channel to target systems within networks",
+  "name": "Use of UltraVNC Remote Access Software",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "process.pe.description:VNCViewer OR process.pe.product:UltraVNC\\ VNCViewer OR process.pe.company:UltraVNC OR process.pe.original_file_name:VNCViewer.exe",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.command-and-control",
+    "attack.t1219"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "frack113"
+  ],
+  "false_positives": [
+    "Legitimate use"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

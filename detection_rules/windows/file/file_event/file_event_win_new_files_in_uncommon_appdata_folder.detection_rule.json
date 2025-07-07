@@ -1,0 +1,61 @@
+{
+  "rule_id": "d7b50671-d1ad-4871-aa60-5aa5b331fe04",
+  "risk_score": 73,
+  "description": "Detects the creation of suspicious files and folders inside the user's AppData folder but not inside any of the common and well known directories (Local, Romaing, LocalLow). This method could be used as a method to bypass detection who exclude the AppData folder in fear of FPs",
+  "name": "Suspicious File Creation In Uncommon AppData Folder",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "(file.path:*\\\\AppData\\\\* AND (file.path:(*.bat OR *.cmd OR *.cpl OR *.dll OR *.exe OR *.hta OR *.iso OR *.lnk OR *.msi OR *.ps1 OR *.psm1 OR *.scr OR *.vbe OR *.vbs)) AND file.path:C\\:\\\\Users\\\\*) AND (NOT ((file.path:(*\\\\AppData\\\\Local\\\\* OR *\\\\AppData\\\\LocalLow\\\\* OR *\\\\AppData\\\\Roaming\\\\*)) AND file.path:C\\:\\\\Users\\\\*))",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "File Create (rule: FileCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.defense-evasion",
+    "attack.execution"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Nasreddine Bencherchali (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Unlikely"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

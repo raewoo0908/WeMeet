@@ -1,0 +1,65 @@
+{
+  "rule_id": "dbbd9f66-2ed3-4ca2-98a4-6ea985dd1a1c",
+  "risk_score": 47,
+  "description": "Detects attempts to create a DLL file to a known desktop application dependencies folder such as Slack, Teams or OneDrive and by an unusual process. This may indicate an attempt to load a malicious module via DLL search order hijacking.",
+  "name": "Potential Initial Access via DLL Search Order Hijacking",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "((process.executable:(*\\\\winword.exe OR *\\\\excel.exe OR *\\\\powerpnt.exe OR *\\\\MSACCESS.EXE OR *\\\\MSPUB.EXE OR *\\\\fltldr.exe OR *\\\\cmd.exe OR *\\\\certutil.exe OR *\\\\mshta.exe OR *\\\\cscript.exe OR *\\\\wscript.exe OR *\\\\curl.exe OR *\\\\powershell.exe OR *\\\\pwsh.exe)) AND (file.path:(*\\\\Microsoft\\\\OneDrive\\\\* OR *\\\\Microsoft\\ OneDrive\\\\* OR *\\\\Microsoft\\\\Teams\\\\* OR *\\\\Local\\\\slack\\\\app\\-* OR *\\\\Local\\\\Programs\\\\Microsoft\\ VS\\ Code\\\\*)) AND (file.path:*\\\\Users\\\\* AND file.path:*\\\\AppData\\\\*) AND file.path:*.dll) AND (NOT (process.executable:*\\\\cmd.exe AND (file.path:*\\\\Users\\\\* AND file.path:*\\\\AppData\\\\* AND file.path:*\\\\Microsoft\\\\OneDrive\\\\* AND file.path:*\\\\api\\-ms\\-win\\-core\\-*)))",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "File Create (rule: FileCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.t1566",
+    "attack.t1566.001",
+    "attack.initial-access",
+    "attack.t1574",
+    "attack.t1574.001",
+    "attack.defense-evasion"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Tim Rauch (rule), Elastic (idea)"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

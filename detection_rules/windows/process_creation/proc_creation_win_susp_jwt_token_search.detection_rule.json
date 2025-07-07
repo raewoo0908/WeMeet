@@ -1,0 +1,61 @@
+{
+  "rule_id": "6d3a3952-6530-44a3-8554-cf17c116c615",
+  "risk_score": 47,
+  "description": "Detects possible search for JWT tokens via CLI by looking for the string \"eyJ0eX\" or \"eyJhbG\".\nThis string is used as an anchor to look for the start of the JWT token used by microsoft office and similar apps.\n",
+  "name": "Potentially Suspicious JWT Token Search Via CLI",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "process.command_line:(*eyJ0eXAiOi* OR *eyJhbGciOi* OR *\\ eyJ0eX* OR *\\ \\\"eyJ0eX\\\"* OR *\\ 'eyJ0eX'* OR *\\ eyJhbG* OR *\\ \\\"eyJhbG\\\"* OR *\\ 'eyJhbG'*)",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.credential-access",
+    "attack.t1528"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Nasreddine Bencherchali (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

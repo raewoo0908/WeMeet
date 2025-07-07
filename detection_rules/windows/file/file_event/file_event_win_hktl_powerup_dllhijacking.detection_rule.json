@@ -1,0 +1,63 @@
+{
+  "rule_id": "602a1f13-c640-4d73-b053-be9a2fa58b96",
+  "risk_score": 73,
+  "description": "Powerup tool's Write Hijack DLL exploits DLL hijacking for privilege escalation.\nIn it's default mode, it builds a self deleting .bat file which executes malicious command.\nThe detection rule relies on creation of the malicious bat file (debug.bat by default).\n",
+  "name": "HackTool - Powerup Write Hijack DLL",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "(process.executable:(*\\\\powershell.exe OR *\\\\pwsh.exe)) AND file.path:*.bat",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "File Create (rule: FileCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.persistence",
+    "attack.privilege-escalation",
+    "attack.defense-evasion",
+    "attack.t1574.001"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Subhash Popuri (@pbssubhash)"
+  ],
+  "false_positives": [
+    "Any powershell script that creates bat files"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

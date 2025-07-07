@@ -1,0 +1,62 @@
+{
+  "rule_id": "1a5fefe6-734f-452e-a07d-fc1c35bce4b2",
+  "risk_score": 47,
+  "description": "Detects the removal of a port or application rule in the Windows Firewall configuration using netsh",
+  "name": "Firewall Rule Deleted Via Netsh.EXE",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "((process.command_line:*firewall* AND process.command_line:*delete\\ *) AND (process.executable:*\\\\netsh.exe OR process.pe.original_file_name:netsh.exe)) AND (NOT (process.command_line:*name\\=Dropbox* AND process.parent.executable:*\\\\Dropbox.exe))",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.defense-evasion",
+    "attack.t1562.004"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "frack113"
+  ],
+  "false_positives": [
+    "Legitimate administration activity",
+    "Software installations and removal"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

@@ -1,0 +1,50 @@
+{
+  "rule_id": "f62176f3-8128-4faa-bf6c-83261322e5eb",
+  "risk_score": 47,
+  "description": "Detects keywords from well-known PowerShell exploitation frameworks",
+  "name": "Malicious PowerShell Keywords",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "powershell.file.script_block_text:(*AdjustTokenPrivileges* OR *IMAGE_NT_OPTIONAL_HDR64_MAGIC* OR *Metasploit* OR *Microsoft.Win32.UnsafeNativeMethods* OR *Mimikatz* OR *MiniDumpWriteDump* OR *PAGE_EXECUTE_READ* OR *ReadProcessMemory.Invoke* OR *SE_PRIVILEGE_ENABLED* OR *SECURITY_DELEGATION* OR *TOKEN_ADJUST_PRIVILEGES* OR *TOKEN_ALL_ACCESS* OR *TOKEN_ASSIGN_PRIMARY* OR *TOKEN_DUPLICATE* OR *TOKEN_ELEVATION* OR *TOKEN_IMPERSONATE* OR *TOKEN_INFORMATION_CLASS* OR *TOKEN_PRIVILEGES* OR *TOKEN_QUERY*)",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.execution",
+    "attack.t1059.001"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Sean Metcalf (source), Florian Roth (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Depending on the scripts, this rule might require some initial tuning to fit the environment"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

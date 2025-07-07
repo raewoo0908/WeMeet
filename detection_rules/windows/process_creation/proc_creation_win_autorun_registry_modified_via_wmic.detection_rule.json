@@ -1,0 +1,63 @@
+{
+  "rule_id": "c80e66d8-1780-48a9-b412-46663fd21ac0",
+  "risk_score": 73,
+  "description": "Detects suspicious activity where the WMIC process is used to create an autorun registry entry via reg.exe, which is often indicative of persistence mechanisms employed by malware.\n",
+  "name": "Suspicious Autorun Registry Modified via WMI",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "(((process.command_line:(*\\\\Software\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Run* OR *\\\\Software\\\\WOW6432Node\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Run* OR *\\\\Software\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Policies\\\\Explorer\\\\Run*)) AND (process.command_line:*reg* AND process.command_line:*\\ add\\ *)) AND (process.executable:*\\\\wmic.exe OR process.pe.original_file_name:wmic.exe OR process.parent.executable:*\\\\wmiprvse.exe)) AND ((process.command_line:(*\\:\\\\Perflogs* OR *\\:\\\\ProgramData'* OR *\\:\\\\Windows\\\\Temp* OR *\\:\\\\Temp* OR *\\\\AppData\\\\Local\\\\Temp* OR *\\\\AppData\\\\Roaming* OR *\\:\\\\$Recycle.bin* OR *\\:\\\\Users\\\\Default* OR *\\:\\\\Users\\\\public* OR *%temp%* OR *%tmp%* OR *%Public%* OR *%AppData%*)) OR (process.command_line:*\\:\\\\Users\\\\* AND (process.command_line:(*\\\\Favorites* OR *\\\\Favourites* OR *\\\\Contacts* OR *\\\\Music* OR *\\\\Pictures* OR *\\\\Documents* OR *\\\\Photos*))))",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.execution",
+    "attack.persistence",
+    "attack.t1547.001",
+    "attack.t1047"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Swachchhanda Shrawan Poudel (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Legitimate administrative activity or software installations"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

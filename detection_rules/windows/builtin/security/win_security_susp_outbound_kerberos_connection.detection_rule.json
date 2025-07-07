@@ -1,0 +1,51 @@
+{
+  "rule_id": "eca91c7c-9214-47b9-b4c5-cb1d7e4f2350",
+  "risk_score": 47,
+  "description": "Detects uncommon outbound network activity via Kerberos default port indicating possible lateral movement or first stage PrivEsc via delegation.\n",
+  "name": "Uncommon Outbound Kerberos Connection - Security",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "winlog.channel:Security AND ((destination.port:88 AND event.code:5156) AND (NOT (process.executable:*\\\\Windows\\\\System32\\\\lsass.exe AND (process.executable:(\\\\device\\\\harddiskvolume* OR C\\:*)))) AND (NOT (((process.executable:(*\\\\Program\\ Files\\ \\(x86\\)\\\\Google\\\\Chrome\\\\Application\\\\chrome.exe OR *\\\\Program\\ Files\\\\Google\\\\Chrome\\\\Application\\\\chrome.exe)) AND (process.executable:(\\\\device\\\\harddiskvolume* OR C\\:*))) OR ((process.executable:(*\\\\Program\\ Files\\ \\(x86\\)\\\\Mozilla\\ Firefox\\\\firefox.exe OR *\\\\Program\\ Files\\\\Mozilla\\ Firefox\\\\firefox.exe)) AND (process.executable:(\\\\device\\\\harddiskvolume* OR C\\:*))) OR process.executable:*\\\\tomcat\\\\bin\\\\tomcat8.exe)))",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.lateral-movement",
+    "attack.credential-access",
+    "attack.t1558.003"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Ilyas Ochkov, oscd.community"
+  ],
+  "false_positives": [
+    "Web Browsers and third party application might generate similar activity. An initial baseline is required."
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

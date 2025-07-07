@@ -1,0 +1,50 @@
+{
+  "rule_id": "3109530e-ab47-4cc6-a953-cac5ebcc93ae",
+  "risk_score": 47,
+  "description": "Detects the deletion of the \"Zone.Identifier\" ADS by an uncommon process. Attackers can leverage this in order to bypass security restrictions that make use of the ADS such as Microsoft Office apps.",
+  "name": "ADS Zone.Identifier Deleted By Uncommon Application",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "file.path:*\\:Zone.Identifier AND (NOT (process.executable:(C\\:\\\\Program\\ Files\\\\PowerShell\\\\7\\-preview\\\\pwsh.exe OR C\\:\\\\Program\\ Files\\\\PowerShell\\\\7\\\\pwsh.exe OR C\\:\\\\Windows\\\\explorer.exe OR C\\:\\\\Windows\\\\System32\\\\WindowsPowerShell\\\\v1.0\\\\powershell.exe OR C\\:\\\\Windows\\\\SysWOW64\\\\explorer.exe OR C\\:\\\\Windows\\\\SysWOW64\\\\WindowsPowerShell\\\\v1.0\\\\powershell.exe))) AND (NOT ((process.executable:(C\\:\\\\Program\\ Files\\ \\(x86\\)\\\\Google\\\\Chrome\\\\Application\\\\chrome.exe OR C\\:\\\\Program\\ Files\\\\Google\\\\Chrome\\\\Application\\\\chrome.exe)) OR (process.executable:(C\\:\\\\Program\\ Files\\ \\(x86\\)\\\\Mozilla\\ Firefox\\\\firefox.exe OR C\\:\\\\Program\\ Files\\\\Mozilla\\ Firefox\\\\firefox.exe))))",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.defense-evasion",
+    "attack.t1070.004"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Nasreddine Bencherchali (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Other third party applications not listed."
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

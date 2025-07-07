@@ -1,0 +1,51 @@
+{
+  "rule_id": "2f77047c-e6e9-4c11-b088-a3de399524cd",
+  "risk_score": 73,
+  "description": "Detects usage of certain functions and keywords that are used to manipulate security descriptors in order to potentially set a backdoor. As seen used in the DAMP project.",
+  "name": "Potential Persistence Via Security Descriptors - ScriptBlock",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "(powershell.file.script_block_text:(*\\\\Lsa\\\\JD* OR *\\\\Lsa\\\\Skew1* OR *\\\\Lsa\\\\Data* OR *\\\\Lsa\\\\GBG*)) AND (powershell.file.script_block_text:*win32_Trustee* AND powershell.file.script_block_text:*win32_Ace* AND powershell.file.script_block_text:*.AccessMask* AND powershell.file.script_block_text:*.AceType* AND powershell.file.script_block_text:*.SetSecurityDescriptor*)",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.persistence",
+    "attack.defense-evasion",
+    "attack.privilege-escalation"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Nasreddine Bencherchali (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

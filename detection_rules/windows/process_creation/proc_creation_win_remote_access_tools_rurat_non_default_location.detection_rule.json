@@ -1,0 +1,60 @@
+{
+  "rule_id": "e01fa958-6893-41d4-ae03-182477c5e77d",
+  "risk_score": 47,
+  "description": "Detects execution of Remote Utilities RAT (RURAT) from an unusual location (outside of 'C:\\Program Files')",
+  "name": "Remote Access Tool - RURAT Execution From Unusual Location",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "((process.executable:(*\\\\rutserv.exe OR *\\\\rfusclient.exe)) OR process.pe.product:Remote\\ Utilities) AND (NOT (process.executable:(C\\:\\\\Program\\ Files\\\\Remote\\ Utilities* OR C\\:\\\\Program\\ Files\\ \\(x86\\)\\\\Remote\\ Utilities*)))",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.defense-evasion"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Nasreddine Bencherchali (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

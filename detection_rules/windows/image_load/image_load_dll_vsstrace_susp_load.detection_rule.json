@@ -1,0 +1,51 @@
+{
+  "rule_id": "48bfd177-7cf2-412b-ad77-baf923489e82",
+  "risk_score": 47,
+  "description": "Detects the image load of VSS DLL by uncommon executables",
+  "name": "Potentially Suspicious Volume Shadow Copy Vsstrace.dll Load",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "file.path:*\\\\vsstrace.dll AND (NOT (((process.executable:(C\\:\\\\Windows\\\\explorer.exe OR C\\:\\\\Windows\\\\ImmersiveControlPanel\\\\SystemSettings.exe)) OR (process.executable:(C\\:\\\\Windows\\\\System32\\\\* OR C\\:\\\\Windows\\\\SysWOW64\\\\* OR C\\:\\\\Windows\\\\Temp\\\\\\{* OR C\\:\\\\Windows\\\\WinSxS\\\\* OR C\\:\\\\ProgramData\\\\Package\\ Cache\\\\\\{*))) OR (process.executable:(C\\:\\\\Program\\ Files\\\\* OR C\\:\\\\Program\\ Files\\ \\(x86\\)\\\\*))))",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.defense-evasion",
+    "attack.impact",
+    "attack.t1490"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "frack113"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

@@ -1,0 +1,51 @@
+{
+  "rule_id": "5f9db380-ea57-4d1e-beab-8a2d33397e93",
+  "risk_score": 73,
+  "description": "Detects the pattern of UAC Bypass using Windows Media Player osksupport.dll (UACMe 32)",
+  "name": "UAC Bypass Using Windows Media Player - Registry",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "winlog.event_data.Details:Binary\\ Data AND registry.path:*\\\\SOFTWARE\\\\Microsoft\\\\Windows\\ NT\\\\CurrentVersion\\\\AppCompatFlags\\\\Compatibility\\ Assistant\\\\Store\\\\C\\:\\\\Program\\ Files\\\\Windows\\ Media\\ Player\\\\osk.exe",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.defense-evasion",
+    "attack.privilege-escalation",
+    "attack.t1548.002"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Christian Burkard (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

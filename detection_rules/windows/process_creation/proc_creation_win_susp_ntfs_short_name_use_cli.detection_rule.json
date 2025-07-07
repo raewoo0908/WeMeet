@@ -1,0 +1,61 @@
+{
+  "rule_id": "dd6b39d9-d9be-4a3b-8fe0-fe3c6a5c1795",
+  "risk_score": 47,
+  "description": "Detect use of the Windows 8.3 short name. Which could be used as a method to avoid command-line detection",
+  "name": "Use NTFS Short Name in Command Line",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "(process.command_line:(*\\~1.exe* OR *\\~1.bat* OR *\\~1.msi* OR *\\~1.vbe* OR *\\~1.vbs* OR *\\~1.dll* OR *\\~1.ps1* OR *\\~1.js* OR *\\~1.hta* OR *\\~2.exe* OR *\\~2.bat* OR *\\~2.msi* OR *\\~2.vbe* OR *\\~2.vbs* OR *\\~2.dll* OR *\\~2.ps1* OR *\\~2.js* OR *\\~2.hta*)) AND (NOT ((process.parent.executable:(*\\\\WebEx\\\\WebexHost.exe OR *\\\\thor\\\\thor64.exe)) OR process.command_line:*C\\:\\\\xampp\\\\vcredist\\\\VCREDI\\~1.EXE*))",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.defense-evasion",
+    "attack.t1564.004"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "frack113, Nasreddine Bencherchali (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Applications could use this notation occasionally which might generate some false positives. In that case Investigate the parent and child process."
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

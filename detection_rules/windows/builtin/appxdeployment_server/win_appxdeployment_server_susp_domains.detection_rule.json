@@ -1,0 +1,49 @@
+{
+  "rule_id": "8b48ad89-10d8-4382-a546-50588c410f0d",
+  "risk_score": 73,
+  "description": "Detects an appx package added to the pipeline of the \"to be processed\" packages which was downloaded from a suspicious domain.\n",
+  "name": "Suspicious Remote AppX Package Locations",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "winlog.channel:Microsoft\\-Windows\\-AppXDeploymentServer\\/Operational AND (event.code:854 AND (winlog.event_data.Path:(*.githubusercontent.com* OR *anonfiles.com* OR *cdn.discordapp.com* OR *ddns.net* OR *dl.dropboxusercontent.com* OR *ghostbin.co* OR *glitch.me* OR *gofile.io* OR *hastebin.com* OR *mediafire.com* OR *mega.nz* OR *onrender.com* OR *pages.dev* OR *paste.ee* OR *pastebin.com* OR *pastebin.pl* OR *pastetext.net* OR *privatlab.com* OR *privatlab.net* OR *send.exploit.in* OR *sendspace.com* OR *storage.googleapis.com* OR *storjshare.io* OR *supabase.co* OR *temp.sh* OR *transfer.sh* OR *trycloudflare.com* OR *ufile.io* OR *w3spaces.com* OR *workers.dev*)))",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.defense-evasion"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Nasreddine Bencherchali (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

@@ -1,0 +1,51 @@
+{
+  "rule_id": "cbb56d62-4060-40f7-9466-d8aaf3123f83",
+  "risk_score": 47,
+  "description": "Detects the image load of \"Python Core\" by a non-Python process. This might be indicative of a Python script bundled with Py2Exe.",
+  "name": "Python Image Load By Non-Python Process",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "file.pe.description:Python\\ Core AND (NOT (process.executable:*Python* OR (process.executable:(C\\:\\\\Program\\ Files\\\\* OR C\\:\\\\Program\\ Files\\ \\(x86\\)\\\\* OR C\\:\\\\ProgramData\\\\Anaconda3\\\\*)))) AND _exists_:process.executable",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.defense-evasion",
+    "attack.t1027.002"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Patrick St. John, OTR (Open Threat Research)"
+  ],
+  "false_positives": [
+    "Legitimate Py2Exe Binaries",
+    "Known false positive caused with Python Anaconda"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

@@ -1,0 +1,50 @@
+{
+  "rule_id": "e3f673b3-65d1-4d80-9146-466f8b63fa99",
+  "risk_score": 47,
+  "description": "Detects file renames where the target filename uses an uncommon double extension. Could indicate potential ransomware activity renaming files and adding a custom extension to the encrypted files, such as \".jpg.crypted\", \".docx.locky\", etc.",
+  "name": "Suspicious Appended Extension",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "((winlog.event_data.SourceFilename:(*.doc OR *.docx OR *.jpeg OR *.jpg OR *.lnk OR *.pdf OR *.png OR *.pst OR *.rtf OR *.xls OR *.xlsx)) AND (file.path:(*.doc.* OR *.docx.* OR *.jpeg.* OR *.jpg.* OR *.lnk.* OR *.pdf.* OR *.png.* OR *.pst.* OR *.rtf.* OR *.xls.* OR *.xlsx.*))) AND (NOT (file.path:(*.backup OR *.bak OR *.old OR *.orig OR *.temp OR *.tmp))) AND (NOT (file.path:*\\:\\\\ProgramData\\\\Anaconda3\\\\* AND file.path:*.c\\~))",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.impact",
+    "attack.t1486"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "frack113"
+  ],
+  "false_positives": [
+    "Backup software"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

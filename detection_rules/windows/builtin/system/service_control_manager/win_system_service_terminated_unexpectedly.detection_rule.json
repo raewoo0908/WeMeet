@@ -1,0 +1,49 @@
+{
+  "rule_id": "56abae0c-6212-4b97-adc0-0b559bb950c3",
+  "risk_score": 73,
+  "description": "Detects important or interesting Windows services that got terminated unexpectedly.",
+  "name": "Important Windows Service Terminated Unexpectedly",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "winlog.channel:System AND ((event.code:7034 AND winlog.provider_name:Service\\ Control\\ Manager) AND (winlog.event_data.param1:*Message\\ Queuing* OR (winlog.event_data.Binary:(*4d0053004d005100* OR *6d0073006d007100*))))",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.defense-evasion"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Nasreddine Bencherchali (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Rare false positives could occur since service termination could happen due to multiple reasons"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

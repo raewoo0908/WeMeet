@@ -1,0 +1,63 @@
+{
+  "rule_id": "b17ea6f7-6e90-447e-a799-e6c0a493d6ce",
+  "risk_score": 47,
+  "description": "Shadow Copies creation using operating systems utilities, possible credential access",
+  "name": "Shadow Copies Creation Using Operating Systems Utilities",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "(process.command_line:*shadow* AND process.command_line:*create*) AND ((process.executable:(*\\\\powershell.exe OR *\\\\pwsh.exe OR *\\\\wmic.exe OR *\\\\vssadmin.exe)) OR (process.pe.original_file_name:(PowerShell.EXE OR pwsh.dll OR wmic.exe OR VSSADMIN.EXE)))",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.credential-access",
+    "attack.t1003",
+    "attack.t1003.002",
+    "attack.t1003.003"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Teymur Kheirkhabarov, Daniil Yugoslavskiy, oscd.community"
+  ],
+  "false_positives": [
+    "Legitimate administrator working with shadow copies, access for backup purposes"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

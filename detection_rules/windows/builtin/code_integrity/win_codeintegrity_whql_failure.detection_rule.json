@@ -1,0 +1,49 @@
+{
+  "rule_id": "2f8cd7a0-9d5a-4f62-9f8b-2c951aa0dd1f",
+  "risk_score": 73,
+  "description": "Detects loaded kernel modules that did not meet the WHQL signing requirements.",
+  "name": "CodeIntegrity - Unmet WHQL Requirements For Loaded Kernel Module",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "winlog.channel:Microsoft\\-Windows\\-CodeIntegrity\\/Operational AND ((event.code:(3082 OR 3083)) AND (NOT (winlog.event_data.FileNameBuffer:(system32\\\\drivers\\\\vsock.sys OR System32\\\\drivers\\\\vmci.sys))))",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.privilege-escalation"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Nasreddine Bencherchali (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Unlikely"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

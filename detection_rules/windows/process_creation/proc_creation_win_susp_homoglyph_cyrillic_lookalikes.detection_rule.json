@@ -1,0 +1,62 @@
+{
+  "rule_id": "32e280f1-8ad4-46ef-9e80-910657611fbc",
+  "risk_score": 47,
+  "description": "Detects the presence of unicode characters which are homoglyphs, or identical in appearance, to ASCII letter characters.\nThis is used as an obfuscation and masquerading techniques. Only \"perfect\" homoglyphs are included; these are characters that\nare indistinguishable from ASCII characters and thus may make excellent candidates for homoglyph attack characters.\n",
+  "name": "Potential Homoglyph Attack Using Lookalike Characters",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "(process.command_line:(*а* OR *е* OR *о* OR *р* OR *с* OR *х* OR *ѕ* OR *і* OR *ӏ* OR *ј* OR *һ* OR *ԁ* OR *ԛ* OR *ԝ* OR *ο*)) OR (process.command_line:(*А* OR *В* OR *Е* OR *К* OR *М* OR *Н* OR *О* OR *Р* OR *С* OR *Т* OR *Х* OR *Ѕ* OR *І* OR *Ј* OR *Ү* OR *Ӏ* OR *Ԍ* OR *Ԛ* OR *Ԝ* OR *Α* OR *Β* OR *Ε* OR *Ζ* OR *Η* OR *Ι* OR *Κ* OR *Μ* OR *Ν* OR *Ο* OR *Ρ* OR *Τ* OR *Υ* OR *Χ*))",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.defense-evasion",
+    "attack.t1036",
+    "attack.t1036.003"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Micah Babinski, @micahbabinski"
+  ],
+  "false_positives": [
+    "Commandlines with legitimate Cyrillic text; will likely require tuning (or not be usable) in countries where these alphabets are in use."
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

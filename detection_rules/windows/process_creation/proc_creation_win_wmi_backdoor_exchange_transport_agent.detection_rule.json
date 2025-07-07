@@ -1,0 +1,61 @@
+{
+  "rule_id": "797011dc-44f4-4e6f-9f10-a8ceefbe566b",
+  "risk_score": 99,
+  "description": "Detects a WMI backdoor in Exchange Transport Agents via WMI event filters",
+  "name": "WMI Backdoor Exchange Transport Agent",
+  "severity": "critical",
+  "type": "query",
+  "language": "lucene",
+  "query": "process.parent.executable:*\\\\EdgeTransport.exe AND (NOT (process.executable:C\\:\\\\Windows\\\\System32\\\\conhost.exe OR (process.executable:*\\\\Bin\\\\OleConverter.exe AND process.executable:C\\:\\\\Program\\ Files\\\\Microsoft\\\\Exchange\\ Server\\\\*)))",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.persistence",
+    "attack.t1546.003"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Florian Roth (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

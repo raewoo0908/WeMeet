@@ -1,0 +1,60 @@
+{
+  "rule_id": "4c7f49ee-2638-43bb-b85b-ce676c30b260",
+  "risk_score": 47,
+  "description": "Detects the creation of new DLL assembly files by \"aspnet_compiler.exe\", which could be a sign of \"aspnet_compiler\" abuse to proxy execution through a build provider.\n",
+  "name": "Assembly DLL Creation Via AspNetCompiler",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "process.executable:*\\\\aspnet_compiler.exe AND (file.path:*\\\\Temporary\\ ASP.NET\\ Files\\\\* AND file.path:*\\\\assembly\\\\tmp\\\\* AND file.path:*.dll*)",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "File Create (rule: FileCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.execution"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Nasreddine Bencherchali (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Legitimate assembly compilation using a build provider"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

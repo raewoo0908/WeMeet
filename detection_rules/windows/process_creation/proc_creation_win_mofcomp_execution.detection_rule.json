@@ -1,0 +1,61 @@
+{
+  "rule_id": "1dd05363-104e-4b4a-b963-196a534b03a1",
+  "risk_score": 73,
+  "description": "Detects execution of the \"mofcomp\" utility as a child of a suspicious shell or script running utility or by having a suspicious path in the commandline.\nThe \"mofcomp\" utility parses a file containing MOF statements and adds the classes and class instances defined in the file to the WMI repository.\nAttackers abuse this utility to install malicious MOF scripts\n",
+  "name": "Potential Suspicious Mofcomp Execution",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "(((process.parent.executable:(*\\\\cmd.exe OR *\\\\powershell.exe OR *\\\\pwsh.exe OR *\\\\wsl.exe OR *\\\\wscript.exe OR *\\\\cscript.exe)) OR (process.command_line:(*\\\\AppData\\\\Local\\\\Temp* OR *\\\\Users\\\\Public\\\\* OR *\\\\WINDOWS\\\\Temp\\\\* OR *%temp%* OR *%tmp%* OR *%appdata%*))) AND (process.executable:*\\\\mofcomp.exe OR process.pe.original_file_name:mofcomp.exe)) AND (NOT (process.command_line:*C\\:\\\\Windows\\\\TEMP\\\\* AND process.command_line:*.mof AND process.parent.executable:C\\:\\\\Windows\\\\System32\\\\wbem\\\\WmiPrvSE.exe)) AND (NOT (process.command_line:*C\\:\\\\Windows\\\\TEMP\\\\* AND process.command_line:*.mof))",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.defense-evasion",
+    "attack.t1218"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Nasreddine Bencherchali (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

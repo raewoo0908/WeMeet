@@ -1,0 +1,51 @@
+{
+  "rule_id": "828af599-4c53-4ed2-ba4a-a9f835c434ea",
+  "risk_score": 73,
+  "description": "The Fax service attempts to load ualapi.dll, which is non-existent. An attacker can then (side)load their own malicious DLL using this service.",
+  "name": "Fax Service DLL Search Order Hijack",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "(file.path:*ualapi.dll AND process.executable:*\\\\fxssvc.exe) AND (NOT file.path:C\\:\\\\Windows\\\\WinSxS\\\\*)",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.persistence",
+    "attack.defense-evasion",
+    "attack.t1574.001"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "NVISO"
+  ],
+  "false_positives": [
+    "Unlikely"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

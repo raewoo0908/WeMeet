@@ -1,0 +1,61 @@
+{
+  "rule_id": "8a8379b8-780b-4dbf-b1e9-31c8d112fefb",
+  "risk_score": 73,
+  "description": "Detects scheduled task creations that have suspicious action command and folder combinations",
+  "name": "Schtasks From Suspicious Folders",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "(process.command_line:(*C\\:\\\\ProgramData\\\\* OR *%ProgramData%*)) AND (process.command_line:(*powershell* OR *pwsh* OR *cmd\\ \\/c\\ * OR *cmd\\ \\/k\\ * OR *cmd\\ \\/r\\ * OR *cmd.exe\\ \\/c\\ * OR *cmd.exe\\ \\/k\\ * OR *cmd.exe\\ \\/r\\ *)) AND process.command_line:*\\ \\/create\\ * AND (process.executable:*\\\\schtasks.exe OR process.pe.original_file_name:schtasks.exe)",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.execution",
+    "attack.t1053.005"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Florian Roth (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

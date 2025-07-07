@@ -1,0 +1,51 @@
+{
+  "rule_id": "f674e36a-4b91-431e-8aef-f8a96c2aca35",
+  "risk_score": 47,
+  "description": "Detects modification of autostart extensibility point (ASEP) in registry.",
+  "name": "CurrentControlSet Autorun Keys Modification",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "(registry.path:*\\\\SYSTEM\\\\CurrentControlSet\\\\Control* AND (registry.path:(*\\\\Terminal\\ Server\\\\WinStations\\\\RDP\\-Tcp\\\\InitialProgram* OR *\\\\Terminal\\ Server\\\\Wds\\\\rdpwd\\\\StartupPrograms* OR *\\\\SecurityProviders\\\\SecurityProviders* OR *\\\\SafeBoot\\\\AlternateShell* OR *\\\\Print\\\\Providers* OR *\\\\Print\\\\Monitors* OR *\\\\NetworkProvider\\\\Order* OR *\\\\Lsa\\\\Notification\\ Packages* OR *\\\\Lsa\\\\Authentication\\ Packages* OR *\\\\BootVerificationProgram\\\\ImagePath*))) AND (NOT (((winlog.event_data.Details:(cpwmon64_v40.dll OR CutePDF\\ Writer)) AND process.executable:C\\:\\\\Windows\\\\System32\\\\spoolsv.exe AND registry.path:*\\\\Print\\\\Monitors\\\\CutePDF\\ Writer\\ Monitor*) OR winlog.event_data.Details:\\(Empty\\) OR (process.executable:C\\:\\\\Windows\\\\System32\\\\spoolsv.exe AND registry.path:*Print\\\\Monitors\\\\Appmon\\\\Ports\\\\Microsoft.Office.OneNote_* AND (user.name:(*AUTHORI* OR *AUTORI*))) OR (process.executable:C\\:\\\\Windows\\\\System32\\\\poqexec.exe AND registry.path:*\\\\NetworkProvider\\\\Order\\\\ProviderOrder) OR (winlog.event_data.Details:VNCpm.dll AND process.executable:C\\:\\\\Windows\\\\System32\\\\spoolsv.exe AND registry.path:*\\\\Print\\\\Monitors\\\\MONVNC\\\\Driver)))",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.persistence",
+    "attack.t1547.001"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Victor Sergeev, Daniil Yugoslavskiy, Gleb Sukhodolskiy, Timur Zinniatullin, oscd.community, Tim Shelton, frack113 (split)"
+  ],
+  "false_positives": [
+    "Legitimate software automatically (mostly, during installation) sets up autorun keys for legitimate reason",
+    "Legitimate administrator sets up autorun keys for legitimate reason"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

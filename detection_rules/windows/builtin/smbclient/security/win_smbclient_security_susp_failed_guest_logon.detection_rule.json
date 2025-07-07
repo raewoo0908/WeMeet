@@ -1,0 +1,50 @@
+{
+  "rule_id": "71886b70-d7b4-4dbf-acce-87d2ca135262",
+  "risk_score": 47,
+  "description": "Detect Attempt PrintNightmare (CVE-2021-1675) Remote code execution in Windows Spooler Service",
+  "name": "Suspicious Rejected SMB Guest Logon From IP",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "winlog.channel:Microsoft\\-Windows\\-SmbClient\\/Security AND (event.code:31017 AND winlog.event_data.ServerName:\\\\1* AND winlog.event_data.UserName:\"\")",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.credential-access",
+    "attack.t1110.001"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Florian Roth (Nextron Systems), KevTheHermit, fuzzyf10w"
+  ],
+  "false_positives": [
+    "Account fallback reasons (after failed login with specific account)"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

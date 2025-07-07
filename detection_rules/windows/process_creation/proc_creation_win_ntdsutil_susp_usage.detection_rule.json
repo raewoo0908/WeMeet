@@ -1,0 +1,62 @@
+{
+  "rule_id": "a58353df-af43-4753-bad0-cd83ef35eef5",
+  "risk_score": 47,
+  "description": "Detects execution of ntdsutil.exe to perform different actions such as restoring snapshots...etc.",
+  "name": "Suspicious Usage Of Active Directory Diagnostic Tool (ntdsutil.exe)",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "((process.command_line:*snapshot* AND process.command_line:*mount\\ *) OR (process.command_line:*ac* AND process.command_line:*\\ i* AND process.command_line:*\\ ntds*)) AND (process.executable:*\\\\ntdsutil.exe OR process.pe.original_file_name:ntdsutil.exe)",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.credential-access",
+    "attack.t1003.003"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Nasreddine Bencherchali (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Legitimate usage to restore snapshots",
+    "Legitimate admin activity"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

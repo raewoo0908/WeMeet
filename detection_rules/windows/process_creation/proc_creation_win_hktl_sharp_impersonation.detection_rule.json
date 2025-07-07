@@ -1,0 +1,63 @@
+{
+  "rule_id": "f89b08d0-77ad-4728-817b-9b16c5a69c7a",
+  "risk_score": 73,
+  "description": "Detects execution of the SharpImpersonation tool. Which can be used to manipulate tokens on a Windows computers remotely (PsExec/WmiExec) or interactively",
+  "name": "HackTool - SharpImpersonation Execution",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "((process.command_line:*\\ user\\:* AND process.command_line:*\\ binary\\:*) OR (process.command_line:*\\ user\\:* AND process.command_line:*\\ shellcode\\:*) OR (process.command_line:(*\\ technique\\:CreateProcessAsUserW* OR *\\ technique\\:ImpersonateLoggedOnuser*))) OR (process.executable:*\\\\SharpImpersonation.exe OR process.pe.original_file_name:SharpImpersonation.exe)",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.privilege-escalation",
+    "attack.defense-evasion",
+    "attack.t1134.001",
+    "attack.t1134.003"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Sai Prashanth Pulisetti @pulisettis, Nasreddine Bencherchali (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

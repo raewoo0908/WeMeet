@@ -1,0 +1,62 @@
+{
+  "rule_id": "9c7e131a-0f2c-4ae0-9d43-b04f4e266d43",
+  "risk_score": 47,
+  "description": "Detects uncommon child processes of Appvlp.EXE\nAppvlp or the Application Virtualization Utility is included with Microsoft Office. Attackers are able to abuse \"AppVLP\" to execute shell commands.\nNormally, this binary is used for Application Virtualization, but it can also be abused to circumvent the ASR file path rule folder\nor to mark a file as a system file.\n",
+  "name": "Uncommon Child Process Of Appvlp.EXE",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "process.parent.executable:*\\\\appvlp.exe AND (NOT (process.executable:(*\\:\\\\Windows\\\\SysWOW64\\\\rundll32.exe OR *\\:\\\\Windows\\\\System32\\\\rundll32.exe))) AND (NOT ((process.executable:*\\:\\\\Program\\ Files\\\\Microsoft\\ Office* AND process.executable:*\\\\msoasb.exe) OR (process.executable:*\\:\\\\Program\\ Files\\\\Microsoft\\ Office* AND process.executable:*\\\\MSOUC.EXE) OR ((process.executable:*\\:\\\\Program\\ Files\\\\Microsoft\\ Office* AND process.executable:*\\\\SkypeSrv\\\\*) AND process.executable:*\\\\SKYPESERVER.EXE)))",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.t1218",
+    "attack.defense-evasion",
+    "attack.execution"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Sreeman"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

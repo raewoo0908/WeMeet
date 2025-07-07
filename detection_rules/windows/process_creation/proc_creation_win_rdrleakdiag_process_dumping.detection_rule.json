@@ -1,0 +1,61 @@
+{
+  "rule_id": "edadb1e5-5919-4e4c-8462-a9e643b02c4b",
+  "risk_score": 73,
+  "description": "Detects the use of the Microsoft Windows Resource Leak Diagnostic tool \"rdrleakdiag.exe\" to dump process memory",
+  "name": "Process Memory Dump via RdrLeakDiag.EXE",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "(process.command_line:(*\\-memdmp* OR *\\/memdmp* OR *–memdmp* OR *—memdmp* OR *―memdmp*) OR process.command_line:(*fullmemdmp*)) AND (process.command_line:(*\\ \\-o\\ * OR *\\ \\/o\\ * OR *\\ –o\\ * OR *\\ —o\\ * OR *\\ ―o\\ *) OR process.command_line:(*\\ \\-p\\ * OR *\\ \\/p\\ * OR *\\ –p\\ * OR *\\ —p\\ * OR *\\ ―p\\ *)) AND (process.executable:*\\\\rdrleakdiag.exe OR process.pe.original_file_name:RdrLeakDiag.exe)",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.credential-access",
+    "attack.t1003.001"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Cedric MAURUGEON, Florian Roth (Nextron Systems), Swachchhanda Shrawan Poudel, Nasreddine Bencherchali (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Unlikely"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

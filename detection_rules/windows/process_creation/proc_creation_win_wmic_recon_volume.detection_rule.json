@@ -1,0 +1,63 @@
+{
+  "rule_id": "c79da740-5030-45ec-a2e0-479e824a562c",
+  "risk_score": 47,
+  "description": "An adversary might use WMI to discover information about the system, such as the volume name, size,\nfree space, and other disk information. This can be done using the `wmic` command-line utility and has been\nobserved being used by threat actors such as Volt Typhoon.\n",
+  "name": "System Disk And Volume Reconnaissance Via Wmic.EXE",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "(process.command_line:(*volume* OR *path\\ win32_logicaldisk*)) AND (process.executable:*\\\\WMIC.exe OR process.pe.original_file_name:wmic.exe)",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.execution",
+    "attack.discovery",
+    "attack.t1047",
+    "attack.t1082"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Stephen Lincoln `@slincoln-aiq`(AttackIQ)"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

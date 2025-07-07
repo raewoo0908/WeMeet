@@ -1,0 +1,61 @@
+{
+  "rule_id": "12fbff88-16b5-4b42-9754-cd001a789fb3",
+  "risk_score": 47,
+  "description": "Detects a CodePage modification using the \"mode.com\" utility to Russian language.\nThis behavior has been used by threat actors behind Dharma ransomware.\n",
+  "name": "CodePage Modification Via MODE.COM To Russian Language",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "((process.command_line:*\\ con\\ * AND process.command_line:*\\ cp\\ * AND process.command_line:*\\ select\\=*) AND (process.command_line:(*\\=1251 OR *\\=866))) AND (process.executable:*\\\\mode.com OR process.pe.original_file_name:MODE.COM)",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.defense-evasion",
+    "attack.t1036"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Joseliyo Sanchez, @Joseliyo_Jstnk"
+  ],
+  "false_positives": [
+    "Russian speaking people changing the CodePage"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

@@ -1,0 +1,73 @@
+{
+  "rule_id": "52cad028-0ff0-4854-8f67-d25dfcbc78b4",
+  "risk_score": 73,
+  "description": "Detects a suspicious child process of a Microsoft HTML Help (HH.exe)",
+  "name": "HTML Help HH.EXE Suspicious Child Process",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "(process.executable:(*\\\\CertReq.exe OR *\\\\CertUtil.exe OR *\\\\cmd.exe OR *\\\\cscript.exe OR *\\\\installutil.exe OR *\\\\MSbuild.exe OR *\\\\MSHTA.EXE OR *\\\\msiexec.exe OR *\\\\powershell.exe OR *\\\\pwsh.exe OR *\\\\regsvr32.exe OR *\\\\rundll32.exe OR *\\\\schtasks.exe OR *\\\\wmic.exe OR *\\\\wscript.exe)) AND process.parent.executable:*\\\\hh.exe",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.defense-evasion",
+    "attack.execution",
+    "attack.initial-access",
+    "attack.t1047",
+    "attack.t1059.001",
+    "attack.t1059.003",
+    "attack.t1059.005",
+    "attack.t1059.007",
+    "attack.t1218",
+    "attack.t1218.001",
+    "attack.t1218.010",
+    "attack.t1218.011",
+    "attack.t1566",
+    "attack.t1566.001"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Maxim Pavlunin, Nasreddine Bencherchali (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

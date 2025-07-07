@@ -1,0 +1,53 @@
+{
+  "rule_id": "3245cd30-e015-40ff-a31d-5cadd5f377ec",
+  "risk_score": 73,
+  "description": "Detects the execution of the hacktool Rubeus using specific command line flags",
+  "name": "HackTool - Rubeus Execution - ScriptBlock",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "powershell.file.script_block_text:(*asreproast\\ * OR *dump\\ \\/service\\:krbtgt\\ * OR *dump\\ \\/luid\\:0x* OR *kerberoast\\ * OR *createnetonly\\ \\/program\\:* OR *ptt\\ \\/ticket\\:* OR *\\/impersonateuser\\:* OR *renew\\ \\/ticket\\:* OR *asktgt\\ \\/user\\:* OR *harvest\\ \\/interval\\:* OR *s4u\\ \\/user\\:* OR *s4u\\ \\/ticket\\:* OR *hash\\ \\/password\\:* OR *golden\\ \\/aes256\\:* OR *silver\\ \\/user\\:*)",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.credential-access",
+    "attack.t1003",
+    "attack.t1558.003",
+    "attack.lateral-movement",
+    "attack.t1550.003"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Christian Burkard (Nextron Systems), Florian Roth (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Unlikely"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

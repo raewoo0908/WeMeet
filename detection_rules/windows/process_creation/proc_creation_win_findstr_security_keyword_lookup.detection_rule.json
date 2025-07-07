@@ -1,0 +1,61 @@
+{
+  "rule_id": "4fe074b4-b833-4081-8f24-7dcfeca72b42",
+  "risk_score": 47,
+  "description": "Detects execution of \"findstr\" to search for common names of security tools. Attackers often pipe the results of recon commands such as \"tasklist\" or \"whoami\" to \"findstr\" in order to filter out the results.\nThis detection focuses on the keywords that the attacker might use as a filter.\n",
+  "name": "Security Tools Keyword Lookup Via Findstr.EXE",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "(process.command_line:(*\\ avira OR *\\ avira\\\" OR *\\ cb OR *\\ cb\\\" OR *\\ cylance OR *\\ cylance\\\" OR *\\ defender OR *\\ defender\\\" OR *\\ kaspersky OR *\\ kaspersky\\\" OR *\\ kes OR *\\ kes\\\" OR *\\ mc OR *\\ mc\\\" OR *\\ sec OR *\\ sec\\\" OR *\\ sentinel OR *\\ sentinel\\\" OR *\\ symantec OR *\\ symantec\\\" OR *\\ virus OR *\\ virus\\\")) AND ((process.executable:(*\\\\find.exe OR *\\\\findstr.exe)) OR (process.pe.original_file_name:(FIND.EXE OR FINDSTR.EXE)))",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.discovery",
+    "attack.t1518.001"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Nasreddine Bencherchali (Nextron Systems), frack113"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

@@ -1,0 +1,49 @@
+{
+  "rule_id": "fad91067-08c5-4d1a-8d8c-d96a21b37814",
+  "risk_score": 47,
+  "description": "Detects changes to the PowerShell execution policy in order to bypass signing requirements for script execution",
+  "name": "Potential PowerShell Execution Policy Tampering",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "((winlog.event_data.Details:(*Bypass* OR *Unrestricted*)) AND (registry.path:(*\\\\ShellIds\\\\Microsoft.PowerShell\\\\ExecutionPolicy OR *\\\\Policies\\\\Microsoft\\\\Windows\\\\PowerShell\\\\ExecutionPolicy))) AND (NOT (process.executable:(*\\:\\\\Windows\\\\System32\\\\* OR *\\:\\\\Windows\\\\SysWOW64\\\\*)))",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.defense-evasion"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Nasreddine Bencherchali (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

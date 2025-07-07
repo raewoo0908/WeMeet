@@ -1,0 +1,64 @@
+{
+  "rule_id": "e7be6119-fc37-43f0-ad4f-1f3f99be2f9f",
+  "risk_score": 73,
+  "description": "Files with well-known filenames (sensitive files with credential data) copying",
+  "name": "Copying Sensitive Files with Credential Data",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "((process.command_line:(*vss*) OR process.command_line:(*\\ \\-m\\ * OR *\\ \\/m\\ * OR *\\ –m\\ * OR *\\ —m\\ * OR *\\ ―m\\ *) OR process.command_line:(*\\ \\-y\\ * OR *\\ \\/y\\ * OR *\\ –y\\ * OR *\\ —y\\ * OR *\\ ―y\\ *)) AND (process.executable:*\\\\esentutl.exe OR process.pe.original_file_name:\\\\esentutl.exe)) OR (process.command_line:(*\\\\config\\\\RegBack\\\\sam* OR *\\\\config\\\\RegBack\\\\security* OR *\\\\config\\\\RegBack\\\\system* OR *\\\\config\\\\sam* OR *\\\\config\\\\security* OR *\\\\config\\\\system\\ * OR *\\\\repair\\\\sam* OR *\\\\repair\\\\security* OR *\\\\repair\\\\system* OR *\\\\windows\\\\ntds\\\\ntds.dit*))",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.credential-access",
+    "attack.t1003.002",
+    "attack.t1003.003",
+    "car.2013-07-001",
+    "attack.s0404"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Teymur Kheirkhabarov, Daniil Yugoslavskiy, oscd.community"
+  ],
+  "false_positives": [
+    "Copying sensitive files for legitimate use (eg. backup) or forensic investigation by legitimate incident responder or forensic investigator."
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

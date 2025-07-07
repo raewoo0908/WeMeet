@@ -1,0 +1,49 @@
+{
+  "rule_id": "a1b1fd53-9c4a-444c-bae0-34a330fc7aa8",
+  "risk_score": 73,
+  "description": "Detects when an attacker adds a new \"DLLPathOverride\" value to the \"Natural Language\" key in order to achieve persistence which will get invoked by \"SearchIndexer.exe\" process",
+  "name": "Potential Persistence Via DLLPathOverride",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "registry.path:*\\\\SYSTEM\\\\CurrentControlSet\\\\Control\\\\ContentIndex\\\\Language\\\\* AND (registry.path:(*\\\\StemmerDLLPathOverride* OR *\\\\WBDLLPathOverride* OR *\\\\StemmerClass* OR *\\\\WBreakerClass*))",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.persistence"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Nasreddine Bencherchali (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

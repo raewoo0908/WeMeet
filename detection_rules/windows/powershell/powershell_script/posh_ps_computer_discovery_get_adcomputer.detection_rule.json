@@ -1,0 +1,50 @@
+{
+  "rule_id": "db885529-903f-4c5d-9864-28fe199e6370",
+  "risk_score": 47,
+  "description": "Detects usage of the Get-ADComputer cmdlet to collect computer information and output it to a file",
+  "name": "Computer Discovery And Export Via Get-ADComputer Cmdlet - PowerShell",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "(powershell.file.script_block_text:(*\\ \\|\\ Select\\ * OR *Out\\-File* OR *Set\\-Content* OR *Add\\-Content*)) AND (powershell.file.script_block_text:*Get\\-ADComputer\\ * AND powershell.file.script_block_text:*\\ \\-Filter\\ \\**)",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.discovery",
+    "attack.t1033"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Nasreddine Bencherchali (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Legitimate admin scripts may use the same technique, it's better to exclude specific computers or users who execute these commands or scripts often"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

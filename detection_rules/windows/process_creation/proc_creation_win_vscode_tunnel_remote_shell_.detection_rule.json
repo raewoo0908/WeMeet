@@ -1,0 +1,61 @@
+{
+  "rule_id": "f4a623c2-4ef5-4c33-b811-0642f702c9f1",
+  "risk_score": 47,
+  "description": "Detects the execution of a shell (powershell, bash, wsl...) via Visual Studio Code tunnel. Attackers can abuse this functionality to establish a C2 channel and execute arbitrary commands on the system.",
+  "name": "Visual Studio Code Tunnel Shell Execution",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "(process.parent.command_line:*.vscode\\-server* AND process.parent.executable:*\\\\servers\\\\Stable\\-* AND process.parent.executable:*\\\\server\\\\node.exe) AND ((process.command_line:*\\\\terminal\\\\browser\\\\media\\\\shellIntegration.ps1* AND (process.executable:(*\\\\powershell.exe OR *\\\\pwsh.exe))) OR (process.executable:(*\\\\wsl.exe OR *\\\\bash.exe)))",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.command-and-control",
+    "attack.t1071.001"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Nasreddine Bencherchali (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Legitimate use of Visual Studio Code tunnel and running code from there"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

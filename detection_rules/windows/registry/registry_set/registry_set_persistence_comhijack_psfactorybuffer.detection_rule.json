@@ -1,0 +1,50 @@
+{
+  "rule_id": "243380fa-11eb-4141-af92-e14925e77c1b",
+  "risk_score": 73,
+  "description": "Detects changes to the PSFactory COM InProcServer32 registry. This technique was used by RomCom to create persistence storing a malicious DLL.",
+  "name": "Potential PSFactoryBuffer COM Hijacking",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "registry.path:*\\\\CLSID\\\\\\{c90250f3\\-4d7d\\-4991\\-9b69\\-a5c5bc1c2ae6\\}\\\\InProcServer32\\\\\\(Default\\) AND (NOT (winlog.event_data.Details:(%windir%\\\\System32\\\\ActXPrxy.dll OR C\\:\\\\Windows\\\\System32\\\\ActXPrxy.dll)))",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.persistence",
+    "attack.t1546.015"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "BlackBerry Threat Research and Intelligence Team - @Joseliyo_Jstnk"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

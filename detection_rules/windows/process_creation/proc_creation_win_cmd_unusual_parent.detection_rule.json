@@ -1,0 +1,61 @@
+{
+  "rule_id": "4b991083-3d0e-44ce-8fc4-b254025d8d4b",
+  "risk_score": 47,
+  "description": "Detects suspicious parent process for cmd.exe",
+  "name": "Unusual Parent Process For Cmd.EXE",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "process.executable:*\\\\cmd.exe AND (process.parent.executable:(*\\\\csrss.exe OR *\\\\ctfmon.exe OR *\\\\dllhost.exe OR *\\\\epad.exe OR *\\\\FlashPlayerUpdateService.exe OR *\\\\GoogleUpdate.exe OR *\\\\jucheck.exe OR *\\\\jusched.exe OR *\\\\LogonUI.exe OR *\\\\lsass.exe OR *\\\\regsvr32.exe OR *\\\\SearchIndexer.exe OR *\\\\SearchProtocolHost.exe OR *\\\\SIHClient.exe OR *\\\\sihost.exe OR *\\\\slui.exe OR *\\\\spoolsv.exe OR *\\\\sppsvc.exe OR *\\\\taskhostw.exe OR *\\\\unsecapp.exe OR *\\\\WerFault.exe OR *\\\\wermgr.exe OR *\\\\wlanext.exe OR *\\\\WUDFHost.exe))",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.execution",
+    "attack.t1059"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Tim Rauch, Elastic (idea)"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

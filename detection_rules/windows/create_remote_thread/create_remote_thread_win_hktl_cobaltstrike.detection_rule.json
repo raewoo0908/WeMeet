@@ -1,0 +1,50 @@
+{
+  "rule_id": "6309645e-122d-4c5b-bb2b-22e4f9c2fa42",
+  "risk_score": 73,
+  "description": "Detects a potential remote threat creation with certain characteristics which are typical for Cobalt Strike beacons",
+  "name": "HackTool - Potential CobaltStrike Process Injection",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "winlog.event_data.StartAddress:(*0B80 OR *0C7C OR *0C88)",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.defense-evasion",
+    "attack.t1055.001"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Olaf Hartong, Florian Roth (Nextron Systems), Aleksey Potapov, oscd.community"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

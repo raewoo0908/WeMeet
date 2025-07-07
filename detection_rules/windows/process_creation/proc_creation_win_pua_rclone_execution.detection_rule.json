@@ -1,0 +1,61 @@
+{
+  "rule_id": "e37db05d-d1f9-49c8-b464-cee1a4b11638",
+  "risk_score": 73,
+  "description": "Detects execution of RClone utility for exfiltration as used by various ransomwares strains like REvil, Conti, FiveHands, etc",
+  "name": "PUA - Rclone Execution",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "(process.command_line:*\\-\\-config\\ * AND process.command_line:*\\-\\-no\\-check\\-certificate\\ * AND process.command_line:*\\ copy\\ *) OR ((process.command_line:(*pass* OR *user* OR *copy* OR *sync* OR *config* OR *lsd* OR *remote* OR *ls* OR *mega* OR *pcloud* OR *ftp* OR *ignore\\-existing* OR *auto\\-confirm* OR *transfers* OR *multi\\-thread\\-streams* OR *no\\-check\\-certificate\\ *)) AND (process.executable:*\\\\rclone.exe OR process.pe.description:Rsync\\ for\\ cloud\\ storage))",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.exfiltration",
+    "attack.t1567.002"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Bhabesh Raj, Sittikorn S, Aaron Greetham (@beardofbinary) - NCC Group"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

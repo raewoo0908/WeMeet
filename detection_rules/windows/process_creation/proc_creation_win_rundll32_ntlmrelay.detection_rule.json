@@ -1,0 +1,62 @@
+{
+  "rule_id": "bb76d96b-821c-47cf-944b-7ce377864492",
+  "risk_score": 73,
+  "description": "Detects a privilege elevation attempt by coercing NTLM authentication on the Printer Spooler service",
+  "name": "Suspicious NTLM Authentication on the Printer Spooler Service",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "((process.command_line:(*spoolss* OR *srvsvc* OR *\\/print\\/pipe\\/*)) AND (process.command_line:*C\\:\\\\windows\\\\system32\\\\davclnt.dll,DavSetCookie* AND process.command_line:*http*)) AND (process.executable:*\\\\rundll32.exe OR process.pe.original_file_name:RUNDLL32.EXE)",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.privilege-escalation",
+    "attack.credential-access",
+    "attack.t1212"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Elastic (idea), Tobias Michalski (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

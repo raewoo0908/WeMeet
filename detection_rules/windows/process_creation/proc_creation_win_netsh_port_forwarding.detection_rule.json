@@ -1,0 +1,64 @@
+{
+  "rule_id": "322ed9ec-fcab-4f67-9a34-e7c6aef43614",
+  "risk_score": 47,
+  "description": "Detects the execution of netsh commands that configure a new port forwarding (PortProxy) rule",
+  "name": "New Port Forwarding Rule Added Via Netsh.EXE",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "(process.executable:*\\\\netsh.exe OR process.pe.original_file_name:netsh.exe) AND ((process.command_line:*interface* AND process.command_line:*portproxy* AND process.command_line:*add* AND process.command_line:*v4tov4*) OR (process.command_line:*i\\ * AND process.command_line:*p\\ * AND process.command_line:*a\\ * AND process.command_line:*v\\ *) OR (process.command_line:*connectp* AND process.command_line:*listena* AND process.command_line:*c\\=*))",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.lateral-movement",
+    "attack.defense-evasion",
+    "attack.command-and-control",
+    "attack.t1090"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Florian Roth (Nextron Systems), omkar72, oscd.community, Swachchhanda Shrawan Poudel"
+  ],
+  "false_positives": [
+    "Legitimate administration activity",
+    "WSL2 network bridge PowerShell script used for WSL/Kubernetes/Docker (e.g. https://github.com/microsoft/WSL/issues/4150#issuecomment-504209723)"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

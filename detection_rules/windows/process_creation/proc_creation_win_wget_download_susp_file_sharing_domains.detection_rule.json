@@ -1,0 +1,60 @@
+{
+  "rule_id": "a0d7e4d2-bede-4141-8896-bc6e237e977c",
+  "risk_score": 73,
+  "description": "Detects potentially suspicious file downloads from file sharing domains using wget.exe",
+  "name": "Suspicious File Download From File Sharing Domain Via Wget.EXE",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "(process.command_line:(*.ps1 OR *.ps1' OR *.ps1\\\" OR *.dat OR *.dat' OR *.dat\\\" OR *.msi OR *.msi' OR *.msi\\\" OR *.bat OR *.bat' OR *.bat\\\" OR *.exe OR *.exe' OR *.exe\\\" OR *.vbs OR *.vbs' OR *.vbs\\\" OR *.vbe OR *.vbe' OR *.vbe\\\" OR *.hta OR *.hta' OR *.hta\\\" OR *.dll OR *.dll' OR *.dll\\\" OR *.psm1 OR *.psm1' OR *.psm1\\\")) AND (process.command_line:/\\s-O\\s/ OR process.command_line:*\\-\\-output\\-document*) AND process.command_line:*http* AND (process.executable:*\\\\wget.exe OR process.pe.original_file_name:wget.exe) AND (process.command_line:(*.githubusercontent.com* OR *anonfiles.com* OR *cdn.discordapp.com* OR *ddns.net* OR *dl.dropboxusercontent.com* OR *ghostbin.co* OR *glitch.me* OR *gofile.io* OR *hastebin.com* OR *mediafire.com* OR *mega.nz* OR *onrender.com* OR *pages.dev* OR *paste.ee* OR *pastebin.com* OR *pastebin.pl* OR *pastetext.net* OR *pixeldrain.com* OR *privatlab.com* OR *privatlab.net* OR *send.exploit.in* OR *sendspace.com* OR *storage.googleapis.com* OR *storjshare.io* OR *supabase.co* OR *temp.sh* OR *transfer.sh* OR *trycloudflare.com* OR *ufile.io* OR *w3spaces.com* OR *workers.dev*))",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.execution"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Nasreddine Bencherchali (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

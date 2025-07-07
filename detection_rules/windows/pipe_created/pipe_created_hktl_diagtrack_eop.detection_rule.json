@@ -1,0 +1,49 @@
+{
+  "rule_id": "1f7025a6-e747-4130-aac4-961eb47015f1",
+  "risk_score": 99,
+  "description": "Detects creation of default named pipe used by the DiagTrackEoP POC, a tool that abuses \"SeImpersonate\" privilege.",
+  "name": "HackTool - DiagTrackEoP Default Named Pipe",
+  "severity": "critical",
+  "type": "query",
+  "language": "lucene",
+  "query": "file.name:*thisispipe*",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.privilege-escalation"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Nasreddine Bencherchali (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Unlikely"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

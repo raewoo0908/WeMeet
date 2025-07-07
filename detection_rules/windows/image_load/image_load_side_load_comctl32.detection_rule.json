@@ -1,0 +1,52 @@
+{
+  "rule_id": "6360757a-d460-456c-8b13-74cf0e60cceb",
+  "risk_score": 73,
+  "description": "Detects potential DLL sideloading using comctl32.dll to obtain system privileges",
+  "name": "Potential DLL Sideloading Via comctl32.dll",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "file.path:*\\\\comctl32.dll AND (file.path:(C\\:\\\\Windows\\\\System32\\\\logonUI.exe.local\\\\* OR C\\:\\\\Windows\\\\System32\\\\werFault.exe.local\\\\* OR C\\:\\\\Windows\\\\System32\\\\consent.exe.local\\\\* OR C\\:\\\\Windows\\\\System32\\\\narrator.exe.local\\\\* OR C\\:\\\\windows\\\\system32\\\\wermgr.exe.local\\\\*))",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.defense-evasion",
+    "attack.persistence",
+    "attack.privilege-escalation",
+    "attack.t1574.001"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Nasreddine Bencherchali (Nextron Systems), Subhash Popuri (@pbssubhash)"
+  ],
+  "false_positives": [
+    "Unlikely"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

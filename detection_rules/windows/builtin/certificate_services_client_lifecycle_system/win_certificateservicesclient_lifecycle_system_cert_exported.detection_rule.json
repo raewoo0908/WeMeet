@@ -1,0 +1,50 @@
+{
+  "rule_id": "58c0bff0-40a0-46e8-b5e8-b734b84d2017",
+  "risk_score": 47,
+  "description": "Detects when an application exports a certificate (and potentially the private key as well) from the local Windows certificate store.",
+  "name": "Certificate Exported From Local Certificate Store",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "winlog.channel:Microsoft\\-Windows\\-CertificateServicesClient\\-Lifecycle\\-System\\/Operational AND event.code:1007",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.credential-access",
+    "attack.t1649"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Zach Mathis"
+  ],
+  "false_positives": [
+    "Legitimate application requesting certificate exports will trigger this. Apply additional filters as needed"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

@@ -1,0 +1,61 @@
+{
+  "rule_id": "786cdae8-fefb-4eb2-9227-04e34060db01",
+  "risk_score": 47,
+  "description": "Detects a network connection initiated by \"wordpad.exe\" over uncommon destination ports.\nThis might indicate potential process injection activity from a beacon or similar mechanisms.\n",
+  "name": "Suspicious Wordpad Outbound Connections",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "(process.executable:*\\\\wordpad.exe AND network.direction:true) AND (NOT (destination.port:(80 OR 139 OR 443 OR 445 OR 465 OR 587 OR 993 OR 995)))",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Network connection detected (rule: NetworkConnect)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.defense-evasion",
+    "attack.command-and-control"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "X__Junior (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Other ports can be used, apply additional filters accordingly"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

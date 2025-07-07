@@ -1,0 +1,50 @@
+{
+  "rule_id": "8d85cf08-bf97-4260-ba49-986a2a65129c",
+  "risk_score": 47,
+  "description": "Detects potential PowerShell commands or code within registry run keys",
+  "name": "Suspicious Powershell In Registry Run Keys",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "(winlog.event_data.Details:(*powershell* OR *pwsh\\ * OR *FromBase64String* OR *.DownloadFile\\(* OR *.DownloadString\\(* OR *\\ \\-w\\ hidden\\ * OR *\\ \\-w\\ 1\\ * OR *\\-windowstyle\\ hidden* OR *\\-window\\ hidden* OR *\\ \\-nop\\ * OR *\\ \\-encodedcommand\\ * OR *\\-ExecutionPolicy\\ Bypass* OR *Invoke\\-Expression* OR *IEX\\ \\(* OR *Invoke\\-Command* OR *ICM\\ \\-* OR *Invoke\\-WebRequest* OR *IWR\\ * OR *\\ \\-noni\\ * OR *\\ \\-noninteractive\\ *)) AND (registry.path:(*\\\\Software\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Run* OR *\\\\Software\\\\WOW6432Node\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Run* OR *\\\\Software\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Policies\\\\Explorer\\\\Run*))",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.persistence",
+    "attack.t1547.001"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "frack113, Florian Roth (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Legitimate admin or third party scripts. Baseline according to your environment"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

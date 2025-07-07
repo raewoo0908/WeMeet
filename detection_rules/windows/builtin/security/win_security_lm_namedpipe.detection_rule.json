@@ -1,0 +1,50 @@
+{
+  "rule_id": "52d8b0c6-53d6-439a-9e41-52ad442ad9ad",
+  "risk_score": 73,
+  "description": "This detection excludes known namped pipes accessible remotely and notify on newly observed ones, may help to detect lateral movement and remote exec using named pipes",
+  "name": "First Time Seen Remote Named Pipe",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "winlog.channel:Security AND ((event.code:5145 AND winlog.event_data.ShareName:\\\\\\\\\\*\\\\IPC$) AND (NOT (winlog.event_data.RelativeTargetName:(atsvc OR samr OR lsarpc OR lsass OR winreg OR netlogon OR srvsvc OR protected_storage OR wkssvc OR browser OR netdfs OR svcctl OR spoolss OR ntsvcs OR LSM_API_service OR HydraLsPipe OR TermSrv_API_service OR MsFteWds OR sql\\\\query OR eventlog))))",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.lateral-movement",
+    "attack.t1021.002"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Samir Bousseaden"
+  ],
+  "false_positives": [
+    "Update the excluded named pipe to filter out any newly observed legit named pipe"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

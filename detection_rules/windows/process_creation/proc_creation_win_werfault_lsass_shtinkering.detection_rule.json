@@ -1,0 +1,61 @@
+{
+  "rule_id": "9a4ccd1a-3526-4d99-b980-9f9c5d3a6ff3",
+  "risk_score": 73,
+  "description": "Detects potential credential dumping via Windows Error Reporting LSASS Shtinkering technique which uses the Windows Error Reporting to dump lsass",
+  "name": "Potential Credential Dumping Via WER",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "(((process.command_line:*\\ \\-u\\ \\-p\\ * AND process.command_line:*\\ \\-ip\\ * AND process.command_line:*\\ \\-s\\ *) AND (winlog.event_data.ParentUser:(*AUTHORI* OR *AUTORI*)) AND (user.name:(*AUTHORI* OR *AUTORI*))) AND (process.executable:*\\\\Werfault.exe OR process.pe.original_file_name:WerFault.exe)) AND (NOT process.parent.executable:C\\:\\\\Windows\\\\System32\\\\lsass.exe)",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.credential-access",
+    "attack.t1003.001"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "@pbssubhash , Nasreddine Bencherchali"
+  ],
+  "false_positives": [
+    "Windows Error Reporting might produce similar behavior. In that case, check the PID associated with the \"-p\" parameter in the CommandLine."
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

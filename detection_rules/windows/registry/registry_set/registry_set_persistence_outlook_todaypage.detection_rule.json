@@ -1,0 +1,50 @@
+{
+  "rule_id": "487bb375-12ef-41f6-baae-c6a1572b4dd1",
+  "risk_score": 73,
+  "description": "Detects potential persistence activity via outlook today page.\nAn attacker can set a custom page to execute arbitrary code and link to it via the registry values \"URL\" and \"UserDefinedUrl\".\n",
+  "name": "Potential Persistence Via Outlook Today Page",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "(registry.path:*Software\\\\Microsoft\\\\Office\\\\* AND registry.path:*\\\\Outlook\\\\Today\\\\*) AND ((winlog.event_data.Details:DWORD\\ \\(0x00000001\\) AND registry.path:*\\\\Stamp) OR (registry.path:(*\\\\URL OR *\\\\UserDefinedUrl))) AND (NOT (process.executable:*\\\\OfficeClickToRun.exe AND (process.executable:(C\\:\\\\Program\\ Files\\\\Common\\ Files\\\\Microsoft\\ Shared\\\\ClickToRun\\\\* OR C\\:\\\\Program\\ Files\\\\Common\\ Files\\\\Microsoft\\ Shared\\\\ClickToRun\\\\Updates\\\\*))))",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.persistence",
+    "attack.t1112"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Tobias Michalski (Nextron Systems), David Bertho (@dbertho) & Eirik Sveen (@0xSV1), Storebrand"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

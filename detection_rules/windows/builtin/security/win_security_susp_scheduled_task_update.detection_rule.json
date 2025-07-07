@@ -1,0 +1,52 @@
+{
+  "rule_id": "614cf376-6651-47c4-9dcc-6b9527f749f4",
+  "risk_score": 73,
+  "description": "Detects update to a scheduled task event that contain suspicious keywords.",
+  "name": "Suspicious Scheduled Task Update",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "winlog.channel:Security AND ((winlog.event_data.TaskContentNew:(*regsvr32* OR *rundll32* OR *cmd.exe\\<\\/Command\\>* OR *cmd\\<\\/Command\\>* OR *\\<Arguments\\>\\/c\\ * OR *\\<Arguments\\>\\/k\\ * OR *\\<Arguments\\>\\/r\\ * OR *powershell* OR *pwsh* OR *mshta* OR *wscript* OR *cscript* OR *certutil* OR *bitsadmin* OR *bash.exe* OR *bash\\ * OR *scrcons* OR *wmic\\ * OR *wmic.exe* OR *forfiles* OR *scriptrunner* OR *hh.exe*)) AND event.code:4702 AND (winlog.event_data.TaskContentNew:(*\\\\AppData\\\\Local\\\\Temp\\\\* OR *\\\\AppData\\\\Roaming\\\\* OR *\\\\Users\\\\Public\\\\* OR *\\\\WINDOWS\\\\Temp\\\\* OR *C\\:\\\\Temp\\\\* OR *\\\\Desktop\\\\* OR *\\\\Downloads\\\\* OR *\\\\Temporary\\ Internet* OR *C\\:\\\\ProgramData\\\\* OR *C\\:\\\\Perflogs\\\\*)))",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.execution",
+    "attack.privilege-escalation",
+    "attack.persistence",
+    "attack.t1053.005"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Nasreddine Bencherchali (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

@@ -1,0 +1,65 @@
+{
+  "rule_id": "3a6586ad-127a-4d3b-a677-1e6eacdf8fde",
+  "risk_score": 73,
+  "description": "Detects suspicious child processes of a Windows shell and scripting processes such as wscript, rundll32, powershell, mshta...etc.",
+  "name": "Windows Shell/Scripting Processes Spawning Suspicious Programs",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "((process.executable:(*\\\\schtasks.exe OR *\\\\nslookup.exe OR *\\\\certutil.exe OR *\\\\bitsadmin.exe OR *\\\\mshta.exe)) AND (process.parent.executable:(*\\\\mshta.exe OR *\\\\powershell.exe OR *\\\\pwsh.exe OR *\\\\rundll32.exe OR *\\\\cscript.exe OR *\\\\wscript.exe OR *\\\\wmiprvse.exe OR *\\\\regsvr32.exe))) AND (NOT ((process.parent.command_line:(*\\\\Program\\ Files\\\\Amazon\\\\WorkSpacesConfig\\\\Scripts\\\\setup\\-scheduledtask.ps1* OR *\\\\Program\\ Files\\\\Amazon\\\\WorkSpacesConfig\\\\Scripts\\\\set\\-selfhealing.ps1* OR *\\\\Program\\ Files\\\\Amazon\\\\WorkSpacesConfig\\\\Scripts\\\\check\\-workspacehealth.ps1* OR *\\\\nessus_*)) OR process.working_directory:*\\\\ccmcache\\\\* OR process.command_line:*\\\\nessus_* OR ((process.command_line:*C\\:\\\\MEM_Configmgr_* AND process.command_line:*\\\\SMSSETUP\\\\BIN\\\\* AND process.command_line:*\\\\autorun.hta* AND process.command_line:*\\{1E460BD7\\-F1C3\\-4B2E\\-88BF\\-4E770A288AF5\\}*) AND process.executable:*\\\\mshta.exe AND (process.parent.command_line:*C\\:\\\\MEM_Configmgr_* AND process.parent.command_line:*\\\\splash.hta* AND process.parent.command_line:*\\{1E460BD7\\-F1C3\\-4B2E\\-88BF\\-4E770A288AF5\\}*) AND process.parent.executable:*\\\\mshta.exe)))",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.execution",
+    "attack.defense-evasion",
+    "attack.t1059.005",
+    "attack.t1059.001",
+    "attack.t1218"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Florian Roth (Nextron Systems), Tim Shelton"
+  ],
+  "false_positives": [
+    "Administrative scripts",
+    "Microsoft SCCM"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

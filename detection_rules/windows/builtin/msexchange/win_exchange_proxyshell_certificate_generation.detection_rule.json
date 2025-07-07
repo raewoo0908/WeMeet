@@ -1,0 +1,50 @@
+{
+  "rule_id": "b7bc7038-638b-4ffd-880c-292c692209ef",
+  "risk_score": 99,
+  "description": "Detects a write of an Exchange CSR to an untypical directory or with aspx name suffix which can be used to place a webshell",
+  "name": "Certificate Request Export to Exchange Webserver",
+  "severity": "critical",
+  "type": "query",
+  "language": "lucene",
+  "query": "winlog.channel:MSExchange\\ Management AND ((*New\\-ExchangeCertificate* AND *\\ \\-GenerateRequest* AND *\\ \\-BinaryEncoded* AND *\\ \\-RequestFile*) AND (*\\\\\\\\localhost\\\\C$* OR *\\\\\\\\127.0.0.1\\\\C$* OR *C\\:\\\\inetpub* OR *.aspx*))",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.persistence",
+    "attack.t1505.003"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Max Altgelt (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Unlikely"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

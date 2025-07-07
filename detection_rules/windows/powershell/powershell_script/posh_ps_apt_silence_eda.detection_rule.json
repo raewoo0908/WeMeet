@@ -1,0 +1,57 @@
+{
+  "rule_id": "3ceb2083-a27f-449a-be33-14ec1b7cc973",
+  "risk_score": 99,
+  "description": "Detects Silence EmpireDNSAgent as described in the Group-IP report",
+  "name": "Silence.EDA Detection",
+  "severity": "critical",
+  "type": "query",
+  "language": "lucene",
+  "query": "(powershell.file.script_block_text:*System.Diagnostics.Process* AND powershell.file.script_block_text:*Stop\\-Computer* AND powershell.file.script_block_text:*Restart\\-Computer* AND powershell.file.script_block_text:*Exception\\ in\\ execution* AND powershell.file.script_block_text:*$cmdargs* AND powershell.file.script_block_text:*Close\\-Dnscat2Tunnel*) AND (powershell.file.script_block_text:*set\\ type\\=$LookupType`nserver* AND powershell.file.script_block_text:*$Command\\ \\|\\ nslookup\\ 2\\>\\&1\\ \\|\\ Out\\-String* AND powershell.file.script_block_text:*New\\-RandomDNSField* AND powershell.file.script_block_text:*\\[Convert\\]\\:\\:ToString\\($SYNOptions,\\ 16\\)* AND powershell.file.script_block_text:*$Session.Dead\\ \\=\\ $True* AND powershell.file.script_block_text:*$Session\\[\\\"Driver\\\"\\]\\ \\-eq*)",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.execution",
+    "attack.t1059.001",
+    "attack.command-and-control",
+    "attack.t1071.004",
+    "attack.t1572",
+    "attack.impact",
+    "attack.t1529",
+    "attack.g0091",
+    "attack.s0363"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Alina Stepchenkova, Group-IB, oscd.community"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

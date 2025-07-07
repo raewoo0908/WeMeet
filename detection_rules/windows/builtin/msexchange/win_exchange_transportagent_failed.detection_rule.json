@@ -1,0 +1,50 @@
+{
+  "rule_id": "c7d16cae-aaf3-42e5-9c1c-fb8553faa6fa",
+  "risk_score": 73,
+  "description": "Detects a failed installation of a Exchange Transport Agent",
+  "name": "Failed MSExchange Transport Agent Installation",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "winlog.channel:MSExchange\\ Management AND (winlog.event_data.Data:*Install\\-TransportAgent* AND event.code:6)",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.persistence",
+    "attack.t1505.002"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Tobias Michalski (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Legitimate installations of exchange TransportAgents. AssemblyPath is a good indicator for this."
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

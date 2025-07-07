@@ -1,0 +1,62 @@
+{
+  "rule_id": "d9367cbb-c2e0-47ce-bdc0-128cb6da898d",
+  "risk_score": 73,
+  "description": "Detects SharpLdapWhoami, a whoami alternative that queries the LDAP service on a domain controller",
+  "name": "HackTool - SharpLdapWhoami Execution",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "(process.command_line:(*\\ \\/method\\:ntlm OR *\\ \\/method\\:kerb OR *\\ \\/method\\:nego OR *\\ \\/m\\:nego OR *\\ \\/m\\:ntlm OR *\\ \\/m\\:kerb)) OR process.executable:*\\\\SharpLdapWhoami.exe OR (process.pe.original_file_name:*SharpLdapWhoami* OR process.pe.product:SharpLdapWhoami)",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.discovery",
+    "attack.t1033",
+    "car.2016-03-001"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Florian Roth (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Programs that use the same command line flags"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

@@ -1,0 +1,50 @@
+{
+  "rule_id": "49e5bc24-8b86-49f1-b743-535f332c2856",
+  "risk_score": 73,
+  "description": "Detects blocked attempts to change any of Defender's settings such as \"Real Time Monitoring\" and \"Behavior Monitoring\"",
+  "name": "Microsoft Defender Tamper Protection Trigger",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "winlog.channel:Microsoft\\-Windows\\-Windows\\ Defender\\/Operational AND (event.code:5013 AND (winlog.event_data.Value:(*\\\\Windows\\ Defender\\\\DisableAntiSpyware OR *\\\\Windows\\ Defender\\\\DisableAntiVirus OR *\\\\Windows\\ Defender\\\\Scan\\\\DisableArchiveScanning OR *\\\\Windows\\ Defender\\\\Scan\\\\DisableScanningNetworkFiles OR *\\\\Real\\-Time\\ Protection\\\\DisableRealtimeMonitoring OR *\\\\Real\\-Time\\ Protection\\\\DisableBehaviorMonitoring OR *\\\\Real\\-Time\\ Protection\\\\DisableIOAVProtection OR *\\\\Real\\-Time\\ Protection\\\\DisableScriptScanning)))",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.defense-evasion",
+    "attack.t1562.001"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Bhabesh Raj, Nasreddine Bencherchali"
+  ],
+  "false_positives": [
+    "Administrator might try to disable defender features during testing (must be investigated)"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

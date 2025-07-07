@@ -1,0 +1,51 @@
+{
+  "rule_id": "2632954e-db1c-49cb-9936-67d1ef1d17d2",
+  "risk_score": 47,
+  "description": "An attacker can use the SID history attribute to gain additional privileges.",
+  "name": "Addition of SID History to Active Directory Object",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "winlog.channel:Security AND ((event.code:(4765 OR 4766)) OR (event.code:4738 AND (NOT (winlog.event_data.SidHistory:(\\- OR %%1793))) AND _exists_:winlog.event_data.SidHistory))",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.persistence",
+    "attack.privilege-escalation",
+    "attack.t1134.005"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Thomas Patzke, @atc_project (improvements)"
+  ],
+  "false_positives": [
+    "Migration of an account into a new domain"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

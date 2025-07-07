@@ -1,0 +1,62 @@
+{
+  "rule_id": "80fc36aa-945e-4181-89f2-2f907ab6775d",
+  "risk_score": 73,
+  "description": "Detects the pattern of UAC Bypass using IEInstal.exe (UACMe 64)",
+  "name": "UAC Bypass Using IEInstal - Process",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "process.executable:*\\\\AppData\\\\Local\\\\Temp\\\\* AND process.executable:*consent.exe AND (winlog.event_data.IntegrityLevel:(High OR System OR S\\-1\\-16\\-16384 OR S\\-1\\-16\\-12288)) AND process.parent.executable:*\\\\ieinstal.exe",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.defense-evasion",
+    "attack.privilege-escalation",
+    "attack.t1548.002"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Christian Burkard (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

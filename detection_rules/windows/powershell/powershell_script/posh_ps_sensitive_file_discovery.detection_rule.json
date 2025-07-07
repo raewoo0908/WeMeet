@@ -1,0 +1,50 @@
+{
+  "rule_id": "7d416556-6502-45b2-9bad-9d2f05f38997",
+  "risk_score": 47,
+  "description": "Detect adversaries enumerate sensitive files",
+  "name": "Powershell Sensitive File Discovery",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "(powershell.file.script_block_text:(*ls* OR *get\\-childitem* OR *gci*)) AND (powershell.file.script_block_text:(*.pass* OR *.kdbx* OR *.kdb*)) AND powershell.file.script_block_text:*\\-recurse*",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.discovery",
+    "attack.t1083"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "frack113"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

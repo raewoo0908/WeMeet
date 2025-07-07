@@ -1,0 +1,50 @@
+{
+  "rule_id": "882fbe50-d8d7-4e29-ae80-0648a8556866",
+  "risk_score": 47,
+  "description": "Detects \"BugCheck\" errors indicating the system rebooted due to a crash, capturing the bugcheck code, dump file path, and report ID.",
+  "name": "Crash Dump Created By Operating System",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "winlog.channel:System AND (event.code:1001 AND winlog.provider_name:Microsoft\\-Windows\\-WER\\-SystemErrorReporting)",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.credential-access",
+    "attack.collection",
+    "attack.t1003.002",
+    "attack.t1005"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Jason Mull"
+  ],
+  "false_positives": [],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

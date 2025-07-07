@@ -1,0 +1,50 @@
+{
+  "rule_id": "fef394cd-f44d-4040-9b18-95d92fe278c0",
+  "risk_score": 47,
+  "description": "Detects potential DLL sideloading of \"DbgModel.dll\"",
+  "name": "Potential DLL Sideloading Of DbgModel.DLL",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "file.path:*\\\\dbgmodel.dll AND (NOT (file.path:(C\\:\\\\Windows\\\\System32\\\\* OR C\\:\\\\Windows\\\\SysWOW64\\\\* OR C\\:\\\\Windows\\\\WinSxS\\\\*))) AND (NOT (file.path:C\\:\\\\Program\\ Files\\\\WindowsApps\\\\Microsoft.WinDbg_* OR (file.path:(C\\:\\\\Program\\ Files\\ \\(x86\\)\\\\Windows\\ Kits\\\\* OR C\\:\\\\Program\\ Files\\\\Windows\\ Kits\\\\*))))",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.defense-evasion",
+    "attack.t1574.001"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Gary Lobermier"
+  ],
+  "false_positives": [
+    "Legitimate applications loading their own versions of the DLL mentioned in this rule"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

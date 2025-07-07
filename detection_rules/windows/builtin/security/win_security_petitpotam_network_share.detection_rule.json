@@ -1,0 +1,50 @@
+{
+  "rule_id": "1ce8c8a3-2723-48ed-8246-906ac91061a6",
+  "risk_score": 73,
+  "description": "Detect PetitPotam coerced authentication activity.",
+  "name": "Possible PetitPotam Coerce Authentication Attempt",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "winlog.channel:Security AND (event.code:5145 AND winlog.event_data.RelativeTargetName:lsarpc AND winlog.event_data.ShareName:*\\\\IPC$ AND winlog.event_data.ShareName:\\\\\\\\* AND user.name:ANONYMOUS\\ LOGON)",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.credential-access",
+    "attack.t1187"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Mauricio Velazco, Michael Haag"
+  ],
+  "false_positives": [
+    "Unknown. Feedback welcomed."
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

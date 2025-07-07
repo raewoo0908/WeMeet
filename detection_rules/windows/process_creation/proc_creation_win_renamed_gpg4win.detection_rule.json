@@ -1,0 +1,59 @@
+{
+  "rule_id": "ec0722a3-eb5c-4a56-8ab2-bf6f20708592",
+  "risk_score": 73,
+  "description": "Detects the execution of a renamed \"gpg.exe\". Often used by ransomware and loaders to decrypt/encrypt data.",
+  "name": "Renamed Gpg.EXE Execution",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "process.pe.original_file_name:gpg.exe AND (NOT (process.executable:(*\\\\gpg.exe OR *\\\\gpg2.exe)))",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.impact",
+    "attack.t1486"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Nasreddine Bencherchali (Nextron Systems), frack113"
+  ],
+  "false_positives": [],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

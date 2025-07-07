@@ -1,0 +1,50 @@
+{
+  "rule_id": "d36f7c12-14a3-4d48-b6b8-774b9c66f44d",
+  "risk_score": 47,
+  "description": "Detects potential DLL sideloading of Python DLL files.",
+  "name": "Potential Python DLL SideLoading",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "(file.path:(*\\\\python39.dll OR *\\\\python310.dll OR *\\\\python311.dll OR *\\\\python312.dll)) AND (NOT (((file.path:(C\\:\\\\Program\\ Files\\\\Python3* OR C\\:\\\\Program\\ Files\\ \\(x86\\)\\\\Python3*)) OR file.path:*\\\\AppData\\\\Local\\\\Programs\\\\Python\\\\Python3*) OR (file.pe.company:Python\\ Software\\ Foundation AND file.pe.description:Python AND file.pe.product:Python AND file.code_signature.signed:true))) AND (NOT ((file.path:(*\\\\cpython\\\\externals\\\\* OR *\\\\cpython\\\\PCbuild\\\\*)) OR file.path:C\\:\\\\Program\\ Files\\\\Microsoft\\ Visual\\ Studio\\\\*))",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.defense-evasion",
+    "attack.t1574.001"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Swachchhanda Shrawan Poudel"
+  ],
+  "false_positives": [
+    "Legitimate software using Python DLLs"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

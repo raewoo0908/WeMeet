@@ -1,0 +1,50 @@
+{
+  "rule_id": "f742bde7-9528-42e5-bd82-84f51a8387d2",
+  "risk_score": 73,
+  "description": "Detects changes to registry keys related to \"Trusted Location\" of Microsoft Office where the path is set to something uncommon. Attackers might add additional trusted locations to avoid macro security restrictions.",
+  "name": "Uncommon Microsoft Office Trusted Location Added",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "(registry.path:*Security\\\\Trusted\\ Locations\\\\Location* AND registry.path:*\\\\Path) AND (NOT ((process.executable:(*\\:\\\\Program\\ Files\\\\Microsoft\\ Office\\\\* OR *\\:\\\\Program\\ Files\\ \\(x86\\)\\\\Microsoft\\ Office\\\\*)) OR (process.executable:*\\:\\\\Program\\ Files\\\\Common\\ Files\\\\Microsoft\\ Shared\\\\ClickToRun\\\\* AND process.executable:*\\\\OfficeClickToRun.exe))) AND (NOT (winlog.event_data.Details:(*%APPDATA%\\\\Microsoft\\\\Templates* OR *%%APPDATA%%\\\\Microsoft\\\\Templates* OR *%APPDATA%\\\\Microsoft\\\\Word\\\\Startup* OR *%%APPDATA%%\\\\Microsoft\\\\Word\\\\Startup* OR *\\:\\\\Program\\ Files\\ \\(x86\\)\\\\Microsoft\\ Office\\\\root\\\\Templates\\\\* OR *\\:\\\\Program\\ Files\\\\Microsoft\\ Office\\ \\(x86\\)\\\\Templates* OR *\\:\\\\Program\\ Files\\\\Microsoft\\ Office\\\\root\\\\Templates\\\\* OR *\\:\\\\Program\\ Files\\\\Microsoft\\ Office\\\\Templates\\\\*)))",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.defense-evasion",
+    "attack.t1112"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Nasreddine Bencherchali (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Other unknown legitimate or custom paths need to be filtered to avoid false positives"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

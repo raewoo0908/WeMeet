@@ -1,0 +1,63 @@
+{
+  "rule_id": "86588b36-c6d3-465f-9cee-8f9093e07798",
+  "risk_score": 47,
+  "description": "Detects the creation of a schtasks that potentially executes a payload stored in the Windows Registry using PowerShell.",
+  "name": "Scheduled Task Executing Payload from Registry",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "(process.command_line:*\\/Create* AND (process.command_line:(*Get\\-ItemProperty* OR *\\ gp\\ *)) AND (process.command_line:(*HKCU\\:* OR *HKLM\\:* OR *registry\\:\\:* OR *HKEY_*)) AND (process.executable:*\\\\schtasks.exe OR process.pe.original_file_name:schtasks.exe)) AND (NOT (process.command_line:(*FromBase64String* OR *encodedcommand*)))",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.execution",
+    "attack.persistence",
+    "attack.t1053.005",
+    "attack.t1059.001"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "X__Junior (Nextron Systems), Nasreddine Bencherchali (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

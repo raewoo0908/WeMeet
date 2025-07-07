@@ -1,0 +1,61 @@
+{
+  "rule_id": "1eeed653-dbc8-4187-ad0c-eeebb20e6599",
+  "risk_score": 47,
+  "description": "Detects service principal name (SPN) enumeration used for Kerberoasting",
+  "name": "Potential SPN Enumeration Via Setspn.EXE",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "(process.command_line:(*\\ \\-q\\ * OR *\\ \\/q\\ *)) AND (process.executable:*\\\\setspn.exe OR process.pe.original_file_name:setspn.exe OR (process.pe.description:*Query\\ or\\ reset\\ the\\ computer* AND process.pe.description:*SPN\\ attribute*))",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.credential-access",
+    "attack.t1558.003"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Markus Neis, keepwatch"
+  ],
+  "false_positives": [
+    "Administration activity"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

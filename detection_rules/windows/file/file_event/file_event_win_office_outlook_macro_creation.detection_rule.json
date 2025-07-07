@@ -1,0 +1,64 @@
+{
+  "rule_id": "8c31f563-f9a7-450c-bfa8-35f8f32f1f61",
+  "risk_score": 47,
+  "description": "Detects the creation of a macro file for Outlook.",
+  "name": "New Outlook Macro Created",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "process.executable:*\\\\outlook.exe AND file.path:*\\\\Microsoft\\\\Outlook\\\\VbaProject.OTM",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "File Create (rule: FileCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.persistence",
+    "attack.command-and-control",
+    "attack.t1137",
+    "attack.t1008",
+    "attack.t1546"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "@ScoubiMtl"
+  ],
+  "false_positives": [
+    "User genuinely creates a VB Macro for their email"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

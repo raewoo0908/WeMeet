@@ -1,0 +1,50 @@
+{
+  "rule_id": "dcd74b95-3f36-4ed9-9598-0490951643aa",
+  "risk_score": 73,
+  "description": "Detects Cmdlet names from PowerView of the PowerSploit exploitation framework.",
+  "name": "PowerView PowerShell Cmdlets - ScriptBlock",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "powershell.file.script_block_text:(*Export\\-PowerViewCSV* OR *Find\\-DomainLocalGroupMember* OR *Find\\-DomainObjectPropertyOutlier* OR *Find\\-DomainProcess* OR *Find\\-DomainShare* OR *Find\\-DomainUserEvent* OR *Find\\-DomainUserLocation* OR *Find\\-ForeignGroup* OR *Find\\-ForeignUser* OR *Find\\-GPOComputerAdmin* OR *Find\\-GPOLocation* OR *Find\\-InterestingDomain* OR *Find\\-InterestingFile* OR *Find\\-LocalAdminAccess* OR *Find\\-ManagedSecurityGroups* OR *Get\\-CachedRDPConnection* OR *Get\\-DFSshare* OR *Get\\-DomainDFSShare* OR *Get\\-DomainDNSRecord* OR *Get\\-DomainDNSZone* OR *Get\\-DomainFileServer* OR *Get\\-DomainGPOComputerLocalGroupMapping* OR *Get\\-DomainGPOLocalGroup* OR *Get\\-DomainGPOUserLocalGroupMapping* OR *Get\\-LastLoggedOn* OR *Get\\-LoggedOnLocal* OR *Get\\-NetFileServer* OR *Get\\-NetForest* OR *Get\\-NetGPOGroup* OR *Get\\-NetProcess* OR *Get\\-NetRDPSession* OR *Get\\-RegistryMountedDrive* OR *Get\\-RegLoggedOn* OR *Get\\-WMIRegCachedRDPConnection* OR *Get\\-WMIRegLastLoggedOn* OR *Get\\-WMIRegMountedDrive* OR *Get\\-WMIRegProxy* OR *Invoke\\-ACLScanner* OR *Invoke\\-CheckLocalAdminAccess* OR *Invoke\\-EnumerateLocalAdmin* OR *Invoke\\-EventHunter* OR *Invoke\\-FileFinder* OR *Invoke\\-Kerberoast* OR *Invoke\\-MapDomainTrust* OR *Invoke\\-ProcessHunter* OR *Invoke\\-RevertToSelf* OR *Invoke\\-ShareFinder* OR *Invoke\\-UserHunter* OR *Invoke\\-UserImpersonation* OR *Remove\\-RemoteConnection* OR *Request\\-SPNTicket* OR *Resolve\\-IPAddress*)",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.execution",
+    "attack.t1059.001"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Bhabesh Raj"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

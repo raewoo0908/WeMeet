@@ -1,0 +1,61 @@
+{
+  "rule_id": "cea2b7ea-792b-405f-95a1-b903ea06458f",
+  "risk_score": 73,
+  "description": "Detects suspicious child processes of the \"Manage Engine ServiceDesk Plus\" Java web service",
+  "name": "Suspicious Child Process Of Manage Engine ServiceDesk",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "((process.executable:(*\\\\AppVLP.exe OR *\\\\bash.exe OR *\\\\bitsadmin.exe OR *\\\\calc.exe OR *\\\\certutil.exe OR *\\\\cscript.exe OR *\\\\curl.exe OR *\\\\forfiles.exe OR *\\\\mftrace.exe OR *\\\\mshta.exe OR *\\\\net.exe OR *\\\\net1.exe OR *\\\\notepad.exe OR *\\\\powershell.exe OR *\\\\pwsh.exe OR *\\\\query.exe OR *\\\\reg.exe OR *\\\\schtasks.exe OR *\\\\scrcons.exe OR *\\\\sh.exe OR *\\\\systeminfo.exe OR *\\\\whoami.exe OR *\\\\wmic.exe OR *\\\\wscript.exe)) AND (process.parent.executable:*\\\\ManageEngine\\\\ServiceDesk\\\\* AND process.parent.executable:*\\\\java.exe*)) AND (NOT (process.command_line:*\\ stop* AND (process.executable:(*\\\\net.exe OR *\\\\net1.exe))))",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.command-and-control",
+    "attack.t1102"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Florian Roth (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Legitimate sub processes started by Manage Engine ServiceDesk Pro"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

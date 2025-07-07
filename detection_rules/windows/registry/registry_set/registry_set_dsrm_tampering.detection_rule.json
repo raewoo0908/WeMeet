@@ -1,0 +1,50 @@
+{
+  "rule_id": "b61e87c0-50db-4b2e-8986-6a2be94b33b0",
+  "risk_score": 73,
+  "description": "Detects changes to \"DsrmAdminLogonBehavior\" registry value.\nDuring a Domain Controller (DC) promotion, administrators create a Directory Services Restore Mode (DSRM) local administrator account with a password that rarely changes. The DSRM account is an “Administrator” account that logs in with the DSRM mode when the server is booting up to restore AD backups or recover the server from a failure.\nAttackers could abuse DSRM account to maintain their persistence and access to the organization's Active Directory.\nIf the \"DsrmAdminLogonBehavior\" value is set to \"0\", the administrator account can only be used if the DC starts in DSRM.\nIf the \"DsrmAdminLogonBehavior\" value is set to \"1\", the administrator account can only be used if the local AD DS service is stopped.\nIf the \"DsrmAdminLogonBehavior\" value is set to \"2\", the administrator account can always be used.\n",
+  "name": "Directory Service Restore Mode(DSRM) Registry Value Tampering",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "registry.path:*\\\\Control\\\\Lsa\\\\DsrmAdminLogonBehavior AND (NOT winlog.event_data.Details:DWORD\\ \\(0x00000000\\))",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.persistence",
+    "attack.t1556"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Nischal Khadgi"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

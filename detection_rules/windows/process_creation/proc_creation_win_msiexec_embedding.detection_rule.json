@@ -1,0 +1,61 @@
+{
+  "rule_id": "4a2a2c3e-209f-4d01-b513-4155a540b469",
+  "risk_score": 47,
+  "description": "Adversaries may abuse msiexec.exe to proxy the execution of malicious payloads",
+  "name": "Suspicious MsiExec Embedding Parent",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "((process.executable:(*\\\\powershell.exe OR *\\\\pwsh.exe OR *\\\\cmd.exe)) AND (process.parent.command_line:*MsiExec.exe* AND process.parent.command_line:*\\-Embedding\\ *)) AND (NOT ((process.command_line:*C\\:\\\\Program\\ Files\\\\SplunkUniversalForwarder\\\\bin\\\\* AND process.executable:*\\:\\\\Windows\\\\System32\\\\cmd.exe) OR (process.command_line:*\\\\DismFoDInstall.cmd* OR (process.parent.command_line:*\\\\MsiExec.exe\\ \\-Embedding\\ * AND process.parent.command_line:*Global\\\\MSI0000*))))",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.t1218.007",
+    "attack.defense-evasion"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "frack113"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

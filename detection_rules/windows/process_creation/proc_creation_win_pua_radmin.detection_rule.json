@@ -1,0 +1,62 @@
+{
+  "rule_id": "5817e76f-4804-41e6-8f1d-5fa0b3ecae2d",
+  "risk_score": 47,
+  "description": "Detects the execution of Radmin which can be abused by an adversary to remotely control Windows machines",
+  "name": "PUA - Radmin Viewer Utility Execution",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "process.pe.description:Radmin\\ Viewer OR process.pe.product:Radmin\\ Viewer OR process.pe.original_file_name:Radmin.exe",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.execution",
+    "attack.lateral-movement",
+    "attack.t1072"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "frack113"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

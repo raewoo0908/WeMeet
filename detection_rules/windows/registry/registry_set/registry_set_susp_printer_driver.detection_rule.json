@@ -1,0 +1,51 @@
+{
+  "rule_id": "e0813366-0407-449a-9869-a2db1119dc41",
+  "risk_score": 73,
+  "description": "Detects a suspicious printer driver installation with an empty Manufacturer value",
+  "name": "Suspicious Printer Driver Empty Manufacturer",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "(winlog.event_data.Details:\\(Empty\\) AND (registry.path:*\\\\Control\\\\Print\\\\Environments\\\\Windows\\ x64\\\\Drivers* AND registry.path:*\\\\Manufacturer*)) AND (NOT (registry.path:*\\\\CutePDF\\ Writer\\ v4.0\\\\* OR registry.path:*\\\\Version\\-3\\\\PDF24\\\\* OR (registry.path:(*\\\\VNC\\ Printer\\ \\(PS\\)\\\\* OR *\\\\VNC\\ Printer\\ \\(UD\\)\\\\*))))",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.privilege-escalation",
+    "attack.t1574",
+    "cve.2021-1675"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Florian Roth (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Alerts on legitimate printer drivers that do not set any more details in the Manufacturer value"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

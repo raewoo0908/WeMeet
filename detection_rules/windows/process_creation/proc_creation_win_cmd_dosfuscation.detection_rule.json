@@ -1,0 +1,61 @@
+{
+  "rule_id": "a77c1610-fc73-4019-8e29-0f51efc04a51",
+  "risk_score": 47,
+  "description": "Detects possible payload obfuscation via the commandline",
+  "name": "Potential Dosfuscation Activity",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "process.command_line:(*\\^\\^* OR *\\^\\|\\^* OR *,;,* OR *;;;;* OR *;;\\ ;;* OR *\\(,\\(,* OR *%COMSPEC\\:\\~* OR *\\ c\\^m\\^d* OR *\\^c\\^m\\^d* OR *\\ c\\^md* OR *\\ cm\\^d* OR *\\^cm\\^d* OR *\\ s\\^et\\ * OR *\\ s\\^e\\^t\\ * OR *\\ se\\^t\\ *)",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.execution",
+    "attack.t1059"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "frack113, Nasreddine Bencherchali (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

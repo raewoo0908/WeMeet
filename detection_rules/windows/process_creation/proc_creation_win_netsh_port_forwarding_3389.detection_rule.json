@@ -1,0 +1,63 @@
+{
+  "rule_id": "782d6f3e-4c5d-4b8c-92a3-1d05fed72e63",
+  "risk_score": 73,
+  "description": "Detects the execution of netsh to configure a port forwarding of port 3389 (RDP) rule",
+  "name": "RDP Port Forwarding Rule Added Via Netsh.EXE",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "(process.command_line:*\\ i* AND process.command_line:*\\ p* AND process.command_line:*\\=3389* AND process.command_line:*\\ c*) AND (process.executable:*\\\\netsh.exe OR process.pe.original_file_name:netsh.exe)",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.lateral-movement",
+    "attack.defense-evasion",
+    "attack.command-and-control",
+    "attack.t1090"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Florian Roth (Nextron Systems), oscd.community"
+  ],
+  "false_positives": [
+    "Legitimate administration activity"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

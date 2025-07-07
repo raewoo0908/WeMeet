@@ -1,0 +1,51 @@
+{
+  "rule_id": "b5de0c9a-6f19-43e0-af4e-55ad01f550af",
+  "risk_score": 47,
+  "description": "Detects windows utilities loading an unsigned or untrusted DLL.\nAdversaries often abuse those programs to proxy execution of malicious code.\n",
+  "name": "Unsigned DLL Loaded by Windows Utility",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "(process.executable:(*\\\\InstallUtil.exe OR *\\\\RegAsm.exe OR *\\\\RegSvcs.exe OR *\\\\regsvr32.exe OR *\\\\rundll32.exe)) AND (NOT ((file.code_signature.status:(errorChaining OR errorCode_endpoint OR errorExpired OR trusted)) OR (file.code_signature.status:(\"\" OR \\-)) OR (NOT _exists_:file.code_signature.status) OR file.code_signature.signed:true OR (file.code_signature.signed:(\"\" OR \\-)) OR (NOT _exists_:file.code_signature.signed)))",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.t1218.011",
+    "attack.t1218.010",
+    "attack.defense-evasion"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Swachchhanda Shrawan Poudel"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

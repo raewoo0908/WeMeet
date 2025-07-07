@@ -1,0 +1,51 @@
+{
+  "rule_id": "bf72941a-cba0-41ea-b18c-9aca3925690d",
+  "risk_score": 73,
+  "description": "Detects execution of ADRecon.ps1 for AD reconnaissance which has been reported to be actively used by FIN7",
+  "name": "PowerShell ADRecon Execution",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "powershell.file.script_block_text:(*Function\\ Get\\-ADRExcelComOb* OR *Get\\-ADRGPO* OR *Get\\-ADRDomainController* OR *ADRecon\\-Report.xlsx*)",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.discovery",
+    "attack.execution",
+    "attack.t1059.001"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Bhabesh Raj"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

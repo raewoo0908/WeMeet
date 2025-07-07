@@ -1,0 +1,51 @@
+{
+  "rule_id": "0eb46774-f1ab-4a74-8238-1155855f2263",
+  "risk_score": 73,
+  "description": "Detects when attackers or tools disable Windows Defender functionalities via the Windows registry",
+  "name": "Disable Windows Defender Functionalities Via Registry Keys",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "(registry.path:(*\\\\SOFTWARE\\\\Microsoft\\\\Windows\\ Defender\\\\* OR *\\\\SOFTWARE\\\\Policies\\\\Microsoft\\\\Windows\\ Defender\\ Security\\ Center\\\\* OR *\\\\SOFTWARE\\\\Policies\\\\Microsoft\\\\Windows\\ Defender\\\\*)) AND ((winlog.event_data.Details:DWORD\\ \\(0x00000000\\) AND (registry.path:(*\\\\DisallowExploitProtectionOverride OR *\\\\Features\\\\TamperProtection OR *\\\\MpEngine\\\\MpEnablePus OR *\\\\PUAProtection OR *\\\\Signature\\ Update\\\\ForceUpdateFromMU OR *\\\\SpyNet\\\\SpynetReporting OR *\\\\SpyNet\\\\SubmitSamplesConsent OR *\\\\Windows\\ Defender\\ Exploit\\ Guard\\\\Controlled\\ Folder\\ Access\\\\EnableControlledFolderAccess))) OR (winlog.event_data.Details:DWORD\\ \\(0x00000001\\) AND (registry.path:(*\\\\DisableAntiSpyware OR *\\\\DisableAntiVirus OR *\\\\DisableBehaviorMonitoring OR *\\\\DisableBlockAtFirstSeen OR *\\\\DisableEnhancedNotifications OR *\\\\DisableIntrusionPreventionSystem OR *\\\\DisableIOAVProtection OR *\\\\DisableOnAccessProtection OR *\\\\DisableRealtimeMonitoring OR *\\\\DisableScanOnRealtimeEnable OR *\\\\DisableScriptScanning)))) AND (NOT (process.executable:*\\\\sepWscSvc64.exe AND process.executable:C\\:\\\\Program\\ Files\\\\Symantec\\\\Symantec\\ Endpoint\\ Protection\\\\*))",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.defense-evasion",
+    "attack.t1562.001"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "AlertIQ, Ján Trenčanský, frack113, Nasreddine Bencherchali, Swachchhanda Shrawan Poudel"
+  ],
+  "false_positives": [
+    "Administrator actions via the Windows Defender interface",
+    "Third party Antivirus"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

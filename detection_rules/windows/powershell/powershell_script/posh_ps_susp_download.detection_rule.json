@@ -1,0 +1,50 @@
+{
+  "rule_id": "403c2cc0-7f6b-4925-9423-bfa573bed7eb",
+  "risk_score": 47,
+  "description": "Detects suspicious PowerShell download command",
+  "name": "Suspicious PowerShell Download - Powershell Script",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "powershell.file.script_block_text:*System.Net.WebClient* AND (powershell.file.script_block_text:(*.DownloadFile\\(* OR *.DownloadFileAsync\\(* OR *.DownloadString\\(* OR *.DownloadStringAsync\\(*))",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.execution",
+    "attack.t1059.001"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Florian Roth (Nextron Systems)"
+  ],
+  "false_positives": [
+    "PowerShell scripts that download content from the Internet"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

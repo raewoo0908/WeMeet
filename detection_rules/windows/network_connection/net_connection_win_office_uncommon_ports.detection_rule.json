@@ -1,0 +1,61 @@
+{
+  "rule_id": "3b5ba899-9842-4bc2-acc2-12308498bf42",
+  "risk_score": 47,
+  "description": "Detects an office suit application (Word, Excel, PowerPoint, Outlook) communicating to target systems over uncommon ports.",
+  "name": "Office Application Initiated Network Connection Over Uncommon Ports",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "((process.executable:(*\\\\excel.exe OR *\\\\outlook.exe OR *\\\\powerpnt.exe OR *\\\\winword.exe OR *\\\\wordview.exe)) AND network.direction:true) AND (NOT ((destination.port:(53 OR 80 OR 139 OR 443 OR 445)) OR ((destination.port:(143 OR 465 OR 587 OR 993 OR 995)) AND process.executable:*\\:\\\\Program\\ Files\\\\Microsoft\\ Office\\\\* AND process.executable:*\\\\OUTLOOK.EXE)))",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Network connection detected (rule: NetworkConnect)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.defense-evasion",
+    "attack.command-and-control"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "X__Junior (Nextron Systems), Nasreddine Bencherchali (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Other ports can be used, apply additional filters accordingly"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

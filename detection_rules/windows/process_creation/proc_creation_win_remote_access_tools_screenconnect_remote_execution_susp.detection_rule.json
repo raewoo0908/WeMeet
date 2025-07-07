@@ -1,0 +1,61 @@
+{
+  "rule_id": "7b582f1a-b318-4c6a-bf4e-66fe49bf55a5",
+  "risk_score": 47,
+  "description": "Detects potentially suspicious child processes launched via the ScreenConnect client service.\n",
+  "name": "Remote Access Tool - ScreenConnect Potential Suspicious Remote Command Execution",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "(process.executable:(*\\\\bitsadmin.exe OR *\\\\cmd.exe OR *\\\\curl.exe OR *\\\\dllhost.exe OR *\\\\net.exe OR *\\\\nltest.exe OR *\\\\powershell.exe OR *\\\\pwsh.exe OR *\\\\rundll32.exe OR *\\\\wevtutil.exe)) AND (process.parent.command_line:*\\:\\\\Windows\\\\TEMP\\\\ScreenConnect\\\\* AND process.parent.command_line:*run.cmd*)",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.command-and-control",
+    "attack.t1219"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Florian Roth (Nextron Systems), Nasreddine Bencherchali (Nextron Systems), @Kostastsale"
+  ],
+  "false_positives": [
+    "If the script being executed make use of any of the utilities mentioned in the detection then they should filtered out or allowed."
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

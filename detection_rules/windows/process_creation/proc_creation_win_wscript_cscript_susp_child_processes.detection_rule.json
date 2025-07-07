@@ -1,0 +1,60 @@
+{
+  "rule_id": "b6676963-0353-4f88-90f5-36c20d443c6a",
+  "risk_score": 47,
+  "description": "Detects potentially suspicious child processes of Wscript/Cscript. These include processes such as rundll32 with uncommon exports or PowerShell spawning rundll32 or regsvr32.\nMalware such as Pikabot and Qakbot were seen using similar techniques as well as many others.\n",
+  "name": "Cscript/Wscript Potentially Suspicious Child Process",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "(process.parent.executable:(*\\\\wscript.exe OR *\\\\cscript.exe)) AND (process.executable:*\\\\rundll32.exe OR ((process.executable:(*\\\\cmd.exe OR *\\\\powershell.exe OR *\\\\pwsh.exe)) AND ((process.command_line:*mshta* AND process.command_line:*http*) OR (process.command_line:(*rundll32* OR *regsvr32* OR *msiexec*))))) AND (NOT ((process.command_line:(*UpdatePerUserSystemParameters* OR *PrintUIEntry* OR *ClearMyTracksByProcess*)) AND process.executable:*\\\\rundll32.exe))",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.execution"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Nasreddine Bencherchali (Nextron Systems), Alejandro Houspanossian ('@lekz86')"
+  ],
+  "false_positives": [
+    "Some false positives might occur with admin or third party software scripts. Investigate and apply additional filters accordingly."
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

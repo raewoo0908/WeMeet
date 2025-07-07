@@ -1,0 +1,51 @@
+{
+  "rule_id": "4f6c43e2-f989-4ea5-bcd8-843b49a0317c",
+  "risk_score": 73,
+  "description": "Detects the pattern of UAC Bypass using a WoW64 logger DLL hijack (UACMe 30)",
+  "name": "UAC Bypass Using WOW64 Logger DLL Hijack",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "winlog.event_data.CallTrace:UNKNOWN\\(0000000000000000\\)\\|UNKNOWN\\(0000000000000000\\)\\|* AND winlog.event_data.GrantedAccess:0x1fffff AND process.executable:*\\:\\\\Windows\\\\SysWOW64\\\\*",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.defense-evasion",
+    "attack.privilege-escalation",
+    "attack.t1548.002"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Christian Burkard (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

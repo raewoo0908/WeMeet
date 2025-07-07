@@ -1,0 +1,61 @@
+{
+  "rule_id": "9ac94dc8-9042-493c-ba45-3b5e7c86b980",
+  "risk_score": 73,
+  "description": "Detects when adversaries stop services or processes by disabling their respective scheduled tasks in order to conduct data destructive activities",
+  "name": "Disable Important Scheduled Task",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "(process.command_line:(*\\\\Windows\\\\BitLocker* OR *\\\\Windows\\\\ExploitGuard* OR *\\\\Windows\\\\ExploitGuard\\\\ExploitGuard\\ MDM\\ policy\\ Refresh* OR *\\\\Windows\\\\SystemRestore\\\\SR* OR *\\\\Windows\\\\UpdateOrchestrator\\\\* OR *\\\\Windows\\\\Windows\\ Defender\\\\* OR *\\\\Windows\\\\WindowsBackup\\\\* OR *\\\\Windows\\\\WindowsUpdate\\\\*)) AND (process.command_line:*\\/Change* AND process.command_line:*\\/TN* AND process.command_line:*\\/disable*) AND process.executable:*\\\\schtasks.exe",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.impact",
+    "attack.t1489"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "frack113, Nasreddine Bencherchali (Nextron Systems), X__Junior"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

@@ -1,0 +1,52 @@
+{
+  "rule_id": "ce5678bb-b9aa-4fb5-be4b-e57f686256ad",
+  "risk_score": 47,
+  "description": "Detects logons using NTLM to hosts that are potentially not part of the domain.",
+  "name": "Potential Remote Desktop Connection to Non-Domain Host",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "winlog.channel:Microsoft\\-Windows\\-NTLM\\/Operational AND (event.code:8001 AND winlog.event_data.TargetName:TERMSRV*)",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.command-and-control",
+    "attack.t1219"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "James Pemberton"
+  ],
+  "false_positives": [
+    "Host connections to valid domains, exclude these.",
+    "Host connections not using host FQDN.",
+    "Host connections to external legitimate domains."
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

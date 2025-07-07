@@ -1,0 +1,51 @@
+{
+  "rule_id": "778ba9a8-45e4-4b80-8e3e-34a419f0b85e",
+  "risk_score": 47,
+  "description": "Detects DNS queries to a TeamViewer domain only resolved by a TeamViewer client by an image that isn't named TeamViewer (sometimes used by threat actors for obfuscation)",
+  "name": "TeamViewer Domain Query By Non-TeamViewer Application",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "(dns.question.name:(taf.teamviewer.com OR udp.ping.teamviewer.com)) AND (NOT process.executable:*TeamViewer*)",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.command-and-control",
+    "attack.t1219"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Florian Roth (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Unknown binary names of TeamViewer",
+    "Depending on the environment the rule might require some initial tuning before usage to avoid FP with third party applications"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

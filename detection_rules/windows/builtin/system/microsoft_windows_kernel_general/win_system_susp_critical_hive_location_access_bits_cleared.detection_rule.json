@@ -1,0 +1,50 @@
+{
+  "rule_id": "39f919f3-980b-4e6f-a975-8af7e507ef2b",
+  "risk_score": 73,
+  "description": "Detects events from the Kernel-General ETW indicating that the access bits of a hive with a system like hive name located in the temp directory have been reset.\nThis occurs when an application tries to access a hive and the hive has not be recognized since the last 7 days (by default).\nRegistry hive dumping utilities such as QuarksPwDump were seen emitting this behavior.\n",
+  "name": "Critical Hive In Suspicious Location Access Bits Cleared",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "winlog.channel:System AND (event.code:16 AND (winlog.event_data.HiveName:(*\\\\Temp\\\\SAM* OR *\\\\Temp\\\\SECURITY*)) AND winlog.provider_name:Microsoft\\-Windows\\-Kernel\\-General)",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.credential-access",
+    "attack.t1003.002"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Florian Roth (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

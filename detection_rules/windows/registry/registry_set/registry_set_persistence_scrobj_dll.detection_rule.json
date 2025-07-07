@@ -1,0 +1,50 @@
+{
+  "rule_id": "fe20dda1-6f37-4379-bbe0-a98d400cae90",
+  "risk_score": 47,
+  "description": "Detect use of scrobj.dll as this DLL looks for the ScriptletURL key to get the location of the script to execute",
+  "name": "Potential Persistence Via Scrobj.dll COM Hijacking",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "winlog.event_data.Details:C\\:\\\\WINDOWS\\\\system32\\\\scrobj.dll AND registry.path:*InprocServer32\\\\\\(Default\\)",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.persistence",
+    "attack.t1546.015"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "frack113"
+  ],
+  "false_positives": [
+    "Legitimate use of the dll."
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

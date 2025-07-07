@@ -1,0 +1,64 @@
+{
+  "rule_id": "fd877b94-9bb5-4191-bb25-d79cbd93c167",
+  "risk_score": 73,
+  "description": "Detects the usage of \"reg.exe\" in order to dump sensitive registry hives. This includes SAM, SYSTEM and SECURITY hives.",
+  "name": "Dumping of Sensitive Hives Via Reg.EXE",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "(process.command_line:(*\\ save\\ * OR *\\ export\\ * OR *\\ ˢave\\ * OR *\\ eˣport\\ *)) AND (process.command_line:(*\\\\system* OR *\\\\sam* OR *\\\\security* OR *\\\\ˢystem* OR *\\\\syˢtem* OR *\\\\ˢyˢtem* OR *\\\\ˢam* OR *\\\\ˢecurity*)) AND (process.command_line:(*hklm* OR *hk˪m* OR *hkey_local_machine* OR *hkey_˪ocal_machine* OR *hkey_loca˪_machine* OR *hkey_˪oca˪_machine*)) AND (process.executable:*\\\\reg.exe OR process.pe.original_file_name:reg.exe)",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.credential-access",
+    "attack.t1003.002",
+    "attack.t1003.004",
+    "attack.t1003.005",
+    "car.2013-07-001"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Teymur Kheirkhabarov, Endgame, JHasenbusch, Daniil Yugoslavskiy, oscd.community, frack113"
+  ],
+  "false_positives": [
+    "Dumping hives for legitimate purpouse i.e. backup or forensic investigation"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

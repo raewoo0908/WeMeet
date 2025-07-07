@@ -1,0 +1,61 @@
+{
+  "rule_id": "36480ae1-a1cb-4eaa-a0d6-29801d7e9142",
+  "risk_score": 47,
+  "description": "Detects the execution of a renamed binary often used by attackers or malware leveraging new Sysmon OriginalFileName datapoint.",
+  "name": "Potential Defense Evasion Via Binary Rename",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "(process.pe.original_file_name:(Cmd.Exe OR CONHOST.EXE OR 7z.exe OR WinRAR.exe OR wevtutil.exe OR net.exe OR net1.exe OR netsh.exe OR InstallUtil.exe)) AND (NOT (process.executable:(*\\\\cmd.exe OR *\\\\conhost.exe OR *\\\\7z.exe OR *\\\\WinRAR.exe OR *\\\\wevtutil.exe OR *\\\\net.exe OR *\\\\net1.exe OR *\\\\netsh.exe OR *\\\\InstallUtil.exe)))",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.defense-evasion",
+    "attack.t1036.003"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Matthew Green @mgreen27, Ecco, James Pemberton @4A616D6573, oscd.community, Andreas Hunkeler (@Karneades)"
+  ],
+  "false_positives": [
+    "Custom applications use renamed binaries adding slight change to binary name. Typically this is easy to spot and add to whitelist"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

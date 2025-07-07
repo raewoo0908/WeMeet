@@ -1,0 +1,60 @@
+{
+  "rule_id": "c2b86e67-b880-4eec-b045-50bc98ef4844",
+  "risk_score": 47,
+  "description": "Detects the execution of the LaZagne. A utility used to retrieve multiple types of passwords stored on a local computer.\nLaZagne has been leveraged multiple times by threat actors in order to dump credentials.\n",
+  "name": "HackTool - LaZagne Execution",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "process.executable:*\\\\lazagne.exe OR ((process.command_line:(*.exe\\ all OR *.exe\\ browsers OR *.exe\\ chats OR *.exe\\ databases OR *.exe\\ games OR *.exe\\ git OR *.exe\\ mails OR *.exe\\ maven OR *.exe\\ memory OR *.exe\\ multimedia OR *.exe\\ sysadmin OR *.exe\\ unused OR *.exe\\ wifi OR *.exe\\ windows)) AND (process.executable:(*\\:\\\\PerfLogs\\\\* OR *\\:\\\\ProgramData\\\\* OR *\\:\\\\Temp\\\\* OR *\\:\\\\Tmp\\\\* OR *\\:\\\\Windows\\\\Temp\\\\* OR *\\\\AppData\\\\* OR *\\\\Downloads\\\\* OR *\\\\Users\\\\Public\\\\*))) OR ((process.command_line:(*all\\ * OR *browsers\\ * OR *chats\\ * OR *databases\\ * OR *games\\ * OR *git\\ * OR *mails\\ * OR *maven\\ * OR *memory\\ * OR *multimedia\\ * OR *php\\ * OR *svn\\ * OR *sysadmin\\ * OR *unused\\ * OR *wifi\\ * OR *windows\\ *)) AND (process.command_line:(*\\-oA* OR *\\-oJ* OR *\\-oN* OR *\\-output* OR *\\-password* OR *\\-1Password* OR *\\-apachedirectorystudio* OR *\\-autologon* OR *\\-ChromiumBased* OR *\\-composer* OR *\\-coreftp* OR *\\-credfiles* OR *\\-credman* OR *\\-cyberduck* OR *\\-dbvis* OR *\\-EyeCon* OR *\\-filezilla* OR *\\-filezillaserver* OR *\\-ftpnavigator* OR *\\-galconfusion* OR *\\-gitforwindows* OR *\\-hashdump* OR *\\-iisapppool* OR *\\-IISCentralCertP* OR *\\-kalypsomedia* OR *\\-keepass* OR *\\-keepassconfig* OR *\\-lsa_secrets* OR *\\-mavenrepositories* OR *\\-memory_dump* OR *\\-Mozilla* OR *\\-mRemoteNG* OR *\\-mscache* OR *\\-opensshforwindows* OR *\\-openvpn* OR *\\-outlook* OR *\\-pidgin* OR *\\-postgresql* OR *\\-psi\\-im* OR *\\-puttycm* OR *\\-pypykatz* OR *\\-Rclone* OR *\\-rdpmanager* OR *\\-robomongo* OR *\\-roguestale* OR *\\-skype* OR *\\-SQLDeveloper* OR *\\-squirrel* OR *\\-tortoise* OR *\\-turba* OR *\\-UCBrowser* OR *\\-unattended* OR *\\-vault* OR *\\-vaultfiles* OR *\\-vnc* OR *\\-windows* OR *\\-winscp* OR *\\-wsl*)))",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.credential-access"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Nasreddine Bencherchali (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Some false positive is expected from tools with similar command line flags."
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

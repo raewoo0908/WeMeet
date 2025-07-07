@@ -1,0 +1,62 @@
+{
+  "rule_id": "beaa66d6-aa1b-4e3c-80f5-e0145369bfaf",
+  "risk_score": 47,
+  "description": "Detects execution of different log query utilities and commands to search and dump the content of specific event logs or look for specific event IDs.\nThis technique is used by threat actors in order to extract sensitive information from events logs such as usernames, IP addresses, hostnames, etc.\n",
+  "name": "Potentially Suspicious EventLog Recon Activity Using Log Query Utilities",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "((process.command_line:(*\\-InstanceId\\ 462?* OR *.eventid\\ \\-eq\\ 462?* OR *EventCode\\=?462?* OR *EventIdentifier\\=?462?* OR *System\\[EventID\\=462?\\]* OR *\\-InstanceId\\ 4778* OR *.eventid\\ \\-eq\\ 4778* OR *System\\[EventID\\=4778\\]* OR *EventCode\\=?4778?* OR *EventIdentifier\\=?4778?* OR *\\-InstanceId\\ 25* OR *.eventid\\ \\-eq\\ 25* OR *System\\[EventID\\=25\\]* OR *EventCode\\=?25?* OR *EventIdentifier\\=?25?*)) OR (process.command_line:(*Microsoft\\-Windows\\-PowerShell* OR *Microsoft\\-Windows\\-Security\\-Auditing* OR *Microsoft\\-Windows\\-TerminalServices\\-LocalSessionManager* OR *Microsoft\\-Windows\\-TerminalServices\\-RemoteConnectionManager* OR *Microsoft\\-Windows\\-Windows\\ Defender* OR *PowerShellCore* OR *Security* OR *Windows\\ PowerShell*))) AND ((process.command_line:*Select* AND process.command_line:*Win32_NTLogEvent*) OR ((process.command_line:(*\\ qe\\ * OR *\\ query\\-events\\ *)) AND (process.executable:*\\\\wevtutil.exe OR process.pe.original_file_name:wevtutil.exe)) OR (process.command_line:*\\ ntevent* AND (process.executable:*\\\\wmic.exe OR process.pe.original_file_name:wmic.exe)) OR (process.command_line:(*Get\\-WinEvent\\ * OR *get\\-eventlog\\ *)))",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.credential-access",
+    "attack.discovery",
+    "attack.t1552"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Nasreddine Bencherchali (Nextron Systems), X__Junior (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Legitimate usage of the utility by administrators to query the event log"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

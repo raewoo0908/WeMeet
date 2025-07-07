@@ -1,0 +1,61 @@
+{
+  "rule_id": "043c4b8b-3a54-4780-9682-081cb6b8185c",
+  "risk_score": 73,
+  "description": "Detects a suspicious IIS module registration as described in Microsoft threat report on IIS backdoors",
+  "name": "Suspicious IIS Module Registration",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "process.parent.executable:*\\\\w3wp.exe AND (process.command_line:*appcmd.exe\\ add\\ module* OR (process.command_line:*\\ system.enterpriseservices.internal.publish* AND process.executable:*\\\\powershell.exe) OR (process.command_line:*gacutil* AND process.command_line:*\\ \\/I*))",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.persistence",
+    "attack.t1505.004"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Florian Roth (Nextron Systems), Microsoft (idea)"
+  ],
+  "false_positives": [
+    "Administrative activity"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

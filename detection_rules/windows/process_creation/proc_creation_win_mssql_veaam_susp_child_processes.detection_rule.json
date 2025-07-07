@@ -1,0 +1,60 @@
+{
+  "rule_id": "d55b793d-f847-4eea-b59a-5ab09908ac90",
+  "risk_score": 99,
+  "description": "Detects suspicious child processes of the Veeam service process. This could indicate potential RCE or SQL Injection.",
+  "name": "Suspicious Child Process Of Veeam Dabatase",
+  "severity": "critical",
+  "type": "query",
+  "language": "lucene",
+  "query": "(process.parent.command_line:*VEEAMSQL* AND process.parent.executable:*\\\\sqlservr.exe) AND (((process.command_line:(*\\-ex\\ * OR *bypass* OR *cscript* OR *DownloadString* OR *http\\:\\/\\/* OR *https\\:\\/\\/* OR *mshta* OR *regsvr32* OR *rundll32* OR *wscript* OR *copy\\ *)) AND (process.executable:(*\\\\cmd.exe OR *\\\\powershell.exe OR *\\\\pwsh.exe OR *\\\\wsl.exe OR *\\\\wt.exe))) OR (process.executable:(*\\\\net.exe OR *\\\\net1.exe OR *\\\\netstat.exe OR *\\\\nltest.exe OR *\\\\ping.exe OR *\\\\tasklist.exe OR *\\\\whoami.exe)))",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.initial-access",
+    "attack.persistence",
+    "attack.privilege-escalation"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Nasreddine Bencherchali (Nextron Systems)"
+  ],
+  "false_positives": [],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

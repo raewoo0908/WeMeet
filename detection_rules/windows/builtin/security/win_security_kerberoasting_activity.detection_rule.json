@@ -1,0 +1,50 @@
+{
+  "rule_id": "d04ae2b8-ad54-4de0-bd87-4bc1da66aa59",
+  "risk_score": 47,
+  "description": "This rule will collect the data needed to start looking into possible kerberoasting activity.\nFurther analysis or computation within the query is needed focusing on requests from one specific host/IP towards multiple service names within a time period of 5 seconds.\nYou can then set a threshold for the number of requests and time between the requests to turn this into an alert.\n",
+  "name": "Kerberoasting Activity - Initial Query",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "winlog.channel:Security AND ((event.code:4769 AND winlog.event_data.Status:0x0 AND winlog.event_data.TicketEncryptionType:0x17) AND (NOT ((service.name:(*krbtgt OR *$)) AND winlog.event_data.TargetUserName:*$@*)))",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.credential-access",
+    "attack.t1558.003"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "@kostastsale"
+  ],
+  "false_positives": [
+    "Legacy applications."
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

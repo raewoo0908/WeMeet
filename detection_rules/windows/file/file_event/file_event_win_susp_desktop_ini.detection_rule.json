@@ -1,0 +1,62 @@
+{
+  "rule_id": "81315b50-6b60-4d8f-9928-3466e1022515",
+  "risk_score": 47,
+  "description": "Detects unusual processes accessing desktop.ini, which can be leveraged to alter how Explorer displays a folder's content (i.e. renaming files) without changing them on disk.",
+  "name": "Suspicious desktop.ini Action",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "file.path:*\\\\desktop.ini AND (NOT ((process.executable:(C\\:\\\\Windows\\\\* OR C\\:\\\\Program\\ Files\\\\* OR C\\:\\\\Program\\ Files\\ \\(x86\\)\\\\*)) OR (process.executable:*\\\\AppData\\\\Local\\\\JetBrains\\\\Toolbox\\\\bin\\\\7z.exe AND file.path:*\\\\JetBrains\\\\apps\\\\*) OR file.path:C\\:\\\\$WINDOWS.\\~BT\\\\NewOS\\\\*))",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "File Create (rule: FileCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.persistence",
+    "attack.t1547.009"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Maxime Thiebaut (@0xThiebaut), Tim Shelton (HAWK.IO)"
+  ],
+  "false_positives": [
+    "Operations performed through Windows SCCM or equivalent",
+    "Read only access list authority"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

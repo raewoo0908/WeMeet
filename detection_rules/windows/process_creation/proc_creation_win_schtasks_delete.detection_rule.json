@@ -1,0 +1,61 @@
+{
+  "rule_id": "dbc1f800-0fe0-4bc0-9c66-292c2abe3f78",
+  "risk_score": 73,
+  "description": "Detects when adversaries stop services or processes by deleting their respective scheduled tasks in order to conduct data destructive activities",
+  "name": "Delete Important Scheduled Task",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "(process.command_line:(*\\\\Windows\\\\BitLocker* OR *\\\\Windows\\\\ExploitGuard* OR *\\\\Windows\\\\SystemRestore\\\\SR* OR *\\\\Windows\\\\UpdateOrchestrator\\\\* OR *\\\\Windows\\\\Windows\\ Defender\\\\* OR *\\\\Windows\\\\WindowsBackup\\\\* OR *\\\\Windows\\\\WindowsUpdate\\\\*)) AND (process.command_line:*\\/delete* AND process.command_line:*\\/tn*) AND process.executable:*\\\\schtasks.exe",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.impact",
+    "attack.t1489"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Nasreddine Bencherchali (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Unlikely"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

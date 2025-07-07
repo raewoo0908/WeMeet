@@ -1,0 +1,61 @@
+{
+  "rule_id": "39f1f9f2-9636-45de-98f6-a4046aa8e4b9",
+  "risk_score": 47,
+  "description": "Detects the creation of files with certain extensions on a static web site. This can be indicative of potential uploads of a web shell.",
+  "name": "Potential Webshell Creation On Static Website",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "(((file.path:(*.ashx* OR *.asp* OR *.ph* OR *.soap*)) AND file.path:*\\\\inetpub\\\\wwwroot\\\\*) OR (file.path:*.ph* AND (file.path:(*\\\\www\\\\* OR *\\\\htdocs\\\\* OR *\\\\html\\\\*)))) AND (NOT (file.path:*\\\\xampp* OR process.executable:System OR (file.path:(*\\\\AppData\\\\Local\\\\Temp\\\\* OR *\\\\Windows\\\\Temp\\\\*))))",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "File Create (rule: FileCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.persistence",
+    "attack.t1505.003"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Beyu Denis, oscd.community, Tim Shelton, Thurein Oo"
+  ],
+  "false_positives": [
+    "Legitimate administrator or developer creating legitimate executable files in a web application folder"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

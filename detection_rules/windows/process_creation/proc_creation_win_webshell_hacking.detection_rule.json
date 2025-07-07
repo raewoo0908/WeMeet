@@ -1,0 +1,65 @@
+{
+  "rule_id": "4ebc877f-4612-45cb-b3a5-8e3834db36c9",
+  "risk_score": 73,
+  "description": "Detects certain parent child patterns found in cases in which a web shell is used to perform certain credential dumping or exfiltration activities on a compromised system\n",
+  "name": "Webshell Hacking Activity Patterns",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "(((process.parent.executable:(*\\-tomcat\\-* OR *\\\\tomcat*)) AND (process.parent.executable:(*\\\\java.exe OR *\\\\javaw.exe))) OR ((process.command_line:(*catalina.jar* OR *CATALINA_HOME*)) AND (process.parent.executable:(*\\\\java.exe OR *\\\\javaw.exe))) OR (process.parent.executable:(*\\\\caddy.exe OR *\\\\httpd.exe OR *\\\\nginx.exe OR *\\\\php\\-cgi.exe OR *\\\\w3wp.exe OR *\\\\ws_tomcatservice.exe))) AND ((process.command_line:*rundll32* AND process.command_line:*comsvcs*) OR (process.command_line:*\\ \\-hp* AND process.command_line:*\\ a\\ * AND process.command_line:*\\ \\-m*) OR (process.command_line:*net* AND process.command_line:*\\ user\\ * AND process.command_line:*\\ \\/add*) OR (process.command_line:*net* AND process.command_line:*\\ localgroup\\ * AND process.command_line:*\\ administrators\\ * AND process.command_line:*\\/add*) OR (process.executable:(*\\\\ntdsutil.exe OR *\\\\ldifde.exe OR *\\\\adfind.exe OR *\\\\procdump.exe OR *\\\\Nanodump.exe OR *\\\\vssadmin.exe OR *\\\\fsutil.exe)) OR (process.command_line:(*\\ \\-decode\\ * OR *\\ \\-NoP\\ * OR *\\ \\-W\\ Hidden\\ * OR *\\ \\/decode\\ * OR *\\ \\/ticket\\:* OR *\\ sekurlsa* OR *.dmp\\ full* OR *.downloadfile\\(* OR *.downloadstring\\(* OR *FromBase64String* OR *process\\ call\\ create* OR *reg\\ save\\ * OR *whoami\\ \\/priv*)))",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.persistence",
+    "attack.discovery",
+    "attack.t1505.003",
+    "attack.t1018",
+    "attack.t1033",
+    "attack.t1087"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Florian Roth (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Unlikely"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

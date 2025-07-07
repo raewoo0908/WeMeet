@@ -1,0 +1,50 @@
+{
+  "rule_id": "87df9ee1-5416-453a-8a08-e8d4a51e9ce1",
+  "risk_score": 73,
+  "description": "Shadow Copies deletion using operating systems utilities via PowerShell",
+  "name": "Delete Volume Shadow Copies Via WMI With PowerShell",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "(Data:(*Delete\\(\\)* OR *Remove\\-WmiObject*)) AND (Data:*Get\\-WmiObject* AND Data:*Win32_ShadowCopy*)",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.impact",
+    "attack.t1490"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "frack113"
+  ],
+  "false_positives": [
+    "Legitimate Administrator deletes Shadow Copies using operating systems utilities for legitimate reason"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

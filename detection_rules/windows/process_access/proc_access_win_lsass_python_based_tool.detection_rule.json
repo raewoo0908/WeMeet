@@ -1,0 +1,51 @@
+{
+  "rule_id": "f8be3e82-46a3-4e4e-ada5-8e538ae8b9c9",
+  "risk_score": 73,
+  "description": "Detects LSASS process access for potential credential dumping by a Python-like tool such as LaZagne or Pypykatz.",
+  "name": "Credential Dumping Activity By Python Based Tool",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "(winlog.event_data.CallTrace:(*python27.dll\\+* OR *python3*.dll\\+*)) AND (winlog.event_data.CallTrace:*_ctypes.pyd\\+* AND winlog.event_data.CallTrace:*\\:\\\\Windows\\\\System32\\\\KERNELBASE.dll\\+* AND winlog.event_data.CallTrace:*\\:\\\\Windows\\\\SYSTEM32\\\\ntdll.dll\\+*) AND winlog.event_data.GrantedAccess:0x1FFFFF AND winlog.event_data.TargetImage:*\\\\lsass.exe",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.credential-access",
+    "attack.t1003.001",
+    "attack.s0349"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Bhabesh Raj, Jonhnathan Ribeiro"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

@@ -1,0 +1,61 @@
+{
+  "rule_id": "6da2c9f5-7c53-401b-aacb-92c040ce1215",
+  "risk_score": 73,
+  "description": "When configured with suitable command line arguments, w32tm can act as a delay mechanism",
+  "name": "Use of W32tm as Timer",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "(process.command_line:*\\/stripchart* AND process.command_line:*\\/computer\\:* AND process.command_line:*\\/period\\:* AND process.command_line:*\\/dataonly* AND process.command_line:*\\/samples\\:*) AND (process.executable:*\\\\w32tm.exe OR process.pe.original_file_name:w32time.dll)",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.discovery",
+    "attack.t1124"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "frack113"
+  ],
+  "false_positives": [
+    "Legitimate use"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

@@ -1,0 +1,64 @@
+{
+  "rule_id": "c947b146-0abc-4c87-9c64-b17e9d7274a2",
+  "risk_score": 73,
+  "description": "Shadow Copies deletion using operating systems utilities",
+  "name": "Shadow Copies Deletion Using Operating Systems Utilities",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "((process.command_line:*shadow* AND process.command_line:*delete*) AND ((process.executable:(*\\\\powershell.exe OR *\\\\pwsh.exe OR *\\\\wmic.exe OR *\\\\vssadmin.exe OR *\\\\diskshadow.exe)) OR (process.pe.original_file_name:(PowerShell.EXE OR pwsh.dll OR wmic.exe OR VSSADMIN.EXE OR diskshadow.exe)))) OR ((process.command_line:*delete* AND process.command_line:*catalog* AND process.command_line:*quiet*) AND (process.executable:*\\\\wbadmin.exe OR process.pe.original_file_name:WBADMIN.EXE)) OR (((process.command_line:(*unbounded* OR *\\/MaxSize\\=*)) AND (process.command_line:*resize* AND process.command_line:*shadowstorage*)) AND (process.executable:*\\\\vssadmin.exe OR process.pe.original_file_name:VSSADMIN.EXE))",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.defense-evasion",
+    "attack.impact",
+    "attack.t1070",
+    "attack.t1490"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Florian Roth (Nextron Systems), Michael Haag, Teymur Kheirkhabarov, Daniil Yugoslavskiy, oscd.community, Andreas Hunkeler (@Karneades)"
+  ],
+  "false_positives": [
+    "Legitimate Administrator deletes Shadow Copies using operating systems utilities for legitimate reason",
+    "LANDesk LDClient Ivanti-PSModule (PS EncodedCommand)"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

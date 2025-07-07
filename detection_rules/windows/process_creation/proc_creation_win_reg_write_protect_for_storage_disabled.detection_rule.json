@@ -1,0 +1,61 @@
+{
+  "rule_id": "75f7a0e2-7154-4c4d-9eae-5cdb4e0a5c13",
+  "risk_score": 47,
+  "description": "Detects applications trying to modify the registry in order to disable any write-protect property for storage devices.\nThis could be a precursor to a ransomware attack and has been an observed technique used by cypherpunk group.\n",
+  "name": "Write Protect For Storage Disabled",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "process.command_line:*\\\\System\\\\CurrentControlSet\\\\Control* AND process.command_line:*Write\\ Protection* AND process.command_line:*0* AND process.command_line:*storage*",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.defense-evasion",
+    "attack.t1562"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Sreeman"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

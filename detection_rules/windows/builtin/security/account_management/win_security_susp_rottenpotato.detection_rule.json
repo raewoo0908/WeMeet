@@ -1,0 +1,51 @@
+{
+  "rule_id": "16f5d8ca-44bd-47c8-acbe-6fc95a16c12f",
+  "risk_score": 73,
+  "description": "Detects logon events that have characteristics of events generated during an attack with RottenPotato and the like",
+  "name": "RottenPotato Like Attack Pattern",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "winlog.channel:Security AND (event.code:4624 AND (source.ip:(127.0.0.1 OR \\:\\:1)) AND winlog.event_data.LogonType:3 AND winlog.event_data.TargetUserName:ANONYMOUS\\ LOGON AND source.domain:\\-)",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.privilege-escalation",
+    "attack.credential-access",
+    "attack.t1557.001"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "@SBousseaden, Florian Roth"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

@@ -1,0 +1,61 @@
+{
+  "rule_id": "88f680b8-070e-402c-ae11-d2914f2257f1",
+  "risk_score": 73,
+  "description": "Detects usage of a base64 encoded \"IEX\" cmdlet in a process command line",
+  "name": "PowerShell Base64 Encoded IEX Cmdlet",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "(process.command_line:(*SUVYIChb* OR *lFWCAoW* OR *JRVggKF*) OR process.command_line:(*aWV4IChb* OR *lleCAoW* OR *pZXggKF*) OR process.command_line:(*aWV4IChOZX* OR *lleCAoTmV3* OR *pZXggKE5ld*) OR process.command_line:(*SUVYIChOZX* OR *lFWCAoTmV3* OR *JRVggKE5ld*) OR process.command_line:(*SUVYKF* OR *lFWChb* OR *JRVgoW*) OR process.command_line:(*aWV4KF* OR *lleChb* OR *pZXgoW*) OR process.command_line:(*aWV4KE5ld* OR *lleChOZX* OR *pZXgoTmV3*) OR process.command_line:(*SUVYKE5ld* OR *lFWChOZX* OR *JRVgoTmV3*) OR process.command_line:(*SUVYKCgn* OR *lFWCgoJ* OR *JRVgoKC*) OR process.command_line:(*aWV4KCgn* OR *lleCgoJ* OR *pZXgoKC*)) OR (process.command_line:(*SQBFAFgAIAAoAFsA* OR *kARQBYACAAKABbA* OR *JAEUAWAAgACgAWw* OR *aQBlAHgAIAAoAFsA* OR *kAZQB4ACAAKABbA* OR *pAGUAeAAgACgAWw* OR *aQBlAHgAIAAoAE4AZQB3A* OR *kAZQB4ACAAKABOAGUAdw* OR *pAGUAeAAgACgATgBlAHcA* OR *SQBFAFgAIAAoAE4AZQB3A* OR *kARQBYACAAKABOAGUAdw* OR *JAEUAWAAgACgATgBlAHcA*))",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.execution",
+    "attack.t1059.001"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Florian Roth (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

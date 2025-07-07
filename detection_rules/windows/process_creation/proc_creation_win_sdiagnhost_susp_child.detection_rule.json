@@ -1,0 +1,62 @@
+{
+  "rule_id": "f3d39c45-de1a-4486-a687-ab126124f744",
+  "risk_score": 73,
+  "description": "Detects sdiagnhost.exe calling a suspicious child process (e.g. used in exploits for Follina / CVE-2022-30190)",
+  "name": "Sdiagnhost Calling Suspicious Child Process",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "((process.executable:(*\\\\powershell.exe OR *\\\\pwsh.exe OR *\\\\cmd.exe OR *\\\\mshta.exe OR *\\\\cscript.exe OR *\\\\wscript.exe OR *\\\\taskkill.exe OR *\\\\regsvr32.exe OR *\\\\rundll32.exe OR *\\\\calc.exe)) AND process.parent.executable:*\\\\sdiagnhost.exe) AND (NOT ((process.command_line:*bits* AND process.executable:*\\\\cmd.exe) OR ((process.command_line:(*\\-noprofile\\ \\- OR *\\-noprofile)) AND process.executable:*\\\\powershell.exe)))",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.defense-evasion",
+    "attack.t1036",
+    "attack.t1218"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Nextron Systems, @Kostastsale"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

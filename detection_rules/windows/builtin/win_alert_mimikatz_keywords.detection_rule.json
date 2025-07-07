@@ -1,0 +1,59 @@
+{
+  "rule_id": "06d71506-7beb-4f22-8888-e2e5e2ca7fd8",
+  "risk_score": 73,
+  "description": "This method detects mimikatz keywords in different Eventlogs (some of them only appear in older Mimikatz version that are however still used by different threat groups)",
+  "name": "Mimikatz Use",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "(*dpapi\\:\\:masterkey* OR *eo.oe.kiwi* OR *event\\:\\:clear* OR *event\\:\\:drop* OR *gentilkiwi.com* OR *kerberos\\:\\:golden* OR *kerberos\\:\\:ptc* OR *kerberos\\:\\:ptt* OR *kerberos\\:\\:tgt* OR *Kiwi\\ Legit\\ Printer* OR *lsadump\\:\\:* OR *mimidrv.sys* OR *\\\\mimilib.dll* OR *misc\\:\\:printnightmare* OR *misc\\:\\:shadowcopies* OR *misc\\:\\:skeleton* OR *privilege\\:\\:backup* OR *privilege\\:\\:debug* OR *privilege\\:\\:driver* OR *sekurlsa\\:\\:*) AND (NOT event.code:15)",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.s0002",
+    "attack.lateral-movement",
+    "attack.credential-access",
+    "car.2013-07-001",
+    "car.2019-04-004",
+    "attack.t1003.002",
+    "attack.t1003.004",
+    "attack.t1003.001",
+    "attack.t1003.006"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Florian Roth (Nextron Systems), David ANDRE (additional keywords)"
+  ],
+  "false_positives": [
+    "Naughty administrators",
+    "AV Signature updates",
+    "Files with Mimikatz in their filename"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

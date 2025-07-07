@@ -1,0 +1,61 @@
+{
+  "rule_id": "a6fc3c46-23b8-4996-9ea2-573f4c4d88c5",
+  "risk_score": 73,
+  "description": "Detects calls to the AtomicTestHarnesses \"Invoke-ATHRemoteFXvGPUDisablementCommand\" which is designed to abuse the \"RemoteFXvGPUDisablement.exe\" binary to run custom PowerShell code via module load-order hijacking.",
+  "name": "RemoteFXvGPUDisablement Abuse Via AtomicTestHarnesses",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "process.command_line:(*Invoke\\-ATHRemoteFXvGPUDisablementCommand* OR *Invoke\\-ATHRemoteFXvGPUDisableme*)",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.defense-evasion",
+    "attack.t1218"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "frack113"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

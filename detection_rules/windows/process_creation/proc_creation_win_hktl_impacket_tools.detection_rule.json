@@ -1,0 +1,61 @@
+{
+  "rule_id": "4627c6ae-6899-46e2-aa0c-6ebcb1becd19",
+  "risk_score": 73,
+  "description": "Detects the execution of different compiled Windows binaries of the impacket toolset (based on names or part of their names - could lead to false positives)",
+  "name": "HackTool - Impacket Tools Execution",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "(process.executable:(*\\\\goldenPac* OR *\\\\karmaSMB* OR *\\\\kintercept* OR *\\\\ntlmrelayx* OR *\\\\rpcdump* OR *\\\\samrdump* OR *\\\\secretsdump* OR *\\\\smbexec* OR *\\\\smbrelayx* OR *\\\\wmiexec* OR *\\\\wmipersist*)) OR (process.executable:(*\\\\atexec_windows.exe OR *\\\\dcomexec_windows.exe OR *\\\\dpapi_windows.exe OR *\\\\findDelegation_windows.exe OR *\\\\GetADUsers_windows.exe OR *\\\\GetNPUsers_windows.exe OR *\\\\getPac_windows.exe OR *\\\\getST_windows.exe OR *\\\\getTGT_windows.exe OR *\\\\GetUserSPNs_windows.exe OR *\\\\ifmap_windows.exe OR *\\\\mimikatz_windows.exe OR *\\\\netview_windows.exe OR *\\\\nmapAnswerMachine_windows.exe OR *\\\\opdump_windows.exe OR *\\\\psexec_windows.exe OR *\\\\rdp_check_windows.exe OR *\\\\sambaPipe_windows.exe OR *\\\\smbclient_windows.exe OR *\\\\smbserver_windows.exe OR *\\\\sniff_windows.exe OR *\\\\sniffer_windows.exe OR *\\\\split_windows.exe OR *\\\\ticketer_windows.exe))",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.execution",
+    "attack.t1557.001"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Florian Roth (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Legitimate use of the impacket tools"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

@@ -1,0 +1,62 @@
+{
+  "rule_id": "cdc8da7d-c303-42f8-b08c-b4ab47230263",
+  "risk_score": 47,
+  "description": "Detects a rundll32 that communicates with public IP addresses",
+  "name": "Rundll32 Internet Connection",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "(process.executable:*\\\\rundll32.exe AND network.direction:true) AND (NOT (winlog.event_data.CommandLine:*\\\\system32\\\\PcaSvc.dll,PcaPatchSdbTask OR source.domain:*.internal.cloudapp.net OR (destination.ip:127.0.0.0\\/8 OR destination.ip:10.0.0.0\\/8 OR destination.ip:172.16.0.0\\/12 OR destination.ip:192.168.0.0\\/16 OR destination.ip:169.254.0.0\\/16 OR destination.ip:\\:\\:1\\/128 OR destination.ip:fe80\\:\\:\\/10 OR destination.ip:fc00\\:\\:\\/7) OR (destination.ip:20.0.0.0\\/8 OR destination.ip:51.103.0.0\\/16 OR destination.ip:51.104.0.0\\/16 OR destination.ip:51.105.0.0\\/16) OR (destination.port:443 AND process.parent.executable:C\\:\\\\Windows\\\\System32\\\\svchost.exe)))",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Network connection detected (rule: NetworkConnect)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.defense-evasion",
+    "attack.t1218.011",
+    "attack.execution"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Florian Roth (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Communication to other corporate systems that use IP addresses from public address spaces"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

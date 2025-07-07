@@ -1,0 +1,61 @@
+{
+  "rule_id": "1277f594-a7d1-4f28-a2d3-73af5cbeab43",
+  "risk_score": 73,
+  "description": "Detects Windows shells and scripting applications that write files to suspicious folders",
+  "name": "Windows Shell/Scripting Application File Write to Suspicious Folder",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "((process.executable:(*\\\\bash.exe OR *\\\\cmd.exe OR *\\\\cscript.exe OR *\\\\msbuild.exe OR *\\\\powershell.exe OR *\\\\pwsh.exe OR *\\\\sh.exe OR *\\\\wscript.exe)) AND (file.path:(C\\:\\\\PerfLogs\\\\* OR C\\:\\\\Users\\\\Public\\\\*))) OR ((process.executable:(*\\\\certutil.exe OR *\\\\forfiles.exe OR *\\\\mshta.exe OR *\\\\schtasks.exe OR *\\\\scriptrunner.exe OR *\\\\wmic.exe)) AND (file.path:(*C\\:\\\\PerfLogs\\\\* OR *C\\:\\\\Users\\\\Public\\\\* OR *C\\:\\\\Windows\\\\Temp\\\\*)))",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "File Create (rule: FileCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.execution",
+    "attack.t1059"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Florian Roth (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

@@ -1,0 +1,63 @@
+{
+  "rule_id": "f576a613-2392-4067-9d1a-9345fb58d8d1",
+  "risk_score": 47,
+  "description": "Once established within a system or network, an adversary may use automated techniques for collecting internal data.",
+  "name": "Automated Collection Command Prompt",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "(process.command_line:(*.doc* OR *.docx* OR *.xls* OR *.xlsx* OR *.ppt* OR *.pptx* OR *.rtf* OR *.pdf* OR *.txt*)) AND ((process.command_line:*dir\\ * AND process.command_line:*\\ \\/b\\ * AND process.command_line:*\\ \\/s\\ *) OR ((process.command_line:(*\\ \\/e\\ * OR *\\ \\/si\\ *)) AND process.pe.original_file_name:FINDSTR.EXE))",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.collection",
+    "attack.t1119",
+    "attack.credential-access",
+    "attack.t1552.001"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "frack113"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

@@ -1,0 +1,63 @@
+{
+  "rule_id": "0ba1da6d-b6ce-4366-828c-18826c9de23e",
+  "risk_score": 73,
+  "description": "Detects the execution of a renamed binary often used by attackers or malware leveraging new Sysmon OriginalFileName datapoint.",
+  "name": "Potential Defense Evasion Via Rename Of Highly Relevant Binaries",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "(process.pe.description:Execute\\ processes\\ remotely OR process.pe.product:Sysinternals\\ PsExec OR (process.pe.description:(Windows\\ PowerShell* OR pwsh*)) OR (process.pe.original_file_name:(certutil.exe OR cmstp.exe OR cscript.exe OR IE4UINIT.EXE OR mshta.exe OR msiexec.exe OR msxsl.exe OR powershell_ise.exe OR powershell.exe OR psexec.c OR psexec.exe OR psexesvc.exe OR pwsh.dll OR reg.exe OR regsvr32.exe OR rundll32.exe OR WerMgr OR wmic.exe OR wscript.exe))) AND (NOT (process.executable:(*\\\\certutil.exe OR *\\\\cmstp.exe OR *\\\\cscript.exe OR *\\\\ie4uinit.exe OR *\\\\mshta.exe OR *\\\\msiexec.exe OR *\\\\msxsl.exe OR *\\\\powershell_ise.exe OR *\\\\powershell.exe OR *\\\\psexec.exe OR *\\\\psexec64.exe OR *\\\\PSEXESVC.exe OR *\\\\pwsh.exe OR *\\\\reg.exe OR *\\\\regsvr32.exe OR *\\\\rundll32.exe OR *\\\\wermgr.exe OR *\\\\wmic.exe OR *\\\\wscript.exe)))",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.defense-evasion",
+    "attack.t1036.003",
+    "car.2013-05-009"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Matthew Green - @mgreen27, Florian Roth (Nextron Systems), frack113"
+  ],
+  "false_positives": [
+    "Custom applications use renamed binaries adding slight change to binary name. Typically this is easy to spot and add to whitelist",
+    "PsExec installed via Windows Store doesn't contain original filename field (False negative)"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

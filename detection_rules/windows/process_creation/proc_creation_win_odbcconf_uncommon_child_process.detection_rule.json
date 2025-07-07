@@ -1,0 +1,62 @@
+{
+  "rule_id": "8e3c7994-131e-4ba5-b6ea-804d49113a26",
+  "risk_score": 47,
+  "description": "Detects an uncommon child process of \"odbcconf.exe\" binary which normally shouldn't have any child processes.",
+  "name": "Uncommon Child Process Spawned By Odbcconf.EXE",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "process.parent.executable:*\\\\odbcconf.exe",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.defense-evasion",
+    "attack.t1218.008"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Harjot Singh @cyb3rjy0t"
+  ],
+  "false_positives": [
+    "In rare occurrences where \"odbcconf\" crashes. It might spawn a \"werfault\" process",
+    "Other child processes will depend on the DLL being registered by actions like \"regsvr\". In case where the DLLs have external calls (which should be rare). Other child processes might spawn and additional filters need to be applied."
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

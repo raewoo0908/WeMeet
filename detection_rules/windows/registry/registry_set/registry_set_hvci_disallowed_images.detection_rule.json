@@ -1,0 +1,49 @@
+{
+  "rule_id": "555155a2-03bf-4fe7-af74-d176b3fdbe16",
+  "risk_score": 73,
+  "description": "Detects changes to the \"HVCIDisallowedImages\" registry value to potentially add a driver to the list, in order to prevent it from loading.\n",
+  "name": "Driver Added To Disallowed Images In HVCI - Registry",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "registry.path:*\\\\Control\\\\CI\\\\* AND registry.path:*\\\\HVCIDisallowedImages*",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.defense-evasion"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Nasreddine Bencherchali (Nextron Systems), Omar Khaled (@beacon_exe)"
+  ],
+  "false_positives": [
+    "Legitimate usage of this key would also trigger this. Investigate the driver being added and make sure its intended"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

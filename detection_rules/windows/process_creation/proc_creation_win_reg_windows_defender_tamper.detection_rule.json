@@ -1,0 +1,61 @@
+{
+  "rule_id": "452bce90-6fb0-43cc-97a5-affc283139b3",
+  "risk_score": 73,
+  "description": "Detects the usage of \"reg.exe\" to tamper with different Windows Defender registry keys in order to disable some important features related to protection and detection",
+  "name": "Suspicious Windows Defender Registry Key Tampering Via Reg.EXE",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "((process.executable:*\\\\reg.exe OR process.pe.original_file_name:reg.exe) AND (process.command_line:(*SOFTWARE\\\\Microsoft\\\\Windows\\ Defender\\\\* OR *SOFTWARE\\\\Policies\\\\Microsoft\\\\Windows\\ Defender\\ Security\\ Center* OR *SOFTWARE\\\\Policies\\\\Microsoft\\\\Windows\\ Defender\\\\*))) AND (((process.command_line:(*DisallowExploitProtectionOverride* OR *EnableControlledFolderAccess* OR *MpEnablePus* OR *PUAProtection* OR *SpynetReporting* OR *SubmitSamplesConsent* OR *TamperProtection*)) AND (process.command_line:*\\ add\\ * AND process.command_line:*d\\ 0*)) OR ((process.command_line:(*DisableAntiSpyware* OR *DisableAntiSpywareRealtimeProtection* OR *DisableAntiVirus* OR *DisableArchiveScanning* OR *DisableBehaviorMonitoring* OR *DisableBlockAtFirstSeen* OR *DisableConfig* OR *DisableEnhancedNotifications* OR *DisableIntrusionPreventionSystem* OR *DisableIOAVProtection* OR *DisableOnAccessProtection* OR *DisablePrivacyMode* OR *DisableRealtimeMonitoring* OR *DisableRoutinelyTakingAction* OR *DisableScanOnRealtimeEnable* OR *DisableScriptScanning* OR *Notification_Suppress* OR *SignatureDisableUpdateOnStartupWithoutEngine*)) AND (process.command_line:*\\ add\\ * AND process.command_line:*d\\ 1*)))",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.defense-evasion",
+    "attack.t1562.001"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Florian Roth (Nextron Systems), Swachchhanda Shrawan Poudel, Nasreddine Bencherchali (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Rare legitimate use by administrators to test software (should always be investigated)"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

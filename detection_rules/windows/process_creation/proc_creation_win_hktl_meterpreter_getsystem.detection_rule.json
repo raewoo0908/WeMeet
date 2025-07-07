@@ -1,0 +1,63 @@
+{
+  "rule_id": "15619216-e993-4721-b590-4c520615a67d",
+  "risk_score": 73,
+  "description": "Detects the use of getsystem Meterpreter/Cobalt Strike command by detecting a specific service starting",
+  "name": "Potential Meterpreter/CobaltStrike Activity",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "process.parent.executable:*\\\\services.exe AND (((process.command_line:(*cmd* OR *%COMSPEC%*)) AND (process.command_line:*\\/c* AND process.command_line:*echo* AND process.command_line:*\\\\pipe\\\\*)) OR (process.command_line:*rundll32* AND process.command_line:*.dll,a* AND process.command_line:*\\/p\\:*)) AND (NOT process.command_line:*MpCmdRun*)",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.privilege-escalation",
+    "attack.t1134.001",
+    "attack.t1134.002"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Teymur Kheirkhabarov, Ecco, Florian Roth"
+  ],
+  "false_positives": [
+    "Commandlines containing components like cmd accidentally",
+    "Jobs and services started with cmd"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

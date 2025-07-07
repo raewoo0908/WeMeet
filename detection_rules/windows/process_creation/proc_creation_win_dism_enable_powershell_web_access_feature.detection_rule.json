@@ -1,0 +1,61 @@
+{
+  "rule_id": "7e8f2d3b-9c1a-4f67-b9e8-8d9006e0e51f",
+  "risk_score": 73,
+  "description": "Detects the use of DISM to enable the PowerShell Web Access feature, which could be used for remote access and potential abuse",
+  "name": "PowerShell Web Access Feature Enabled Via DISM",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "(process.command_line:*WindowsPowerShellWebAccess* AND process.command_line:*\\/online* AND process.command_line:*\\/enable\\-feature*) AND (process.executable:*\\\\dism.exe OR process.pe.original_file_name:DISM.EXE)",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.persistence",
+    "attack.t1548.002"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Michael Haag"
+  ],
+  "false_positives": [
+    "Legitimate PowerShell Web Access installations by administrators"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

@@ -1,0 +1,50 @@
+{
+  "rule_id": "4fdc44df-bfe9-4fcc-b041-68f5a2d3031c",
+  "risk_score": 47,
+  "description": "Adversaries may manipulate accounts to maintain access to victim systems.\nAccount manipulation may consist of any action that preserves adversary access to a compromised account, such as modifying credentials or permission groups\n",
+  "name": "Powershell LocalAccount Manipulation",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "powershell.file.script_block_text:(*Disable\\-LocalUser* OR *Enable\\-LocalUser* OR *Get\\-LocalUser* OR *Set\\-LocalUser* OR *New\\-LocalUser* OR *Rename\\-LocalUser* OR *Remove\\-LocalUser*)",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.persistence",
+    "attack.t1098"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "frack113"
+  ],
+  "false_positives": [
+    "Legitimate administrative script"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

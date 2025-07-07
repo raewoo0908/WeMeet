@@ -1,0 +1,50 @@
+{
+  "rule_id": "af4c4609-5755-42fe-8075-4effb49f5d44",
+  "risk_score": 47,
+  "description": "Detects Microsoft Excel loading an Add-In (.xll) file from an uncommon location",
+  "name": "Microsoft Excel Add-In Loaded From Uncommon Location",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "(file.path:(*\\\\Desktop\\\\* OR *\\\\Downloads\\\\* OR *\\\\Perflogs\\\\* OR *\\\\Temp\\\\* OR *\\\\Users\\\\Public\\\\* OR *\\\\Windows\\\\Tasks\\\\*)) AND file.path:*.xll AND process.executable:*\\\\excel.exe",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.execution",
+    "attack.t1204.002"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Nasreddine Bencherchali (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Some tuning might be required to allow or remove certain locations used by the rule if you consider them as safe locations"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

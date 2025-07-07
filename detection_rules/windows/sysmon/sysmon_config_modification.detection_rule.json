@@ -1,0 +1,51 @@
+{
+  "rule_id": "8ac03a65-6c84-4116-acad-dc1558ff7a77",
+  "risk_score": 47,
+  "description": "Detects a Sysmon configuration change, which could be the result of a legitimate reconfiguration or someone trying manipulate the configuration",
+  "name": "Sysmon Configuration Change",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "winlog.channel:Microsoft\\-Windows\\-Sysmon\\/Operational AND event.code:16",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.defense-evasion"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "frack113"
+  ],
+  "false_positives": [
+    "Legitimate administrative action"
+  ],
+  "license": "DRL",
+  "rule_name_override": "",
+  "timestamp_override": "",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "from": "1m",
+    "kibana_siem_app_url": ""
+  }
+}

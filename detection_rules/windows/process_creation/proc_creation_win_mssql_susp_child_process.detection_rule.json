@@ -1,0 +1,62 @@
+{
+  "rule_id": "869b9ca7-9ea2-4a5a-8325-e80e62f75445",
+  "risk_score": 73,
+  "description": "Detects suspicious child processes of the SQLServer process. This could indicate potential RCE or SQL Injection.",
+  "name": "Suspicious Child Process Of SQL Server",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "((process.executable:(*\\\\bash.exe OR *\\\\bitsadmin.exe OR *\\\\cmd.exe OR *\\\\netstat.exe OR *\\\\nltest.exe OR *\\\\ping.exe OR *\\\\powershell.exe OR *\\\\pwsh.exe OR *\\\\regsvr32.exe OR *\\\\rundll32.exe OR *\\\\sh.exe OR *\\\\systeminfo.exe OR *\\\\tasklist.exe OR *\\\\wsl.exe)) AND process.parent.executable:*\\\\sqlservr.exe) AND (NOT (process.command_line:\\\"C\\:\\\\Windows\\\\system32\\\\cmd.exe\\\"\\ * AND process.executable:C\\:\\\\Windows\\\\System32\\\\cmd.exe AND process.parent.executable:*DATEV_DBENGINE\\\\MSSQL\\\\Binn\\\\sqlservr.exe AND process.parent.executable:C\\:\\\\Program\\ Files\\\\Microsoft\\ SQL\\ Server\\\\*))",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.t1505.003",
+    "attack.t1190",
+    "attack.initial-access",
+    "attack.persistence",
+    "attack.privilege-escalation"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "FPT.EagleEye Team, wagga"
+  ],
+  "false_positives": [],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

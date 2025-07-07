@@ -1,0 +1,52 @@
+{
+  "rule_id": "9ca2bf31-0570-44d8-a543-534c47c33ed7",
+  "risk_score": 47,
+  "description": "Detects DLL sideloading of \"dbgcore.dll\"",
+  "name": "Potential DLL Sideloading Of DBGCORE.DLL",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "file.path:*\\\\dbgcore.dll AND (NOT (file.path:(C\\:\\\\Program\\ Files\\ \\(x86\\)\\\\* OR C\\:\\\\Program\\ Files\\\\* OR C\\:\\\\Windows\\\\SoftwareDistribution\\\\* OR C\\:\\\\Windows\\\\System32\\\\* OR C\\:\\\\Windows\\\\SystemTemp\\\\* OR C\\:\\\\Windows\\\\SysWOW64\\\\* OR C\\:\\\\Windows\\\\WinSxS\\\\*))) AND (NOT file.path:*\\\\Steam\\\\bin\\\\cef\\\\cef.win7x64\\\\dbgcore.dll)",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.defense-evasion",
+    "attack.persistence",
+    "attack.privilege-escalation",
+    "attack.t1574.001"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Nasreddine Bencherchali (Nextron Systems), Wietze Beukema (project and research)"
+  ],
+  "false_positives": [
+    "Legitimate applications loading their own versions of the DLL mentioned in this rule"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

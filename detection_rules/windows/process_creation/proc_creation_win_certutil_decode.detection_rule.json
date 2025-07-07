@@ -1,0 +1,61 @@
+{
+  "rule_id": "cc9cbe82-7bc0-4ef5-bc23-bbfb83947be7",
+  "risk_score": 47,
+  "description": "Detects the execution of certutil with either the \"decode\" or \"decodehex\" flags to decode base64 or hex encoded files. This can be abused by attackers to decode an encoded payload before execution",
+  "name": "File Decoded From Base64/Hex Via Certutil.EXE",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "(process.command_line:(*\\-decode\\ * OR *\\/decode\\ * OR *–decode\\ * OR *—decode\\ * OR *―decode\\ *) OR process.command_line:(*\\-decodehex\\ * OR *\\/decodehex\\ * OR *–decodehex\\ * OR *—decodehex\\ * OR *―decodehex\\ *)) AND (process.executable:*\\\\certutil.exe OR process.pe.original_file_name:CertUtil.exe)",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.defense-evasion",
+    "attack.t1027"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Florian Roth (Nextron Systems), Jonhnathan Ribeiro, oscd.community"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

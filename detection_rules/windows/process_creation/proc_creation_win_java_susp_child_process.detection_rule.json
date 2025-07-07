@@ -1,0 +1,63 @@
+{
+  "rule_id": "0d34ed8b-1c12-4ff2-828c-16fc860b766d",
+  "risk_score": 73,
+  "description": "Detects suspicious processes spawned from a Java host process which could indicate a sign of exploitation (e.g. log4j)",
+  "name": "Suspicious Processes Spawned by Java.EXE",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "(process.executable:(*\\\\AppVLP.exe OR *\\\\bitsadmin.exe OR *\\\\certutil.exe OR *\\\\cscript.exe OR *\\\\curl.exe OR *\\\\forfiles.exe OR *\\\\hh.exe OR *\\\\mftrace.exe OR *\\\\mshta.exe OR *\\\\net.exe OR *\\\\net1.exe OR *\\\\query.exe OR *\\\\reg.exe OR *\\\\regsvr32.exe OR *\\\\rundll32.exe OR *\\\\schtasks.exe OR *\\\\scrcons.exe OR *\\\\scriptrunner.exe OR *\\\\sh.exe OR *\\\\systeminfo.exe OR *\\\\whoami.exe OR *\\\\wmic.exe OR *\\\\wscript.exe)) AND process.parent.executable:*\\\\java.exe",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.initial-access",
+    "attack.persistence",
+    "attack.privilege-escalation"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Andreas Hunkeler (@Karneades), Florian Roth"
+  ],
+  "false_positives": [
+    "Legitimate calls to system binaries",
+    "Company specific internal usage"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

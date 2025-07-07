@@ -1,0 +1,60 @@
+{
+  "rule_id": "34275eb8-fa19-436b-b959-3d9ecd53fa1f",
+  "risk_score": 47,
+  "description": "Detects the enumeration of a specific DLL or EXE being used by a binary via \"tasklist.exe\".\nThis is often used by attackers in order to find the specific process identifier (PID) that is using the DLL in question.\nIn order to dump the process memory or perform other nefarious actions.\n",
+  "name": "Loaded Module Enumeration Via Tasklist.EXE",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "process.command_line:(*\\-m* OR *\\/m* OR *–m* OR *—m* OR *―m*) AND (process.executable:*\\\\tasklist.exe OR process.pe.original_file_name:tasklist.exe) AND process.command_line:*rdpcorets.dll*",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.t1003"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Swachchhanda Shrawan Poudel"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

@@ -1,0 +1,61 @@
+{
+  "rule_id": "09576804-7a05-458e-a817-eb718ca91f54",
+  "risk_score": 73,
+  "description": "Detects suspicious ways to run Invoke-Execution using IEX alias",
+  "name": "Suspicious PowerShell IEX Execution Patterns",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "(((process.command_line:(*\\ \\|\\ iex;* OR *\\ \\|\\ iex\\ * OR *\\ \\|\\ iex\\}* OR *\\ \\|\\ IEX\\ ;* OR *\\ \\|\\ IEX\\ \\-Error* OR *\\ \\|\\ IEX\\ \\(new* OR *\\);IEX\\ *)) AND (process.executable:(*\\\\powershell.exe OR *\\\\pwsh.exe))) AND (process.command_line:(*\\:\\:FromBase64String* OR *.GetString\\(\\[System.Convert\\]\\:\\:*))) OR (process.command_line:(*\\)\\|iex;$* OR *\\);iex\\($* OR *\\);iex\\ $* OR *\\ \\|\\ IEX\\ \\|\\ * OR *\\ \\|\\ iex\\\\\\\"*))",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.execution",
+    "attack.t1059.001"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Florian Roth (Nextron Systems), Nasreddine Bencherchali (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Legitimate scripts that use IEX"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

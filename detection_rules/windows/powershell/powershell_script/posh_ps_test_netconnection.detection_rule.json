@@ -1,0 +1,50 @@
+{
+  "rule_id": "adf876b3-f1f8-4aa9-a4e4-a64106feec06",
+  "risk_score": 47,
+  "description": "Adversaries may communicate using a protocol and port paring that are typically not associated.\nFor example, HTTPS over port 8088(Citation: Symantec Elfin Mar 2019) or port 587(Citation: Fortinet Agent Tesla April 2018) as opposed to the traditional port 443.\n",
+  "name": "Testing Usage of Uncommonly Used Port",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "(powershell.file.script_block_text:*Test\\-NetConnection* AND powershell.file.script_block_text:*\\-ComputerName\\ * AND powershell.file.script_block_text:*\\-port\\ *) AND (NOT (powershell.file.script_block_text:(*\\ 443\\ * OR *\\ 80\\ *)))",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.command-and-control",
+    "attack.t1571"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "frack113"
+  ],
+  "false_positives": [
+    "Legitimate administrative script"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

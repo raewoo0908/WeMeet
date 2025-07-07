@@ -1,0 +1,52 @@
+{
+  "rule_id": "f241cf1b-3a6b-4e1a-b4f9-133c00dd95ca",
+  "risk_score": 47,
+  "description": "Detects Obfuscated Powershell via RUNDLL LAUNCHER",
+  "name": "Invoke-Obfuscation RUNDLL LAUNCHER - Security",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "winlog.channel:Security AND (event.code:4697 AND (winlog.event_data.ServiceFileName:*rundll32.exe* AND winlog.event_data.ServiceFileName:*shell32.dll* AND winlog.event_data.ServiceFileName:*shellexec_rundll* AND winlog.event_data.ServiceFileName:*powershell*))",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.defense-evasion",
+    "attack.t1027",
+    "attack.execution",
+    "attack.t1059.001"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Timur Zinniatullin, oscd.community"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

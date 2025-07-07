@@ -1,0 +1,50 @@
+{
+  "rule_id": "1547e27c-3974-43e2-a7d7-7f484fb928ec",
+  "risk_score": 73,
+  "description": "Detects the modification of the registry to allow a driver or service to persist in Safe Mode.",
+  "name": "Registry Persistence via Service in Safe Mode",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "(winlog.event_data.Details:Service AND (registry.path:(*\\\\Control\\\\SafeBoot\\\\Minimal\\\\* OR *\\\\Control\\\\SafeBoot\\\\Network\\\\*)) AND registry.path:*\\\\\\(Default\\)) AND (NOT (process.executable:C\\:\\\\WINDOWS\\\\system32\\\\msiexec.exe AND (registry.path:(*\\\\Control\\\\SafeBoot\\\\Minimal\\\\SAVService\\\\\\(Default\\) OR *\\\\Control\\\\SafeBoot\\\\Network\\\\SAVService\\\\\\(Default\\)))))",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.defense-evasion",
+    "attack.t1564.001"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "frack113"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

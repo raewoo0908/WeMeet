@@ -1,0 +1,61 @@
+{
+  "rule_id": "99793437-3e16-439b-be0f-078782cf953d",
+  "risk_score": 47,
+  "description": "Well-known TAP software installation. Possible preparation for data exfiltration using tunneling techniques",
+  "name": "Tap Installer Execution",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "process.executable:*\\\\tapinstall.exe AND (NOT ((process.executable:(*\\:\\\\Program\\ Files\\\\Avast\\ Software\\\\SecureLine\\ VPN\\\\* OR *\\:\\\\Program\\ Files\\ \\(x86\\)\\\\Avast\\ Software\\\\SecureLine\\ VPN\\\\*)) OR process.executable:*\\:\\\\Program\\ Files\\\\OpenVPN\\ Connect\\\\drivers\\\\tap\\\\* OR process.executable:*\\:\\\\Program\\ Files\\ \\(x86\\)\\\\Proton\\ Technologies\\\\ProtonVPNTap\\\\installer\\\\*))",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.exfiltration",
+    "attack.t1048"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Daniil Yugoslavskiy, Ian Davis, oscd.community"
+  ],
+  "false_positives": [
+    "Legitimate OpenVPN TAP installation"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

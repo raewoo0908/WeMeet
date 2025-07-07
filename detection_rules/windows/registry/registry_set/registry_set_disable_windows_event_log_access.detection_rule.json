@@ -1,0 +1,51 @@
+{
+  "rule_id": "ba226dcf-d390-4642-b9af-b534872f1156",
+  "risk_score": 73,
+  "description": "Detects changes to the Windows EventLog channel permission values. It focuses on changes to the Security Descriptor Definition Language (SDDL) string, as modifications to these values can restrict access to specific users or groups, potentially aiding in defense evasion by controlling who can view or modify a event log channel. Upon execution, the user shouldn't be able to access the event log channel via the event viewer or via utilities such as \"Get-EventLog\" or \"wevtutil\".\n",
+  "name": "Windows Event Log Access Tampering Via Registry",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "((registry.path:*\\\\SYSTEM\\\\CurrentControlSet\\\\Services\\\\EventLog\\\\* AND registry.path:*\\\\CustomSD) OR ((registry.path:(*\\\\Policies\\\\Microsoft\\\\Windows\\\\EventLog\\\\* OR *\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\WINEVT\\\\Channels*)) AND registry.path:*\\\\ChannelAccess)) AND (winlog.event_data.Details:*D\\:\\(D;* OR (winlog.event_data.Details:*D\\:\\(* AND winlog.event_data.Details:*\\)\\(D;*))",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.defense-evasion",
+    "attack.t1547.001",
+    "attack.t1112"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "X__Junior"
+  ],
+  "false_positives": [
+    "Administrative activity, still unlikely"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

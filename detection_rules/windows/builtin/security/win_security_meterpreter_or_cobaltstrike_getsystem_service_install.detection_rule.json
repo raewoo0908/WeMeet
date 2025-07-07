@@ -1,0 +1,51 @@
+{
+  "rule_id": "ecbc5e16-58e0-4521-9c60-eb9a7ea4ad34",
+  "risk_score": 73,
+  "description": "Detects the use of getsystem Meterpreter/Cobalt Strike command by detecting a specific service installation",
+  "name": "Meterpreter or Cobalt Strike Getsystem Service Installation - Security",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "winlog.channel:Security AND (event.code:4697 AND (((winlog.event_data.ServiceFileName:(*cmd* OR *%COMSPEC%*)) AND (winlog.event_data.ServiceFileName:*\\/c* AND winlog.event_data.ServiceFileName:*echo* AND winlog.event_data.ServiceFileName:*\\\\pipe\\\\*)) OR (winlog.event_data.ServiceFileName:*rundll32* AND winlog.event_data.ServiceFileName:*.dll,a* AND winlog.event_data.ServiceFileName:*\\/p\\:*) OR winlog.event_data.ServiceFileName:\\\\\\\\127.0.0.1\\\\ADMIN$\\\\*))",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.privilege-escalation",
+    "attack.t1134.001",
+    "attack.t1134.002"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Teymur Kheirkhabarov, Ecco, Florian Roth (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Unlikely"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

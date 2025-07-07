@@ -1,0 +1,60 @@
+{
+  "rule_id": "fdfcbd78-48f1-4a4b-90ac-d82241e368c5",
+  "risk_score": 47,
+  "description": "Detects launch of the PSEXESVC service, which means that this system was the target of a psexec remote execution",
+  "name": "PsExec Service Execution",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "process.executable:C\\:\\\\Windows\\\\PSEXESVC.exe OR process.pe.original_file_name:psexesvc.exe",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.execution"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Thomas Patzke, Romaissa Adjailia, Florian Roth (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Legitimate administrative tasks"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

@@ -1,0 +1,61 @@
+{
+  "rule_id": "754ed792-634f-40ae-b3bc-e0448d33f695",
+  "risk_score": 73,
+  "description": "Detects a suspicious or uncommon parent processes of PowerShell",
+  "name": "Suspicious PowerShell Parent Process",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "(process.parent.executable:*tomcat* OR (process.parent.executable:(*\\\\amigo.exe OR *\\\\browser.exe OR *\\\\chrome.exe OR *\\\\firefox.exe OR *\\\\httpd.exe OR *\\\\iexplore.exe OR *\\\\jbosssvc.exe OR *\\\\microsoftedge.exe OR *\\\\microsoftedgecp.exe OR *\\\\MicrosoftEdgeSH.exe OR *\\\\mshta.exe OR *\\\\nginx.exe OR *\\\\outlook.exe OR *\\\\php\\-cgi.exe OR *\\\\regsvr32.exe OR *\\\\rundll32.exe OR *\\\\safari.exe OR *\\\\services.exe OR *\\\\sqlagent.exe OR *\\\\sqlserver.exe OR *\\\\sqlservr.exe OR *\\\\vivaldi.exe OR *\\\\w3wp.exe))) AND ((process.executable:(*\\\\powershell.exe OR *\\\\pwsh.exe)) OR (process.command_line:(*\\/c\\ powershell* OR *\\/c\\ pwsh*)) OR process.pe.description:Windows\\ PowerShell OR process.pe.product:PowerShell\\ Core\\ 6 OR (process.pe.original_file_name:(PowerShell.EXE OR pwsh.dll)))",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.execution",
+    "attack.t1059.001"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Teymur Kheirkhabarov, Harish Segar"
+  ],
+  "false_positives": [
+    "Other scripts"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

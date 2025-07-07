@@ -1,0 +1,52 @@
+{
+  "rule_id": "f318b911-ea88-43f4-9281-0de23ede628e",
+  "risk_score": 47,
+  "description": "Detects default CSExec pipe creation",
+  "name": "PUA - CSExec Default Named Pipe",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "file.name:*\\\\csexecsvc*",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.lateral-movement",
+    "attack.t1021.002",
+    "attack.execution",
+    "attack.t1569.002"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Nikita Nazarov, oscd.community, Nasreddine Bencherchali (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Legitimate Administrator activity"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

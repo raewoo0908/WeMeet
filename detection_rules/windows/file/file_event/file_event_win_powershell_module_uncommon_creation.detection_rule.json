@@ -1,0 +1,60 @@
+{
+  "rule_id": "e3845023-ca9a-4024-b2b2-5422156d5527",
+  "risk_score": 47,
+  "description": "Detects the creation of a new PowerShell module \".psm1\", \".psd1\", \".dll\", \".ps1\", etc. by a non-PowerShell process",
+  "name": "PowerShell Module File Created By Non-PowerShell Process",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "(file.path:(*\\\\WindowsPowerShell\\\\Modules\\\\* OR *\\\\PowerShell\\\\7\\\\Modules\\\\*)) AND (NOT (process.executable:(*\\:\\\\Program\\ Files\\\\PowerShell\\\\7\\-preview\\\\pwsh.exe OR *\\:\\\\Program\\ Files\\\\PowerShell\\\\7\\\\pwsh.exe OR *\\:\\\\Windows\\\\System32\\\\poqexec.exe OR *\\:\\\\Windows\\\\System32\\\\WindowsPowerShell\\\\v1.0\\\\powershell_ise.exe OR *\\:\\\\Windows\\\\System32\\\\WindowsPowerShell\\\\v1.0\\\\powershell.exe OR *\\:\\\\Windows\\\\SysWOW64\\\\poqexec.exe OR *\\:\\\\Windows\\\\SysWOW64\\\\WindowsPowerShell\\\\v1.0\\\\powershell_ise.exe OR *\\:\\\\Windows\\\\SysWOW64\\\\WindowsPowerShell\\\\v1.0\\\\powershell.exe)))",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "File Create (rule: FileCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.persistence"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Nasreddine Bencherchali (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

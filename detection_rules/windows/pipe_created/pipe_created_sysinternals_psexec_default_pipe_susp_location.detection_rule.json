@@ -1,0 +1,51 @@
+{
+  "rule_id": "41504465-5e3a-4a5b-a5b4-2a0baadd4463",
+  "risk_score": 47,
+  "description": "Detects PsExec default pipe creation where the image executed is located in a suspicious location. Which could indicate that the tool is being used in an attack",
+  "name": "PsExec Tool Execution From Suspicious Locations - PipeName",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "(process.executable:(*\\:\\\\Users\\\\Public\\\\* OR *\\:\\\\Windows\\\\Temp\\\\* OR *\\\\AppData\\\\Local\\\\Temp\\\\* OR *\\\\Desktop\\\\* OR *\\\\Downloads\\\\*)) AND file.name:\\\\PSEXESVC",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.execution",
+    "attack.t1569.002",
+    "attack.s0029"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Nasreddine Bencherchali (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Rare legitimate use of psexec from the locations mentioned above. This will require initial tuning based on your environment."
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

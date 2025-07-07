@@ -1,0 +1,61 @@
+{
+  "rule_id": "4eddc365-79b4-43ff-a9d7-99422dc34b93",
+  "risk_score": 47,
+  "description": "Remote.exe is part of WinDbg in the Windows SDK and can be used for AWL bypass and running remote files.",
+  "name": "Use of Remote.exe",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "process.executable:*\\\\remote.exe OR process.pe.original_file_name:remote.exe",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.defense-evasion",
+    "attack.t1127"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Christopher Peacock @SecurePeacock, SCYTHE @scythe_io"
+  ],
+  "false_positives": [
+    "Approved installs of Windows SDK with Debugging Tools for Windows (WinDbg)."
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

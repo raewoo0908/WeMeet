@@ -1,0 +1,51 @@
+{
+  "rule_id": "b85e5894-9b19-4d86-8c87-a2f3b81f0521",
+  "risk_score": 47,
+  "description": "Detects new BITS transfer job saving local files with potential suspicious extensions",
+  "name": "BITS Transfer Job Downloading File Potential Suspicious Extension",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "winlog.channel:Microsoft\\-Windows\\-Bits\\-Client\\/Operational AND ((event.code:16403 AND (winlog.event_data.LocalName:(*.bat OR *.dll OR *.exe OR *.hta OR *.ps1 OR *.psd1 OR *.sh OR *.vbe OR *.vbs))) AND (NOT (winlog.event_data.LocalName:*\\\\AppData\\\\* AND winlog.event_data.RemoteName:*.com*)))",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.defense-evasion",
+    "attack.persistence",
+    "attack.t1197"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "frack113"
+  ],
+  "false_positives": [
+    "While the file extensions in question can be suspicious at times. It's best to add filters according to your environment to avoid large amount false positives"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

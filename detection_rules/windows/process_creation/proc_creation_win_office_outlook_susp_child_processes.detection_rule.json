@@ -1,0 +1,61 @@
+{
+  "rule_id": "208748f7-881d-47ac-a29c-07ea84bf691d",
+  "risk_score": 73,
+  "description": "Detects a suspicious process spawning from an Outlook process.",
+  "name": "Suspicious Outlook Child Process",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "(process.executable:(*\\\\AppVLP.exe OR *\\\\bash.exe OR *\\\\cmd.exe OR *\\\\cscript.exe OR *\\\\forfiles.exe OR *\\\\hh.exe OR *\\\\mftrace.exe OR *\\\\msbuild.exe OR *\\\\msdt.exe OR *\\\\mshta.exe OR *\\\\msiexec.exe OR *\\\\powershell.exe OR *\\\\pwsh.exe OR *\\\\regsvr32.exe OR *\\\\schtasks.exe OR *\\\\scrcons.exe OR *\\\\scriptrunner.exe OR *\\\\sh.exe OR *\\\\svchost.exe OR *\\\\wmic.exe OR *\\\\wscript.exe)) AND process.parent.executable:*\\\\OUTLOOK.EXE",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.execution",
+    "attack.t1204.002"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Michael Haag, Florian Roth (Nextron Systems), Markus Neis, Elastic, FPT.EagleEye Team"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

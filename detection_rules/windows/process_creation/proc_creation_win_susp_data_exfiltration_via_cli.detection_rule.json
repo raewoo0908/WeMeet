@@ -1,0 +1,61 @@
+{
+  "rule_id": "7d1aaf3d-4304-425c-b7c3-162055e0b3ab",
+  "risk_score": 73,
+  "description": "Detects the use of various CLI utilities exfiltrating data via web requests",
+  "name": "Potential Data Exfiltration Activity Via CommandLine Tools",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "(((process.command_line:(*Invoke\\-WebRequest* OR *iwr\\ * OR *wget\\ * OR *curl\\ *)) AND (process.command_line:*\\ \\-ur* AND process.command_line:*\\ \\-me* AND process.command_line:*\\ \\-b* AND process.command_line:*\\ POST\\ *) AND (process.executable:(*\\\\powershell.exe OR *\\\\pwsh.exe OR *\\\\cmd.exe))) OR ((process.command_line:*\\-\\-ur* AND process.executable:*\\\\curl.exe) AND (process.command_line:(*\\ \\-d\\ * OR *\\ \\-\\-data\\ *))) OR ((process.command_line:(*\\-\\-post\\-data* OR *\\-\\-post\\-file*)) AND process.executable:*\\\\wget.exe)) AND ((process.command_line:(*Get\\-Content* OR *GetBytes* OR *hostname* OR *ifconfig* OR *ipconfig* OR *net\\ view* OR *netstat* OR *nltest* OR *qprocess* OR *sc\\ query* OR *systeminfo* OR *tasklist* OR *ToBase64String* OR *whoami*)) OR (process.command_line:*type\\ * AND process.command_line:*\\ \\>\\ * AND process.command_line:*\\ C\\:\\\\*))",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.execution",
+    "attack.t1059.001"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Nasreddine Bencherchali (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Unlikely"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

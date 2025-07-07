@@ -1,0 +1,50 @@
+{
+  "rule_id": "02ee49e2-e294-4d0f-9278-f5b3212fc588",
+  "risk_score": 73,
+  "description": "Detects suspicious new RUN key element pointing to an executable in a suspicious folder",
+  "name": "New RUN Key Pointing to Suspicious Folder",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "(registry.path:(*\\\\Software\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Run* OR *\\\\Software\\\\WOW6432Node\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Run* OR *\\\\Software\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Policies\\\\Explorer\\\\Run*)) AND ((winlog.event_data.Details:(*\\:\\\\Perflogs* OR *\\:\\\\ProgramData'* OR *\\:\\\\Windows\\\\Temp* OR *\\:\\\\Temp* OR *\\\\AppData\\\\Local\\\\Temp* OR *\\\\AppData\\\\Roaming* OR *\\:\\\\$Recycle.bin* OR *\\:\\\\Users\\\\Default* OR *\\:\\\\Users\\\\public* OR *%temp%* OR *%tmp%* OR *%Public%* OR *%AppData%*)) OR (winlog.event_data.Details:*\\:\\\\Users\\\\* AND (winlog.event_data.Details:(*\\\\Favorites* OR *\\\\Favourites* OR *\\\\Contacts* OR *\\\\Music* OR *\\\\Pictures* OR *\\\\Documents* OR *\\\\Photos*)))) AND (NOT ((winlog.event_data.Details:(*\\\\AppData\\\\Local\\\\Temp\\\\* OR *C\\:\\\\Windows\\\\Temp\\\\*)) AND (winlog.event_data.Details:*rundll32.exe\\ * AND winlog.event_data.Details:*C\\:\\\\WINDOWS\\\\system32\\\\advpack.dll,DelNodeRunDLL32*) AND process.executable:C\\:\\\\Windows\\\\SoftwareDistribution\\\\Download\\\\* AND registry.path:*\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\RunOnce\\\\*))",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.persistence",
+    "attack.t1547.001"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Florian Roth (Nextron Systems), Markus Neis, Sander Wiebing, Swachchhanda Shrawan Poudel (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Software using weird folders for updates"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

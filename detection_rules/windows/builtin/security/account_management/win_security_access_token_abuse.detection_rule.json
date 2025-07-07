@@ -1,0 +1,52 @@
+{
+  "rule_id": "02f7c9c1-1ae8-4c6a-8add-04693807f92f",
+  "risk_score": 47,
+  "description": "Detects potential token impersonation and theft. Example, when using \"DuplicateToken(Ex)\" and \"ImpersonateLoggedOnUser\" with the \"LOGON32_LOGON_NEW_CREDENTIALS flag\".",
+  "name": "Potential Access Token Abuse",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "winlog.channel:Security AND (winlog.event_data.AuthenticationPackageName:Negotiate AND event.code:4624 AND winlog.event_data.ImpersonationLevel:%%1833 AND winlog.event_data.LogonProcessName:Advapi AND winlog.event_data.LogonType:9)",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.defense-evasion",
+    "attack.privilege-escalation",
+    "attack.t1134.001",
+    "stp.4u"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Michaela Adams, Zach Mathis"
+  ],
+  "false_positives": [
+    "Anti-Virus"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

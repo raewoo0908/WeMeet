@@ -1,0 +1,61 @@
+{
+  "rule_id": "62e0298b-e994-4189-bc87-bc699aa62d97",
+  "risk_score": 47,
+  "description": "Detects the import of '.reg' files from suspicious paths using the 'reg.exe' utility",
+  "name": "Potential Suspicious Registry File Imported Via Reg.EXE",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "process.command_line:*\\ import\\ * AND (process.executable:*\\\\reg.exe OR process.pe.original_file_name:reg.exe) AND (process.command_line:(*C\\:\\\\Users\\\\* OR *%temp%* OR *%tmp%* OR *%appdata%* OR *\\\\AppData\\\\Local\\\\Temp\\\\* OR *C\\:\\\\Windows\\\\Temp\\\\* OR *C\\:\\\\ProgramData\\\\*))",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.t1112",
+    "attack.defense-evasion"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "frack113, Nasreddine Bencherchali"
+  ],
+  "false_positives": [
+    "Legitimate import of keys"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

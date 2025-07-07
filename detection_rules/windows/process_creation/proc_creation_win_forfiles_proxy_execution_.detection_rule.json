@@ -1,0 +1,61 @@
+{
+  "rule_id": "9aa5106d-bce3-4b13-86df-3a20f1d5cf0b",
+  "risk_score": 47,
+  "description": "Detects the execution of \"forfiles\" with the \"/c\" flag.\nWhile this is an expected behavior of the tool, it can be abused in order to proxy execution through it with any binary.\nCan be used to bypass application whitelisting.\n",
+  "name": "Forfiles Command Execution",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "process.command_line:(*\\ \\-c\\ * OR *\\ \\/c\\ * OR *\\ –c\\ * OR *\\ —c\\ * OR *\\ ―c\\ *) AND (process.executable:*\\\\forfiles.exe OR process.pe.original_file_name:forfiles.exe)",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.execution",
+    "attack.t1059"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Tim Rauch, Elastic, E.M. Anhaus (originally from Atomic Blue Detections, Endgame), oscd.community"
+  ],
+  "false_positives": [
+    "Legitimate use via a batch script or by an administrator."
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

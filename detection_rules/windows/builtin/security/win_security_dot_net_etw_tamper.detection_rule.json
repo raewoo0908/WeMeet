@@ -1,0 +1,51 @@
+{
+  "rule_id": "a4c90ea1-2634-4ca0-adbb-35eae169b6fc",
+  "risk_score": 73,
+  "description": "Potential adversaries stopping ETW providers recording loaded .NET assemblies.",
+  "name": "ETW Logging Disabled In .NET Processes - Registry",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "winlog.channel:Security AND ((event.code:4657 AND winlog.event_data.NewValue:0 AND winlog.event_data.ObjectName:*\\\\Environment* AND (winlog.event_data.ObjectValueName:(COMPlus_ETWEnabled OR COMPlus_ETWFlags))) OR (event.code:4657 AND winlog.event_data.NewValue:0 AND winlog.event_data.ObjectName:*\\\\SOFTWARE\\\\Microsoft\\\\.NETFramework AND winlog.event_data.ObjectValueName:ETWEnabled))",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.defense-evasion",
+    "attack.t1112",
+    "attack.t1562"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Roberto Rodriguez (Cyb3rWard0g), OTR (Open Threat Research)"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

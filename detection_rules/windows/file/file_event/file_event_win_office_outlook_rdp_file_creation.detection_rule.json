@@ -1,0 +1,60 @@
+{
+  "rule_id": "f748c45a-f8d3-4e6f-b617-fe176f695b8f",
+  "risk_score": 73,
+  "description": "Detects the creation of files with the \".rdp\" extensions in the temporary directory that Outlook uses when opening attachments.\nThis can be used to detect spear-phishing campaigns that use RDP files as attachments.\n",
+  "name": ".RDP File Created by Outlook Process",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "file.path:*.rdp AND ((file.path:(*\\\\AppData\\\\Local\\\\Packages\\\\Microsoft.Outlook_* OR *\\\\AppData\\\\Local\\\\Microsoft\\\\Olk\\\\Attachments\\\\*)) OR (file.path:*\\\\AppData\\\\Local\\\\Microsoft\\\\Windows\\\\* AND file.path:*\\\\Content.Outlook\\\\*))",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "File Create (rule: FileCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.defense-evasion"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Florian Roth"
+  ],
+  "false_positives": [
+    "Whenever someone receives an RDP file as an email attachment and decides to save or open it right from the attachments"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

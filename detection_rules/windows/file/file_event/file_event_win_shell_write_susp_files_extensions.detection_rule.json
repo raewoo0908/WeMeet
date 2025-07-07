@@ -1,0 +1,61 @@
+{
+  "rule_id": "b8fd0e93-ff58-4cbd-8f48-1c114e342e62",
+  "risk_score": 73,
+  "description": "Detects Windows executables that write files with suspicious extensions",
+  "name": "Windows Binaries Write Suspicious Extensions",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "(((process.executable:(*\\\\csrss.exe OR *\\\\lsass.exe OR *\\\\RuntimeBroker.exe OR *\\\\sihost.exe OR *\\\\smss.exe OR *\\\\wininit.exe OR *\\\\winlogon.exe)) AND (file.path:(*.bat OR *.dll OR *.exe OR *.hta OR *.iso OR *.ps1 OR *.txt OR *.vbe OR *.vbs))) OR ((process.executable:(*\\\\dllhost.exe OR *\\\\rundll32.exe OR *\\\\svchost.exe)) AND (file.path:(*.bat OR *.hta OR *.iso OR *.ps1 OR *.vbe OR *.vbs)))) AND (NOT ((process.executable:C\\:\\\\Windows\\\\System32\\\\dllhost.exe AND (file.path:*\\:\\\\Users\\\\* AND file.path:*\\\\AppData\\\\Local\\\\Temp\\\\__PSScriptPolicyTest_*) AND file.path:*.ps1) OR (process.executable:C\\:\\\\Windows\\\\system32\\\\svchost.exe AND (file.path:*C\\:\\\\Windows\\\\System32\\\\GroupPolicy\\\\DataStore\\\\* AND file.path:*\\\\sysvol\\\\* AND file.path:*\\\\Policies\\\\* AND file.path:*\\\\Machine\\\\Scripts\\\\Startup\\\\*) AND (file.path:(*.ps1 OR *.bat)))))",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "File Create (rule: FileCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.defense-evasion",
+    "attack.t1036"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Nasreddine Bencherchali (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

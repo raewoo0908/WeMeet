@@ -1,0 +1,62 @@
+{
+  "rule_id": "7aa7009a-28b9-4344-8c1f-159489a390df",
+  "risk_score": 99,
+  "description": "Detects the use of Windows Credential Editor (WCE)",
+  "name": "HackTool - Windows Credential Editor (WCE) Execution",
+  "severity": "critical",
+  "type": "query",
+  "language": "lucene",
+  "query": "((winlog.event_data.Hashes:(*IMPHASH\\=a53a02b997935fd8eedcb5f7abab9b9f* OR *IMPHASH\\=e96a73c7bf33a464c510ede582318bf2*)) OR (process.command_line:*.exe\\ \\-S AND process.parent.executable:*\\\\services.exe)) AND (NOT process.executable:*\\\\clussvc.exe)",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.credential-access",
+    "attack.t1003.001",
+    "attack.s0005"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Florian Roth (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Another service that uses a single -s command line switch"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

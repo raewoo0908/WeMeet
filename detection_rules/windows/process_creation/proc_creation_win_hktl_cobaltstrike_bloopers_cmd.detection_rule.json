@@ -1,0 +1,62 @@
+{
+  "rule_id": "647c7b9e-d784-4fda-b9a0-45c565a7b729",
+  "risk_score": 73,
+  "description": "Detects use of Cobalt Strike commands accidentally entered in the CMD shell",
+  "name": "Operator Bloopers Cobalt Strike Commands",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "((process.command_line:(*psinject* OR *spawnas* OR *make_token* OR *remote\\-exec* OR *rev2self* OR *dcsync* OR *logonpasswords* OR *execute\\-assembly* OR *getsystem*)) AND (process.command_line:(cmd\\ * OR cmd.exe* OR c\\:\\\\windows\\\\system32\\\\cmd.exe*))) AND (process.pe.original_file_name:Cmd.Exe OR process.executable:*\\\\cmd.exe)",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.execution",
+    "attack.t1059.003",
+    "stp.1u"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "_pete_0, TheDFIRReport"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

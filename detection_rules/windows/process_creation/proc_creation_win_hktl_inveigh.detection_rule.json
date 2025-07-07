@@ -1,0 +1,61 @@
+{
+  "rule_id": "b99a1518-1ad5-4f65-bc95-1ffff97a8fd0",
+  "risk_score": 99,
+  "description": "Detects the use of Inveigh a cross-platform .NET IPv4/IPv6 machine-in-the-middle tool",
+  "name": "HackTool - Inveigh Execution",
+  "severity": "critical",
+  "type": "query",
+  "language": "lucene",
+  "query": "process.executable:*\\\\Inveigh.exe OR (process.pe.original_file_name:(\\\\Inveigh.exe OR \\\\Inveigh.dll)) OR process.pe.description:Inveigh OR (process.command_line:(*\\ \\-SpooferIP* OR *\\ \\-ReplyToIPs\\ * OR *\\ \\-ReplyToDomains\\ * OR *\\ \\-ReplyToMACs\\ * OR *\\ \\-SnifferIP*))",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.credential-access",
+    "attack.t1003.001"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Nasreddine Bencherchali (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Very unlikely"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

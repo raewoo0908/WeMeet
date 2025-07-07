@@ -1,0 +1,62 @@
+{
+  "rule_id": "ee37eb7c-a4e7-4cd5-8fa4-efa27f1c3f31",
+  "risk_score": 73,
+  "description": "Detects the use of Ngrok, a utility used for port forwarding and tunneling, often used by threat actors to make local protected services publicly available.\nInvolved domains are bin.equinox.io for download and *.ngrok.io for connections.\n",
+  "name": "PUA - Ngrok Execution",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "(process.command_line:(*\\ tcp\\ 139* OR *\\ tcp\\ 445* OR *\\ tcp\\ 3389* OR *\\ tcp\\ 5985* OR *\\ tcp\\ 5986*)) OR (process.command_line:*\\ start\\ * AND process.command_line:*\\-\\-all* AND process.command_line:*\\-\\-config* AND process.command_line:*.yml*) OR ((process.command_line:(*\\ tcp\\ * OR *\\ http\\ * OR *\\ authtoken\\ *)) AND process.executable:*ngrok.exe) OR (process.command_line:(*.exe\\ authtoken\\ * OR *.exe\\ start\\ \\-\\-all*))",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.command-and-control",
+    "attack.t1572"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Florian Roth (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Another tool that uses the command line switches of Ngrok",
+    "Ngrok http 3978 (https://learn.microsoft.com/en-us/azure/bot-service/bot-service-debug-channel-ngrok?view=azure-bot-service-4.0)"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

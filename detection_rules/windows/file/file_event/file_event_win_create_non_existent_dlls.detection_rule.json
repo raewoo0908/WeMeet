@@ -1,0 +1,63 @@
+{
+  "rule_id": "df6ecb8b-7822-4f4b-b412-08f524b4576c",
+  "risk_score": 47,
+  "description": "Detects the creation of system DLLs that are usually not present on the system (or at least not in system directories).\nUsually this technique is used to achieve DLL hijacking.\n",
+  "name": "Creation Of Non-Existent System DLL",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "file.path:(*\\:\\\\Windows\\\\System32\\\\TSMSISrv.dll OR *\\:\\\\Windows\\\\System32\\\\TSVIPSrv.dll OR *\\:\\\\Windows\\\\System32\\\\wbem\\\\wbemcomn.dll OR *\\:\\\\Windows\\\\System32\\\\WLBSCTRL.dll OR *\\:\\\\Windows\\\\System32\\\\wow64log.dll OR *\\:\\\\Windows\\\\System32\\\\WptsExtensions.dll OR *\\\\SprintCSP.dll)",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "File Create (rule: FileCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.defense-evasion",
+    "attack.persistence",
+    "attack.privilege-escalation",
+    "attack.t1574.001"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Nasreddine Bencherchali (Nextron Systems), fornotes"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

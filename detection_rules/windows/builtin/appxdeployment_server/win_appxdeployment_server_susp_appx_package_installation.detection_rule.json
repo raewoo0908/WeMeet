@@ -1,0 +1,49 @@
+{
+  "rule_id": "898d5fc9-fbc3-43de-93ad-38e97237c344",
+  "risk_score": 47,
+  "description": "Detects an appx package installation with the error code \"0x80073cff\" which indicates that the package didn't meet the signing requirements and could be suspicious",
+  "name": "Suspicious AppX Package Installation Attempt",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "winlog.channel:Microsoft\\-Windows\\-AppXDeploymentServer\\/Operational AND (winlog.event_data.ErrorCode:0x80073cff AND event.code:401)",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.defense-evasion"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Nasreddine Bencherchali (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Legitimate AppX packages not signed by MS used part of an enterprise"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

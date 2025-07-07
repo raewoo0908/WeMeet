@@ -1,0 +1,64 @@
+{
+  "rule_id": "1012f107-b8f1-4271-af30-5aed2de89b39",
+  "risk_score": 73,
+  "description": "Detects a process spawned by the terminal service server process (this could be an indicator for an exploitation of CVE-2019-0708)",
+  "name": "Terminal Service Process Spawn",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "(process.parent.command_line:*\\\\svchost.exe* AND process.parent.command_line:*termsvcs*) AND (NOT ((process.executable:(*\\\\rdpclip.exe OR *\\:\\\\Windows\\\\System32\\\\csrss.exe OR *\\:\\\\Windows\\\\System32\\\\wininit.exe OR *\\:\\\\Windows\\\\System32\\\\winlogon.exe)) OR (NOT _exists_:process.executable)))",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.initial-access",
+    "attack.t1190",
+    "attack.lateral-movement",
+    "attack.t1210",
+    "car.2013-07-002"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Florian Roth (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

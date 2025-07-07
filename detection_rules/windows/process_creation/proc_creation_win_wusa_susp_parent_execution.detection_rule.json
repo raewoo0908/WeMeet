@@ -1,0 +1,60 @@
+{
+  "rule_id": "ef64fc9c-a45e-43cc-8fd8-7d75d73b4c99",
+  "risk_score": 73,
+  "description": "Detects execution of the \"wusa.exe\" (Windows Update Standalone Installer) utility by a parent process that is located in a suspicious location.\nAttackers could instantiate an instance of \"wusa.exe\" in order to bypass User Account Control (UAC). They can duplicate the access token from \"wusa.exe\" to gain elevated privileges.\n",
+  "name": "Wusa.EXE Executed By Parent Process Located In Suspicious Location",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "process.executable:*\\\\wusa.exe AND ((process.parent.executable:(*\\:\\\\Perflogs\\\\* OR *\\:\\\\Users\\\\Public\\\\* OR *\\:\\\\Windows\\\\Temp\\\\* OR *\\\\Appdata\\\\Local\\\\Temp\\\\* OR *\\\\Temporary\\ Internet*)) OR ((process.parent.executable:*\\:\\\\Users\\\\* AND process.parent.executable:*\\\\Favorites\\\\*) OR (process.parent.executable:*\\:\\\\Users\\\\* AND process.parent.executable:*\\\\Favourites\\\\*) OR (process.parent.executable:*\\:\\\\Users\\\\* AND process.parent.executable:*\\\\Contacts\\\\*) OR (process.parent.executable:*\\:\\\\Users\\\\* AND process.parent.executable:*\\\\Pictures\\\\*))) AND (NOT process.command_line:*.msu*)",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.execution"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "X__Junior (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

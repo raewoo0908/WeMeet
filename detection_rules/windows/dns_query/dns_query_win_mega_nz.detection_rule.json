@@ -1,0 +1,50 @@
+{
+  "rule_id": "613c03ba-0779-4a53-8a1f-47f914a4ded3",
+  "risk_score": 47,
+  "description": "Detects DNS queries for subdomains related to MEGA sharing website",
+  "name": "DNS Query To MEGA Hosting Website",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "dns.question.name:*userstorage.mega.co.nz*",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.exfiltration",
+    "attack.t1567.002"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Aaron Greetham (@beardofbinary) - NCC Group"
+  ],
+  "false_positives": [
+    "Legitimate DNS queries and usage of Mega"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

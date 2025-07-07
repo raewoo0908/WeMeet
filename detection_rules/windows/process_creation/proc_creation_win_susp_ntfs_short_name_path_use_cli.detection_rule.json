@@ -1,0 +1,61 @@
+{
+  "rule_id": "349d891d-fef0-4fe4-bc53-eee623a15969",
+  "risk_score": 47,
+  "description": "Detect use of the Windows 8.3 short name. Which could be used as a method to avoid command-line detection",
+  "name": "Use Short Name Path in Command Line",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "(process.command_line:(*\\~1\\\\* OR *\\~2\\\\*)) AND (NOT ((process.parent.executable:(C\\:\\\\Windows\\\\System32\\\\Dism.exe OR C\\:\\\\Windows\\\\System32\\\\cleanmgr.exe OR C\\:\\\\Program\\ Files\\\\GPSoftware\\\\Directory\\ Opus\\\\dopus.exe)) OR (process.parent.executable:(*\\\\WebEx\\\\WebexHost.exe OR *\\\\thor\\\\thor64.exe OR *\\\\veam.backup.shell.exe OR *\\\\winget.exe OR *\\\\Everything\\\\Everything.exe)) OR process.parent.executable:*\\\\AppData\\\\Local\\\\Temp\\\\WinGet\\\\* OR (process.command_line:(*\\\\appdata\\\\local\\\\webex\\\\webex64\\\\meetings\\\\wbxreport.exe* OR *C\\:\\\\Program\\ Files\\\\Git\\\\post\\-install.bat* OR *C\\:\\\\Program\\ Files\\\\Git\\\\cmd\\\\scalar.exe*))))",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.defense-evasion",
+    "attack.t1564.004"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "frack113, Nasreddine Bencherchali"
+  ],
+  "false_positives": [
+    "Applications could use this notation occasionally which might generate some false positives. In that case investigate the parent and child process."
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

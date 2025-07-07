@@ -1,0 +1,61 @@
+{
+  "rule_id": "7d604714-e071-49ff-8726-edeb95a70679",
+  "risk_score": 73,
+  "description": "Detects programs on a Windows system that should not write scripts to disk",
+  "name": "Legitimate Application Dropped Script",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "(process.executable:(*\\\\eqnedt32.exe OR *\\\\wordpad.exe OR *\\\\wordview.exe OR *\\\\certutil.exe OR *\\\\certoc.exe OR *\\\\CertReq.exe OR *\\\\Desktopimgdownldr.exe OR *\\\\esentutl.exe OR *\\\\mshta.exe OR *\\\\AcroRd32.exe OR *\\\\RdrCEF.exe OR *\\\\hh.exe OR *\\\\finger.exe)) AND (file.path:(*.ps1 OR *.bat OR *.vbs OR *.scf OR *.wsf OR *.wsh))",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "File Create (rule: FileCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.defense-evasion",
+    "attack.t1218"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "frack113, Florian Roth (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

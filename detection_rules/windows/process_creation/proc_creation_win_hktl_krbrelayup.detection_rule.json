@@ -1,0 +1,63 @@
+{
+  "rule_id": "12827a56-61a4-476a-a9cb-f3068f191073",
+  "risk_score": 73,
+  "description": "Detects KrbRelayUp used to perform a universal no-fix local privilege escalation in Windows domain environments where LDAP signing is not enforced",
+  "name": "HackTool - KrbRelayUp Execution",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "(process.command_line:*\\ relay\\ * AND process.command_line:*\\ \\-Domain\\ * AND process.command_line:*\\ \\-ComputerName\\ *) OR (process.command_line:*\\ krbscm\\ * AND process.command_line:*\\ \\-sc\\ *) OR (process.command_line:*\\ spawn\\ * AND process.command_line:*\\ \\-d\\ * AND process.command_line:*\\ \\-cn\\ * AND process.command_line:*\\ \\-cp\\ *) OR (process.executable:*\\\\KrbRelayUp.exe OR process.pe.original_file_name:KrbRelayUp.exe)",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.credential-access",
+    "attack.t1558.003",
+    "attack.lateral-movement",
+    "attack.t1550.003"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Florian Roth (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Unlikely"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

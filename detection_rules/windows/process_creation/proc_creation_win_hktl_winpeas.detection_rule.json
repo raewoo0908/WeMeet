@@ -1,0 +1,64 @@
+{
+  "rule_id": "98b53e78-ebaf-46f8-be06-421aafd176d9",
+  "risk_score": 73,
+  "description": "WinPEAS is a script that search for possible paths to escalate privileges on Windows hosts. The checks are explained on book.hacktricks.xyz",
+  "name": "HackTool - winPEAS Execution",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "process.command_line:*https\\:\\/\\/github.com\\/carlospolop\\/PEASS\\-ng\\/releases\\/latest\\/download\\/* OR (process.command_line:(*\\ applicationsinfo* OR *\\ browserinfo* OR *\\ eventsinfo* OR *\\ fileanalysis* OR *\\ filesinfo* OR *\\ processinfo* OR *\\ servicesinfo* OR *\\ windowscreds*)) OR (process.parent.command_line:*\\ \\-linpeas OR process.command_line:*\\ \\-linpeas) OR (process.pe.original_file_name:winPEAS.exe OR (process.executable:(*\\\\winPEASany_ofs.exe OR *\\\\winPEASany.exe OR *\\\\winPEASx64_ofs.exe OR *\\\\winPEASx64.exe OR *\\\\winPEASx86_ofs.exe OR *\\\\winPEASx86.exe)))",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.privilege-escalation",
+    "attack.discovery",
+    "attack.t1082",
+    "attack.t1087",
+    "attack.t1046"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Georg Lauenstein (sure[secure])"
+  ],
+  "false_positives": [
+    "Unlikely"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

@@ -1,0 +1,54 @@
+{
+  "rule_id": "552b6b65-df37-4d3e-a258-f2fc4771ae54",
+  "risk_score": 47,
+  "description": "Detects potential DLL sideloading of DLLs that are part of antivirus software suchas McAfee, Symantec...etc",
+  "name": "Potential Antivirus Software DLL Sideloading",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "(file.path:*\\\\log.dll AND (NOT ((file.path:(C\\:\\\\Program\\ Files\\\\Bitdefender\\ Antivirus\\ Free\\\\* OR C\\:\\\\Program\\ Files\\ \\(x86\\)\\\\Bitdefender\\ Antivirus\\ Free\\\\*)) OR file.path:C\\:\\\\Program\\ Files\\\\Canon\\\\MyPrinter\\\\* OR (process.executable:C\\:\\\\Program\\ Files\\\\Dell\\\\SARemediation\\\\audit\\\\TelemetryUtility.exe AND (file.path:(C\\:\\\\Program\\ Files\\\\Dell\\\\SARemediation\\\\plugin\\\\log.dll OR C\\:\\\\Program\\ Files\\\\Dell\\\\SARemediation\\\\audit\\\\log.dll)))))) OR (file.path:*\\\\qrt.dll AND (NOT (file.path:(C\\:\\\\Program\\ Files\\\\F\\-Secure\\\\Anti\\-Virus\\\\* OR C\\:\\\\Program\\ Files\\ \\(x86\\)\\\\F\\-Secure\\\\Anti\\-Virus\\\\*)))) OR ((file.path:(*\\\\ashldres.dll OR *\\\\lockdown.dll OR *\\\\vsodscpl.dll)) AND (NOT (file.path:(C\\:\\\\Program\\ Files\\\\McAfee\\\\* OR C\\:\\\\Program\\ Files\\ \\(x86\\)\\\\McAfee\\\\*)))) OR (file.path:*\\\\vftrace.dll AND (NOT (file.path:(C\\:\\\\Program\\ Files\\\\CyberArk\\\\Endpoint\\ Privilege\\ Manager\\\\Agent\\\\x32\\\\* OR C\\:\\\\Program\\ Files\\ \\(x86\\)\\\\CyberArk\\\\Endpoint\\ Privilege\\ Manager\\\\Agent\\\\x32\\\\*)))) OR (file.path:*\\\\wsc.dll AND (NOT (file.path:(C\\:\\\\program\\ Files\\\\AVAST\\ Software\\\\Avast\\\\* OR C\\:\\\\program\\ Files\\ \\(x86\\)\\\\AVAST\\ Software\\\\Avast\\\\*)))) OR (file.path:*\\\\tmdbglog.dll AND (NOT (file.path:(C\\:\\\\program\\ Files\\\\Trend\\ Micro\\\\Titanium\\\\* OR C\\:\\\\program\\ Files\\ \\(x86\\)\\\\Trend\\ Micro\\\\Titanium\\\\*)))) OR (file.path:*\\\\DLPPREM32.dll AND (NOT (file.path:(C\\:\\\\program\\ Files\\\\ESET* OR C\\:\\\\program\\ Files\\ \\(x86\\)\\\\ESET*))))",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.defense-evasion",
+    "attack.persistence",
+    "attack.privilege-escalation",
+    "attack.t1574.001"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Nasreddine Bencherchali (Nextron Systems), Wietze Beukema (project and research)"
+  ],
+  "false_positives": [
+    "Applications that load the same dlls mentioned in the detection section. Investigate them and filter them out if a lot FPs are caused.",
+    "Dell SARemediation plugin folder (C:\\Program Files\\Dell\\SARemediation\\plugin\\log.dll) is known to contain the 'log.dll' file.",
+    "The Canon MyPrinter folder 'C:\\Program Files\\Canon\\MyPrinter\\' is known to contain the 'log.dll' file"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

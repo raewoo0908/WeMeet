@@ -1,0 +1,61 @@
+{
+  "rule_id": "cc368ed0-2411-45dc-a222-510ace303cb2",
+  "risk_score": 47,
+  "description": "Detects potentially suspicious execution of the Regasm/Regsvcs utilities from a potentially suspicious location",
+  "name": "Potentially Suspicious Execution Of Regasm/Regsvcs From Uncommon Location",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "(process.command_line:(*\\\\AppData\\\\Local\\\\Temp\\\\* OR *\\\\Microsoft\\\\Windows\\\\Start\\ Menu\\\\Programs\\\\Startup\\\\* OR *\\\\PerfLogs\\\\* OR *\\\\Users\\\\Public\\\\* OR *\\\\Windows\\\\Temp\\\\*)) AND ((process.executable:(*\\\\Regsvcs.exe OR *\\\\Regasm.exe)) OR (process.pe.original_file_name:(RegSvcs.exe OR RegAsm.exe)))",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.defense-evasion",
+    "attack.t1218.009"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Nasreddine Bencherchali (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

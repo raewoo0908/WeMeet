@@ -1,0 +1,49 @@
+{
+  "rule_id": "94dc4390-6b7c-4784-8ffc-335334404650",
+  "risk_score": 47,
+  "description": "Detects potential abuse of ntdsutil to dump ntds.dit database to a suspicious location",
+  "name": "Dump Ntds.dit To Suspicious Location",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "winlog.channel:Application AND ((winlog.event_data.Data:(*\\:\\\\ntds.dit* OR *\\\\Appdata\\\\* OR *\\\\Desktop\\\\* OR *\\\\Downloads\\\\* OR *\\\\Perflogs\\\\* OR *\\\\Temp\\\\* OR *\\\\Users\\\\Public\\\\*)) AND (winlog.event_data.Data:*ntds.dit* AND event.code:325 AND winlog.provider_name:ESENT))",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.execution"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Nasreddine Bencherchali (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Legitimate backup operation/creating shadow copies"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

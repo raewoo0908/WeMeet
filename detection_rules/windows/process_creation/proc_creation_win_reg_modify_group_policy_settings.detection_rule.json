@@ -1,0 +1,62 @@
+{
+  "rule_id": "ada4b0c4-758b-46ac-9033-9004613a150d",
+  "risk_score": 47,
+  "description": "Detect malicious GPO modifications can be used to implement many other malicious behaviors.",
+  "name": "Modify Group Policy Settings",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "(process.command_line:(*GroupPolicyRefreshTimeDC* OR *GroupPolicyRefreshTimeOffsetDC* OR *GroupPolicyRefreshTime* OR *GroupPolicyRefreshTimeOffset* OR *EnableSmartScreen* OR *ShellSmartScreenLevel*)) AND process.command_line:*\\\\SOFTWARE\\\\Policies\\\\Microsoft\\\\Windows\\\\System* AND (process.executable:*\\\\reg.exe OR process.pe.original_file_name:reg.exe)",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.defense-evasion",
+    "attack.privilege-escalation",
+    "attack.t1484.001"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "frack113"
+  ],
+  "false_positives": [
+    "Legitimate use"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

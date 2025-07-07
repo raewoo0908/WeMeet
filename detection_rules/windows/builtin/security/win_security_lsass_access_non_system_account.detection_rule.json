@@ -1,0 +1,50 @@
+{
+  "rule_id": "962fe167-e48d-4fd6-9974-11e5b9a5d6d1",
+  "risk_score": 47,
+  "description": "Detects potential mimikatz-like tools accessing LSASS from non system account",
+  "name": "LSASS Access From Non System Account",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "winlog.channel:Security AND (((winlog.event_data.AccessMask:(0x100000 OR 0x1010 OR 0x1400 OR 0x1410 OR 0x1418 OR 0x1438 OR 0x143a OR 0x1f0fff OR 0x1f1fff OR 0x1f2fff OR 0x1f3fff OR 0x40 OR 143a OR 1f0fff OR 1f1fff OR 1f2fff OR 1f3fff)) AND (event.code:(4663 OR 4656)) AND winlog.event_data.ObjectName:*\\\\lsass.exe AND winlog.event_data.ObjectType:Process) AND (NOT ((process.executable:(*\\:\\\\Program\\ Files\\\\* OR *\\:\\\\Program\\ Files\\ \\(x86\\)\\\\*)) OR user.name:*$ OR (winlog.event_data.AccessMask:0x1410 AND process.executable:C\\:\\\\Windows\\\\System32\\\\wbem\\\\WmiPrvSE.exe))) AND (NOT process.executable:*\\\\SteamLibrary\\\\steamapps\\\\*))",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.credential-access",
+    "attack.t1003.001"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Roberto Rodriguez @Cyb3rWard0g"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

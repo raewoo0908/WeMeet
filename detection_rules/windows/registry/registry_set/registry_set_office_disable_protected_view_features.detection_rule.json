@@ -1,0 +1,50 @@
+{
+  "rule_id": "a5c7a43f-6009-4a8c-80c5-32abf1c53ecc",
+  "risk_score": 73,
+  "description": "Detects changes to Microsoft Office protected view registry keys with which the attacker disables this feature.",
+  "name": "Microsoft Office Protected View Disabled",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "(registry.path:*\\\\SOFTWARE\\\\Microsoft\\\\Office\\\\* AND registry.path:*\\\\Security\\\\ProtectedView\\\\*) AND ((winlog.event_data.Details:DWORD\\ \\(0x00000000\\) AND (registry.path:(*\\\\enabledatabasefileprotectedview OR *\\\\enableforeigntextfileprotectedview))) OR (winlog.event_data.Details:DWORD\\ \\(0x00000001\\) AND (registry.path:(*\\\\DisableAttachementsInPV OR *\\\\DisableInternetFilesInPV OR *\\\\DisableIntranetCheck OR *\\\\DisableUnsafeLocationsInPV))))",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.defense-evasion",
+    "attack.t1562.001"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "frack113, Nasreddine Bencherchali (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Unlikely"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

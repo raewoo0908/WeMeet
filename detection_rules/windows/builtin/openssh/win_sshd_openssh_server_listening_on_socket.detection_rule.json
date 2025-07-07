@@ -1,0 +1,50 @@
+{
+  "rule_id": "3ce8e9a4-bc61-4c9b-8e69-d7e2492a8781",
+  "risk_score": 47,
+  "description": "Detects scenarios where an attacker enables the OpenSSH server and server starts to listening on SSH socket.",
+  "name": "OpenSSH Server Listening On Socket",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "winlog.channel:OpenSSH\\/Operational AND (event.code:4 AND winlog.event_data.payload:Server\\ listening\\ on\\ * AND winlog.event_data.process:sshd)",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.lateral-movement",
+    "attack.t1021.004"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "mdecrevoisier"
+  ],
+  "false_positives": [
+    "Legitimate administrator activity"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

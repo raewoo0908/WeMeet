@@ -1,0 +1,62 @@
+{
+  "rule_id": "ed74fe75-7594-4b4b-ae38-e38e3fd2eb23",
+  "risk_score": 73,
+  "description": "Detects Non-Standard tools initiating a connection over port 3389 indicating possible lateral movement.\nAn initial baseline is required before using this utility to exclude third party RDP tooling that you might use.\n",
+  "name": "Outbound RDP Connections Over Non-Standard Tools",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "(destination.port:3389 AND network.direction:true) AND (NOT (process.executable:(C\\:\\\\Windows\\\\System32\\\\mstsc.exe OR C\\:\\\\Windows\\\\SysWOW64\\\\mstsc.exe))) AND (NOT ((process.executable:(*\\\\Avast\\ Software\\\\Avast\\\\AvastSvc.exe OR *\\\\Avast\\\\AvastSvc.exe)) OR process.executable:C\\:\\\\Program\\ Files\\\\Google\\\\Chrome\\\\Application\\\\chrome.exe OR (process.executable:C\\:\\\\Windows\\\\System32\\\\dns.exe AND network.transport:udp AND source.port:53) OR process.executable:\"\" OR process.executable:C\\:\\\\Program\\ Files\\\\Mozilla\\ Firefox\\\\firefox.exe OR (NOT _exists_:process.executable) OR process.executable:*\\\\Ranger\\\\SentinelRanger.exe OR process.executable:C\\:\\\\Program\\ Files\\\\SplunkUniversalForwarder\\\\bin\\\\* OR process.executable:*\\\\RDCMan.exe OR (process.executable:(*\\\\FSAssessment.exe OR *\\\\FSDiscovery.exe OR *\\\\MobaRTE.exe OR *\\\\mRemote.exe OR *\\\\mRemoteNG.exe OR *\\\\Passwordstate.exe OR *\\\\RemoteDesktopManager.exe OR *\\\\RemoteDesktopManager64.exe OR *\\\\RemoteDesktopManagerFree.exe OR *\\\\RSSensor.exe OR *\\\\RTS2App.exe OR *\\\\RTSApp.exe OR *\\\\spiceworks\\-finder.exe OR *\\\\Terminals.exe OR *\\\\ws_TunnelService.exe)) OR (process.executable:(*\\\\thor.exe OR *\\\\thor64.exe)) OR (process.executable:(C\\:\\\\Program\\ Files\\\\TSplus\\\\Java\\\\bin\\\\HTML5service.exe OR C\\:\\\\Program\\ Files\\ \\(x86\\)\\\\TSplus\\\\Java\\\\bin\\\\HTML5service.exe)) OR process.executable:\\<unknown\\ process\\>))",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Network connection detected (rule: NetworkConnect)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.lateral-movement",
+    "attack.t1021.001",
+    "car.2013-07-002"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Markus Neis"
+  ],
+  "false_positives": [
+    "Third party RDP tools"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

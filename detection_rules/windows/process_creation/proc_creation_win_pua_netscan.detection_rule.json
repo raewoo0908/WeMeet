@@ -1,0 +1,61 @@
+{
+  "rule_id": "ca387a8e-1c84-4da3-9993-028b45342d30",
+  "risk_score": 47,
+  "description": "Detects usage of SoftPerfect's \"netscan.exe\". An application for scanning networks.\nIt is actively used in-the-wild by threat actors to inspect and understand the network architecture of a victim.\n",
+  "name": "PUA - SoftPerfect Netscan Execution",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "process.executable:*\\\\netscan.exe OR process.pe.product:Network\\ Scanner OR process.pe.description:Application\\ for\\ scanning\\ networks",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.discovery",
+    "attack.t1046"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "@d4ns4n_ (Wuerth-Phoenix)"
+  ],
+  "false_positives": [
+    "Legitimate administrator activity"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

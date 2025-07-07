@@ -1,0 +1,61 @@
+{
+  "rule_id": "b96b2031-7c17-4473-afe7-a30ce714db29",
+  "risk_score": 47,
+  "description": "Detects the execution of FSharp Interpreters \"FsiAnyCpu.exe\" and \"FSi.exe\"\nBoth can be used for AWL bypass and to execute F# code via scripts or inline.\n",
+  "name": "Use of FSharp Interpreters",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "(process.executable:(*\\\\fsi.exe OR *\\\\fsianycpu.exe)) OR (process.pe.original_file_name:(fsi.exe OR fsianycpu.exe))",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.execution",
+    "attack.t1059"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Christopher Peacock @SecurePeacock, SCYTHE @scythe_io"
+  ],
+  "false_positives": [
+    "Legitimate use by a software developer."
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

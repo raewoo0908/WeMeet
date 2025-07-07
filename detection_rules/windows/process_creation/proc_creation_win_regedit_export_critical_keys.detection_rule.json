@@ -1,0 +1,62 @@
+{
+  "rule_id": "82880171-b475-4201-b811-e9c826cd5eaa",
+  "risk_score": 73,
+  "description": "Detects the export of a crital Registry key to a file.",
+  "name": "Exports Critical Registry Keys To a File",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "process.command_line:(*\\ \\-E\\ * OR *\\ \\/E\\ * OR *\\ –E\\ * OR *\\ —E\\ * OR *\\ ―E\\ *) AND (process.command_line:(*hklm* OR *hkey_local_machine*)) AND (process.command_line:(*\\\\system OR *\\\\sam OR *\\\\security)) AND (process.executable:*\\\\regedit.exe OR process.pe.original_file_name:REGEDIT.EXE)",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.exfiltration",
+    "attack.discovery",
+    "attack.t1012"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Oddvar Moe, Sander Wiebing, oscd.community"
+  ],
+  "false_positives": [
+    "Dumping hives for legitimate purpouse i.e. backup or forensic investigation"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

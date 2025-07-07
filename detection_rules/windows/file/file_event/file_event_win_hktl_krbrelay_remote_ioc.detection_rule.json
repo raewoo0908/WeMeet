@@ -1,0 +1,61 @@
+{
+  "rule_id": "3ab79e90-9fab-4cdf-a7b2-6522bc742adb",
+  "risk_score": 73,
+  "description": "Detects the creation of file with specific names used by RemoteKrbRelay SMB Relay attack module.",
+  "name": "HackTool - RemoteKrbRelay SMB Relay Secrets Dump Module Indicators",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "file.path:(*\\:\\\\windows\\\\temp\\\\sam.tmp OR *\\:\\\\windows\\\\temp\\\\sec.tmp OR *\\:\\\\windows\\\\temp\\\\sys.tmp)",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "File Create (rule: FileCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.command-and-control",
+    "attack.t1219"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Nasreddine Bencherchali (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Unlikely"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

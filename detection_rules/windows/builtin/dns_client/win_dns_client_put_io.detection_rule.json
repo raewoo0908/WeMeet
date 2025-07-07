@@ -1,0 +1,49 @@
+{
+  "rule_id": "8b69fd42-9dad-4674-abef-7fdef43ef92a",
+  "risk_score": 47,
+  "description": "Detects DNS queries for subdomains related to \"Put.io\" sharing website.",
+  "name": "DNS Query To Put.io - DNS Client",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "winlog.channel:Microsoft\\-Windows\\-DNS\\ Client\\ Events\\/Operational AND (event.code:3008 AND (dns.question.name:(*api.put.io* OR *upload.put.io*)))",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.command-and-control"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Omar Khaled (@beacon_exe)"
+  ],
+  "false_positives": [
+    "Legitimate DNS queries and usage of Put.io"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

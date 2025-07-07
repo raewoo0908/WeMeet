@@ -1,0 +1,60 @@
+{
+  "rule_id": "40aa399c-7b02-4715-8e5f-73572b493f33",
+  "risk_score": 73,
+  "description": "Detects potentially suspicious file downloads directly from IP addresses and stored in suspicious locations using Wget.exe",
+  "name": "Suspicious File Download From IP Via Wget.EXE - Paths",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "(process.command_line:/\\s-O\\s/ OR process.command_line:*\\-\\-output\\-document*) AND process.command_line:*http* AND (process.executable:*\\\\wget.exe OR process.pe.original_file_name:wget.exe) AND process.command_line:/:\\/\\/[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}/ AND ((process.command_line:(*\\:\\\\PerfLogs\\\\* OR *\\:\\\\Temp\\\\* OR *\\:\\\\Users\\\\Public\\\\* OR *\\:\\\\Windows\\\\Help\\\\* OR *\\:\\\\Windows\\\\Temp\\\\* OR *\\\\Temporary\\ Internet*)) OR (process.command_line:*\\:\\\\Users\\\\* AND process.command_line:*\\\\Favorites\\\\*) OR (process.command_line:*\\:\\\\Users\\\\* AND process.command_line:*\\\\Favourites\\\\*) OR (process.command_line:*\\:\\\\Users\\\\* AND process.command_line:*\\\\Contacts\\\\*) OR (process.command_line:*\\:\\\\Users\\\\* AND process.command_line:*\\\\Pictures\\\\*))",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.execution"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Nasreddine Bencherchali (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

@@ -1,0 +1,57 @@
+{
+  "rule_id": "f0d1feba-4344-4ca9-8121-a6c97bd6df52",
+  "risk_score": 73,
+  "description": "Detects well-known credential dumping tools execution via service execution events",
+  "name": "Credential Dumping Tools Service Execution - Security",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "winlog.channel:Security AND (event.code:4697 AND (winlog.event_data.ServiceFileName:(*cachedump* OR *dumpsvc* OR *fgexec* OR *gsecdump* OR *mimidrv* OR *pwdump* OR *servpw*)))",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.credential-access",
+    "attack.execution",
+    "attack.t1003.001",
+    "attack.t1003.002",
+    "attack.t1003.004",
+    "attack.t1003.005",
+    "attack.t1003.006",
+    "attack.t1569.002",
+    "attack.s0005"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Florian Roth (Nextron Systems), Teymur Kheirkhabarov, Daniil Yugoslavskiy, oscd.community"
+  ],
+  "false_positives": [
+    "Legitimate Administrator using credential dumping tool for password recovery"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

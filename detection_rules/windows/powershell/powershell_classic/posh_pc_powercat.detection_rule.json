@@ -1,0 +1,50 @@
+{
+  "rule_id": "c5b20776-639a-49bf-94c7-84f912b91c15",
+  "risk_score": 47,
+  "description": "Adversaries may use a non-application layer protocol for communication between host and C2 server or among infected hosts within a network",
+  "name": "Netcat The Powershell Version",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "Data:(*powercat\\ * OR *powercat.ps1*)",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.command-and-control",
+    "attack.t1095"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "frack113"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

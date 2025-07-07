@@ -1,0 +1,67 @@
+{
+  "rule_id": "2617e7ed-adb7-40ba-b0f3-8f9945fe6c09",
+  "risk_score": 73,
+  "description": "Detects a suspicious process creation as SYSTEM user (suspicious program or command line parameter)",
+  "name": "Suspicious SYSTEM User Process Creation",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "(((winlog.event_data.IntegrityLevel:(System OR S\\-1\\-16\\-16384)) AND (user.name:(*AUTHORI* OR *AUTORI*))) AND ((process.executable:(*\\\\calc.exe OR *\\\\cscript.exe OR *\\\\forfiles.exe OR *\\\\hh.exe OR *\\\\mshta.exe OR *\\\\ping.exe OR *\\\\wscript.exe)) OR (process.command_line:(*\\ \\-NoP\\ * OR *\\ \\-W\\ Hidden\\ * OR *\\ \\-decode\\ * OR *\\ \\/decode\\ * OR *\\ \\/urlcache\\ * OR *\\ \\-urlcache\\ * OR *\\ \\-e*\\ JAB* OR *\\ \\-e*\\ SUVYI* OR *\\ \\-e*\\ SQBFAFgA* OR *\\ \\-e*\\ aWV4I* OR *\\ \\-e*\\ IAB* OR *\\ \\-e*\\ PAA* OR *\\ \\-e*\\ aQBlAHgA* OR *vssadmin\\ delete\\ shadows* OR *reg\\ SAVE\\ HKLM* OR *\\ \\-ma\\ * OR *Microsoft\\\\Windows\\\\CurrentVersion\\\\Run* OR *.downloadstring\\(* OR *.downloadfile\\(* OR *\\ \\/ticket\\:* OR *dpapi\\:\\:* OR *event\\:\\:clear* OR *event\\:\\:drop* OR *id\\:\\:modify* OR *kerberos\\:\\:* OR *lsadump\\:\\:* OR *misc\\:\\:* OR *privilege\\:\\:* OR *rpc\\:\\:* OR *sekurlsa\\:\\:* OR *sid\\:\\:* OR *token\\:\\:* OR *vault\\:\\:cred* OR *vault\\:\\:list* OR *\\ p\\:\\:d\\ * OR *;iex\\(* OR *MiniDump* OR *net\\ user\\ *)))) AND (NOT (process.parent.executable:*\\:\\\\Packages\\\\Plugins\\\\Microsoft.GuestConfiguration.ConfigurationforWindows\\\\* OR (process.command_line:*\\ \\-ma\\ * AND (process.executable:(*\\:\\\\Program\\ Files\\ \\(x86\\)\\\\Java\\\\* OR *\\:\\\\Program\\ Files\\\\Java\\\\*)) AND process.executable:*\\\\bin\\\\jp2launcher.exe AND (process.parent.executable:(*\\:\\\\Program\\ Files\\ \\(x86\\)\\\\Java\\\\* OR *\\:\\\\Program\\ Files\\\\Java\\\\*)) AND process.parent.executable:*\\\\bin\\\\javaws.exe) OR (process.command_line:*ping* AND process.command_line:*127.0.0.1* AND process.command_line:*\\ \\-n\\ *) OR (process.executable:*\\\\PING.EXE AND process.parent.command_line:*\\\\DismFoDInstall.cmd*)))",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.credential-access",
+    "attack.defense-evasion",
+    "attack.privilege-escalation",
+    "attack.t1134",
+    "attack.t1003",
+    "attack.t1027"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Florian Roth (Nextron Systems), David ANDRE (additional keywords)"
+  ],
+  "false_positives": [
+    "Administrative activity",
+    "Scripts and administrative tools used in the monitored environment",
+    "Monitoring activity"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

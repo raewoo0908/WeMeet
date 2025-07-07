@@ -1,0 +1,61 @@
+{
+  "rule_id": "2cf29f11-e356-4f61-98c0-1bdb9393d6da",
+  "risk_score": 73,
+  "description": "Detects renamed Visual Studio Code tunnel execution. Attackers can abuse this functionality to establish a C2 channel",
+  "name": "Renamed Visual Studio Code Tunnel Execution",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "(((process.command_line:*.exe\\ tunnel AND (NOT _exists_:process.pe.original_file_name)) OR (process.command_line:*.exe\\ tunnel* AND process.command_line:*\\-\\-name\\ * AND process.command_line:*\\-\\-accept\\-server\\-license\\-terms*) OR (process.command_line:*tunnel\\ * AND process.command_line:*service* AND process.command_line:*internal\\-run* AND process.command_line:*tunnel\\-service.log*)) AND (NOT (process.executable:(*\\\\code\\-tunnel.exe OR *\\\\code.exe)))) OR (((process.command_line:*\\/d\\ \\/c\\ * AND process.command_line:*\\\\servers\\\\Stable\\-* AND process.command_line:*code\\-server.cmd*) AND process.executable:*\\\\cmd.exe AND process.parent.command_line:*\\ tunnel) AND (NOT (process.parent.executable:(*\\\\code\\-tunnel.exe OR *\\\\code.exe))))",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.command-and-control",
+    "attack.t1071.001"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Nasreddine Bencherchali (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

@@ -1,0 +1,65 @@
+{
+  "rule_id": "855bc8b5-2ae8-402e-a9ed-b889e6df1900",
+  "risk_score": 47,
+  "description": "Detects a copy command or a copy utility execution to or from an Admin share or remote",
+  "name": "Copy From Or To Admin Share Or Sysvol Folder",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "(process.command_line:(*\\\\\\\\*$* OR *\\\\Sysvol\\\\*)) AND (((process.executable:(*\\\\robocopy.exe OR *\\\\xcopy.exe)) OR (process.pe.original_file_name:(robocopy.exe OR XCOPY.EXE))) OR (process.command_line:*copy* AND (process.executable:*\\\\cmd.exe OR process.pe.original_file_name:Cmd.Exe)) OR ((process.command_line:(*copy\\-item* OR *copy\\ * OR *cpi\\ * OR *\\ cp\\ * OR *move\\ * OR *move\\-item* OR *\\ mi\\ * OR *\\ mv\\ *)) AND ((process.executable:(*\\\\powershell.exe* OR *\\\\pwsh.exe*)) OR (process.pe.original_file_name:(PowerShell.EXE OR pwsh.dll)))))",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.lateral-movement",
+    "attack.collection",
+    "attack.exfiltration",
+    "attack.t1039",
+    "attack.t1048",
+    "attack.t1021.002"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Florian Roth (Nextron Systems), oscd.community, Teymur Kheirkhabarov @HeirhabarovT, Zach Stanford @svch0st, Nasreddine Bencherchali"
+  ],
+  "false_positives": [
+    "Administrative scripts"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

@@ -1,0 +1,65 @@
+{
+  "rule_id": "9a132afa-654e-11eb-ae93-0242ac130002",
+  "risk_score": 73,
+  "description": "Detects AdFind execution with common flags seen used during attacks",
+  "name": "PUA - AdFind Suspicious Execution",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "process.command_line:(*domainlist* OR *trustdmp* OR *dcmodes* OR *adinfo* OR *\\ dclist\\ * OR *computer_pwdnotreqd* OR *objectcategory\\=* OR *\\-subnets\\ \\-f* OR *name\\=\\\"Domain\\ Admins\\\"* OR *\\-sc\\ u\\:* OR *domainncs* OR *dompol* OR *\\ oudmp\\ * OR *subnetdmp* OR *gpodmp* OR *fspdmp* OR *users_noexpire* OR *computers_active* OR *computers_pwdnotreqd*)",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.discovery",
+    "attack.t1018",
+    "attack.t1087.002",
+    "attack.t1482",
+    "attack.t1069.002",
+    "stp.1u"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Janantha Marasinghe (https://github.com/blueteam0ps), FPT.EagleEye Team, omkar72, oscd.community"
+  ],
+  "false_positives": [
+    "Legitimate admin activity"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

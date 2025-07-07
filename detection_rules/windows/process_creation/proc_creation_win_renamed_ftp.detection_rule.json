@@ -1,0 +1,63 @@
+{
+  "rule_id": "277a4393-446c-449a-b0ed-7fdc7795244c",
+  "risk_score": 47,
+  "description": "Detects the execution of a renamed \"ftp.exe\" binary based on the PE metadata fields",
+  "name": "Renamed FTP.EXE Execution",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "process.pe.original_file_name:ftp.exe AND (NOT process.executable:*\\\\ftp.exe)",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.execution",
+    "attack.t1059",
+    "attack.defense-evasion",
+    "attack.t1202"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Victor Sergeev, oscd.community"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

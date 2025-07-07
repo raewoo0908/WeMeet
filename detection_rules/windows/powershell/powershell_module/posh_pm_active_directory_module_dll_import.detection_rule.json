@@ -1,0 +1,51 @@
+{
+  "rule_id": "74176142-4684-4d8a-8b0a-713257e7df8e",
+  "risk_score": 47,
+  "description": "Detects usage of the \"Import-Module\" cmdlet to load the \"Microsoft.ActiveDirectory.Management.dl\" DLL. Which is often used by attackers to perform AD enumeration.",
+  "name": "Potential Active Directory Enumeration Using AD Module - PsModule",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "(Payload:(*Import\\-Module\\ * OR *ipmo\\ *)) AND Payload:*Microsoft.ActiveDirectory.Management.dll*",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.reconnaissance",
+    "attack.discovery",
+    "attack.impact"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Nasreddine Bencherchali (Nextron Systems), frack113"
+  ],
+  "false_positives": [
+    "Legitimate use of the library for administrative activity"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

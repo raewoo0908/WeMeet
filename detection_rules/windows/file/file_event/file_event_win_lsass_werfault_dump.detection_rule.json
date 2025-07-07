@@ -1,0 +1,61 @@
+{
+  "rule_id": "c3e76af5-4ce0-4a14-9c9a-25ceb8fda182",
+  "risk_score": 73,
+  "description": "Detects WerFault creating a dump file with a name that indicates that the dump file could be an LSASS process memory, which contains user credentials",
+  "name": "WerFault LSASS Process Memory Dump",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "process.executable:C\\:\\\\WINDOWS\\\\system32\\\\WerFault.exe AND (file.path:(*\\\\lsass* OR *lsass.exe*))",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "File Create (rule: FileCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.credential-access",
+    "attack.t1003.001"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Florian Roth (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

@@ -1,0 +1,50 @@
+{
+  "rule_id": "dae8171c-5ec6-4396-b210-8466585b53e9",
+  "risk_score": 47,
+  "description": "Detects non-system users performing privileged operation os the SCM database",
+  "name": "SCM Database Privileged Operation",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "winlog.channel:Security AND ((event.code:4674 AND winlog.event_data.ObjectName:servicesactive AND winlog.event_data.ObjectType:SC_MANAGER\\ OBJECT AND winlog.event_data.PrivilegeList:SeTakeOwnershipPrivilege) AND (NOT (process.executable:*\\:\\\\Windows\\\\System32\\\\services.exe AND winlog.logon.id:0x3e4)))",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.privilege-escalation",
+    "attack.t1548"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Roberto Rodriguez @Cyb3rWard0g, Tim Shelton"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

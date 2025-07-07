@@ -1,0 +1,61 @@
+{
+  "rule_id": "ba3f5c1b-6272-4119-9dbd-0bc8d21c2702",
+  "risk_score": 73,
+  "description": "Detects the use of WinAPI Functions via the commandline. As seen used by threat actors via the tool winapiexec",
+  "name": "Potential WinAPI Calls Via CommandLine",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "(process.command_line:(*AddSecurityPackage* OR *AdjustTokenPrivileges* OR *Advapi32* OR *CloseHandle* OR *CreateProcessWithToken* OR *CreatePseudoConsole* OR *CreateRemoteThread* OR *CreateThread* OR *CreateUserThread* OR *DangerousGetHandle* OR *DuplicateTokenEx* OR *EnumerateSecurityPackages* OR *FreeHGlobal* OR *FreeLibrary* OR *GetDelegateForFunctionPointer* OR *GetLogonSessionData* OR *GetModuleHandle* OR *GetProcAddress* OR *GetProcessHandle* OR *GetTokenInformation* OR *ImpersonateLoggedOnUser* OR *kernel32* OR *LoadLibrary* OR *memcpy* OR *MiniDumpWriteDump* OR *ntdll* OR *OpenDesktop* OR *OpenProcess* OR *OpenProcessToken* OR *OpenThreadToken* OR *OpenWindowStation* OR *PtrToString* OR *QueueUserApc* OR *ReadProcessMemory* OR *RevertToSelf* OR *RtlCreateUserThread* OR *secur32* OR *SetThreadToken* OR *VirtualAlloc* OR *VirtualFree* OR *VirtualProtect* OR *WaitForSingleObject* OR *WriteInt32* OR *WriteProcessMemory* OR *ZeroFreeGlobalAllocUnicode*)) AND (NOT (((process.command_line:(*FreeHGlobal* OR *PtrToString* OR *kernel32* OR *CloseHandle*)) AND process.parent.executable:*\\\\CompatTelRunner.exe) OR (process.command_line:*GetLoadLibraryWAddress32* AND process.executable:*\\\\MpCmdRun.exe)))",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.execution",
+    "attack.t1106"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Nasreddine Bencherchali (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Some legitimate action or applications may use these functions. Investigate further to determine the legitimacy of the activity."
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

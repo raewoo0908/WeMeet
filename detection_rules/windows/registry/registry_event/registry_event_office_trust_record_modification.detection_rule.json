@@ -1,0 +1,50 @@
+{
+  "rule_id": "295a59c1-7b79-4b47-a930-df12c15fc9c2",
+  "risk_score": 47,
+  "description": "Alerts on trust record modification within the registry, indicating usage of macros",
+  "name": "Windows Registry Trust Record Modification",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "registry.path:*\\\\Security\\\\Trusted\\ Documents\\\\TrustRecords*",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.initial-access",
+    "attack.t1566.001"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Antonlovesdnb, Trent Liffick (@tliffick)"
+  ],
+  "false_positives": [
+    "This will alert on legitimate macro usage as well, additional tuning is required"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

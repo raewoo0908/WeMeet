@@ -1,0 +1,63 @@
+{
+  "rule_id": "5cc2cda8-f261-4d88-a2de-e9e193c86716",
+  "risk_score": 73,
+  "description": "Detects suspicious processes including shells spawnd from WinRM host process",
+  "name": "Suspicious Processes Spawned by WinRM",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "(process.executable:(*\\\\cmd.exe OR *\\\\sh.exe OR *\\\\bash.exe OR *\\\\powershell.exe OR *\\\\pwsh.exe OR *\\\\wsl.exe OR *\\\\schtasks.exe OR *\\\\certutil.exe OR *\\\\whoami.exe OR *\\\\bitsadmin.exe)) AND process.parent.executable:*\\\\wsmprovhost.exe",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.t1190",
+    "attack.initial-access",
+    "attack.persistence",
+    "attack.privilege-escalation"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Andreas Hunkeler (@Karneades), Markus Neis"
+  ],
+  "false_positives": [
+    "Legitimate WinRM usage"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

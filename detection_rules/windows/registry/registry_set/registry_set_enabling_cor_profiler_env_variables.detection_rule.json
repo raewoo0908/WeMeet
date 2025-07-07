@@ -1,0 +1,50 @@
+{
+  "rule_id": "ad89044a-8f49-4673-9a55-cbd88a1b374f",
+  "risk_score": 47,
+  "description": "Detects .NET Framework CLR and .NET Core CLR \"cor_enable_profiling\" and \"cor_profiler\" variables being set and configured.",
+  "name": "Enabling COR Profiler Environment Variables",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "(registry.path:(*\\\\COR_ENABLE_PROFILING OR *\\\\COR_PROFILER OR *\\\\CORECLR_ENABLE_PROFILING)) OR registry.path:*\\\\CORECLR_PROFILER_PATH*",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.persistence",
+    "attack.privilege-escalation",
+    "attack.defense-evasion",
+    "attack.t1574.012"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Jose Rodriguez (@Cyb3rPandaH), OTR (Open Threat Research), Jimmy Bayne (@bohops)"
+  ],
+  "false_positives": [],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

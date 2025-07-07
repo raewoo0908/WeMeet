@@ -1,0 +1,60 @@
+{
+  "rule_id": "f92a6f1e-a512-4a15-9735-da09e78d7273",
+  "risk_score": 47,
+  "description": "Detects creation of files which are the results of executing the built-in reconnaissance script \"C:\\Windows\\System32\\gatherNetworkInfo.vbs\".",
+  "name": "GatherNetworkInfo.VBS Reconnaissance Script Output",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "(file.path:(*\\\\Hotfixinfo.txt OR *\\\\netiostate.txt OR *\\\\sysportslog.txt OR *\\\\VmSwitchLog.evtx)) AND file.path:C\\:\\\\Windows\\\\System32\\\\config*",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "File Create (rule: FileCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.discovery"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Nasreddine Bencherchali (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

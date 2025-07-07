@@ -1,0 +1,61 @@
+{
+  "rule_id": "9465ddf4-f9e4-4ebd-8d98-702df3a93239",
+  "risk_score": 47,
+  "description": "Detects suspicious IIS native-code module installations via command line",
+  "name": "IIS Native-Code Module Command Line Installation",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "(((process.command_line:*install* AND process.command_line:*module*) AND process.command_line:(*\\-name\\:* OR *\\/name\\:* OR *–name\\:* OR *—name\\:* OR *―name\\:*)) AND (process.executable:*\\\\appcmd.exe OR process.pe.original_file_name:appcmd.exe)) AND (NOT process.parent.executable:C\\:\\\\Windows\\\\System32\\\\inetsrv\\\\iissetup.exe)",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.persistence",
+    "attack.t1505.003"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Florian Roth (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Unknown as it may vary from organisation to organisation how admins use to install IIS modules"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

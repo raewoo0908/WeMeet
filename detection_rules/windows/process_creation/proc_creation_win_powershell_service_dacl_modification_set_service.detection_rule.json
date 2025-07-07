@@ -1,0 +1,61 @@
+{
+  "rule_id": "a95b9b42-1308-4735-a1af-abb1c5e6f5ac",
+  "risk_score": 73,
+  "description": "Detects suspicious DACL modifications via the \"Set-Service\" cmdlet using the \"SecurityDescriptorSddl\" flag (Only available with PowerShell 7) that can be used to hide services or make them unstopable",
+  "name": "Suspicious Service DACL Modification Via Set-Service Cmdlet",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "(process.executable:*\\\\pwsh.exe OR process.pe.original_file_name:pwsh.dll) AND (process.command_line:(*\\-SecurityDescriptorSddl\\ * OR *\\-sd\\ *)) AND ((process.command_line:(*;;;IU* OR *;;;SU* OR *;;;BA* OR *;;;SY* OR *;;;WD*)) AND (process.command_line:*Set\\-Service\\ * AND process.command_line:*D;;*))",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.persistence",
+    "attack.t1543.003"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Nasreddine Bencherchali (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

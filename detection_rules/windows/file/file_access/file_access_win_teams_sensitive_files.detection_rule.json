@@ -1,0 +1,50 @@
+{
+  "rule_id": "65744385-8541-44a6-8630-ffc824d7d4cc",
+  "risk_score": 47,
+  "description": "Detects file access attempts to sensitive Microsoft teams files (leveldb, cookies) by an uncommon process.\n",
+  "name": "Microsoft Teams Sensitive File Access By Uncommon Applications",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "(file.path:(*\\\\Microsoft\\\\Teams\\\\Cookies* OR *\\\\Microsoft\\\\Teams\\\\Local\\ Storage\\\\leveldb*)) AND (NOT process.executable:*\\\\Microsoft\\\\Teams\\\\current\\\\Teams.exe)",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.credential-access",
+    "attack.t1528"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "@SerkinValery"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

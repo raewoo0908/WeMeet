@@ -1,0 +1,62 @@
+{
+  "rule_id": "de46c52b-0bf8-4936-a327-aace94f94ac6",
+  "risk_score": 73,
+  "description": "Detects creation of the Process Explorer drivers by processes other than Process Explorer (procexp) itself.\nHack tools or malware may use the Process Explorer driver to elevate privileges, drops it to disk for a few moments, runs a service using that driver and removes it afterwards.\n",
+  "name": "Process Explorer Driver Creation By Non-Sysinternals Binary",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "(file.path:*\\\\PROCEXP* AND file.path:*.sys) AND (NOT (process.executable:(*\\\\procexp.exe OR *\\\\procexp64.exe)))",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "File Create (rule: FileCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.persistence",
+    "attack.privilege-escalation",
+    "attack.t1068"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Florian Roth (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Some false positives may occur with legitimate renamed process explorer binaries"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

@@ -1,0 +1,50 @@
+{
+  "rule_id": "e6ce8457-68b1-485b-9bdd-3c2b5d679aa9",
+  "risk_score": 73,
+  "description": "Detects VB DLL's loaded by an office application. Which could indicate the presence of VBA Macros.",
+  "name": "VBA DLL Loaded Via Office Application",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "(file.path:(*\\\\VBE7.DLL OR *\\\\VBEUI.DLL OR *\\\\VBE7INTL.DLL)) AND (process.executable:(*\\\\excel.exe OR *\\\\mspub.exe OR *\\\\onenote.exe OR *\\\\onenoteim.exe OR *\\\\outlook.exe OR *\\\\powerpnt.exe OR *\\\\winword.exe))",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.execution",
+    "attack.t1204.002"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Antonlovesdnb"
+  ],
+  "false_positives": [
+    "Legitimate macro usage. Add the appropriate filter according to your environment"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

@@ -1,0 +1,63 @@
+{
+  "rule_id": "59e938ff-0d6d-4dc3-b13f-36cc28734d4e",
+  "risk_score": 47,
+  "description": "Detects code execution via Pester.bat (Pester - Powershell Modulte for testing)",
+  "name": "Execute Code with Pester.bat",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "((process.command_line:*Pester* AND process.command_line:*Get\\-Help*) AND (process.executable:(*\\\\powershell.exe OR *\\\\pwsh.exe))) OR (((process.command_line:*pester* AND process.command_line:*;*) AND process.executable:*\\\\cmd.exe) AND (process.command_line:(*help* OR *\\?*)))",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.execution",
+    "attack.t1059.001",
+    "attack.defense-evasion",
+    "attack.t1216"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Julia Fomina, oscd.community"
+  ],
+  "false_positives": [
+    "Legitimate use of Pester for writing tests for Powershell scripts and modules"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

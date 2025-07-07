@@ -1,0 +1,62 @@
+{
+  "rule_id": "e8d34729-86a4-4140-adfd-0a29c2106307",
+  "risk_score": 73,
+  "description": "Detects the use of CoercedPotato, a tool for privilege escalation",
+  "name": "HackTool - CoercedPotato Execution",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "process.executable:*\\\\CoercedPotato.exe OR (winlog.event_data.Hashes:(*IMPHASH\\=A75D7669DB6B2E107A44C4057FF7F7D6* OR *IMPHASH\\=F91624350E2C678C5DCBE5E1F24E22C9* OR *IMPHASH\\=14C81850A079A87E83D50CA41C709A15*)) OR process.command_line:*\\ \\-\\-exploitId\\ *",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.defense-evasion",
+    "attack.privilege-escalation",
+    "attack.t1055"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Florian Roth (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

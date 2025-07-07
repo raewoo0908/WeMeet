@@ -1,0 +1,51 @@
+{
+  "rule_id": "c8b00925-926c-47e3-beea-298fd563728e",
+  "risk_score": 47,
+  "description": "Detects service installation of different remote access tools software. These software are often abused by threat actors to perform",
+  "name": "Remote Access Tool Services Have Been Installed - Security",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "winlog.channel:Security AND (event.code:4697 AND (service.name:(*AmmyyAdmin* OR *AnyDesk* OR *Atera* OR *BASupportExpressSrvcUpdater* OR *BASupportExpressStandaloneService* OR *chromoting* OR *GoToAssist* OR *GoToMyPC* OR *jumpcloud* OR *LMIGuardianSvc* OR *LogMeIn* OR *monblanking* OR *Parsec* OR *RManService* OR *RPCPerformanceService* OR *RPCService* OR *SplashtopRemoteService* OR *SSUService* OR *TeamViewer* OR *TightVNC* OR *vncserver* OR *Zoho*)))",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.persistence",
+    "attack.t1543.003",
+    "attack.t1569.002"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Connor Martin, Nasreddine Bencherchali (Nextron Systems)"
+  ],
+  "false_positives": [
+    "The rule doesn't look for anything suspicious so false positives are expected. If you use one of the tools mentioned, comment it out"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

@@ -1,0 +1,52 @@
+{
+  "rule_id": "4c54ba8f-73d2-4d40-8890-d9cf1dca3d30",
+  "risk_score": 73,
+  "description": "Detects Obfuscated Powershell via VAR++ LAUNCHER",
+  "name": "Invoke-Obfuscation VAR++ LAUNCHER OBFUSCATION - Security",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "winlog.channel:Security AND (event.code:4697 AND (winlog.event_data.ServiceFileName:(*\\{0\\}* OR *\\{1\\}* OR *\\{2\\}* OR *\\{3\\}* OR *\\{4\\}* OR *\\{5\\}*)) AND (winlog.event_data.ServiceFileName:*\\&\\&set* AND winlog.event_data.ServiceFileName:*cmd* AND winlog.event_data.ServiceFileName:*\\/c* AND winlog.event_data.ServiceFileName:*\\-f*))",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.defense-evasion",
+    "attack.t1027",
+    "attack.execution",
+    "attack.t1059.001"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Timur Zinniatullin, oscd.community"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

@@ -1,0 +1,61 @@
+{
+  "rule_id": "805c55d9-31e6-4846-9878-c34c75054fe9",
+  "risk_score": 73,
+  "description": "Detects Octopus Scanner Malware.",
+  "name": "Octopus Scanner Malware",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "file.path:(*\\\\AppData\\\\Local\\\\Microsoft\\\\Cache134.dat OR *\\\\AppData\\\\Local\\\\Microsoft\\\\ExplorerSync.db)",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "File Create (rule: FileCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.t1195",
+    "attack.t1195.001"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "NVISO"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

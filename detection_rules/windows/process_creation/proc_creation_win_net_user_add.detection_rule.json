@@ -1,0 +1,62 @@
+{
+  "rule_id": "cd219ff3-fa99-45d4-8380-a7d15116c6dc",
+  "risk_score": 47,
+  "description": "Identifies the creation of local users via the net.exe command.",
+  "name": "New User Created Via Net.EXE",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "(process.command_line:*user* AND process.command_line:*add*) AND ((process.executable:(*\\\\net.exe OR *\\\\net1.exe)) OR (process.pe.original_file_name:(net.exe OR net1.exe)))",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.persistence",
+    "attack.t1136.001"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Endgame, JHasenbusch (adapted to Sigma for oscd.community)"
+  ],
+  "false_positives": [
+    "Legitimate user creation.",
+    "Better use event IDs for user creation rather than command line rules."
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

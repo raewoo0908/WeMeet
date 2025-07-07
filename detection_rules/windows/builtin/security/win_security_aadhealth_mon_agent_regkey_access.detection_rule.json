@@ -1,0 +1,50 @@
+{
+  "rule_id": "ff151c33-45fa-475d-af4f-c2f93571f4fe",
+  "risk_score": 47,
+  "description": "This detection uses Windows security events to detect suspicious access attempts to the registry key of Azure AD Health monitoring agent.\nThis detection requires an access control entry (ACE) on the system access control list (SACL) of the following securable object HKLM\\SOFTWARE\\Microsoft\\Microsoft Online\\Reporting\\MonitoringAgent.\n",
+  "name": "Azure AD Health Monitoring Agent Registry Keys Access",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "winlog.channel:Security AND (((event.code:(4656 OR 4663)) AND winlog.event_data.ObjectName:\\\\REGISTRY\\\\MACHINE\\\\SOFTWARE\\\\Microsoft\\\\Microsoft\\ Online\\\\Reporting\\\\MonitoringAgent AND winlog.event_data.ObjectType:Key) AND (NOT (process.executable:(*Microsoft.Identity.Health.Adfs.DiagnosticsAgent.exe* OR *Microsoft.Identity.Health.Adfs.InsightsService.exe* OR *Microsoft.Identity.Health.Adfs.MonitoringAgent.Startup.exe* OR *Microsoft.Identity.Health.Adfs.PshSurrogate.exe* OR *Microsoft.Identity.Health.Common.Clients.ResourceMonitor.exe*))))",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.discovery",
+    "attack.t1012"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Roberto Rodriguez (Cyb3rWard0g), OTR (Open Threat Research), MSTIC"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

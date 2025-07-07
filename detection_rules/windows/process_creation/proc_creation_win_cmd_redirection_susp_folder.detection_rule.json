@@ -1,0 +1,61 @@
+{
+  "rule_id": "8e0bb260-d4b2-4fff-bb8d-3f82118e6892",
+  "risk_score": 47,
+  "description": "Detects inline Windows shell commands redirecting output via the \">\" symbol to a suspicious location.\nThis technique is sometimes used by malicious actors in order to redirect the output of reconnaissance commands such as \"hostname\" and \"dir\" to files for future exfiltration.\n",
+  "name": "Potentially Suspicious CMD Shell Output Redirect",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "(process.executable:*\\\\cmd.exe OR process.pe.original_file_name:Cmd.Exe) AND ((process.command_line:(*\\>?%APPDATA%\\\\* OR *\\>?%TEMP%\\\\* OR *\\>?%TMP%\\\\* OR *\\>?%USERPROFILE%\\\\* OR *\\>?C\\:\\\\ProgramData\\\\* OR *\\>?C\\:\\\\Temp\\\\* OR *\\>?C\\:\\\\Users\\\\Public\\\\* OR *\\>?C\\:\\\\Windows\\\\Temp\\\\*)) OR ((process.command_line:(*\\ \\>* OR *\\\"\\>* OR *'\\>*)) AND (process.command_line:*C\\:\\\\Users\\\\* AND process.command_line:*\\\\AppData\\\\Local\\\\*)))",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.defense-evasion",
+    "attack.t1218"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Nasreddine Bencherchali (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Legitimate admin or third party scripts used for diagnostic collection might generate some false positives"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

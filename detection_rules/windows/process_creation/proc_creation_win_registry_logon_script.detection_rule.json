@@ -1,0 +1,61 @@
+{
+  "rule_id": "21d856f9-9281-4ded-9377-51a1a6e2a432",
+  "risk_score": 73,
+  "description": "Detects the addition of a new LogonScript to the registry value \"UserInitMprLogonScript\" for potential persistence",
+  "name": "Potential Persistence Via Logon Scripts - CommandLine",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "process.command_line:*UserInitMprLogonScript*",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.persistence",
+    "attack.t1037.001"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Tom Ueltschi (@c_APT_ure)"
+  ],
+  "false_positives": [
+    "Legitimate addition of Logon Scripts via the command line by administrators or third party tools"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

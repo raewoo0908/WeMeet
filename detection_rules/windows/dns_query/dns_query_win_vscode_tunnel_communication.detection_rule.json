@@ -1,0 +1,50 @@
+{
+  "rule_id": "b3e6418f-7c7a-4fad-993a-93b65027a9f1",
+  "risk_score": 47,
+  "description": "Detects DNS query requests to Visual Studio Code tunnel domains. Attackers can abuse that feature to establish a reverse shell or persistence on a machine.\n",
+  "name": "DNS Query To Visual Studio Code Tunnels Domain",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "dns.question.name:*.tunnels.api.visualstudio.com",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.command-and-control",
+    "attack.t1071.001"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "citron_ninja"
+  ],
+  "false_positives": [
+    "Legitimate use of Visual Studio Code tunnel will also trigger this."
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

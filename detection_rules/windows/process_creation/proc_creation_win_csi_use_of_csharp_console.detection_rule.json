@@ -1,0 +1,62 @@
+{
+  "rule_id": "a9e416a8-e613-4f8b-88b8-a7d1d1af2f61",
+  "risk_score": 73,
+  "description": "Detects the execution of CSharp interactive console by PowerShell",
+  "name": "Suspicious Use of CSharp Interactive Console",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "process.executable:*\\\\csi.exe AND process.pe.original_file_name:csi.exe AND (process.parent.executable:(*\\\\powershell.exe OR *\\\\pwsh.exe OR *\\\\powershell_ise.exe))",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.execution",
+    "attack.defense-evasion",
+    "attack.t1127"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Michael R. (@nahamike01)"
+  ],
+  "false_positives": [
+    "Possible depending on environment. Pair with other factors such as net connections, command-line args, etc."
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

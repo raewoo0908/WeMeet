@@ -1,0 +1,49 @@
+{
+  "rule_id": "439957a7-ad86-4a8f-9705-a28131c6821b",
+  "risk_score": 47,
+  "description": "Detects applications or users re-enabling old TLS versions by setting the \"Enabled\" value to \"1\" for the \"Protocols\" registry key.",
+  "name": "Old TLS1.0/TLS1.1 Protocol Version Enabled",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "winlog.event_data.Details:DWORD\\ \\(0x00000001\\) AND (registry.path:(*\\\\Control\\\\SecurityProviders\\\\SCHANNEL\\\\Protocols\\\\TLS\\ 1.0\\\\* OR *\\\\Control\\\\SecurityProviders\\\\SCHANNEL\\\\Protocols\\\\TLS\\ 1.1\\\\*)) AND registry.path:*\\\\Enabled",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.defense-evasion"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Nasreddine Bencherchali (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Legitimate enabling of the old tls versions due to incompatibility"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

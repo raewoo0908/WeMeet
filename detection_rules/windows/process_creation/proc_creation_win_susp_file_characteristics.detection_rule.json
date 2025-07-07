@@ -1,0 +1,61 @@
+{
+  "rule_id": "9637e8a5-7131-4f7f-bdc7-2b05d8670c43",
+  "risk_score": 47,
+  "description": "Detects Executables in the Downloads folder without FileVersion,Description,Product,Company likely created with py2exe",
+  "name": "Suspicious File Characteristics Due to Missing Fields",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "((process.pe.description:\\? AND process.pe.file_version:\\?) OR (process.pe.description:\\? AND process.pe.product:\\?) OR (process.pe.company:\\? AND process.pe.description:\\?)) AND process.executable:*\\\\Downloads\\\\*",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.execution",
+    "attack.t1059.006"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Markus Neis, Sander Wiebing"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

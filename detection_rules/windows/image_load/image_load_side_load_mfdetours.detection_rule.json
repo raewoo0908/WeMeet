@@ -1,0 +1,51 @@
+{
+  "rule_id": "d2605a99-2218-4894-8fd3-2afb7946514d",
+  "risk_score": 47,
+  "description": "Detects potential DLL sideloading of \"mfdetours.dll\". While using \"mftrace.exe\" it can be abused to attach to an arbitrary process and force load any DLL named \"mfdetours.dll\" from the current directory of execution.",
+  "name": "Potential Mfdetours.DLL Sideloading",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "file.path:*\\\\mfdetours.dll AND (NOT file.path:*\\:\\\\Program\\ Files\\ \\(x86\\)\\\\Windows\\ Kits\\\\10\\\\bin\\\\*)",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.defense-evasion",
+    "attack.privilege-escalation",
+    "attack.t1574.001"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Nasreddine Bencherchali (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Unlikely"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

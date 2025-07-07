@@ -1,0 +1,51 @@
+{
+  "rule_id": "e9d4ab66-a532-4ef7-a502-66a9e4a34f5d",
+  "risk_score": 47,
+  "description": "Detects the reporting of NTLMv1 being used between a client and server. NTLMv1 is insecure as the underlying encryption algorithms can be brute-forced by modern hardware.",
+  "name": "NTLMv1 Logon Between Client and Server",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "winlog.channel:System AND ((event.code:(6038 OR 6039)) AND winlog.provider_name:LsaSrv)",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.defense-evasion",
+    "attack.lateral-movement",
+    "attack.t1550.002"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Tim Shelton, Nasreddine Bencherchali (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Environments that use NTLMv1"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

@@ -1,0 +1,61 @@
+{
+  "rule_id": "92fa78e7-4d39-45f1-91a3-8b23f3f1088d",
+  "risk_score": 73,
+  "description": "Detects PowerShell writing startup shortcuts.\nThis procedure was highlighted in Red Canary Intel Insights Oct. 2021, \"We frequently observe adversaries using PowerShell to write malicious .lnk files into the startup directory to establish persistence.\nAccordingly, this detection opportunity is likely to identify persistence mechanisms in multiple threats.\nIn the context of Yellow Cockatoo, this persistence mechanism eventually launches the command-line script that leads to the installation of a malicious DLL\"\n",
+  "name": "Potential Startup Shortcut Persistence Via PowerShell.EXE",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "(process.executable:(*\\\\powershell.exe OR *\\\\pwsh.exe)) AND file.path:*\\\\start\\ menu\\\\programs\\\\startup\\\\* AND file.path:*.lnk",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "File Create (rule: FileCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.persistence",
+    "attack.t1547.001"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Christopher Peacock '@securepeacock', SCYTHE"
+  ],
+  "false_positives": [
+    "Depending on your environment accepted applications may leverage this at times. It is recommended to search for anomalies inidicative of malware."
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

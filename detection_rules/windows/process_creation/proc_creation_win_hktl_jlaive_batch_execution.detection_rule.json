@@ -1,0 +1,61 @@
+{
+  "rule_id": "0a99eb3e-1617-41bd-b095-13dc767f3def",
+  "risk_score": 47,
+  "description": "Detects the use of Jlaive to execute assemblies in a copied PowerShell",
+  "name": "HackTool - Jlaive In-Memory Assembly Execution",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "(process.parent.command_line:*.bat AND process.parent.executable:*\\\\cmd.exe) AND (((process.command_line:*powershell.exe* AND process.command_line:*.bat.exe*) AND process.executable:*\\\\xcopy.exe) OR ((process.command_line:*pwsh.exe* AND process.command_line:*.bat.exe*) AND process.executable:*\\\\xcopy.exe) OR ((process.command_line:*\\+s* AND process.command_line:*\\+h* AND process.command_line:*.bat.exe*) AND process.executable:*\\\\attrib.exe))",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.execution",
+    "attack.t1059.003"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Jose Luis Sanchez Martinez (@Joseliyo_Jstnk)"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

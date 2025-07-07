@@ -1,0 +1,61 @@
+{
+  "rule_id": "6812a10b-60ea-420c-832f-dfcc33b646ba",
+  "risk_score": 73,
+  "description": "Detects potential PowerShell execution from a DLL instead of the usual PowerShell process as seen used in PowerShdll.\nThis detection assumes that PowerShell commands are passed via the CommandLine.\n",
+  "name": "Potential PowerShell Execution Via DLL",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "(process.command_line:(*Default.GetString* OR *DownloadString* OR *FromBase64String* OR *ICM\\ * OR *IEX\\ * OR *Invoke\\-Command* OR *Invoke\\-Expression*)) AND ((process.executable:(*\\\\InstallUtil.exe OR *\\\\RegAsm.exe OR *\\\\RegSvcs.exe OR *\\\\regsvr32.exe OR *\\\\rundll32.exe)) OR (process.pe.original_file_name:(InstallUtil.exe OR RegAsm.exe OR RegSvcs.exe OR REGSVR32.EXE OR RUNDLL32.EXE)))",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.defense-evasion",
+    "attack.t1218.011"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Markus Neis, Nasreddine Bencherchali (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

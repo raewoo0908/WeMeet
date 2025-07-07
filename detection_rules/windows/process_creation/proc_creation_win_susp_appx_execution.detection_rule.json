@@ -1,0 +1,60 @@
+{
+  "rule_id": "f91ed517-a6ba-471d-9910-b3b4a398c0f3",
+  "risk_score": 47,
+  "description": "Detects potentially suspicious child process of applications launched from inside the WindowsApps directory. This could be a sign of a rogue \".appx\" package installation/execution",
+  "name": "Potentially Suspicious Windows App Activity",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "process.parent.executable:*C\\:\\\\Program\\ Files\\\\WindowsApps\\\\* AND ((process.command_line:(*cmd\\ \\/c* OR *Invoke\\-* OR *Base64*)) OR (process.executable:(*\\\\cmd.exe OR *\\\\cscript.exe OR *\\\\mshta.exe OR *\\\\powershell.exe OR *\\\\pwsh.exe OR *\\\\regsvr32.exe OR *\\\\rundll32.exe OR *\\\\wscript.exe))) AND (NOT ((process.executable:(*\\\\powershell.exe OR *\\\\cmd.exe OR *\\\\pwsh.exe)) AND process.parent.executable:*\\:\\\\Program\\ Files\\\\WindowsApps\\\\Microsoft.WindowsTerminal* AND process.parent.executable:*\\\\WindowsTerminal.exe))",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.defense-evasion"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Nasreddine Bencherchali (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Legitimate packages that make use of external binaries such as Windows Terminal"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

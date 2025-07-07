@@ -1,0 +1,51 @@
+{
+  "rule_id": "da34e323-1e65-42db-83be-a6725ac2caa3",
+  "risk_score": 47,
+  "description": "Detects the execution of powershell scripts with calls to the \"Start-NetEventSession\" cmdlet. Which allows an attacker to start event and packet capture for a network event session.\nAdversaries may attempt to capture network to gather information over the course of an operation.\nData captured via this technique may include user credentials, especially those sent over an insecure, unencrypted protocol.\n",
+  "name": "Potential Packet Capture Activity Via Start-NetEventSession - ScriptBlock",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "powershell.file.script_block_text:*Start\\-NetEventSession*",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.credential-access",
+    "attack.discovery",
+    "attack.t1040"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "frack113"
+  ],
+  "false_positives": [
+    "Legitimate network diagnostic scripts."
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

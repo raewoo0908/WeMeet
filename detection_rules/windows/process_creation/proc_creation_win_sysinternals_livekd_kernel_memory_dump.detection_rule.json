@@ -1,0 +1,60 @@
+{
+  "rule_id": "c7746f1c-47d3-43d6-8c45-cd1e54b6b0a2",
+  "risk_score": 73,
+  "description": "Detects execution of LiveKD with the \"-m\" flag to potentially dump the kernel memory",
+  "name": "Kernel Memory Dump Via LiveKD",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "process.command_line:(*\\ \\-m* OR *\\ \\/m* OR *\\ –m* OR *\\ —m* OR *\\ ―m*) AND ((process.executable:(*\\\\livekd.exe OR *\\\\livekd64.exe)) OR process.pe.original_file_name:livekd.exe)",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.defense-evasion"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Nasreddine Bencherchali (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Unlikely in production environment"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

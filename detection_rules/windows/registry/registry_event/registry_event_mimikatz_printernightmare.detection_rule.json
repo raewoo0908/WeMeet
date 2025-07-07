@@ -1,0 +1,52 @@
+{
+  "rule_id": "ba6b9e43-1d45-4d3c-a504-1043a64c8469",
+  "risk_score": 99,
+  "description": "Detects static QMS 810 and mimikatz driver name used by Mimikatz as exploited in CVE-2021-1675 and CVE-2021-34527",
+  "name": "PrinterNightmare Mimikatz Driver Name",
+  "severity": "critical",
+  "type": "query",
+  "language": "lucene",
+  "query": "(registry.path:(*\\\\Control\\\\Print\\\\Environments\\\\Windows\\ x64\\\\Drivers\\\\Version\\-3\\\\QMS\\ 810\\\\* OR *\\\\Control\\\\Print\\\\Environments\\\\Windows\\ x64\\\\Drivers\\\\Version\\-3\\\\mimikatz*)) OR (registry.path:*legitprinter* AND registry.path:*\\\\Control\\\\Print\\\\Environments\\\\Windows*) OR ((registry.path:(*\\\\Control\\\\Print\\\\Environments* OR *\\\\CurrentVersion\\\\Print\\\\Printers*)) AND (registry.path:(*Gentil\\ Kiwi* OR *mimikatz\\ printer* OR *Kiwi\\ Legit\\ Printer*)))",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.execution",
+    "attack.t1204",
+    "cve.2021-1675",
+    "cve.2021-34527"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Markus Neis, @markus_neis, Florian Roth"
+  ],
+  "false_positives": [
+    "Legitimate installation of printer driver QMS 810, Texas Instruments microLaser printer (unlikely)"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

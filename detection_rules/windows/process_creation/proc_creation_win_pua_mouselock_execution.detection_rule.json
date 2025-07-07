@@ -1,0 +1,62 @@
+{
+  "rule_id": "c9192ad9-75e5-43eb-8647-82a0a5b493e3",
+  "risk_score": 47,
+  "description": "In Kaspersky's 2020 Incident Response Analyst Report they listed legitimate tool \"Mouse Lock\" as being used for both credential access and collection in security incidents.",
+  "name": "PUA - Mouse Lock Execution",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "process.pe.product:*Mouse\\ Lock* OR process.pe.company:*Misc314* OR process.command_line:*Mouse\\ Lock_*",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.credential-access",
+    "attack.collection",
+    "attack.t1056.002"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Cian Heasley"
+  ],
+  "false_positives": [
+    "Legitimate uses of Mouse Lock software"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

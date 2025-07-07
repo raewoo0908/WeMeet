@@ -1,0 +1,50 @@
+{
+  "rule_id": "9827ae57-3802-418f-994b-d5ecf5cd974b",
+  "risk_score": 47,
+  "description": "Detects the addition of the \"Debugger\" value to the \"DbgManagedDebugger\" key in order to achieve persistence. Which will get invoked when an application crashes",
+  "name": "Potential Registry Persistence Attempt Via DbgManagedDebugger",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "registry.path:*\\\\Microsoft\\\\.NETFramework\\\\DbgManagedDebugger AND (NOT winlog.event_data.Details:\\\"C\\:\\\\Windows\\\\system32\\\\vsjitdebugger.exe\\\"\\ PID\\ %d\\ APPDOM\\ %d\\ EXTEXT\\ \\\"%s\\\"\\ EVTHDL\\ %d)",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.persistence",
+    "attack.t1574"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "frack113"
+  ],
+  "false_positives": [
+    "Legitimate use of the key to setup a debugger. Which is often the case on developers machines"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

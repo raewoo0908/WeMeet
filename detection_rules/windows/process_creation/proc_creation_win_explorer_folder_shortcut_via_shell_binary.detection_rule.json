@@ -1,0 +1,61 @@
+{
+  "rule_id": "c3d76afc-93df-461e-8e67-9b2bad3f2ac4",
+  "risk_score": 73,
+  "description": "Detects the initial execution of \"cmd.exe\" which spawns \"explorer.exe\" with the appropriate command line arguments for opening the \"My Computer\" folder.\n",
+  "name": "File Explorer Folder Opened Using Explorer Folder Shortcut Via Shell",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "process.command_line:*shell\\:mycomputerfolder* AND process.executable:*\\\\explorer.exe AND (process.parent.executable:(*\\\\cmd.exe OR *\\\\powershell.exe OR *\\\\pwsh.exe))",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.discovery",
+    "attack.t1135"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "@Kostastsale"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

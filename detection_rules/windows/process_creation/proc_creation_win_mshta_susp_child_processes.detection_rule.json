@@ -1,0 +1,65 @@
+{
+  "rule_id": "03cc0c25-389f-4bf8-b48d-11878079f1ca",
+  "risk_score": 73,
+  "description": "Detects a suspicious process spawning from an \"mshta.exe\" process, which could be indicative of a malicious HTA script execution",
+  "name": "Suspicious MSHTA Child Process",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "((process.executable:(*\\\\cmd.exe OR *\\\\powershell.exe OR *\\\\pwsh.exe OR *\\\\wscript.exe OR *\\\\cscript.exe OR *\\\\sh.exe OR *\\\\bash.exe OR *\\\\reg.exe OR *\\\\regsvr32.exe OR *\\\\bitsadmin.exe)) OR (process.pe.original_file_name:(Cmd.Exe OR PowerShell.EXE OR pwsh.dll OR wscript.exe OR cscript.exe OR Bash.exe OR reg.exe OR REGSVR32.EXE OR bitsadmin.exe))) AND process.parent.executable:*\\\\mshta.exe",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.defense-evasion",
+    "attack.t1218.005",
+    "car.2013-02-003",
+    "car.2013-03-001",
+    "car.2014-04-003"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Michael Haag"
+  ],
+  "false_positives": [
+    "Printer software / driver installations",
+    "HP software"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

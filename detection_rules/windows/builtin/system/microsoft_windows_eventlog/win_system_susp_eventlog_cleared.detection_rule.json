@@ -1,0 +1,52 @@
+{
+  "rule_id": "100ef69e-3327-481c-8e5c-6d80d9507556",
+  "risk_score": 73,
+  "description": "Detects the clearing of one of the Windows Core Eventlogs. e.g. caused by \"wevtutil cl\" command execution",
+  "name": "Important Windows Eventlog Cleared",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "winlog.channel:System AND ((winlog.channel:(Microsoft\\-Windows\\-PowerShell\\/Operational OR Microsoft\\-Windows\\-Sysmon\\/Operational OR PowerShellCore\\/Operational OR Security OR System OR Windows\\ PowerShell)) AND event.code:104 AND winlog.provider_name:Microsoft\\-Windows\\-Eventlog)",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.defense-evasion",
+    "attack.t1070.001",
+    "car.2016-04-002"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Florian Roth (Nextron Systems), Tim Shelton, Nasreddine Bencherchali (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Rollout of log collection agents (the setup routine often includes a reset of the local Eventlog)",
+    "System provisioning (system reset before the golden image creation)"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

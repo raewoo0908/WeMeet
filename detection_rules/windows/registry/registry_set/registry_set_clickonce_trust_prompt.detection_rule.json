@@ -1,0 +1,50 @@
+{
+  "rule_id": "ac9159cc-c364-4304-8f0a-d63fc1a0aabb",
+  "risk_score": 47,
+  "description": "Detects changes to the ClickOnce trust prompt registry key in order to enable an installation from different locations such as the Internet.",
+  "name": "ClickOnce Trust Prompt Tampering",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "winlog.event_data.Details:Enabled AND registry.path:*\\\\SOFTWARE\\\\MICROSOFT\\\\.NETFramework\\\\Security\\\\TrustManager\\\\PromptingLevel\\\\* AND (registry.path:(*\\\\Internet OR *\\\\LocalIntranet OR *\\\\MyComputer OR *\\\\TrustedSites OR *\\\\UntrustedSites))",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.defense-evasion",
+    "attack.t1112"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "@SerkinValery, Nasreddine Bencherchali (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Legitimate internal requirements."
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

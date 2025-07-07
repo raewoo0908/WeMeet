@@ -1,0 +1,63 @@
+{
+  "rule_id": "9c0295ce-d60d-40bd-bd74-84673b7592b1",
+  "risk_score": 73,
+  "description": "Detects suspicious base64 encoded and obfuscated \"LOAD\" keyword used in .NET \"reflection.assembly\"",
+  "name": "Suspicious Encoded And Obfuscated Reflection Assembly Load Function Call",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "process.command_line:(*OgA6ACgAIgBMACIAKwAiAG8AYQBkACIAKQ* OR *oAOgAoACIATAAiACsAIgBvAGEAZAAiACkA* OR *6ADoAKAAiAEwAIgArACIAbwBhAGQAIgApA* OR *OgA6ACgAIgBMAG8AIgArACIAYQBkACIAKQ* OR *oAOgAoACIATABvACIAKwAiAGEAZAAiACkA* OR *6ADoAKAAiAEwAbwAiACsAIgBhAGQAIgApA* OR *OgA6ACgAIgBMAG8AYQAiACsAIgBkACIAKQ* OR *oAOgAoACIATABvAGEAIgArACIAZAAiACkA* OR *6ADoAKAAiAEwAbwBhACIAKwAiAGQAIgApA* OR *OgA6ACgAJwBMACcAKwAnAG8AYQBkACcAKQ* OR *oAOgAoACcATAAnACsAJwBvAGEAZAAnACkA* OR *6ADoAKAAnAEwAJwArACcAbwBhAGQAJwApA* OR *OgA6ACgAJwBMAG8AJwArACcAYQBkACcAKQ* OR *oAOgAoACcATABvACcAKwAnAGEAZAAnACkA* OR *6ADoAKAAnAEwAbwAnACsAJwBhAGQAJwApA* OR *OgA6ACgAJwBMAG8AYQAnACsAJwBkACcAKQ* OR *oAOgAoACcATABvAGEAJwArACcAZAAnACkA* OR *6ADoAKAAnAEwAbwBhACcAKwAnAGQAJwApA*)",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.execution",
+    "attack.defense-evasion",
+    "attack.t1059.001",
+    "attack.t1027"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "pH-T (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Unlikely"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

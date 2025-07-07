@@ -1,0 +1,61 @@
+{
+  "rule_id": "b236190c-1c61-41e9-84b3-3fe03f6d76b0",
+  "risk_score": 47,
+  "description": "Detects a potential command line flag anomaly related to \"regsvr32\" in which the \"/i\" flag is used without the \"/n\" which should be uncommon.",
+  "name": "Potential Regsvr32 Commandline Flag Anomaly",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "(process.command_line:(*\\ \\-i\\:* OR *\\ \\/i\\:* OR *\\ –i\\:* OR *\\ —i\\:* OR *\\ ―i\\:*) AND process.executable:*\\\\regsvr32.exe) AND (NOT process.command_line:(*\\ \\-n\\ * OR *\\ \\/n\\ * OR *\\ –n\\ * OR *\\ —n\\ * OR *\\ ―n\\ *))",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.defense-evasion",
+    "attack.t1218.010"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Florian Roth (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Administrator typo might cause some false positives"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

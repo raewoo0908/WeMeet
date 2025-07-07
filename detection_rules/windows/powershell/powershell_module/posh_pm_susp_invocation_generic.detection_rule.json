@@ -1,0 +1,50 @@
+{
+  "rule_id": "bbb80e91-5746-4fbe-8898-122e2cafdbf4",
+  "risk_score": 73,
+  "description": "Detects suspicious PowerShell invocation command parameters",
+  "name": "Suspicious PowerShell Invocations - Generic - PowerShell Module",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "(ContextInfo:(*\\ \\-enc\\ * OR *\\ \\-EncodedCommand\\ * OR *\\ \\-ec\\ *)) AND (ContextInfo:(*\\ \\-w\\ hidden\\ * OR *\\ \\-window\\ hidden\\ * OR *\\ \\-windowstyle\\ hidden\\ * OR *\\ \\-w\\ 1\\ *)) AND (ContextInfo:(*\\ \\-noni\\ * OR *\\ \\-noninteractive\\ *))",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.execution",
+    "attack.t1059.001"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Florian Roth (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Very special / sneaky PowerShell scripts"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

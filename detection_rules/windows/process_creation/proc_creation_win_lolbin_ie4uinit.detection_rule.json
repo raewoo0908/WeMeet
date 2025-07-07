@@ -1,0 +1,61 @@
+{
+  "rule_id": "d3bf399f-b0cf-4250-8bb4-dfc192ab81dc",
+  "risk_score": 47,
+  "description": "Detect use of ie4uinit.exe to execute commands from a specially prepared ie4uinit.inf file from a directory other than the usual directories",
+  "name": "Ie4uinit Lolbin Use From Invalid Path",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "(process.executable:*\\\\ie4uinit.exe OR process.pe.original_file_name:IE4UINIT.EXE) AND (NOT ((process.working_directory:(c\\:\\\\windows\\\\system32\\\\ OR c\\:\\\\windows\\\\sysWOW64\\\\)) OR (NOT _exists_:process.working_directory)))",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.defense-evasion",
+    "attack.t1218"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "frack113"
+  ],
+  "false_positives": [
+    "ViberPC updater calls this binary with the following commandline \"ie4uinit.exe -ClearIconCache\""
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

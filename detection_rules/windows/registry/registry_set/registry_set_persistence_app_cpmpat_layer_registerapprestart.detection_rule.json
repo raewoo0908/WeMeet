@@ -1,0 +1,50 @@
+{
+  "rule_id": "b86852fb-4c77-48f9-8519-eb1b2c308b59",
+  "risk_score": 47,
+  "description": "Detects the setting of the REGISTERAPPRESTART compatibility layer on an application.\nThis compatibility layer allows an application to register for restart using the \"RegisterApplicationRestart\" API.\nThis can be potentially abused as a persistence mechanism.\n",
+  "name": "Potential Persistence Via AppCompat RegisterAppRestart Layer",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "winlog.event_data.Details:*REGISTERAPPRESTART* AND registry.path:*\\\\SOFTWARE\\\\Microsoft\\\\Windows\\ NT\\\\CurrentVersion\\\\AppCompatFlags\\\\Layers\\\\*",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.persistence",
+    "attack.t1546.011"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Nasreddine Bencherchali (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Legitimate applications making use of this feature for compatibility reasons"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

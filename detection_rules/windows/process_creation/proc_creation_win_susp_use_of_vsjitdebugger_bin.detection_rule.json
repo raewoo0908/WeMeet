@@ -1,0 +1,61 @@
+{
+  "rule_id": "15c7904e-6ad1-4a45-9b46-5fb25df37fd2",
+  "risk_score": 47,
+  "description": "There is an option for a MS VS Just-In-Time Debugger \"vsjitdebugger.exe\" to launch specified executable and attach a debugger.\nThis option may be used adversaries to execute malicious code by signed verified binary.\nThe debugger is installed alongside with Microsoft Visual Studio package.\n",
+  "name": "Malicious PE Execution by Microsoft Visual Studio Debugger",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "process.parent.executable:*\\\\vsjitdebugger.exe AND (NOT (process.executable:(*\\\\vsimmersiveactivatehelper*.exe OR *\\\\devenv.exe)))",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.t1218",
+    "attack.defense-evasion"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Agro (@agro_sev), Ensar Şamil (@sblmsrsn), oscd.community"
+  ],
+  "false_positives": [
+    "The process spawned by vsjitdebugger.exe is uncommon."
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

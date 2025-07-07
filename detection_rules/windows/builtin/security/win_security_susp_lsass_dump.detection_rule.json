@@ -1,0 +1,50 @@
+{
+  "rule_id": "aa1697b7-d611-4f9a-9cb2-5125b4ccfd5c",
+  "risk_score": 73,
+  "description": "Detects process handle on LSASS process with certain access mask and object type SAM_DOMAIN",
+  "name": "Password Dumper Activity on LSASS",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "winlog.channel:Security AND (winlog.event_data.AccessMask:0x705 AND event.code:4656 AND winlog.event_data.ObjectType:SAM_DOMAIN AND process.executable:*\\\\lsass.exe)",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.credential-access",
+    "attack.t1003.001"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "sigma"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

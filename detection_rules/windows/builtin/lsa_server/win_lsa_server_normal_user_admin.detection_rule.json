@@ -1,0 +1,50 @@
+{
+  "rule_id": "7ac407cc-0f48-4328-aede-de1d2e6fef41",
+  "risk_score": 47,
+  "description": "Detect standard users login that are part of high privileged groups such as the Administrator group",
+  "name": "Standard User In High Privileged Group",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "winlog.channel:Microsoft\\-Windows\\-LSA\\/Operational AND ((event.code:300 AND (winlog.event_data.SidList:(*S\\-1\\-5\\-32\\-544* OR *\\-500\\}* OR *\\-518\\}* OR *\\-519\\}*)) AND winlog.event_data.TargetUserSid:S\\-1\\-5\\-21\\-*) AND (NOT (winlog.event_data.TargetUserSid:(*\\-500 OR *\\-518 OR *\\-519))))",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.credential-access",
+    "attack.privilege-escalation"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "frack113"
+  ],
+  "false_positives": [
+    "Standard domain users who are part of the administrator group. These users shouldn't have these right. But in the case where it's necessary. They should be filtered out using the \"TargetUserName\" field"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

@@ -1,0 +1,61 @@
+{
+  "rule_id": "f5d19838-41b5-476c-98d8-ba8af4929ee2",
+  "risk_score": 73,
+  "description": "Detects a suspicious copy operation that tries to copy a known LOLBIN from system (System32, SysWOW64, WinSxS) directories to another on disk in order to bypass detections based on locations.\n",
+  "name": "LOL-Binary Copied From System Directory",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "((process.command_line:*copy\\ * AND process.executable:*\\\\cmd.exe) OR ((process.executable:(*\\\\robocopy.exe OR *\\\\xcopy.exe)) OR (process.pe.original_file_name:(robocopy.exe OR XCOPY.EXE))) OR ((process.command_line:(*copy\\-item* OR *\\ copy\\ * OR *cpi\\ * OR *\\ cp\\ *)) AND (process.executable:(*\\\\powershell.exe OR *\\\\pwsh.exe)))) AND ((process.command_line:(*\\\\bitsadmin.exe* OR *\\\\calc.exe* OR *\\\\certutil.exe* OR *\\\\cmdl32.exe* OR *\\\\cscript.exe* OR *\\\\mshta.exe* OR *\\\\rundll32.exe* OR *\\\\wscript.exe*)) AND (process.command_line:(*\\\\System32* OR *\\\\SysWOW64* OR *\\\\WinSxS*)))",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.defense-evasion",
+    "attack.t1036.003"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Nasreddine Bencherchali (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

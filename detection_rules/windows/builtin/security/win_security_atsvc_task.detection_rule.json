@@ -1,0 +1,53 @@
+{
+  "rule_id": "f6de6525-4509-495a-8a82-1f8b0ed73a00",
+  "risk_score": 47,
+  "description": "Detects remote task creation via at.exe or API interacting with ATSVC namedpipe",
+  "name": "Remote Task Creation via ATSVC Named Pipe",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "winlog.channel:Security AND (winlog.event_data.AccessList:*WriteData* AND event.code:5145 AND winlog.event_data.RelativeTargetName:atsvc AND winlog.event_data.ShareName:\\\\\\\\\\*\\\\IPC$)",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.lateral-movement",
+    "attack.persistence",
+    "car.2013-05-004",
+    "car.2015-04-001",
+    "attack.t1053.002"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Samir Bousseaden"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

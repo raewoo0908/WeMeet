@@ -1,0 +1,50 @@
+{
+  "rule_id": "214e8f95-100a-4e04-bb31-ef6cba8ce07e",
+  "risk_score": 47,
+  "description": "Detects the use of the spoolss named pipe over SMB. This can be used to trigger the authentication via NTLM of any machine that has the spoolservice enabled.",
+  "name": "DCERPC SMB Spoolss Named Pipe",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "winlog.channel:Security AND (event.code:5145 AND winlog.event_data.RelativeTargetName:spoolss AND winlog.event_data.ShareName:\\\\\\\\\\*\\\\IPC$)",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.lateral-movement",
+    "attack.t1021.002"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "OTR (Open Threat Research)"
+  ],
+  "false_positives": [
+    "Domain Controllers acting as printer servers too? :)"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

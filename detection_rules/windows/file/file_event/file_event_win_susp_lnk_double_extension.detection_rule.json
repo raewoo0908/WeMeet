@@ -1,0 +1,61 @@
+{
+  "rule_id": "3215aa19-f060-4332-86d5-5602511f3ca8",
+  "risk_score": 47,
+  "description": "Detects the creation of files with an \"LNK\" as a second extension. This is sometimes used by malware as a method to abuse the fact that Windows hides the \"LNK\" extension by default.\n",
+  "name": "Suspicious LNK Double Extension File Created",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "((file.path:(*.doc.* OR *.docx.* OR *.jpg.* OR *.pdf.* OR *.ppt.* OR *.pptx.* OR *.xls.* OR *.xlsx.*)) AND file.path:*.lnk) AND (NOT file.path:*\\\\AppData\\\\Roaming\\\\Microsoft\\\\Windows\\\\Recent\\\\*) AND (NOT ((process.executable:*\\\\excel.exe AND file.path:*\\\\AppData\\\\Roaming\\\\Microsoft\\\\Excel*) OR (process.executable:*\\\\powerpnt.exe AND file.path:*\\\\AppData\\\\Roaming\\\\Microsoft\\\\PowerPoint*) OR ((process.executable:(*\\\\excel.exe OR *\\\\powerpnt.exe OR *\\\\winword.exe)) AND file.path:*\\\\AppData\\\\Roaming\\\\Microsoft\\\\Office\\\\Recent\\\\*) OR (process.executable:*\\\\winword.exe AND file.path:*\\\\AppData\\\\Roaming\\\\Microsoft\\\\Word*)))",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "File Create (rule: FileCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.defense-evasion",
+    "attack.t1036.007"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Nasreddine Bencherchali (Nextron Systems), frack113"
+  ],
+  "false_positives": [
+    "Some tuning is required for other general purpose directories of third party apps"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

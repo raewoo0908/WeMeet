@@ -1,0 +1,62 @@
+{
+  "rule_id": "e9b61244-893f-427c-b287-3e708f321c6b",
+  "risk_score": 73,
+  "description": "Detects the creation of a symbolic link between \"cmd.exe\" and the accessibility on-screen keyboard binary (osk.exe) using \"mklink\". This technique provides an elevated command prompt to the user from the login screen without the need to log in.",
+  "name": "Potential Privilege Escalation Using Symlink Between Osk and Cmd",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "(process.command_line:*mklink* AND process.command_line:*\\\\osk.exe* AND process.command_line:*\\\\cmd.exe*) AND (process.executable:*\\\\cmd.exe OR process.pe.original_file_name:Cmd.Exe)",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.privilege-escalation",
+    "attack.persistence",
+    "attack.t1546.008"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "frack113"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

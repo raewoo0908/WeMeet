@@ -1,0 +1,61 @@
+{
+  "rule_id": "98767d61-b2e8-4d71-b661-e36783ee24c1",
+  "risk_score": 47,
+  "description": "Detects attempts of decoding encoded Gzip archives via PowerShell.",
+  "name": "Gzip Archive Decode Via PowerShell",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "process.command_line:*GZipStream* AND process.command_line:*\\:\\:Decompress*",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.command-and-control",
+    "attack.t1132.001"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Hieu Tran"
+  ],
+  "false_positives": [
+    "Legitimate administrative scripts may use this functionality. Use \"ParentImage\" in combination with the script names and allowed users and applications to filter legitimate executions"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

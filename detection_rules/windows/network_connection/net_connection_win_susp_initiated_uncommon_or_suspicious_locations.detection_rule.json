@@ -1,0 +1,61 @@
+{
+  "rule_id": "7b434893-c57d-4f41-908d-6a17bf1ae98f",
+  "risk_score": 73,
+  "description": "Detects a network connection initiated by programs or processes running from suspicious or uncommon files system locations.\n",
+  "name": "Network Connection Initiated From Process Located In Potentially Suspicious Or Uncommon Location",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "((process.executable:(*\\:\\\\$Recycle.bin* OR *\\:\\\\Perflogs\\\\* OR *\\:\\\\Temp\\\\* OR *\\:\\\\Users\\\\Default\\\\* OR *\\:\\\\Windows\\\\Fonts\\\\* OR *\\:\\\\Windows\\\\IME\\\\* OR *\\:\\\\Windows\\\\System32\\\\Tasks\\\\* OR *\\:\\\\Windows\\\\Tasks\\\\* OR *\\\\config\\\\systemprofile\\\\* OR *\\\\Windows\\\\addins\\\\*)) AND network.direction:true) AND (NOT (destination.domain:(*.githubusercontent.com OR *anonfiles.com OR *cdn.discordapp.com OR *ddns.net OR *dl.dropboxusercontent.com OR *ghostbin.co OR *glitch.me OR *gofile.io OR *hastebin.com OR *mediafire.com OR *mega.co.nz OR *mega.nz OR *onrender.com OR *pages.dev OR *paste.ee OR *pastebin.com OR *pastebin.pl OR *pastetext.net OR *portmap.io OR *privatlab.com OR *privatlab.net OR *send.exploit.in OR *sendspace.com OR *storage.googleapis.com OR *storjshare.io OR *supabase.co OR *temp.sh OR *transfer.sh OR *trycloudflare.com OR *ufile.io OR *w3spaces.com OR *workers.dev)))",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Network connection detected (rule: NetworkConnect)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.command-and-control",
+    "attack.t1105"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Florian Roth (Nextron Systems), Nasreddine Bencherchali (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

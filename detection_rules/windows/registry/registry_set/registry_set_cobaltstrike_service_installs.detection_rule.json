@@ -1,0 +1,54 @@
+{
+  "rule_id": "61a7697c-cb79-42a8-a2ff-5f0cdfae0130",
+  "risk_score": 73,
+  "description": "Detects known malicious service installs that appear in cases in which a Cobalt Strike beacon elevates privileges or lateral movement.\n",
+  "name": "Potential CobaltStrike Service Installations - Registry",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "((winlog.event_data.Details:*ADMIN$* AND winlog.event_data.Details:*.exe*) OR (winlog.event_data.Details:*%COMSPEC%* AND winlog.event_data.Details:*start* AND winlog.event_data.Details:*powershell*)) AND (registry.path:*\\\\System\\\\CurrentControlSet\\\\Services* OR (registry.path:*\\\\System\\\\ControlSet* AND registry.path:*\\\\Services*))",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.execution",
+    "attack.privilege-escalation",
+    "attack.lateral-movement",
+    "attack.t1021.002",
+    "attack.t1543.003",
+    "attack.t1569.002"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Wojciech Lesicki"
+  ],
+  "false_positives": [
+    "Unlikely"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

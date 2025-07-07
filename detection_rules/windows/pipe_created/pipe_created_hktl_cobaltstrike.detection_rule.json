@@ -1,0 +1,51 @@
+{
+  "rule_id": "d5601f8c-b26f-4ab0-9035-69e11a8d4ad2",
+  "risk_score": 99,
+  "description": "Detects the creation of a named pipe as used by CobaltStrike",
+  "name": "CobaltStrike Named Pipe",
+  "severity": "critical",
+  "type": "query",
+  "language": "lucene",
+  "query": "(file.name:*\\\\MSSE\\-* AND file.name:*\\-server*) OR file.name:\\\\interprocess_* OR file.name:\\\\lsarpc_* OR file.name:\\\\mojo_* OR file.name:\\\\msagent_* OR file.name:\\\\netlogon_* OR file.name:\\\\postex_* OR file.name:\\\\samr_* OR file.name:\\\\srvsvc_* OR file.name:\\\\status_* OR file.name:\\\\wkssvc_*",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.defense-evasion",
+    "attack.privilege-escalation",
+    "attack.t1055"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Florian Roth (Nextron Systems), Wojciech Lesicki"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

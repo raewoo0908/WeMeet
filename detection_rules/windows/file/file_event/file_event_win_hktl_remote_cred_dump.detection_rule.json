@@ -1,0 +1,61 @@
+{
+  "rule_id": "6e2a900a-ced9-4e4a-a9c2-13e706f9518a",
+  "risk_score": 73,
+  "description": "Detects default filenames output from the execution of CrackMapExec and Impacket-secretsdump against an endpoint.",
+  "name": "HackTool - Potential Remote Credential Dumping Activity Via CrackMapExec Or Impacket-Secretsdump",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "process.executable:*\\\\svchost.exe AND file.path:/\\\\Windows\\\\System32\\\\[a-zA-Z0-9]{8}\\.tmp$/",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "File Create (rule: FileCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.credential-access",
+    "attack.t1003"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "SecurityAura"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

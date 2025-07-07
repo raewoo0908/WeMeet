@@ -1,0 +1,50 @@
+{
+  "rule_id": "f356a9c4-effd-4608-bbf8-408afd5cd006",
+  "risk_score": 99,
+  "description": "Detects a program that invoked suspicious DNS queries known from Cobalt Strike beacons",
+  "name": "Suspicious Cobalt Strike DNS Beaconing - Sysmon",
+  "severity": "critical",
+  "type": "query",
+  "language": "lucene",
+  "query": "(dns.question.name:(aaa.stage.* OR post.1*)) OR dns.question.name:*.stage.123456.*",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.command-and-control",
+    "attack.t1071.004"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Florian Roth (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

@@ -1,0 +1,51 @@
+{
+  "rule_id": "90ae0469-0cee-4509-b67f-e5efcef040f7",
+  "risk_score": 73,
+  "description": "Detects potential DLL sideloading activity via the Aruba Networks Virtual Intranet Access \"arubanetsvc.exe\" process using DLL Search Order Hijacking",
+  "name": "Aruba Network Service Potential DLL Sideloading",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "((file.path:(*\\\\wtsapi32.dll OR *\\\\msvcr100.dll OR *\\\\msvcp100.dll OR *\\\\dbghelp.dll OR *\\\\dbgcore.dll OR *\\\\wininet.dll OR *\\\\iphlpapi.dll OR *\\\\version.dll OR *\\\\cryptsp.dll OR *\\\\cryptbase.dll OR *\\\\wldp.dll OR *\\\\profapi.dll OR *\\\\sspicli.dll OR *\\\\winsta.dll OR *\\\\dpapi.dll)) AND process.executable:*\\\\arubanetsvc.exe) AND (NOT (file.path:(C\\:\\\\Windows\\\\System32\\\\* OR C\\:\\\\Windows\\\\SysWOW64\\\\* OR C\\:\\\\Windows\\\\WinSxS\\\\*)))",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.privilege-escalation",
+    "attack.persistence",
+    "attack.t1574.001"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Nasreddine Bencherchali (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

@@ -1,0 +1,62 @@
+{
+  "rule_id": "0e29e3a7-1ad8-40aa-b691-9f82ecd33d66",
+  "risk_score": 47,
+  "description": "Detects the creation of a new office macro files on the systems via an application (browser, mail client).",
+  "name": "Office Macro File Download",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "((file.path:(*.docm OR *.dotm OR *.xlsm OR *.xltm OR *.potm OR *.pptm)) OR (file.path:(*.docm\\:Zone* OR *.dotm\\:Zone* OR *.xlsm\\:Zone* OR *.xltm\\:Zone* OR *.potm\\:Zone* OR *.pptm\\:Zone*))) AND (process.executable:(*\\\\RuntimeBroker.exe OR *\\\\outlook.exe OR *\\\\thunderbird.exe OR *\\\\brave.exe OR *\\\\chrome.exe OR *\\\\firefox.exe OR *\\\\iexplore.exe OR *\\\\maxthon.exe OR *\\\\MicrosoftEdge.exe OR *\\\\msedge.exe OR *\\\\msedgewebview2.exe OR *\\\\opera.exe OR *\\\\safari.exe OR *\\\\seamonkey.exe OR *\\\\vivaldi.exe OR *\\\\whale.exe))",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "File Create (rule: FileCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.initial-access",
+    "attack.t1566.001"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Nasreddine Bencherchali (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Legitimate macro files downloaded from the internet",
+    "Legitimate macro files sent as attachments via emails"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

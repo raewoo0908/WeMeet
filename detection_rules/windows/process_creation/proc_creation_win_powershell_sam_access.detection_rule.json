@@ -1,0 +1,62 @@
+{
+  "rule_id": "1af57a4b-460a-4738-9034-db68b880c665",
+  "risk_score": 73,
+  "description": "Detects suspicious PowerShell scripts accessing SAM hives",
+  "name": "PowerShell SAM Copy",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "(process.command_line:*\\\\HarddiskVolumeShadowCopy* AND process.command_line:*System32\\\\config\\\\sam*) AND (process.command_line:(*Copy\\-Item* OR *cp\\ $_.* OR *cpi\\ $_.* OR *copy\\ $_.* OR *.File\\]\\:\\:Copy\\(*))",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.credential-access",
+    "attack.t1003.002"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Florian Roth (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Some rare backup scenarios",
+    "PowerShell scripts fixing HiveNightmare / SeriousSAM ACLs"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

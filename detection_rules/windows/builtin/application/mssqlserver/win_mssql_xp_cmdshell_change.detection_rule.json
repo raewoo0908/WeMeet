@@ -1,0 +1,50 @@
+{
+  "rule_id": "d08dd86f-681e-4a00-a92c-1db218754417",
+  "risk_score": 73,
+  "description": "Detects when the MSSQL \"xp_cmdshell\" stored procedure setting is changed.\n",
+  "name": "MSSQL XPCmdshell Option Change",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "winlog.channel:Application AND (winlog.event_data.Data:*xp_cmdshell* AND event.code:15457 AND winlog.provider_name:*MSSQL*)",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.execution"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Nasreddine Bencherchali (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Legitimate enable/disable of the setting",
+    "Note that since the event contain the change for both values. This means that this will trigger on both enable and disable"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

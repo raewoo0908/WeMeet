@@ -1,0 +1,50 @@
+{
+  "rule_id": "8eef149c-bd26-49f2-9e5a-9b00e3af499b",
+  "risk_score": 47,
+  "description": "Detects the attack technique pass the hash which is used to move laterally inside the network",
+  "name": "Pass the Hash Activity 2",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "winlog.channel:Security AND (((event.code:4624 AND winlog.event_data.KeyLength:0 AND winlog.event_data.LogonProcessName:NtLmSsp AND winlog.event_data.LogonType:3 AND user.id:S\\-1\\-0\\-0) OR (event.code:4624 AND winlog.event_data.LogonProcessName:seclogo AND winlog.event_data.LogonType:9)) AND (NOT winlog.event_data.TargetUserName:ANONYMOUS\\ LOGON))",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.lateral-movement",
+    "attack.t1550.002"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Dave Kennedy, Jeff Warren (method) / David Vassallo (rule)"
+  ],
+  "false_positives": [
+    "Administrator activity"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

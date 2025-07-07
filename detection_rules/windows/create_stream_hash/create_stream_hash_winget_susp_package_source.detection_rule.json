@@ -1,0 +1,50 @@
+{
+  "rule_id": "a3f5c081-e75b-43a0-9f5b-51f26fe5dba2",
+  "risk_score": 73,
+  "description": "Detects potential suspicious winget package installation from a suspicious source.",
+  "name": "Potential Suspicious Winget Package Installation",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "(winlog.event_data.Contents:(*\\:\\/\\/1* OR *\\:\\/\\/2* OR *\\:\\/\\/3* OR *\\:\\/\\/4* OR *\\:\\/\\/5* OR *\\:\\/\\/6* OR *\\:\\/\\/7* OR *\\:\\/\\/8* OR *\\:\\/\\/9*)) AND winlog.event_data.Contents:\\[ZoneTransfer\\]\\ \\ ZoneId\\=3* AND file.path:*\\\\AppData\\\\Local\\\\Temp\\\\WinGet\\\\* AND file.path:*\\:Zone.Identifier",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.defense-evasion",
+    "attack.persistence"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Nasreddine Bencherchali (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

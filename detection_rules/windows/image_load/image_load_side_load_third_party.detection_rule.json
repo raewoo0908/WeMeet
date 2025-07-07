@@ -1,0 +1,52 @@
+{
+  "rule_id": "f9df325d-d7bc-4a32-8a1a-2cc61dcefc63",
+  "risk_score": 47,
+  "description": "Detects DLL sideloading of DLLs that are part of third party software (zoom, discord....etc)",
+  "name": "Third Party Software DLL Sideloading",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "(file.path:*\\\\commfunc.dll AND (NOT (file.path:*\\\\AppData\\\\local\\\\Google\\\\Chrome\\\\Application\\\\* OR (file.path:(C\\:\\\\Program\\ Files\\\\Lenovo\\\\Communications\\ Utility\\\\* OR C\\:\\\\Program\\ Files\\ \\(x86\\)\\\\Lenovo\\\\Communications\\ Utility\\\\*))))) OR (file.path:*\\\\tosbtkbd.dll AND (NOT (file.path:(C\\:\\\\Program\\ Files\\\\Toshiba\\\\Bluetooth\\ Toshiba\\ Stack\\\\* OR C\\:\\\\Program\\ Files\\ \\(x86\\)\\\\Toshiba\\\\Bluetooth\\ Toshiba\\ Stack\\\\*))))",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.defense-evasion",
+    "attack.persistence",
+    "attack.privilege-escalation",
+    "attack.t1574.001"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Nasreddine Bencherchali (Nextron Systems), Wietze Beukema (project and research)"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

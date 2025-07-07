@@ -1,0 +1,61 @@
+{
+  "rule_id": "2704ab9e-afe2-4854-a3b1-0c0706d03578",
+  "risk_score": 99,
+  "description": "Detects the use of Dumpert process dumper, which dumps the lsass.exe process memory",
+  "name": "HackTool - Dumpert Process Dumper Execution",
+  "severity": "critical",
+  "type": "query",
+  "language": "lucene",
+  "query": "winlog.event_data.Hashes:*MD5\\=09D278F9DE118EF09163C6140255C690* OR process.command_line:*Dumpert.dll*",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.credential-access",
+    "attack.t1003.001"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Florian Roth (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Very unlikely"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

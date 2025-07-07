@@ -1,0 +1,61 @@
+{
+  "rule_id": "e218595b-bbe7-4ee5-8a96-f32a24ad3468",
+  "risk_score": 73,
+  "description": "Detects a suspicious curl process start on Windows and outputs the requested document to a local file",
+  "name": "Suspicious Curl.EXE Download",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "(process.executable:*\\\\curl.exe OR process.pe.product:The\\ curl\\ executable) AND ((process.command_line:(*.dll OR *.gif OR *.jpeg OR *.jpg OR *.png OR *.temp OR *.tmp OR *.txt OR *.vbe OR *.vbs)) OR (process.command_line:(*%AppData%* OR *%Public%* OR *%Temp%* OR *%tmp%* OR *\\\\AppData\\\\* OR *\\\\Desktop\\\\* OR *\\\\Temp\\\\* OR *\\\\Users\\\\Public\\\\* OR *C\\:\\\\PerfLogs\\\\* OR *C\\:\\\\ProgramData\\\\* OR *C\\:\\\\Windows\\\\Temp\\\\*))) AND (NOT ((process.command_line:*\\-\\-silent\\ \\-\\-show\\-error\\ \\-\\-output\\ * AND process.command_line:*gfw\\-httpget\\-* AND process.command_line:*AppData*) AND process.executable:C\\:\\\\Program\\ Files\\\\Git\\\\mingw64\\\\bin\\\\curl.exe AND process.parent.executable:C\\:\\\\Program\\ Files\\\\Git\\\\usr\\\\bin\\\\sh.exe))",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.command-and-control",
+    "attack.t1105"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Florian Roth (Nextron Systems), Nasreddine Bencherchali (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

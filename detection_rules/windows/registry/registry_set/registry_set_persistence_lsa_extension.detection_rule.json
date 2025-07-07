@@ -1,0 +1,49 @@
+{
+  "rule_id": "41f6531d-af6e-4c6e-918f-b946f2b85a36",
+  "risk_score": 73,
+  "description": "Detects when an attacker modifies the \"REG_MULTI_SZ\" value named \"Extensions\" to include a custom DLL to achieve persistence via lsass.\nThe \"Extensions\" list contains filenames of DLLs being automatically loaded by lsass.exe. Each DLL has its InitializeLsaExtension() method called after loading.\n",
+  "name": "Potential Persistence Via LSA Extensions",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "registry.path:*\\\\SYSTEM\\\\CurrentControlSet\\\\Control\\\\LsaExtensionConfig\\\\LsaSrv\\\\Extensions*",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.persistence"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Nasreddine Bencherchali (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Unlikely"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

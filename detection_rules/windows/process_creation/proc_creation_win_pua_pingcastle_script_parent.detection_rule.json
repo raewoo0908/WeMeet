@@ -1,0 +1,61 @@
+{
+  "rule_id": "b37998de-a70b-4f33-b219-ec36bf433dc0",
+  "risk_score": 73,
+  "description": "Detects the execution of PingCastle, a tool designed to quickly assess the Active Directory security level via a script located in a potentially suspicious or uncommon location.\n",
+  "name": "PUA - PingCastle Execution From Potentially Suspicious Parent",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "((process.parent.command_line:(*.bat* OR *.chm* OR *.cmd* OR *.hta* OR *.htm* OR *.html* OR *.js* OR *.lnk* OR *.ps1* OR *.vbe* OR *.vbs* OR *.wsf*)) OR (process.parent.command_line:(*\\:\\\\Perflogs\\\\* OR *\\:\\\\Temp\\\\* OR *\\:\\\\Users\\\\Public\\\\* OR *\\:\\\\Windows\\\\Temp\\\\* OR *\\\\AppData\\\\Local\\\\Temp* OR *\\\\AppData\\\\Roaming\\\\* OR *\\\\Temporary\\ Internet*)) OR ((process.parent.command_line:*\\:\\\\Users\\\\* AND process.parent.command_line:*\\\\Favorites\\\\*) OR (process.parent.command_line:*\\:\\\\Users\\\\* AND process.parent.command_line:*\\\\Favourites\\\\*) OR (process.parent.command_line:*\\:\\\\Users\\\\* AND process.parent.command_line:*\\\\Contacts\\\\*))) AND (process.parent.command_line:(*.bat* OR *.chm* OR *.cmd* OR *.hta* OR *.htm* OR *.html* OR *.js* OR *.lnk* OR *.ps1* OR *.vbe* OR *.vbs* OR *.wsf*)) AND (process.executable:*\\\\PingCastle.exe OR process.pe.original_file_name:PingCastle.exe OR process.pe.product:Ping\\ Castle OR (process.command_line:(*\\-\\-scanner\\ aclcheck* OR *\\-\\-scanner\\ antivirus* OR *\\-\\-scanner\\ computerversion* OR *\\-\\-scanner\\ foreignusers* OR *\\-\\-scanner\\ laps_bitlocker* OR *\\-\\-scanner\\ localadmin* OR *\\-\\-scanner\\ nullsession* OR *\\-\\-scanner\\ nullsession\\-trust* OR *\\-\\-scanner\\ oxidbindings* OR *\\-\\-scanner\\ remote* OR *\\-\\-scanner\\ share* OR *\\-\\-scanner\\ smb* OR *\\-\\-scanner\\ smb3querynetwork* OR *\\-\\-scanner\\ spooler* OR *\\-\\-scanner\\ startup* OR *\\-\\-scanner\\ zerologon*)) OR process.command_line:*\\-\\-no\\-enum\\-limit* OR (process.command_line:*\\-\\-healthcheck* AND process.command_line:*\\-\\-level\\ Full*) OR (process.command_line:*\\-\\-healthcheck* AND process.command_line:*\\-\\-server\\ *))",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.reconnaissance",
+    "attack.t1595"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Nasreddine Bencherchali (Nextron Systems), X__Junior (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

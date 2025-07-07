@@ -1,0 +1,61 @@
+{
+  "rule_id": "6a5f68d1-c4b5-46b9-94ee-5324892ea939",
+  "risk_score": 73,
+  "description": "Detects the removal of Sysmon, which could be a potential attempt at defense evasion",
+  "name": "Uninstall Sysinternals Sysmon",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "process.command_line:(*\\-u* OR *\\/u* OR *–u* OR *—u* OR *―u*) AND ((process.executable:(*\\\\Sysmon64.exe OR *\\\\Sysmon.exe)) OR process.pe.description:System\\ activity\\ monitor)",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.defense-evasion",
+    "attack.t1562.001"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "frack113"
+  ],
+  "false_positives": [
+    "Legitimate administrators might use this command to remove Sysmon for debugging purposes"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

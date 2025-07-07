@@ -1,0 +1,50 @@
+{
+  "rule_id": "6c6c6282-7671-4fe9-a0ce-a2dcebdc342b",
+  "risk_score": 47,
+  "description": "Adversaries may abuse PowerShell commands and scripts for execution.\nPowerShell is a powerful interactive command-line interface and scripting environment included in the Windows operating system. (Citation: TechNet PowerShell)\nAdversaries can use PowerShell to perform a number of actions, including discovery of information and execution of code\n",
+  "name": "Powershell XML Execute Command",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "(powershell.file.script_block_text:(*IEX\\ * OR *Invoke\\-Expression\\ * OR *Invoke\\-Command\\ * OR *ICM\\ \\-*)) AND (powershell.file.script_block_text:*New\\-Object* AND powershell.file.script_block_text:*System.Xml.XmlDocument* AND powershell.file.script_block_text:*.Load*)",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.execution",
+    "attack.t1059.001"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "frack113"
+  ],
+  "false_positives": [
+    "Legitimate administrative script"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

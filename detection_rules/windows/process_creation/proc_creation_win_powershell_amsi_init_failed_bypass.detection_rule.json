@@ -1,0 +1,61 @@
+{
+  "rule_id": "30edb182-aa75-42c0-b0a9-e998bb29067c",
+  "risk_score": 73,
+  "description": "Detects Request to \"amsiInitFailed\" that can be used to disable AMSI Scanning",
+  "name": "Potential AMSI Bypass Via .NET Reflection",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "(process.command_line:*System.Management.Automation.AmsiUtils* AND process.command_line:*amsiInitFailed*) OR (process.command_line:*\\[Ref\\].Assembly.GetType* AND process.command_line:*SetValue\\($null,$true\\)* AND process.command_line:*NonPublic,Static*)",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.defense-evasion",
+    "attack.t1562.001"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Markus Neis, @Kostastsale"
+  ],
+  "false_positives": [
+    "Unlikely"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

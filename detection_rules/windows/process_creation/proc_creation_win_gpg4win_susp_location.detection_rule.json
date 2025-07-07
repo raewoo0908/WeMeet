@@ -1,0 +1,60 @@
+{
+  "rule_id": "e1e0b7d7-e10b-4ee4-ac49-a4bda05d320d",
+  "risk_score": 73,
+  "description": "Detects usage of Gpg4win to encrypt/decrypt files located in potentially suspicious locations.",
+  "name": "File Encryption/Decryption Via Gpg4win From Suspicious Locations",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "process.command_line:*\\-passphrase* AND ((process.executable:(*\\\\gpg.exe OR *\\\\gpg2.exe)) OR process.pe.product:GNU\\ Privacy\\ Guard\\ \\(GnuPG\\) OR process.pe.description:GnuPG’s\\ OpenPGP\\ tool) AND (process.command_line:(*\\:\\\\PerfLogs\\\\* OR *\\:\\\\Temp\\\\* OR *\\:\\\\Users\\\\Public\\\\* OR *\\:\\\\Windows\\\\Temp\\\\* OR *\\\\AppData\\\\Local\\\\Temp\\\\* OR *\\\\AppData\\\\Roaming\\\\*))",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.execution"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Nasreddine Bencherchali (Nextron Systems), X__Junior (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

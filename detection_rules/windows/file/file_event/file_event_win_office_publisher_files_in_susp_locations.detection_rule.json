@@ -1,0 +1,60 @@
+{
+  "rule_id": "3d2a2d59-929c-4b78-8c1a-145dfe9e07b1",
+  "risk_score": 47,
+  "description": "Detects creation of files with the \".pub\" extension in suspicious or uncommon locations. This could be a sign of attackers abusing Publisher documents",
+  "name": "Publisher Attachment File Dropped In Suspicious Location",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "(file.path:(*\\\\AppData\\\\Local\\\\Temp\\\\* OR *\\\\Users\\\\Public\\\\* OR *\\\\Windows\\\\Temp\\\\* OR *C\\:\\\\Temp\\\\*)) AND file.path:*.pub",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "File Create (rule: FileCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.defense-evasion"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Nasreddine Bencherchali (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Legitimate usage of \".pub\" files from those locations"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

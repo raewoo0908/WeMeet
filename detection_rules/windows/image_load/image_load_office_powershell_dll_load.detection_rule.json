@@ -1,0 +1,49 @@
+{
+  "rule_id": "bb2ba6fb-95d4-4a25-89fc-30bb736c021a",
+  "risk_score": 47,
+  "description": "Detects PowerShell core DLL being loaded by an Office Product",
+  "name": "PowerShell Core DLL Loaded Via Office Application",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "(file.path:(*\\\\System.Management.Automation.Dll* OR *\\\\System.Management.Automation.ni.Dll*)) AND (process.executable:(*\\\\excel.exe OR *\\\\mspub.exe OR *\\\\outlook.exe OR *\\\\onenote.exe OR *\\\\onenoteim.exe OR *\\\\powerpnt.exe OR *\\\\winword.exe))",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.defense-evasion"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Nasreddine Bencherchali (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

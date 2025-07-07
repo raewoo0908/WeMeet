@@ -1,0 +1,50 @@
+{
+  "rule_id": "1f2b5353-573f-4880-8e33-7d04dcf97744",
+  "risk_score": 73,
+  "description": "Detects when an attacker tries to hide from Sysmon by disabling or stopping it",
+  "name": "Sysmon Configuration Modification",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "(*Sysmon\\ config\\ state\\ changed* OR winlog.event_data.State:Stopped) AND (NOT winlog.event_data.State:Started)",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.defense-evasion",
+    "attack.t1564"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "frack113"
+  ],
+  "false_positives": [
+    "Legitimate administrative action"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

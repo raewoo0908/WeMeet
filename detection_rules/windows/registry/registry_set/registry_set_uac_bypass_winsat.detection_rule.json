@@ -1,0 +1,51 @@
+{
+  "rule_id": "6597be7b-ac61-4ac8-bef4-d3ec88174853",
+  "risk_score": 73,
+  "description": "Detects the pattern of UAC Bypass using a path parsing issue in winsat.exe (UACMe 52)",
+  "name": "UAC Bypass Abusing Winsat Path Parsing - Registry",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "winlog.event_data.Details:*\\\\appdata\\\\local\\\\temp\\\\system32\\\\winsat.exe AND winlog.event_data.Details:c\\:\\\\users\\\\* AND registry.path:*\\\\Root\\\\InventoryApplicationFile\\\\winsat.exe\\|* AND registry.path:*\\\\LowerCaseLongPath",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.defense-evasion",
+    "attack.privilege-escalation",
+    "attack.t1548.002"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Christian Burkard (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

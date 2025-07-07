@@ -1,0 +1,61 @@
+{
+  "rule_id": "899133d5-4d7c-4a7f-94ee-27355c879d90",
+  "risk_score": 47,
+  "description": "Detects execution of python using the \"-c\" flag. This is could be used as a way to launch a reverse shell or execute live python code.",
+  "name": "Python Inline Command Execution",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "(process.command_line:*\\ \\-c* AND (process.pe.original_file_name:python.exe OR (process.executable:(*python.exe OR *python3.exe OR *python2.exe)))) AND (NOT (process.parent.command_line:*\\-E\\ \\-s\\ \\-m\\ ensurepip\\ \\-U\\ \\-\\-default\\-pip* AND process.parent.executable:*\\\\python.exe AND process.parent.executable:C\\:\\\\Program\\ Files\\\\Python*)) AND (NOT ((process.command_line:*\\<pip\\-setuptools\\-caller\\>* AND process.command_line:*exec\\(compile\\(*) OR process.parent.executable:*\\\\AppData\\\\Local\\\\Programs\\\\Microsoft\\ VS\\ Code\\\\Code.exe))",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.execution",
+    "attack.t1059"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Nasreddine Bencherchali (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Python libraries that use a flag starting with \"-c\". Filter according to your environment"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

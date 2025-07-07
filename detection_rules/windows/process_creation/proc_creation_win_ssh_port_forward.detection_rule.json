@@ -1,0 +1,64 @@
+{
+  "rule_id": "327f48c1-a6db-4eb8-875a-f6981f1b0183",
+  "risk_score": 47,
+  "description": "Detects port forwarding activity via SSH.exe",
+  "name": "Port Forwarding Activity Via SSH.EXE",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "process.command_line:(*\\ \\-R\\ * OR *\\ \\/R\\ * OR *\\ –R\\ * OR *\\ —R\\ * OR *\\ ―R\\ *) AND process.executable:*\\\\ssh.exe",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.command-and-control",
+    "attack.lateral-movement",
+    "attack.t1572",
+    "attack.t1021.001",
+    "attack.t1021.004"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Nasreddine Bencherchali (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Administrative activity using a remote port forwarding to a local port"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

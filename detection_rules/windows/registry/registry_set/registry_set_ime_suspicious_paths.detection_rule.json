@@ -1,0 +1,50 @@
+{
+  "rule_id": "9d8f9bb8-01af-4e15-a3a2-349071530530",
+  "risk_score": 73,
+  "description": "Detects usage of Windows Input Method Editor (IME) keyboard layout feature, which allows an attacker to load a DLL into the process after sending the WM_INPUTLANGCHANGEREQUEST message.\nBefore doing this, the client needs to register the DLL in a special registry key that is assumed to implement this keyboard layout. This registry key should store a value named \"Ime File\" with a DLL path.\nIMEs are essential for languages that have more characters than can be represented on a standard keyboard, such as Chinese, Japanese, and Korean.\n",
+  "name": "Suspicious Path In Keyboard Layout IME File Registry Value",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "(registry.path:*\\\\Control\\\\Keyboard\\ Layouts\\\\* AND registry.path:*Ime\\ File*) AND ((winlog.event_data.Details:(*\\:\\\\Perflogs\\\\* OR *\\:\\\\Users\\\\Public\\\\* OR *\\:\\\\Windows\\\\Temp\\\\* OR *\\\\AppData\\\\Local\\\\Temp\\\\* OR *\\\\AppData\\\\Roaming\\\\* OR *\\\\Temporary\\ Internet*)) OR ((winlog.event_data.Details:*\\:\\\\Users\\\\* AND winlog.event_data.Details:*\\\\Favorites\\\\*) OR (winlog.event_data.Details:*\\:\\\\Users\\\\* AND winlog.event_data.Details:*\\\\Favourites\\\\*) OR (winlog.event_data.Details:*\\:\\\\Users\\\\* AND winlog.event_data.Details:*\\\\Contacts\\\\*)))",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.defense-evasion",
+    "attack.t1562.001"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "X__Junior (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

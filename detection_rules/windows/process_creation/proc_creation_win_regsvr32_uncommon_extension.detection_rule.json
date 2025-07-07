@@ -1,0 +1,62 @@
+{
+  "rule_id": "50919691-7302-437f-8e10-1fe088afa145",
+  "risk_score": 47,
+  "description": "Detects a \"regsvr32\" execution where the DLL doesn't contain a common file extension.",
+  "name": "Regsvr32 DLL Execution With Uncommon Extension",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "(process.executable:*\\\\regsvr32.exe OR process.pe.original_file_name:REGSVR32.EXE) AND (NOT (process.command_line:\"\" OR (process.command_line:(*.ax* OR *.cpl* OR *.dll* OR *.ocx*)) OR (NOT _exists_:process.command_line))) AND (NOT (process.command_line:(*.bav* OR *.ppl*)))",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.defense-evasion",
+    "attack.t1574",
+    "attack.execution"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Florian Roth (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Other legitimate extensions currently not in the list either from third party or specific Windows components."
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

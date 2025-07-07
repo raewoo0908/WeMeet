@@ -1,0 +1,61 @@
+{
+  "rule_id": "148431ce-4b70-403d-8525-fcc2993f29ea",
+  "risk_score": 47,
+  "description": "Detects potential DLL injection and execution using \"Tracker.exe\"",
+  "name": "Potential DLL Injection Or Execution Using Tracker.exe",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "((process.command_line:(*\\ \\/d\\ * OR *\\ \\/c\\ *)) AND (process.executable:*\\\\tracker.exe OR process.pe.description:Tracker)) AND (NOT (process.command_line:*\\ \\/ERRORREPORT\\:PROMPT\\ * OR (process.parent.executable:(*\\\\Msbuild\\\\Current\\\\Bin\\\\MSBuild.exe OR *\\\\Msbuild\\\\Current\\\\Bin\\\\amd64\\\\MSBuild.exe))))",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.defense-evasion",
+    "attack.t1055.001"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Avneet Singh @v3t0_, oscd.community"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

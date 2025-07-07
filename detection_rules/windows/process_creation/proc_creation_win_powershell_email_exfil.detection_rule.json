@@ -1,0 +1,60 @@
+{
+  "rule_id": "312d0384-401c-4b8b-abdf-685ffba9a332",
+  "risk_score": 73,
+  "description": "Detects email exfiltration via powershell cmdlets",
+  "name": "Email Exifiltration Via Powershell",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "(process.command_line:*Add\\-PSSnapin* AND process.command_line:*Get\\-Recipient* AND process.command_line:*\\-ExpandProperty* AND process.command_line:*EmailAddresses* AND process.command_line:*SmtpAddress* AND process.command_line:*\\-hidetableheaders*) AND (process.executable:(*\\\\powershell.exe OR *\\\\pwsh.exe))",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.exfiltration"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Nasreddine Bencherchali (Nextron Systems),  Azure-Sentinel (idea)"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

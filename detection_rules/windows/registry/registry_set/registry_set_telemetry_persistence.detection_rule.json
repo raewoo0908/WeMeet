@@ -1,0 +1,50 @@
+{
+  "rule_id": "73a883d0-0348-4be4-a8d8-51031c2564f8",
+  "risk_score": 73,
+  "description": "Detects potential persistence behavior using the windows telemetry registry key.\nWindows telemetry makes use of the binary CompatTelRunner.exe to run a variety of commands and perform the actual telemetry collections.\nThis binary was created to be easily extensible, and to that end, it relies on the registry to instruct on which commands to run.\nThe problem is, it will run any arbitrary command without restriction of location or type.\n",
+  "name": "Potential Registry Persistence Attempt Via Windows Telemetry",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "((winlog.event_data.Details:(*.bat* OR *.bin* OR *.cmd* OR *.dat* OR *.dll* OR *.exe* OR *.hta* OR *.jar* OR *.js* OR *.msi* OR *.ps* OR *.sh* OR *.vb*)) AND registry.path:*\\\\SOFTWARE\\\\Microsoft\\\\Windows\\ NT\\\\CurrentVersion\\\\AppCompatFlags\\\\TelemetryController\\\\* AND registry.path:*\\\\Command) AND (NOT (winlog.event_data.Details:(*\\\\system32\\\\CompatTelRunner.exe* OR *\\\\system32\\\\DeviceCensus.exe*)))",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.persistence",
+    "attack.t1053.005"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Lednyov Alexey, oscd.community, Sreeman"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

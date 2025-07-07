@@ -1,0 +1,61 @@
+{
+  "rule_id": "4b046706-5789-4673-b111-66f25fe99534",
+  "risk_score": 47,
+  "description": "Detects usage of the \"cipher\" built-in utility in order to overwrite deleted data from disk.\nAdversaries may destroy data and files on specific systems or in large numbers on a network to interrupt availability to systems, services, and network resources.\nData destruction is likely to render stored data irrecoverable by forensic techniques through overwriting files or data on local and remote drives\n",
+  "name": "Deleted Data Overwritten Via Cipher.EXE",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "process.command_line:*\\ \\/w\\:* AND (process.pe.original_file_name:CIPHER.EXE OR process.executable:*\\\\cipher.exe)",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.impact",
+    "attack.t1485"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "frack113"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

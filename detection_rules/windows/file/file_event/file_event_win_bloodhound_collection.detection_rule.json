@@ -1,0 +1,67 @@
+{
+  "rule_id": "02773bed-83bf-469f-b7ff-e676e7d78bab",
+  "risk_score": 73,
+  "description": "Detects default file names outputted by the BloodHound collection tool SharpHound",
+  "name": "BloodHound Collection Files",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "(file.path:(*BloodHound.zip OR *_computers.json OR *_containers.json OR *_domains.json OR *_gpos.json OR *_groups.json OR *_ous.json OR *_users.json)) AND (NOT (process.executable:*\\\\svchost.exe AND file.path:*\\\\pocket_containers.json AND file.path:C\\:\\\\Program\\ Files\\\\WindowsApps\\\\Microsoft.*))",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "File Create (rule: FileCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.discovery",
+    "attack.t1087.001",
+    "attack.t1087.002",
+    "attack.t1482",
+    "attack.t1069.001",
+    "attack.t1069.002",
+    "attack.execution",
+    "attack.t1059.001"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "C.J. May"
+  ],
+  "false_positives": [
+    "Some false positives may arise in some environment and this may require some tuning. Add additional filters or reduce level depending on the level of noise"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

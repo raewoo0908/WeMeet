@@ -1,0 +1,62 @@
+{
+  "rule_id": "07a99744-56ac-40d2-97b7-2095967b0e03",
+  "risk_score": 73,
+  "description": "Detects potential privilege escalation attempt via the creation of the \"*.Exe.Local\" folder inside the \"System32\" directory in order to sideload \"comctl32.dll\"",
+  "name": "Potential Privilege Escalation Attempt Via .Exe.Local Technique",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "file.path:*\\\\comctl32.dll AND (file.path:(C\\:\\\\Windows\\\\System32\\\\logonUI.exe.local* OR C\\:\\\\Windows\\\\System32\\\\werFault.exe.local* OR C\\:\\\\Windows\\\\System32\\\\consent.exe.local* OR C\\:\\\\Windows\\\\System32\\\\narrator.exe.local* OR C\\:\\\\Windows\\\\System32\\\\wermgr.exe.local*))",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "File Create (rule: FileCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.defense-evasion",
+    "attack.persistence",
+    "attack.privilege-escalation"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Nasreddine Bencherchali (Nextron Systems), Subhash P (@pbssubhash)"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

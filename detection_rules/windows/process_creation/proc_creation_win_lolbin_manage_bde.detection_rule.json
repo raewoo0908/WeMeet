@@ -1,0 +1,61 @@
+{
+  "rule_id": "c363385c-f75d-4753-a108-c1a8e28bdbda",
+  "risk_score": 73,
+  "description": "Detects potential abuse of the \"manage-bde.wsf\" script as a LOLBIN to proxy execution",
+  "name": "Potential Manage-bde.wsf Abuse To Proxy Execution",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "(process.command_line:*manage\\-bde.wsf* AND (process.executable:*\\\\wscript.exe OR process.pe.original_file_name:wscript.exe)) OR ((process.parent.command_line:*manage\\-bde.wsf* AND (process.parent.executable:(*\\\\cscript.exe OR *\\\\wscript.exe))) AND (NOT process.executable:*\\\\cmd.exe))",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.defense-evasion",
+    "attack.t1216"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "oscd.community, Natalia Shornikova, Nasreddine Bencherchali (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Unlikely"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

@@ -1,0 +1,65 @@
+{
+  "rule_id": "bed2a484-9348-4143-8a8a-b801c979301c",
+  "risk_score": 73,
+  "description": "Detects certain command line parameters often used during reconnaissance activity via web shells",
+  "name": "Webshell Detection With Command Line Keywords",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "(((process.parent.executable:(*\\-tomcat\\-* OR *\\\\tomcat*)) AND (process.parent.executable:(*\\\\java.exe OR *\\\\javaw.exe))) OR ((process.command_line:(*catalina.jar* OR *CATALINA_HOME*)) AND (process.parent.executable:(*\\\\java.exe OR *\\\\javaw.exe))) OR (process.parent.executable:(*\\\\w3wp.exe OR *\\\\php\\-cgi.exe OR *\\\\nginx.exe OR *\\\\httpd.exe OR *\\\\caddy.exe OR *\\\\ws_tomcatservice.exe))) AND ((process.command_line:(*\\&cd\\&echo* OR *cd\\ \\/d\\ *)) OR ((process.executable:(*\\\\dsquery.exe OR *\\\\find.exe OR *\\\\findstr.exe OR *\\\\ipconfig.exe OR *\\\\netstat.exe OR *\\\\nslookup.exe OR *\\\\pathping.exe OR *\\\\quser.exe OR *\\\\schtasks.exe OR *\\\\systeminfo.exe OR *\\\\tasklist.exe OR *\\\\tracert.exe OR *\\\\ver.exe OR *\\\\wevtutil.exe OR *\\\\whoami.exe)) OR (process.pe.original_file_name:(dsquery.exe OR find.exe OR findstr.exe OR ipconfig.exe OR netstat.exe OR nslookup.exe OR pathping.exe OR quser.exe OR schtasks.exe OR sysinfo.exe OR tasklist.exe OR tracert.exe OR ver.exe OR VSSADMIN.EXE OR wevtutil.exe OR whoami.exe))) OR (process.command_line:(*\\ Test\\-NetConnection\\ * OR *dir\\ \\\\*)) OR ((process.command_line:(*\\ user\\ * OR *\\ use\\ * OR *\\ group\\ *)) AND (process.pe.original_file_name:(net.exe OR net1.exe))) OR (process.command_line:*\\ \\-n\\ * AND process.pe.original_file_name:ping.exe) OR ((process.command_line:(*\\ \\-enc\\ * OR *\\ \\-EncodedCommand\\ * OR *\\ \\-w\\ hidden\\ * OR *\\ \\-windowstyle\\ hidden* OR *.WebClient\\).Download*)) AND (process.executable:(*\\\\cmd.exe OR *\\\\powershell.exe OR *\\\\pwsh.exe))) OR (process.command_line:*\\ \\/node\\:* AND process.pe.original_file_name:wmic.exe))",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.persistence",
+    "attack.discovery",
+    "attack.t1505.003",
+    "attack.t1018",
+    "attack.t1033",
+    "attack.t1087"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Florian Roth (Nextron Systems), Jonhnathan Ribeiro, Anton Kutepov, oscd.community, Chad Hudson, Matt Anderson"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

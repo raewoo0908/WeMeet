@@ -1,0 +1,51 @@
+{
+  "rule_id": "f354eba5-623b-450f-b073-0b5b2773b6aa",
+  "risk_score": 99,
+  "description": "Detects potential DLL hijack of \"iertutil.dll\" found in the DCOM InternetExplorer.Application Class",
+  "name": "Potential DCOM InternetExplorer.Application DLL Hijack - Image Load",
+  "severity": "critical",
+  "type": "query",
+  "language": "lucene",
+  "query": "file.path:*\\\\Internet\\ Explorer\\\\iertutil.dll AND process.executable:*\\\\Internet\\ Explorer\\\\iexplore.exe",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.lateral-movement",
+    "attack.t1021.002",
+    "attack.t1021.003"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Roberto Rodriguez @Cyb3rWard0g, Open Threat Research (OTR), wagga"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

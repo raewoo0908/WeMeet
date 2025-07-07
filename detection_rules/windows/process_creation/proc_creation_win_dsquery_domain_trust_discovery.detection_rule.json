@@ -1,0 +1,61 @@
+{
+  "rule_id": "3bad990e-4848-4a78-9530-b427d854aac0",
+  "risk_score": 47,
+  "description": "Detects execution of \"dsquery.exe\" for domain trust discovery",
+  "name": "Domain Trust Discovery Via Dsquery",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "process.command_line:*trustedDomain* AND (process.executable:*\\\\dsquery.exe OR process.pe.original_file_name:dsquery.exe)",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.discovery",
+    "attack.t1482"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "E.M. Anhaus, Tony Lambert, oscd.community, omkar72"
+  ],
+  "false_positives": [
+    "Legitimate use of the utilities by legitimate user for legitimate reason"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

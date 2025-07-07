@@ -1,0 +1,50 @@
+{
+  "rule_id": "f99276ad-d122-4989-a09a-d00904a5f9d2",
+  "risk_score": 47,
+  "description": "Detects keywords that could indicate clearing PowerShell history",
+  "name": "Clear PowerShell History - PowerShell Module",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "((Payload:*Set\\-PSReadlineOption* AND Payload:*–HistorySaveStyle* AND Payload:*SaveNothing*) OR (Payload:*Set\\-PSReadlineOption* AND Payload:*\\-HistorySaveStyle* AND Payload:*SaveNothing*)) OR ((Payload:(*del* OR *Remove\\-Item* OR *rm*)) AND Payload:*\\(Get\\-PSReadlineOption\\).HistorySavePath*)",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.defense-evasion",
+    "attack.t1070.003"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Ilyas Ochkov, Jonhnathan Ribeiro, Daniil Yugoslavskiy, oscd.community"
+  ],
+  "false_positives": [
+    "Legitimate PowerShell scripts"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

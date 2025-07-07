@@ -1,0 +1,62 @@
+{
+  "rule_id": "1e75c1cc-c5d4-42aa-ac3d-91b0b68b3b4c",
+  "risk_score": 47,
+  "description": "Detects the usage of the \"Squirrel.exe\" to download arbitrary files. This binary is part of multiple Electron based software installations (Slack, Teams, Discord, etc.)\n",
+  "name": "Arbitrary File Download Via Squirrel.EXE",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "(process.command_line:(*\\ \\-\\-download\\ * OR *\\ \\-\\-update\\ * OR *\\ \\-\\-updateRollback\\=*)) AND process.command_line:*http* AND (process.executable:(*\\\\squirrel.exe OR *\\\\update.exe))",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.defense-evasion",
+    "attack.execution",
+    "attack.t1218"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Nasreddine Bencherchali (Nextron Systems), Karneades / Markus Neis, Jonhnathan Ribeiro, oscd.community"
+  ],
+  "false_positives": [
+    "Expected FP with some Electron based applications such as (1Clipboard, Beaker Browser, Caret, Discord, GitHub Desktop, etc.)"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

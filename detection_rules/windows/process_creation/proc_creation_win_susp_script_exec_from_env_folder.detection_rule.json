@@ -1,0 +1,61 @@
+{
+  "rule_id": "1228c958-e64e-4e71-92ad-7d429f4138ba",
+  "risk_score": 73,
+  "description": "Detects a suspicious script execution in temporary folders or folders accessible by environment variables",
+  "name": "Script Interpreter Execution From Suspicious Folder",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "((process.command_line:(*\\ \\-ep\\ bypass\\ * OR *\\ \\-ExecutionPolicy\\ bypass\\ * OR *\\ \\-w\\ hidden\\ * OR *\\/e\\:javascript\\ * OR *\\/e\\:Jscript\\ * OR *\\/e\\:vbscript\\ *)) OR (process.executable:(*\\\\cscript.exe OR *\\\\mshta.exe OR *\\\\wscript.exe)) OR (process.pe.original_file_name:(cscript.exe OR mshta.exe OR wscript.exe))) AND ((process.command_line:(*\\:\\\\Perflogs\\\\* OR *\\:\\\\Users\\\\Public\\\\* OR *\\\\AppData\\\\Local\\\\Temp* OR *\\\\AppData\\\\Roaming\\\\Temp* OR *\\\\Temporary\\ Internet* OR *\\\\Windows\\\\Temp*)) OR ((process.command_line:*\\:\\\\Users\\\\* AND process.command_line:*\\\\Favorites\\\\*) OR (process.command_line:*\\:\\\\Users\\\\* AND process.command_line:*\\\\Favourites\\\\*) OR (process.command_line:*\\:\\\\Users\\\\* AND process.command_line:*\\\\Contacts\\\\*)))",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.execution",
+    "attack.t1059"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Florian Roth (Nextron Systems), Nasreddine Bencherchali (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Unknown"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

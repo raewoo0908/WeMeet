@@ -1,0 +1,50 @@
+{
+  "rule_id": "26b692dc-1722-49b2-b496-a8258aa6371d",
+  "risk_score": 47,
+  "description": "Detects keywords that could indicate clearing PowerShell history",
+  "name": "Clear PowerShell History - PowerShell",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "((powershell.file.script_block_text:*Set\\-PSReadlineOption* AND powershell.file.script_block_text:*–HistorySaveStyle* AND powershell.file.script_block_text:*SaveNothing*) OR (powershell.file.script_block_text:*Set\\-PSReadlineOption* AND powershell.file.script_block_text:*\\-HistorySaveStyle* AND powershell.file.script_block_text:*SaveNothing*)) OR ((powershell.file.script_block_text:(*del* OR *Remove\\-Item* OR *rm*)) AND powershell.file.script_block_text:*\\(Get\\-PSReadlineOption\\).HistorySavePath*)",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.defense-evasion",
+    "attack.t1070.003"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Ilyas Ochkov, Jonhnathan Ribeiro, Daniil Yugoslavskiy, oscd.community"
+  ],
+  "false_positives": [
+    "Legitimate PowerShell scripts"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

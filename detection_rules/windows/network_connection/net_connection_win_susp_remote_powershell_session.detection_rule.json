@@ -1,0 +1,64 @@
+{
+  "rule_id": "c539afac-c12a-46ed-b1bd-5a5567c9f045",
+  "risk_score": 73,
+  "description": "Detects a process that initiated a network connection over ports 5985 or 5986 from a non-network service account.\nThis could potentially indicates a remote PowerShell connection.\n",
+  "name": "Potential Remote PowerShell Session Initiated",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "((destination.port:(5985 OR 5986)) AND network.direction:true AND winlog.event_data.SourceIsIpv6:false) AND (NOT (((destination.ip:(\\:\\:1 OR 127.0.0.1)) AND (source.ip:(\\:\\:1 OR 127.0.0.1))) OR ((user.name:(*NETWORK\\ SERVICE* OR *NETZWERKDIENST* OR *SERVICIO\\ DE\\ RED* OR *SERVIZIO\\ DI\\ RETE*)) OR (user.name:*SERVICE\\ R* AND user.name:*SEAU*)))) AND (NOT (process.executable:(C\\:\\\\Program\\ Files\\\\Avast\\ Software\\\\Avast\\\\AvastSvc.exe OR C\\:\\\\Program\\ Files\\ \\(x86\\)\\\\Avast\\ Software\\\\Avast\\\\AvastSvc.exe)))",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Network connection detected (rule: NetworkConnect)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.execution",
+    "attack.t1059.001",
+    "attack.lateral-movement",
+    "attack.t1021.006"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Roberto Rodriguez @Cyb3rWard0g"
+  ],
+  "false_positives": [
+    "Legitimate usage of remote PowerShell, e.g. remote administration and monitoring.",
+    "Network Service user name of a not-covered localization"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

@@ -1,0 +1,51 @@
+{
+  "rule_id": "02d1d718-dd13-41af-989d-ea85c7fab93f",
+  "risk_score": 73,
+  "description": "Detects uncommon processes creating remote threads.",
+  "name": "Rare Remote Thread Creation By Uncommon Source Image",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "process.executable:(*\\\\bash.exe OR *\\\\cscript.exe OR *\\\\cvtres.exe OR *\\\\defrag.exe OR *\\\\dialer.exe OR *\\\\dnx.exe OR *\\\\esentutl.exe OR *\\\\excel.exe OR *\\\\expand.exe OR *\\\\find.exe OR *\\\\findstr.exe OR *\\\\forfiles.exe OR *\\\\gpupdate.exe OR *\\\\hh.exe OR *\\\\installutil.exe OR *\\\\lync.exe OR *\\\\makecab.exe OR *\\\\mDNSResponder.exe OR *\\\\monitoringhost.exe OR *\\\\msbuild.exe OR *\\\\mshta.exe OR *\\\\mspaint.exe OR *\\\\outlook.exe OR *\\\\ping.exe OR *\\\\provtool.exe OR *\\\\python.exe OR *\\\\regsvr32.exe OR *\\\\robocopy.exe OR *\\\\runonce.exe OR *\\\\sapcimc.exe OR *\\\\smartscreen.exe OR *\\\\spoolsv.exe OR *\\\\tstheme.exe OR *\\\\userinit.exe OR *\\\\vssadmin.exe OR *\\\\vssvc.exe OR *\\\\w3wp.exe OR *\\\\winscp.exe OR *\\\\winword.exe OR *\\\\wmic.exe OR *\\\\wscript.exe)",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.privilege-escalation",
+    "attack.defense-evasion",
+    "attack.t1055"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Perez Diego (@darkquassar), oscd.community"
+  ],
+  "false_positives": [
+    "This rule is best put in testing first in order to create a baseline that reflects the data in your environment."
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

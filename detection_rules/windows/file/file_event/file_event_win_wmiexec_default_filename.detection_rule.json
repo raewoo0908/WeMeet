@@ -1,0 +1,61 @@
+{
+  "rule_id": "8d5aca11-22b3-4f22-b7ba-90e60533e1fb",
+  "risk_score": 99,
+  "description": "Detects the creation of the default output filename used by the wmiexec tool",
+  "name": "Wmiexec Default Output File",
+  "severity": "critical",
+  "type": "query",
+  "language": "lucene",
+  "query": "file.path:/\\\\Windows\\\\__1\\d{9}\\.\\d{1,7}$/ OR file.path:/C:\\\\__1\\d{9}\\.\\d{1,7}$/ OR file.path:/D:\\\\__1\\d{9}\\.\\d{1,7}$/",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "File Create (rule: FileCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.lateral-movement",
+    "attack.t1047"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Nasreddine Bencherchali (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Unlikely"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

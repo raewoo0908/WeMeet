@@ -1,0 +1,61 @@
+{
+  "rule_id": "6902955a-01b7-432c-b32a-6f5f81d8f625",
+  "risk_score": 73,
+  "description": "Detects the presence of an LSASS dump file in the \"CrashDumps\" folder. This could be a sign of LSASS credential dumping. Techniques such as the LSASS Shtinkering have been seen abusing the Windows Error Reporting to dump said process.",
+  "name": "LSASS Process Dump Artefact In CrashDumps Folder",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "file.path:*lsass.exe.* AND file.path:*.dmp AND file.path:C\\:\\\\Windows\\\\System32\\\\config\\\\systemprofile\\\\AppData\\\\Local\\\\CrashDumps\\\\*",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "File Create (rule: FileCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.credential-access",
+    "attack.t1003.001"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "@pbssubhash"
+  ],
+  "false_positives": [
+    "Rare legitimate dump of the process by the operating system due to a crash of lsass"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

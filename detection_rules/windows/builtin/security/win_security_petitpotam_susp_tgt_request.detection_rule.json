@@ -1,0 +1,50 @@
+{
+  "rule_id": "6a53d871-682d-40b6-83e0-b7c1a6c4e3a5",
+  "risk_score": 73,
+  "description": "Detect suspicious Kerberos TGT requests.\nOnce an attacer obtains a computer certificate by abusing Active Directory Certificate Services in combination with PetitPotam, the next step would be to leverage the certificate for malicious purposes.\nOne way of doing this is to request a Kerberos Ticket Granting Ticket using a tool like Rubeus.\nThis request will generate a 4768 event with some unusual fields depending on the environment.\nThis analytic will require tuning, we recommend filtering Account_Name to the Domain Controller computer accounts.\n",
+  "name": "PetitPotam Suspicious Kerberos TGT Request",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "winlog.channel:Security AND ((winlog.event_data.CertThumbprint:* AND event.code:4768 AND winlog.event_data.TargetUserName:*$) AND (NOT (source.ip:\\:\\:1 OR winlog.event_data.CertThumbprint:\"\")))",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.credential-access",
+    "attack.t1187"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Mauricio Velazco, Michael Haag"
+  ],
+  "false_positives": [
+    "False positives are possible if the environment is using certificates for authentication. We recommend filtering Account_Name to the Domain Controller computer accounts."
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

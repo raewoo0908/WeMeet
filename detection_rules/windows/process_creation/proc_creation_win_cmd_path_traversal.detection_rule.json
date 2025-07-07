@@ -1,0 +1,61 @@
+{
+  "rule_id": "087790e3-3287-436c-bccf-cbd0184a7db1",
+  "risk_score": 73,
+  "description": "Detects potential path traversal attempt via cmd.exe. Could indicate possible command/argument confusion/hijacking",
+  "name": "Potential CommandLine Path Traversal Via Cmd.EXE",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "(((process.parent.command_line:(*\\/c* OR *\\/k* OR *\\/r*)) OR (process.command_line:(*\\/c* OR *\\/k* OR *\\/r*))) AND (process.parent.executable:*\\\\cmd.exe OR process.executable:*\\\\cmd.exe OR process.pe.original_file_name:cmd.exe) AND (process.parent.command_line:\\/..\\/..\\/ OR process.command_line:*\\/..\\/..\\/*)) AND (NOT process.command_line:*\\\\Tasktop\\\\keycloak\\\\bin\\\\\\/..\\/..\\/jre\\\\bin\\\\java*)",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.execution",
+    "attack.t1059.003"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "xknow @xknow_infosec, Tim Shelton"
+  ],
+  "false_positives": [
+    "Java tools are known to produce false-positive when loading libraries"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

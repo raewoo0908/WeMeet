@@ -1,0 +1,78 @@
+{
+  "rule_id": "c2c76b77-32be-4d1f-82c9-7e544bdfe0eb",
+  "risk_score": 47,
+  "description": "Detects potential suspicious behaviour using secedit.exe. Such as exporting or modifying the security policy",
+  "name": "Potential Suspicious Activity Using SeCEdit",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "(process.executable:*\\\\secedit.exe OR process.pe.original_file_name:SeCEdit) AND ((process.command_line:*\\/configure* AND process.command_line:*\\/db*) OR (process.command_line:*\\/export* AND process.command_line:*\\/cfg*))",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.discovery",
+    "attack.persistence",
+    "attack.defense-evasion",
+    "attack.credential-access",
+    "attack.privilege-escalation",
+    "attack.t1562.002",
+    "attack.t1547.001",
+    "attack.t1505.005",
+    "attack.t1556.002",
+    "attack.t1562",
+    "attack.t1574.007",
+    "attack.t1564.002",
+    "attack.t1546.008",
+    "attack.t1546.007",
+    "attack.t1547.014",
+    "attack.t1547.010",
+    "attack.t1547.002",
+    "attack.t1557",
+    "attack.t1082"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Janantha Marasinghe"
+  ],
+  "false_positives": [
+    "Legitimate administrative use"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

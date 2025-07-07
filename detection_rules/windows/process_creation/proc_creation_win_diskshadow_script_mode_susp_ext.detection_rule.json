@@ -1,0 +1,61 @@
+{
+  "rule_id": "1dde5376-a648-492e-9e54-4241dd9b0c7f",
+  "risk_score": 47,
+  "description": "Detects execution of \"Diskshadow.exe\" in script mode to execute an script with a potentially uncommon extension.\nInitial baselining of the allowed extension list is required.\n",
+  "name": "Diskshadow Script Mode - Uncommon Script Extension Execution",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "(process.command_line:(*\\-s\\ * OR *\\/s\\ * OR *–s\\ * OR *—s\\ * OR *―s\\ *) AND (process.pe.original_file_name:diskshadow.exe OR process.executable:*\\\\diskshadow.exe)) AND (NOT process.command_line:*.txt*)",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.defense-evasion",
+    "attack.t1218"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Nasreddine Bencherchali (Nextron Systems)"
+  ],
+  "false_positives": [
+    "False postitve might occur with legitimate or uncommon extensions used internally. Initial baseline is required."
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

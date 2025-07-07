@@ -1,0 +1,62 @@
+{
+  "rule_id": "17a1be64-8d88-40bf-b5ff-a4f7a50ebcc8",
+  "risk_score": 73,
+  "description": "Detects creation of a new service via \"sc\" command or the powershell \"new-service\" cmdlet with suspicious binary paths",
+  "name": "Suspicious New Service Creation",
+  "severity": "high",
+  "type": "query",
+  "language": "lucene",
+  "query": "((process.command_line:*New\\-Service* AND process.command_line:*\\-BinaryPathName*) OR ((process.command_line:*create* AND process.command_line:*binPath\\=*) AND process.executable:*\\\\sc.exe)) AND (process.command_line:(*powershell* OR *mshta* OR *wscript* OR *cscript* OR *svchost* OR *dllhost* OR *cmd\\ * OR *cmd.exe\\ \\/c* OR *cmd.exe\\ \\/k* OR *cmd.exe\\ \\/r* OR *rundll32* OR *C\\:\\\\Users\\\\Public* OR *\\\\Downloads\\\\* OR *\\\\Desktop\\\\* OR *\\\\Microsoft\\\\Windows\\\\Start\\ Menu\\\\Programs\\\\Startup\\\\* OR *C\\:\\\\Windows\\\\TEMP\\\\* OR *\\\\AppData\\\\Local\\\\Temp*))",
+  "filters": [
+    {
+      "query": {
+        "match": {
+          "event.action": {
+            "type": "phrase",
+            "query": "Process Create (rule: ProcessCreate)"
+          }
+        }
+      }
+    }
+  ],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.persistence",
+    "attack.privilege-escalation",
+    "attack.t1543.003"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Nasreddine Bencherchali (Nextron Systems)"
+  ],
+  "false_positives": [
+    "Unlikely"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}

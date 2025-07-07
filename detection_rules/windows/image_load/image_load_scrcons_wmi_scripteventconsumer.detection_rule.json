@@ -1,0 +1,53 @@
+{
+  "rule_id": "b439f47d-ef52-4b29-9a2f-57d8a96cb6b8",
+  "risk_score": 47,
+  "description": "Detects signs of the WMI script host process \"scrcons.exe\" loading scripting DLLs which could indicates WMI ActiveScriptEventConsumers EventConsumers activity.",
+  "name": "WMI ActiveScriptEventConsumers Activity Via Scrcons.EXE DLL Load",
+  "severity": "medium",
+  "type": "query",
+  "language": "lucene",
+  "query": "(file.path:(*\\\\vbscript.dll OR *\\\\wbemdisp.dll OR *\\\\wshom.ocx OR *\\\\scrrun.dll)) AND process.executable:*\\\\scrcons.exe",
+  "filters": [],
+  "enabled": true,
+  "interval": "5m",
+  "from": "now-70m",
+  "max_signals": 100,
+  "tags": [
+    "attack.lateral-movement",
+    "attack.privilege-escalation",
+    "attack.persistence",
+    "attack.t1546.003"
+  ],
+  "to": "now",
+  "references": [],
+  "threat": [],
+  "version": 1,
+  "exceptions_list": [],
+  "related_integrations": [],
+  "required_fields": [],
+  "setup": "",
+  "author": [
+    "Roberto Rodriguez (Cyb3rWard0g), OTR (Open Threat Research)"
+  ],
+  "false_positives": [
+    "Legitimate event consumers",
+    "Dell computers on some versions register an event consumer that is known to cause false positives when brightness is changed by the corresponding keyboard button"
+  ],
+  "license": "DRL",
+  "output_index": "",
+  "index": [
+    "apm-*-transaction*",
+    "auditbeat-*",
+    "endgame-*",
+    "filebeat-*",
+    "logs-*",
+    "packetbeat-*",
+    "traces-apm*",
+    "winlogbeat-*",
+    "-*elastic-cloud-logs-*"
+  ],
+  "meta": {
+    "kibana_siem_app_url": ""
+  },
+  "actions": []
+}
