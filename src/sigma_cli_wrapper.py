@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 Sigma CLI Wrapper
-Sigma CLI를 래핑하여 우리 프로젝트에서 사용할 수 있는 인터페이스 제공
+Wrapper for Sigma CLI to provide an interface for use in our project
 """
 
 import subprocess
@@ -14,20 +14,20 @@ import yaml
 
 
 class SigmaCLIWrapper:
-    """Sigma CLI를 래핑하는 클래스"""
+    """Class that wraps Sigma CLI"""
     
     def __init__(self, sigma_cli_path: str = "sigma"):
         """
-        Sigma CLI 래퍼 초기화
+        Initialize Sigma CLI wrapper
         
         Args:
-            sigma_cli_path: sigma CLI 명령어 경로 (기본값: "sigma")
+            sigma_cli_path: sigma CLI command path (default: "sigma")
         """
         self.sigma_cli_path = sigma_cli_path
         self._check_sigma_cli()
     
     def _check_sigma_cli(self):
-        """Sigma CLI가 설치되어 있는지 확인"""
+        """Check if Sigma CLI is installed"""
         try:
             result = subprocess.run(
                 [self.sigma_cli_path, "--version"],
@@ -35,25 +35,25 @@ class SigmaCLIWrapper:
                 text=True,
                 check=True
             )
-            print(f"✅ Sigma CLI 확인됨: {result.stdout.strip()}")
+            print(f"[OK] Sigma CLI verified: {result.stdout.strip()}")
         except (subprocess.CalledProcessError, FileNotFoundError):
             raise RuntimeError(
-                f"Sigma CLI를 찾을 수 없습니다. 설치 방법:\n"
+                f"Sigma CLI not found. Installation methods:\n"
                 f"pip install sigma-cli\n"
-                f"또는\n"
+                f"or\n"
                 f"pipx install sigma-cli"
             )
     
     def convert_to_lucene(self, sigma_rule_path: str, pipeline: str = "ecs_windows") -> str:
         """
-        Sigma rule을 Lucene 쿼리로 변환
+        Convert Sigma rule to Lucene query
         
         Args:
-            sigma_rule_path: Sigma rule 파일 경로
-            pipeline: 사용할 처리 파이프라인 (기본값: "ecs_windows")
+            sigma_rule_path: Sigma rule file path
+            pipeline: Processing pipeline to use (default: "ecs_windows")
             
         Returns:
-            변환된 Lucene 쿼리 문자열
+            Converted Lucene query string
         """
         try:
             cmd = [
@@ -73,18 +73,18 @@ class SigmaCLIWrapper:
             return result.stdout.strip()
             
         except subprocess.CalledProcessError as e:
-            raise RuntimeError(f"Sigma CLI 변환 실패: {e.stderr}")
+            raise RuntimeError(f"Sigma CLI conversion failed: {e.stderr}")
     
     def convert_to_elasticsearch(self, sigma_rule_path: str, pipeline: str = "ecs_windows") -> str:
         """
-        Sigma rule을 Elasticsearch 쿼리로 변환
+        Convert Sigma rule to Elasticsearch query
         
         Args:
-            sigma_rule_path: Sigma rule 파일 경로
-            pipeline: 사용할 처리 파이프라인 (기본값: "ecs_windows")
+            sigma_rule_path: Sigma rule file path
+            pipeline: Processing pipeline to use (default: "ecs_windows")
             
         Returns:
-            변환된 Elasticsearch 쿼리 문자열
+            Converted Elasticsearch query string
         """
         try:
             cmd = [
@@ -104,21 +104,21 @@ class SigmaCLIWrapper:
             return result.stdout.strip()
             
         except subprocess.CalledProcessError as e:
-            raise RuntimeError(f"Sigma CLI 변환 실패: {e.stderr}")
+            raise RuntimeError(f"Sigma CLI conversion failed: {e.stderr}")
     
     def convert_sigma_rule_dict(self, sigma_rule: Dict[str, Any], 
                                target: str = "lucene", 
                                pipeline: str = "ecs_windows") -> str:
         """
-        Sigma rule 딕셔너리를 임시 파일로 저장하고 변환
+        Save Sigma rule dictionary to temporary file and convert
         
         Args:
-            sigma_rule: Sigma rule 딕셔너리
-            target: 변환 대상 (lucene, elasticsearch 등)
-            pipeline: 사용할 처리 파이프라인
+            sigma_rule: Sigma rule dictionary
+            target: Conversion target (lucene, elasticsearch, etc.)
+            pipeline: Processing pipeline to use
             
         Returns:
-            변환된 쿼리 문자열
+            Converted query string
         """
         with tempfile.NamedTemporaryFile(mode='w', suffix='.yml', delete=False) as temp_file:
             yaml.dump(sigma_rule, temp_file, default_flow_style=False, allow_unicode=True)
@@ -130,13 +130,13 @@ class SigmaCLIWrapper:
             elif target == "elasticsearch":
                 return self.convert_to_elasticsearch(temp_file_path, pipeline)
             else:
-                raise ValueError(f"지원하지 않는 변환 대상: {target}")
+                raise ValueError(f"Unsupported conversion target: {target}")
         finally:
-            # 임시 파일 삭제
+            # Delete temporary file
             os.unlink(temp_file_path)
     
     def list_available_targets(self) -> List[str]:
-        """사용 가능한 변환 대상을 조회"""
+        """List available conversion targets"""
         try:
             result = subprocess.run(
                 [self.sigma_cli_path, "list", "targets"],
@@ -146,10 +146,10 @@ class SigmaCLIWrapper:
             )
             return [line.strip() for line in result.stdout.split('\n') if line.strip()]
         except subprocess.CalledProcessError as e:
-            raise RuntimeError(f"대상 조회 실패: {e.stderr}")
+            raise RuntimeError(f"Failed to list targets: {e.stderr}")
     
     def list_available_pipelines(self) -> List[str]:
-        """사용 가능한 파이프라인을 조회"""
+        """List available pipelines"""
         try:
             result = subprocess.run(
                 [self.sigma_cli_path, "list", "pipelines"],
@@ -159,17 +159,17 @@ class SigmaCLIWrapper:
             )
             return [line.strip() for line in result.stdout.split('\n') if line.strip()]
         except subprocess.CalledProcessError as e:
-            raise RuntimeError(f"파이프라인 조회 실패: {e.stderr}")
+            raise RuntimeError(f"Failed to list pipelines: {e.stderr}")
     
     def validate_sigma_rule(self, sigma_rule_path: str) -> bool:
         """
-        Sigma rule 유효성 검사
+        Validate Sigma rule
         
         Args:
-            sigma_rule_path: Sigma rule 파일 경로
+            sigma_rule_path: Sigma rule file path
             
         Returns:
-            유효성 검사 결과
+            Validation result
         """
         try:
             cmd = [
@@ -191,14 +191,14 @@ class SigmaCLIWrapper:
 
 
 class EnhancedKibanaConverter:
-    """Sigma CLI를 활용한 향상된 Kibana 변환기"""
+    """Enhanced Kibana converter using Sigma CLI"""
     
     def __init__(self, sigma_cli_path: str = "sigma"):
         """
-        향상된 Kibana 변환기 초기화
+        Initialize enhanced Kibana converter
         
         Args:
-            sigma_cli_path: sigma CLI 명령어 경로
+            sigma_cli_path: sigma CLI command path
         """
         self.sigma_cli = SigmaCLIWrapper(sigma_cli_path)
         self.field_mappings = {
@@ -215,47 +215,47 @@ class EnhancedKibanaConverter:
     def convert_sigma_to_kql(self, sigma_rule: Dict[str, Any], 
                            pipeline: str = "ecs_windows") -> str:
         """
-        Sigma rule을 KQL로 변환 (Sigma CLI 활용)
+        Convert Sigma rule to KQL (using Sigma CLI)
         
         Args:
-            sigma_rule: Sigma rule 딕셔너리
-            pipeline: 사용할 처리 파이프라인
+            sigma_rule: Sigma rule dictionary
+            pipeline: Processing pipeline to use
             
         Returns:
-            변환된 KQL 쿼리
+            Converted KQL query
         """
         try:
-            # Sigma CLI로 Lucene 쿼리 생성
+            # Create Lucene query using Sigma CLI
             lucene_query = self.sigma_cli.convert_sigma_rule_dict(
                 sigma_rule, target="lucene", pipeline=pipeline
             )
             
-            # Lucene을 KQL로 변환 (필요시)
+            # Convert Lucene to KQL (if needed)
             kql_query = self._lucene_to_kql(lucene_query)
             
             return kql_query
             
         except Exception as e:
-            print(f"Sigma CLI 변환 실패, 기존 변환기 사용: {e}")
-            # 실패 시 기존 변환기 사용
+            print(f"Sigma CLI conversion failed, using fallback converter: {e}")
+            # Use fallback converter on failure
             return self._fallback_conversion(sigma_rule)
     
     def _lucene_to_kql(self, lucene_query: str) -> str:
         """
-        Lucene 쿼리를 KQL로 변환
+        Convert Lucene query to KQL
         
         Args:
-            lucene_query: Lucene 쿼리 문자열
+            lucene_query: Lucene query string
             
         Returns:
-            KQL 쿼리 문자열
+            KQL query string
         """
-        # Lucene과 KQL은 매우 유사하므로 대부분 그대로 사용 가능
-        # 필요시 추가 변환 로직 구현
+        # Lucene and KQL are very similar, so most can be used as-is
+        # Implement additional conversion logic if needed
         return lucene_query
     
     def _fallback_conversion(self, sigma_rule: Dict[str, Any]) -> str:
-        """기존 변환기로 폴백"""
+        """Fallback to existing converter"""
         from .kibana_converter import SigmaToKibanaConverter
         converter = SigmaToKibanaConverter()
         return converter.convert_to_kql_query(sigma_rule)
@@ -263,26 +263,26 @@ class EnhancedKibanaConverter:
     def convert_to_detection_rule(self, sigma_rule: Dict[str, Any], 
                                 pipeline: str = "ecs_windows") -> Dict[str, Any]:
         """
-        Sigma rule을 Kibana Detection Rule로 변환
+        Convert Sigma rule to Kibana Detection Rule
         
         Args:
-            sigma_rule: Sigma rule 딕셔너리
-            pipeline: 사용할 처리 파이프라인
+            sigma_rule: Sigma rule dictionary
+            pipeline: Processing pipeline to use
             
         Returns:
-            Kibana Detection Rule 딕셔너리
+            Kibana Detection Rule dictionary
         """
-        # 기존 변환기 사용 (Detection Rule 구조는 동일)
+        # Use existing converter (Detection Rule structure is the same)
         from .kibana_converter import SigmaToKibanaConverter
         converter = SigmaToKibanaConverter()
         
-        # KQL 쿼리는 Sigma CLI로 생성
+        # Create KQL query using Sigma CLI
         kql_query = self.convert_sigma_to_kql(sigma_rule, pipeline)
         
-        # Detection Rule 구조 생성
+        # Create Detection Rule structure
         detection_rule = converter.convert_to_detection_rule(sigma_rule)
         
-        # KQL 쿼리 업데이트
+        # Update KQL query
         detection_rule['query'] = kql_query
         
         return detection_rule
