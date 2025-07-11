@@ -36,7 +36,7 @@ def _get_kibana_client(kibana_url: str = None, username: str = None, password: s
     username = username or os.getenv('KIBANA_USERNAME')
     password = password or os.getenv('KIBANA_PASSWORD')
 
-    click.echo(f"✔️ Kibana URL: {kibana_url}")
+    click.echo(f"[INFO] Kibana URL: {kibana_url}")
     
     return KibanaDetectionClient(kibana_url, username, password)
 
@@ -228,7 +228,7 @@ def _create_detection_rules_batch(json_files: List[str], kibana_url: str = None,
             click.echo(f"     • {failed_file}")
 
     # Output summary
-    click.echo(f"\n📊 Batch Registration Results:")
+    click.echo(f"\n[INFO] Batch Registration Results:")
     click.echo(f"   - Total files: {results['total']}")
     click.echo(f"   - Success: {results['success']}")
     click.echo(f"   - Failed: {results['failed']}")
@@ -275,7 +275,7 @@ def _convert_and_create_with_structure(input_dir: str, output_base_dir: str = "d
     if not sigma_files:
         raise ValueError(f"No Sigma rule files found in input directory: {input_dir}")
     
-    click.echo(f"📁 Found {len(sigma_files)} Sigma rule files.")
+    click.echo(f"[INFO] Found {len(sigma_files)} Sigma rule files.")
     
     results = {
         'total_files': len(sigma_files),
@@ -297,7 +297,7 @@ def _convert_and_create_with_structure(input_dir: str, output_base_dir: str = "d
             
             output_file = output_dir / f"{sigma_file.stem}.detection_rule.json"
             
-            click.echo(f"🔄 Converting: {relative_path}")
+            click.echo(f"[INFO] Converting: {relative_path}")
             
             # Convert Sigma rule
             converted_file = converter.convert_file(
@@ -884,7 +884,7 @@ def convert_and_create_batch(input, output, pipeline, sigma_cli_path, additional
             sys.exit(1)
 
         # Step 1: Test Kibana connection
-        click.echo(f"\n🔗 Step 2: Testing Kibana connection...")
+        click.echo(f"\nStep 2: Testing Kibana connection...")
         client = _get_kibana_client(kibana_url, username, password)
         if not client.test_connection():
             click.echo("[ERROR] Failed to connect to Kibana.", err=True)
