@@ -319,17 +319,52 @@ class KibanaDetectionClient:
             Dictionary of deletion results per rule
         """
         results = {}
+        cnt = 0
+        total = len(rule_ids)
         
         for rule_id in rule_ids:
             try:
                 success = self.delete_detection_rule(rule_id)
                 results[rule_id] = success
                 if success:
-                    self.logger.info(f"Rule deletion successful: {rule_id}")
-                else:
-                    self.logger.error(f"Rule deletion failed: {rule_id}")
+                    cnt += 1
+                    self.logger.info(f"Deleted {cnt}/{total} rules")
             except Exception as e:
                 self.logger.error(f"Error occurred during rule deletion: {rule_id} - {e}")
                 results[rule_id] = False
         
         return results 
+    
+    def delete_all_rules(self) -> Dict[str, bool]:
+        """
+        Delete all Detection Rules.
+        
+        Returns:
+            Dictionary of deletion results per rule
+        """
+        try:
+            # Get all rules
+            all_rules = self.list_detection_rules(per_page=1000)  # Set to a large number
+            results = {}
+            cnt = 0
+            total = len(all_rules)
+            
+            for rule in all_rules:
+                try:
+                    success = self.delete_detection_rule(rule['rule_id'])
+                    if success:
+                        cnt += 1
+                        self.logger.info(f"Deleted {cnt}/{total} rules")
+                    results[rule['rule_id']] = success
+                    
+                except Exception as e:
+                    self.logger.error(f"Error occurred during rule deletion: {rule['rule_id']} - {e}")
+                    results[rule['rule_id']] = False
+            
+            return results
+            
+        except Exception as e:
+            self.logger.error(f"Error occurred during all rules deletion: {e}")
+            results[rule['rule_id']] = False
+            
+        return results  
