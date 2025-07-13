@@ -976,6 +976,53 @@ def create_rules_batch(input, kibana_url, username, password):
         click.echo(f"[ERROR] Registration failed: {e}", err=True)
         sys.exit(1)
 
+@cli.command()
+@click.option('--kibana-url', default=_get_default_kibana_url, help='Kibana server URL')
+@click.option('--username', default=_get_default_kibana_username, help='Kibana username')
+@click.option('--password', default=_get_default_kibana_password, help='Kibana password')
+@click.option('--force', is_flag=True, help='Force deletion without confirmation')
+def delete_all_rules(kibana_url, username, password, force):
+    """Delete all Detection Rules."""
+    try:
+        client = _get_kibana_client(kibana_url, username, password)
+        if not client.test_connection():
+            click.echo("[ERROR] Failed to connect to Kibana.", err=True)
+            sys.exit(1)
+        click.echo("[OK] Kibana connection successful")
+
+        # User confirmation
+        if not force:
+            click.echo(f"\nDo you want to delete the all Detection Rules?")
+            if not click.confirm("Continue? (y/N)"):
+                click.echo("Deletion cancelled.")
+                return
+        
+        # Delete all rules
+        click.echo(f"\nDeleting all Detection Rules...")
+        results = client.delete_all_rules()
+
+        # Summary
+        success_count = sum(1 for success in results.values() if success)
+        failed_count = len(results) - success_count
+        
+        click.echo(f"\nDeletion Results:")
+        click.echo(f"   - Total targets: {len(results)} items")
+        click.echo(f"   - Deleted: {success_count} items")
+        click.echo(f"   - Failed: {failed_count} items")
+
+        if failed_count > 0:
+            click.echo(f"\nFailed to delete rules:")
+            for rule_id, success in results.items():
+                if not success:
+                    click.echo(f"   • {rule_id}")
+            sys.exit(1)
+        else:
+            click.echo(f"\n[OK] All Failed Detection Rules were successfully deleted!")
+            
+    except Exception as e:
+        click.echo(f"[ERROR] Deletion failed: {e}", err=True)
+        sys.exit(1)
+        
 
 @cli.command()
 @click.option('--kibana-url', default=_get_default_kibana_url, help='Kibana server URL')
