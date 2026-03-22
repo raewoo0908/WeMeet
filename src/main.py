@@ -32,7 +32,7 @@ _load_env()
 
 def _get_kibana_client(kibana_url: str = None, username: str = None, password: str = None):
     """Create a Kibana client."""
-    kibana_url = kibana_url or os.getenv('KIBANA_URL', 'http://localhost:5601')
+    kibana_url = kibana_url or os.getenv('KIBANA_URL')
     username = username or os.getenv('KIBANA_USERNAME')
     password = password or os.getenv('KIBANA_PASSWORD')
 
@@ -44,32 +44,32 @@ def _get_kibana_client(kibana_url: str = None, username: str = None, password: s
 def _get_sigma_manager(sigma_cli_path: str = None):
     """Create a Sigma CLI manager."""
     if sigma_cli_path is None:
-        sigma_cli_path = os.getenv('SIGMA_CLI_PATH', 'sigma')
+        sigma_cli_path = os.getenv('SIGMA_CLI_PATH')
     return SigmaCLIManager(sigma_cli_path)
 
 
 def _get_sigma_converter(sigma_cli_path: str = None):
     """Create a Sigma CLI converter."""
     if sigma_cli_path is None:
-        sigma_cli_path = os.getenv('SIGMA_CLI_PATH', 'sigma')
+        sigma_cli_path = os.getenv('SIGMA_CLI_PATH')
     return SigmaCLIConverter(sigma_cli_path)
 
 
 def _get_default_sigma_cli_path():
     """Return the default Sigma CLI path."""
-    return os.getenv('SIGMA_CLI_PATH', 'sigma')
+    return os.getenv('SIGMA_CLI_PATH')
 
 def _get_default_kibana_url():
     """Return the default Kibana URL."""
-    return os.getenv('KIBANA_URL', 'http://localhost:5601')
+    return os.getenv('KIBANA_URL')
 
 def _get_default_kibana_username():
     """Return the default Kibana username."""
-    return os.getenv('KIBANA_USERNAME', 'elastic')
+    return os.getenv('KIBANA_USERNAME')
 
 def _get_default_kibana_password():
     """Return the default Kibana password."""
-    return os.getenv('KIBANA_PASSWORD', 'changeme')
+    return os.getenv('KIBANA_PASSWORD')
 
 
 def _get_sigma_rule_files(input_path: str) -> List[str]:
