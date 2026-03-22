@@ -103,8 +103,8 @@ pipx install sigma-cli
 # .env 파일 생성
 cat > .env << EOF
 KIBANA_URL=http://localhost:5601
-KIBANA_USERNAME=elastic
-KIBANA_PASSWORD=changeme
+KIBANA_USERNAME=YOUR_NAME
+KIBANA_PASSWORD=YOUR_PW
 SIGMA_CLI_PATH=sigma
 EOF
 ```
